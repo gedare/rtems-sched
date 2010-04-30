@@ -1,0 +1,20 @@
+/.cvsignore/1.1.1.1/Fri Dec 14 06:29:56 2007//
+/KNOWN_PROBLEMS/1.1.1.1/Fri Dec 14 06:29:55 2007//
+/LICENSE/1.1.1.1/Fri Dec 14 06:29:56 2007//
+/Makefile.am/1.14/Sat Nov 28 06:24:47 2009//
+/README/1.1.1.1/Fri Dec 14 06:29:57 2007//
+/bsp_specs/1.4/Sun Dec  7 04:31:00 2008//
+/configure.ac/1.7/Sat Nov 28 06:28:40 2009//
+D/flash////
+D/i2c////
+D/include////
+D/irq////
+D/make////
+D/network////
+D/pci////
+D/start////
+D/startup////
+D/tod////
+D/vme////
+/ChangeLog/1.48/Sat Feb 20 21:09:21 2010//
+/preinstall.am/1.6/Sun Apr 25 18:26:32 2010//
