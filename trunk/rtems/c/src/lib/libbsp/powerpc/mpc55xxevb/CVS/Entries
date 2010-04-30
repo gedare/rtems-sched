@@ -1,0 +1,14 @@
+/.cvsignore/1.1/Tue Jul 15 22:55:15 2008//
+/README/1.2/Tue Jul 21 08:38:04 2009//
+/bsp_specs/1.4/Tue Jul 21 08:38:04 2009//
+D/clock////
+D/include////
+D/make////
+D/network////
+D/startup////
+D/tests////
+/configure.ac/1.11/Wed Apr 14 17:14:32 2010//
+D/i2c////
+/ChangeLog/1.50/Fri Apr 30 19:21:51 2010//
+/Makefile.am/1.21/Fri Apr 30 19:21:51 2010//
+/preinstall.am/1.8/Fri Apr 30 19:21:51 2010//

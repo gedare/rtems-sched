@@ -1,0 +1,8 @@
+A D/aclocal////
+A D/apt////
+A D/gpg////
+A D/yum.repos.d////
+R D/yum.repos.d////
+R D/gpg////
+R D/apt////
+R D/aclocal////
