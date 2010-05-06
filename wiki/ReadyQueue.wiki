@@ -1,0 +1,148 @@
+#summary Overview of current and proposed ready queue designs.
+
+= Introduction =
+
+This page describes the current ready queue design and implementation, and then discusses how the ready queue will be refactored as part of this project.  
+
+In this description all header files (.h) are located in cpukit/score/include/rtems/score/, all inline files (.inl) are in cpukit/score/inline/rtems/score/, and all source code files (.c) are in cpukit/score/src.  Any exceptions will be explicitly noted.
+
+= Existing Ready Queue =
+
+Scheduling in RTEMS is built on the notion of chains. A chain is a double-linked list of zero or more nodes starting with head and ending with tail control nodes. The chain node is defined by `struct Chain_Node_struct` in the chain.h file.
+
+A structure of chains called the ready chains is used by scheduler to manage the set of ready tasks and assign the highest priority task to the CPU. The ready queue is implemented as a 256-element array of FIFO lists. Every element (list) of the array represents a priority level. The zero level designates the highest priority. Tasks with equivalent priorities are placed on the same FIFO list associated with their priority level.  The highest priority task is the first one in the first non-empty priority-level FIFO list from the beginning of the ready queue. 
+
+Finding the highest priority task would be time-consuming using linearly search for the first non-empty FIFO list. Therefore, a 256-bit set is maintained in which every non-empty FIFO list has a set bit corresponding to its priority level. This bit field is handled by low-level cpu instructions and thus the first non-empty list can be found efficiently on many architectures. Note that the executing task remains in the ready queue. A task is removed from the ready queue only when it terminates or becomes blocked.
+
+== Ready Chains ==
+
+The array of FIFOs is declared in thread.h as `SCORE_EXTERN Chain_Control *_Thread_Ready_chain;`
+
+=== Functions ===
+
+Manipulation of the ready chains happens throughout the thread management code.  Refactoring this code is the goal of the first phase of this project. This list shows the functions that manipulate the ready chain array, and how they use it.
+
+  * thread.inl: `_Thread_Calculate_heir`
+  Returns a pointer to the highest priority ready thread.
+{{{
+_Thread_Heir = (Thread_Control *)
+  _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+}}}
+  * thread.c: `_Thread_Handler_initialization`
+  Initializes thread manager data structures.
+{{{
+  _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
+    (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+
+  for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
+    _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
+}}}
+  * threadrotatequeue.c: `_Thread_Rotate_Ready_Queue`
+  Remove the running thread from the ready chain and place it at the rear of this chain.
+{{{
+  ready = &_Thread_Ready_chain[ priority ];
+}}}
+  * threadsetpriority.c: `_Thread_Set_priority`
+  Manipulates the thread's priority bitmap.
+{{{
+  the_thread->ready = &_Thread_Ready_chain[ new_priority ];
+}}}
+
+Additionally, functions in the thread manager access the ready chains through the thread TCB.  The `Chain_Control *ready;` field of the TCB points to the Ready FIFO for the thread's priority level.  The following list shows code points that manipulate a ready chain directly, and also indicates if the priority map is modified as well.
+  * threadchangepriority.c: `_Thread_Change_priority`
+  Enqueues a thread to a ready queue.
+{{{
+  _Priority_Add_to_bit_map( &the_thread->Priority_map );
+  if ( prepend_it )
+    _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
+  else
+    _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+}}}
+  * threadclearstate.c: `_Thread_Clear_state`
+  Enqueues a thread to a ready queue.
+{{{
+  _Priority_Add_to_bit_map( &the_thread->Priority_map );
+  _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
+}}}
+  * threadready.c: `_Thread_Ready`
+  Enqueues a thread to a ready queue.
+{{{
+  _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+}}}
+  * threadresettimeslice.c: `_Thread_Reset_timeslice`
+  Requeues a thread on a ready queue.
+{{{
+  _Chain_Extract_unprotected( &executing->Object.Node );
+  _Chain_Append_unprotected( ready, &executing->Object.Node );
+}}}
+  * threadresume.c: `_Thread_Resume`
+  Enqueues a thread to a ready queue.
+{{{  
+  _Priority_Add_to_bit_map( &the_thread->Priority_map );
+  _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
+}}}
+  * threadrotatequeue.c: `_Thread_Rotate_Ready_Queue`
+  Dequeues a thread from a ready queue.  Enqueues a thread to a ready queue.
+{{{
+  node = _Chain_Get_first_unprotected( ready );
+  _Chain_Append_unprotected( ready, node );
+}}}
+  * threadsetstate.c:
+  Dequeues a thread from a ready queue.
+{{{
+  _Chain_Initialize_empty( ready );
+  _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+...
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
+}}}
+  * threadsettransient.c: `_Thread_Set_transient`
+  Dequeues a thread from a ready queue.
+{{{
+  _Chain_Initialize_empty( ready );
+  _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+...
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
+}}}
+  * threadsuspend.c: `_Thread_Suspend`
+  Dequeues a thread from a ready queue.
+{{{
+  _Chain_Initialize_empty( ready );
+  _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+...
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
+}}}
+  * threadyieldprocessor.c: `_Thread_Yield_processor`
+  Dequeues and Enqueues a thread on a chain.
+{{{
+  _Chain_Extract_unprotected( &executing->Object.Node );
+  _Chain_Append_unprotected( ready, &executing->Object.Node );
+}}}
+
+== Priority Bitmaps ==
+
+The bitmap used for determining the highest priority ready FIFO is declared in priority.h as a combination of 
+{{{
+SCORE_EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
+
+SCORE_EXTERN Priority_Bit_map_control
+               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+}}}
+
+Each thread determines how to index the priority bit maps using the 
+`Priority_Information Priority_map;` field of the thread control block.
+
+=== Functions ===
+
+The Thread Priority Handler functions are all located in priority.inl.  Priority bit map management is pretty well captured, although the implementation is specifically tailored to the bitfield approach.  If we want to use a different way to represent priority, we may need to manipulate either the Priority Handler or the priority fields of the TCB and functions that access them.  Here is a list of the Priority Handler functions.
+  * `_Priority_Handler_initialization`
+  * `_Priority_Is_valid`
+  * `_Priority_Major`
+  * `_Priority_Minor`
+  * `_Priority_Mask`
+  * `_Priority_Mask_invert`
+  * `_Priority_Bits_index`
+  * `_Priority_Add_to_bit_map`
+  * `_Priority_Remove_from_bit_map`
+  * `_Priority_Get_highest`
+  * `_Priority_Initialize_information`
+  * `_Priority_Is_group_empty`
