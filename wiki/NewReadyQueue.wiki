@@ -2,3 +2,17 @@
 #labels Phase-Design
 
 = Introduction =
+
+This page provides the design of how the ready queue will be refactored as part of this project.  See ReadyQueue for an overview of the current queue structure and some background on RTEMS chains and priority bit maps.
+
+== Broad Goals ==
+
+At a high-level, the RTEMS' ready queue should be modular and configurable so that the existing ready queue structure can be used for uniproccessors and a new ready queue implementation can be used for multiprocessors.
+
+== Interface ==
+
+
+== Internal data structures ==
+
+
+== Internal functions ==
