@@ -1,19 +1,19 @@
-#summary Overview of current and proposed ready queue designs.
+#summary Overview of current ready queue design and implementation.
 #labels Phase-Requirements
 
 = Introduction =
 
-This page describes the current ready queue design and implementation, and then discusses how the ready queue will be refactored as part of this project.  
+This page describes the current ready queue design and implementation. See NewReadyQueue for the design of how the ready queue will be refactored as part of this project.  
 
 In this description all header files (.h) are located in cpukit/score/include/rtems/score/, all inline files (.inl) are in cpukit/score/inline/rtems/score/, and all source code files (.c) are in cpukit/score/src.  Any exceptions will be explicitly noted.
 
-= Existing Ready Queue =
+= Current Ready Queue =
 
 Scheduling in RTEMS is built on the notion of chains. A chain is a double-linked list of zero or more nodes starting with head and ending with tail control nodes. The chain node is defined by `struct Chain_Node_struct` in the chain.h file.
 
-A structure of chains called the ready chains is used by scheduler to manage the set of ready tasks and assign the highest priority task to the CPU. The ready queue is implemented as a 256-element array of FIFO lists. Every element (list) of the array represents a priority level. The zero level designates the highest priority. Tasks with equivalent priorities are placed on the same FIFO list associated with their priority level.  The highest priority task is the first one in the first non-empty priority-level FIFO list from the beginning of the ready queue. 
+A structure of chains called the ready chains is used by the scheduler to manage the set of ready tasks and assign the highest priority task to the CPU. The ready queue is implemented as a 256-element array of FIFO lists. Every element (list) of the array represents a priority level. The zero level designates the highest priority. Tasks with equivalent priorities are placed on the same FIFO list associated with their priority level.  The highest priority task is the first one in the first non-empty priority-level FIFO list from the beginning of the ready queue. 
 
-Finding the highest priority task would be time-consuming using linearly search for the first non-empty FIFO list. Therefore, a 256-bit bitfield is maintained in which every non-empty FIFO list has a set bit corresponding to its priority level. The search is a two level lookup with a scan of only 16 bits at a time required.  Two scans are performed.  The first scan is the "major" portion of the priority (e.g. upper nibble) and the second scan scans the 16-bits associates with that range of priorities to determine the "minor" portion (e.g. lower nibble).  This bitfield scanning is handled by low-level cpu dependent instructions or highly optimized portable C when special instructions are not available.  Thus the first non-empty list can be found efficiently and in a fixed length of execution time. Note that the executing task remains in the ready queue. A task is removed from the ready queue only when it terminates or becomes blocked.
+Finding the highest priority task would be time-consuming using linear search for the first non-empty FIFO list. Therefore, a 256-bit bitfield is maintained in which every non-empty FIFO list has a set bit corresponding to its priority level. The search is a two level lookup with a scan of only 16 bits at a time required.  Two scans are performed.  The first scan is the "major" portion of the priority (e.g. upper nibble) and the second scan scans the 16-bits associates with that range of priorities to determine the "minor" portion (e.g. lower nibble).  This bitfield scanning is handled by low-level cpu dependent instructions or highly optimized portable C when special instructions are not available.  Thus the first non-empty list can be found efficiently and in a fixed length of execution time. Note that the executing task remains in the ready queue. A task is removed from the ready queue only when it terminates or becomes blocked.
 
 == Ready Chains ==
 
