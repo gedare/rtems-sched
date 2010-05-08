@@ -12,15 +12,15 @@ At a high-level, the RTEMS' ready queue should be modular and configurable so th
 == Supporting the Current Scheduler ==
 From the current use of the ready chains, we can see the following interface functions:
 {{{
-void _RQ_enqueue_last( readyq*, tcb* ); /* fifo */
+void _RQ_enqueue_last( readyq*, Thread_Control* ); /* fifo */
 
-void _RQ_enqueue_with_priority( readyq*, tcb* ); /* prio */
+void _RQ_enqueue_with_priority( readyq*, Thread_Control* ); /* prio */
 
 tcb* _RQ_read_first( readyq* ); /* no dequeue */
 
-tcb* _RQ_dequeue_with_priority( readyq*, prio ); /* extract at prio */
+tcb* _RQ_dequeue_with_priority( readyq*, priority* ); /* extract at prio */
 
-void _RQ_dequeue_tcb( readyq*, tcb* ); /* for sleep/suspend */
+void _RQ_dequeue_tcb( readyq*, Thread_Control* ); /* for sleep/suspend */
 }}}
 
 *Note: ready queue accesses are assumed to be protected by the caller.*
@@ -31,25 +31,27 @@ In the typical case, since the currently executing task stays on the ready queue
 
 Here are some prototypical implementations of these interface functions with the current ready chain infrastructure:
 {{{
-void _RQ_enqueue_last( readyq*, tcb* ) {
+readyq* rq = _Thread_Ready_chain;
+
+void _RQ_enqueue_last( readyq* rq, Thread_Control *tcb ) {
   _Chain_Append_unprotected( tcb->ready, &tcb->Object.Node );
 }
 
-void _RQ_enqueue_with_priority( readyq*, tcb* ) {
+void _RQ_enqueue_with_priority( readyq* rq, Thread_Control *tcb ) {
   _Priority_Add_to_bit_map( &tcb->Priority_map );
   _Chain_Append_unprotected(tcb->ready, &tcb->Object.Node);
 }
 
-tcb* _RQ_read_first( readyq* ) {
-  return (Thread_Control *) _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+tcb* _RQ_read_first( readyq* rq ) {
+  return (Thread_Control *) rq[ _Priority_Get_highest() ].first;
 }
 
-tcb* _RQ_dequeue_with_priority( readyq*, prio ) {
-  Chain_Control *ready = &_Thread_Ready_chain[ prio ];
+tcb* _RQ_dequeue_with_priority( readyq* rq, priority* prio ) {
+  Chain_Control *ready = &rq[ prio ];
   return (Thread_Control*) _Chain_Get_first_unprotected( ready );
 }
 
-void _RQ_dequeue_tcb( readyq*, tcb* ) {
+void _RQ_dequeue_tcb( readyq* rq, Thread_Control *tcb ) {
   _Priority_Remove_from_bit_map( &tcb->Priority_map );
   _Chain_Extract_unprotected( &tcb->Object.Node );
 }
