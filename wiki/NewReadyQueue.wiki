@@ -64,3 +64,6 @@ These functions assume the current priority management scheme.  However, we shou
 Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
 
 === Priority ===
+The current priority management is captured in the [ReadyQueue#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Manager interface to encapsulate the particulars of how priority is determined.
+
+  
