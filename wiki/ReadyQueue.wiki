@@ -136,14 +136,26 @@ Each thread determines how to index the priority bit maps using the
 
 The Thread Priority Handler functions are all located in priority.inl.  Priority bit map management is pretty well captured, although the implementation is specifically tailored to the bitfield approach.  If we want to use a different way to represent priority, we may need to manipulate either the Priority Handler or the priority fields of the TCB and functions that access them.  Here is a list of the Priority Handler functions.
   * `_Priority_Handler_initialization`
+  Initializes priority handler.  Clears all bitmap fields.
   * `_Priority_Is_valid`
+  Bounds checking on priority values.
   * `_Priority_Major`
+  Returns upper nibble of priority.
   * `_Priority_Minor`
+  Returns lower nibble of priority.
   * `_Priority_Mask`
+  Bitfield mask for a particular priority value.
   * `_Priority_Mask_invert`
+  Inverted bitfield mask for a particular priority value.
   * `_Priority_Bits_index`
+  Translates the bit numbers returned by the bit scan to an index value.
   * `_Priority_Add_to_bit_map`
+  Indicate that a thread has been readied at a particular priority level.
   * `_Priority_Remove_from_bit_map`
+  Indicate that a thread has been removed from the ready state.
   * `_Priority_Get_highest`
+  Returns the priority of the highest priority ready thread.
   * `_Priority_Initialize_information`
+  Initializes the tcb field used for managing thread priority and bitmap.
   * `_Priority_Is_group_empty`
+  Returns true of an entire priority group is empty. Short-circuits the bit scan.
