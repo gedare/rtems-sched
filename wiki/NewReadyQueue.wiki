@@ -10,6 +10,8 @@ This page provides the design of how the ready queue will be refactored as part 
 At a high-level, the RTEMS' ready queue should be modular and configurable so that the existing ready queue structure can be used for uniproccessors and a new ready queue implementation can be used for multiprocessors. The ready queue should have an opaque interface to the rest of the system, including the scheduler manager. 
 
 == Supporting the Current Scheduler ==
+
+=== Ready Chains ===
 From the current use of the ready chains, we can see the following interface functions:
 {{{
 void _RQ_enqueue_last( readyq*, Thread_Control* ); /* fifo */
@@ -61,4 +63,4 @@ These functions assume the current priority management scheme.  However, we shou
 
 Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
 
-=== Adding Priority ===
+=== Priority ===
