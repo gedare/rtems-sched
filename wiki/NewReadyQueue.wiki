@@ -7,12 +7,56 @@ This page provides the design of how the ready queue will be refactored as part 
 
 == Broad Goals ==
 
-At a high-level, the RTEMS' ready queue should be modular and configurable so that the existing ready queue structure can be used for uniproccessors and a new ready queue implementation can be used for multiprocessors.
+At a high-level, the RTEMS' ready queue should be modular and configurable so that the existing ready queue structure can be used for uniproccessors and a new ready queue implementation can be used for multiprocessors. The ready queue should have an opaque interface to the rest of the system, including the scheduler manager. 
 
-== Interface ==
+== Supporting the Current Scheduler ==
+From the current use of the ready chains, we can see the following interface functions:
+{{{
+void _RQ_enqueue_last( readyq*, tcb* ); /* fifo */
 
+void _RQ_enqueue_with_priority( readyq*, tcb* ); /* prio */
 
-== Internal data structures ==
+tcb* _RQ_read_first( readyq* ); /* no dequeue */
 
+tcb* _RQ_dequeue_with_priority( readyq*, prio ); /* extract at prio */
 
-== Internal functions ==
+void _RQ_dequeue_tcb( readyq*, tcb* ); /* for sleep/suspend */
+}}}
+
+*Note: ready queue accesses are assumed to be protected by the caller.*
+
+The above interface supports both round-robin and priority-based scheduling policies, along with extracting arbitrary threads from the ready queue for blocking or for re-queueing operations. This functionality is mostly sufficient for the existing scheduler mechanism. However, this does not capture _management_ of priority.
+
+In the typical case, since the currently executing task stays on the ready queue, it would be explicitly removed with `_RQ_dequeue_tcb` to avoid race conditions. Thus there is no `_RQ_dequeue_first` function in this interface. However, `_RQ_dequeue_with_priority` would be used in situations such as rotating the ready queue, in which the first task of a given priority is shifted to the end of its queue. Passing this function the highest priority effectively provides an `_RQ_dequeue_first` function.  
+
+Here are some prototypical implementations of these interface functions with the current ready chain infrastructure:
+{{{
+void _RQ_enqueue_last( readyq*, tcb* ) {
+  _Chain_Append_unprotected( tcb->ready, &tcb->Object.Node );
+}
+
+void _RQ_enqueue_with_priority( readyq*, tcb* ) {
+  _Priority_Add_to_bit_map( &tcb->Priority_map );
+  _Chain_Append_unprotected(tcb->ready, &tcb->Object.Node);
+}
+
+tcb* _RQ_read_first( readyq* ) {
+  return (Thread_Control *) _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+}
+
+tcb* _RQ_dequeue_with_priority( readyq*, prio ) {
+  Chain_Control *ready = &_Thread_Ready_chain[ prio ];
+  return (Thread_Control*) _Chain_Get_first_unprotected( ready );
+}
+
+void _RQ_dequeue_tcb( readyq*, tcb* ) {
+  _Priority_Remove_from_bit_map( &tcb->Priority_map );
+  _Chain_Extract_unprotected( &tcb->Object.Node );
+}
+}}}
+
+These functions assume the current priority management scheme.  However, we should instead add an interface for priority-based scheduling, so that priority can take on different meaning in different contexts.  For example, deadline-based scheduling can be implemented instead, in which case priority is derived from relative deadlines.  This means we need to re-think this simple interface.
+
+Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
+
+=== Adding Priority ===
