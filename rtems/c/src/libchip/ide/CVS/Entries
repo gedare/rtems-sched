@@ -1,8 +1,8 @@
-/ata.h/1.9/Thu Oct 22 11:48:29 2009//
-/ata_internal.h/1.12/Tue Jan 19 09:10:03 2010//
-/ide_ctrl.h/1.4/Tue Apr 20 10:43:39 2004//
-/ide_ctrl_cfg.h/1.11/Mon Nov 30 03:42:53 2009//
-/ide_ctrl_io.h/1.7/Thu Oct  8 07:24:22 2009//
-/ide_controller.c/1.14/Sun Mar 14 17:38:49 2010//
-/ata.c/1.37/Wed Apr 14 17:14:35 2010//
+/ata.c/1.38/Tue Jun  1 20:03:58 2010//
+/ata.h/1.9/Tue Jun  1 19:42:46 2010//
+/ata_internal.h/1.12/Tue Jun  1 19:42:46 2010//
+/ide_controller.c/1.14/Tue Jun  1 19:42:46 2010//
+/ide_ctrl.h/1.4/Tue Jun  1 19:42:46 2010//
+/ide_ctrl_cfg.h/1.11/Tue Jun  1 19:42:46 2010//
+/ide_ctrl_io.h/1.7/Tue Jun  1 19:42:46 2010//
 D

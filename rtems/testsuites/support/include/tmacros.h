@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: tmacros.h,v 1.53 2010/04/28 16:37:20 joel Exp $
+ *  $Id: tmacros.h,v 1.54 2010/05/29 05:29:33 ralf Exp $
  */
 
 #ifndef __TMACROS_h
@@ -303,9 +303,6 @@ extern "C" {
 
 /* newlib's ino_t is a typedef to "unsigned long" */
 #define PRIxino_t "lx"
-
-/* newlib's off_t is a typedef to "long" */
-#define PRIdoff_t "ld"
 
 /* IEEE Std 1003.1-2008 defines a type blksize_t,
  * newlib currently doesn't have this type, but uses "long" */

@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.60 2009/12/03 17:15:01 joel Exp $
+## $Id: configure.ac,v 1.61 2010/05/29 05:31:45 ralf Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-psxtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -52,6 +52,9 @@ AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
 # FIXME: IEEE Std 1003.1-2008 mandates mprotect in sys/mman.h,
 # RTEMS provides a stub, despite newlib doesn't have sys/mman.h
 AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
+
+# FIXME: We should get rid of this. It's a cludge.
+AC_CHECK_SIZEOF([off_t])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile

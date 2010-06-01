@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_.h,v 1.32 2010/04/30 08:55:40 sh Exp $
+ *  $Id: libio_.h,v 1.34 2010/05/31 13:56:36 ccj Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H
@@ -246,7 +246,7 @@ int rtems_libio_is_file_open(
 
 int rtems_filesystem_evaluate_relative_path(
   const char                        *pathname,
-  int                                pathnamelen,
+  size_t                             pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
@@ -254,7 +254,7 @@ int rtems_filesystem_evaluate_relative_path(
 
 int rtems_filesystem_evaluate_path(
   const char                        *pathname,
-  int                                pathnamelen,
+  size_t                             pathnamelen,
   int                                flags,
   rtems_filesystem_location_info_t  *pathloc,
   int                                follow_link
@@ -270,8 +270,6 @@ int rtems_filesystem_prefix_separators(
 );
 
 void rtems_filesystem_initialize(void);
-
-int init_fs_mount_table(void);
 
 #ifdef __cplusplus
 }

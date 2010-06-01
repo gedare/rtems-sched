@@ -94,13 +94,13 @@ static struct	xdr_ops xdrmem_ops_unaligned = {
 void
 xdrmem_create(
 	XDR *xdrs,
-	caddr_t addr,
+	char * addr,
 	u_int size,
 	enum xdr_op op)
 {
 
 	xdrs->x_op = op;
-	xdrs->x_ops = ((size_t)addr & (sizeof(int32_t) - 1))
+	xdrs->x_ops = ((uintptr_t)addr & (sizeof(int32_t) - 1))
 		? &xdrmem_ops_unaligned : &xdrmem_ops_aligned;
 	xdrs->x_private = xdrs->x_base = addr;
 	xdrs->x_handy = size;
@@ -210,10 +210,10 @@ xdrmem_setpos(
 	XDR *xdrs,
 	u_int pos)
 {
-	register caddr_t newaddr = xdrs->x_base + pos;
-	register caddr_t lastaddr = xdrs->x_private + xdrs->x_handy;
+	void *newaddr = xdrs->x_base + pos;
+	void *lastaddr = xdrs->x_private + xdrs->x_handy;
 
-	if ((intptr_t)newaddr > (intptr_t)lastaddr)
+	if (newaddr > lastaddr)
 		return (FALSE);
 	xdrs->x_private = newaddr;
 	xdrs->x_handy = (intptr_t)lastaddr - (intptr_t)newaddr;
@@ -229,7 +229,7 @@ xdrmem_inline_aligned(
 
 	if (xdrs->x_handy >= len) {
 		xdrs->x_handy -= len;
-		buf = (int32_t *) xdrs->x_private;
+		buf = (int32_t *)xdrs->x_private;
 		xdrs->x_private += len;
 	}
 	return (buf);
