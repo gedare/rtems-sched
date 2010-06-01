@@ -79,10 +79,6 @@ $(PROJECT_INCLUDE)/rtems/score/coresem.h: include/rtems/score/coresem.h $(PROJEC
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coresem.h
 
-$(PROJECT_INCLUDE)/rtems/score/edf.h: include/rtems/score/edf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/edf.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/edf.h
-
 $(PROJECT_INCLUDE)/rtems/score/heap.h: include/rtems/score/heap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/heap.h
@@ -106,10 +102,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.h
 $(PROJECT_INCLUDE)/rtems/score/priority.h: include/rtems/score/priority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
-
-$(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h
 
 $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
@@ -221,10 +213,6 @@ $(PROJECT_INCLUDE)/rtems/score/coresem.inl: inline/rtems/score/coresem.inl $(PRO
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/coresem.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/coresem.inl
 
-$(PROJECT_INCLUDE)/rtems/score/edf.inl: inline/rtems/score/edf.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/edf.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/edf.inl
-
 $(PROJECT_INCLUDE)/rtems/score/heap.inl: inline/rtems/score/heap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/heap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/heap.inl
@@ -240,10 +228,6 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
 $(PROJECT_INCLUDE)/rtems/score/priority.inl: inline/rtems/score/priority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
-
-$(PROJECT_INCLUDE)/rtems/score/rbtree.inl: inline/rtems/score/rbtree.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
 
 $(PROJECT_INCLUDE)/rtems/score/stack.inl: inline/rtems/score/stack.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl
