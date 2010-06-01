@@ -1,12 +1,12 @@
-/.cvsignore/1.4/Mon Jul 14 05:53:42 2008//
-/Makefile.am/1.41/Thu Oct  2 21:38:00 2008//
-/README/1.2/Thu Nov 18 21:22:57 1999//
-/bsp_specs/1.8/Thu Dec  4 20:31:44 2008//
-/configure.ac/1.25/Sat Nov 28 06:28:41 2009//
-/times/1.1/Fri Mar 20 17:16:30 1998//
 D/include////
 D/make////
 D/start////
 D/startup////
-/ChangeLog/1.123/Fri Apr 30 19:21:51 2010//
-/preinstall.am/1.6/Sun Apr 25 18:26:32 2010//
+/.cvsignore/1.4/Tue Jun  1 19:42:25 2010//
+/ChangeLog/1.123/Tue Jun  1 19:42:25 2010//
+/Makefile.am/1.41/Tue Jun  1 19:42:25 2010//
+/README/1.2/Tue Jun  1 19:42:25 2010//
+/bsp_specs/1.8/Tue Jun  1 19:42:25 2010//
+/configure.ac/1.25/Tue Jun  1 19:42:25 2010//
+/preinstall.am/1.6/Tue Jun  1 19:42:25 2010//
+/times/1.1/Tue Jun  1 19:42:25 2010//
