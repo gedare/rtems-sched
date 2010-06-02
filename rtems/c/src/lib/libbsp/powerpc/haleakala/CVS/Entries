@@ -3,11 +3,11 @@ D/include////
 D/irq////
 D/make////
 D/startup////
-/.cvsignore/1.1/Tue Jun  1 19:41:37 2010//
-/ChangeLog/1.31/Tue Jun  1 19:41:37 2010//
-/Makefile.am/1.15/Tue Jun  1 19:41:37 2010//
-/README/1.1/Tue Jun  1 19:41:37 2010//
-/bsp_specs/1.1/Tue Jun  1 19:41:37 2010//
-/bsp_specs.dl/1.1/Tue Jun  1 19:41:37 2010//
-/configure.ac/1.7/Tue Jun  1 19:41:37 2010//
-/preinstall.am/1.4/Tue Jun  1 21:46:39 2010//
+/.cvsignore/1.1/Tue Jul 15 22:54:52 2008//
+/ChangeLog/1.31/Wed Apr 14 17:14:31 2010//
+/Makefile.am/1.15/Sat Nov 28 06:24:47 2009//
+/README/1.1/Mon Jul 14 08:45:02 2008//
+/bsp_specs/1.1/Mon Jul 14 08:45:02 2008//
+/bsp_specs.dl/1.1/Mon Jul 14 08:45:02 2008//
+/configure.ac/1.7/Tue Oct 20 05:05:32 2009//
+/preinstall.am/1.4/Sun Apr 25 18:26:32 2010//
