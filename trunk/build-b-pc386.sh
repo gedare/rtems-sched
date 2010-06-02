@@ -15,7 +15,7 @@ time make -j 4 2> make.error
 
 echo ""
 
-${TARGET}-objdump -d ${TARGET}/c/sun4u/testsuites/samples/hello/hello.exe > hello.disasm
+${TARGET}-objdump -d ${TARGET}/c/${BSP}/testsuites/samples/hello/hello.exe > hello.disasm
 
-${TARGET}-objdump -d ${TARGET}/c/sun4u/testsuites/samples/ticker/ticker.exe > ticker.disasm
+${TARGET}-objdump -d ${TARGET}/c/${BSP}/testsuites/samples/ticker/ticker.exe > ticker.disasm
 
