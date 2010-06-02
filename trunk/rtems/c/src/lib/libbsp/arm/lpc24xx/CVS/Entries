@@ -7,10 +7,10 @@ D/misc////
 D/rtc////
 D/ssp////
 D/startup////
-/.cvsignore/1.1/Tue Jun  1 19:41:27 2010//
-/ChangeLog/1.52/Tue Jun  1 20:03:56 2010//
-/Makefile.am/1.28/Tue Jun  1 20:03:56 2010//
-/README/1.6/Tue Jun  1 19:41:27 2010//
-/bsp_specs/1.2/Tue Jun  1 19:41:27 2010//
-/configure.ac/1.15/Tue Jun  1 19:41:27 2010//
-/preinstall.am/1.19/Tue Jun  1 21:46:39 2010//
+/.cvsignore/1.1/Mon Sep 22 16:20:00 2008//
+/ChangeLog/1.52/Wed Jun  2 13:21:06 2010//
+/Makefile.am/1.28/Wed Jun  2 13:21:06 2010//
+/README/1.6/Mon Oct  5 10:33:31 2009//
+/bsp_specs/1.2/Thu Dec  4 20:30:17 2008//
+/configure.ac/1.15/Wed Apr 14 17:14:24 2010//
+/preinstall.am/1.19/Wed Jun  2 13:21:06 2010//

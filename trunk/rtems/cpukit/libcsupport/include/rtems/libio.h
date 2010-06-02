@@ -17,7 +17,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio.h,v 1.64 2010/06/01 10:42:51 ralf Exp $
+ *  $Id: libio.h,v 1.65 2010/06/02 00:43:13 ccj Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO_H
@@ -292,7 +292,7 @@ struct _rtems_filesystem_operations_table {
 /*
  * File system table used by mount to manage file systems.
  */
-typedef struct _rtems_filesystem_table {
+typedef struct rtems_filesystem_table_t {
   const char                    *type;
   rtems_filesystem_fsmount_me_t  mount_h;
 } rtems_filesystem_table_t;
@@ -300,7 +300,7 @@ typedef struct _rtems_filesystem_table {
 /*
  * File system table runtime loaded nodes.
  */
-typedef struct _rtems_filesystem_table_node {
+typedef struct rtems_filesystem_table_node_t {
   rtems_chain_node         node;
   rtems_filesystem_table_t entry;
 } rtems_filesystem_table_node_t;
