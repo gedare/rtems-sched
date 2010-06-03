@@ -103,6 +103,14 @@ $(PROJECT_INCLUDE)/rtems/score/priority.h: include/rtems/score/priority.h $(PROJ
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
 
+$(PROJECT_INCLUDE)/rtems/score/readyq.h: include/rtems/score/readyq.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.h
+
+$(PROJECT_INCLUDE)/rtems/score/rqdata.h: include/rtems/score/rqdata.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rqdata.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rqdata.h
+
 $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
@@ -232,6 +240,14 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
 $(PROJECT_INCLUDE)/rtems/score/stack.inl: inline/rtems/score/stack.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.inl
+
+$(PROJECT_INCLUDE)/rtems/score/readyq.inl: inline/rtems/score/readyq.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.inl
+
+$(PROJECT_INCLUDE)/rtems/score/rqdata.inl: inline/rtems/score/rqdata.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
 
 $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl

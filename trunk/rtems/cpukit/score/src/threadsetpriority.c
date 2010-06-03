@@ -50,7 +50,10 @@ void _Thread_Set_priority(
 )
 {
   the_thread->current_priority = new_priority;
+#if 0
   the_thread->ready            = &_Thread_Ready_chain[ new_priority ];
+#endif
+  the_thread->ready            = &_Thread_Ready_queue.Queues.Priority[ new_priority ];
 
   _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
 }

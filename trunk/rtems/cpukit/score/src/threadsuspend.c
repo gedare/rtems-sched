@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -68,6 +69,9 @@ void _Thread_Suspend(
 
   the_thread->current_state = STATES_SUSPENDED;
 
+
+  _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
+#if 0
   if ( _Chain_Has_only_one_node( ready ) ) {
 
     _Chain_Initialize_empty( ready );
@@ -75,6 +79,7 @@ void _Thread_Suspend(
 
   } else
     _Chain_Extract_unprotected( &the_thread->Object.Node );
+#endif
 
   _ISR_Flash( level );
 
