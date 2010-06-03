@@ -25,6 +25,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
+    include/rtems/score/readyq.h include/rtems/score/rqdata.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
@@ -53,6 +54,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
+    inline/rtems/score/readyq.inl inline/rtems/score/rqdata.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
     inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
     inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
@@ -142,6 +144,18 @@ libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
+
+## READYQ_C_FILES
+libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
+    src/readyqdequeuefifo.c src/readyqdequeuepriority.c \
+    src/readyqenqueue.c src/readyqenqueuefifo.c \
+    src/readyqenqueuefirst.c src/readyqenqueuefirstfifo.c \
+		src/readyqenqueuefirstpriority.c \
+    src/readyqenqueuepriority.c src/readyqextract.c \
+    src/readyqextractfifo.c src/readyqextractpriority.c \
+    src/readyqextractwithproxy.c src/readyqfirst.c src/readyqfirstfifo.c \
+    src/readyqfirstpriority.c src/readyqflush.c src/readyqrequeue.c \
+    src/readyqprocesstimeout.c src/readyqtimeout.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \

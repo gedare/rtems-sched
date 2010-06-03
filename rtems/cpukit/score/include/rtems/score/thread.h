@@ -62,6 +62,7 @@ extern "C" {
 #endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/rqdata.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
@@ -472,6 +473,10 @@ SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
  *  The following points to the array of FIFOs used to manage the
  *  set of ready threads.
  */
+#if 0
+SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
+#endif
+SCORE_EXTERN Ready_queue_Control  _Thread_Ready_queue;
 SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
 
 /**

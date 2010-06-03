@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -61,7 +62,10 @@ void _Thread_Rotate_Ready_Queue(
   Chain_Control  *ready;
   Chain_Node     *node;
 
+#if 0
   ready     = &_Thread_Ready_chain[ priority ];
+#endif
+  ready     = &_Thread_Ready_queue.Queues.Priority[ priority ];
   executing = _Thread_Executing;
 
   if ( ready == executing->ready ) {
@@ -73,8 +77,14 @@ void _Thread_Rotate_Ready_Queue(
 
   if ( !_Chain_Is_empty( ready ) ) {
     if (!_Chain_Has_only_one_node( ready ) ) {
+      _Ready_queue_Requeue(
+        &_Thread_Ready_queue, 
+        (Thread_Control*) _Chain_First(ready)
+      );
+#if 0
       node = _Chain_Get_first_unprotected( ready );
       _Chain_Append_unprotected( ready, node );
+#endif
     }
   }
 

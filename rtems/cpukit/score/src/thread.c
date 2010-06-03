@@ -24,6 +24,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -45,7 +46,9 @@
 
 void _Thread_Handler_initialization(void)
 {
+#if 0
   uint32_t     index;
+#endif
   uint32_t     ticks_per_timeslice;
   uint32_t     maximum_extensions;
   #if defined(RTEMS_MULTIPROCESSING)
@@ -82,12 +85,21 @@ void _Thread_Handler_initialization(void)
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
+  /* TODO: make ready queue discipline configurable and give control of 
+   * the following ready chain allocation. */
+  _Ready_queue_Initialize(
+      &_Thread_Ready_queue, 
+      READY_QUEUE_DISCIPLINE_PRIORITY
+  );
+
+#if 0
   _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
     (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
   );
 
   for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
     _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
+#endif
 
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Handler_initialization( maximum_proxies );

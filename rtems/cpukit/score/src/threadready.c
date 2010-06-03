@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -60,10 +61,14 @@ void _Thread_Ready(
   _ISR_Disable( level );
 
   the_thread->current_state = STATES_READY;
+  
+  _Ready_queue_Enqueue(&_Thread_Ready_queue, the_thread);
 
+#if 0
   _Priority_Add_to_bit_map( &the_thread->Priority_map );
 
   _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+#endif
 
   _ISR_Flash( level );
 

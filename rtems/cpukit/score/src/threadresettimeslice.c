@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -61,8 +62,11 @@ void _Thread_Reset_timeslice( void )
       _ISR_Enable( level );
       return;
     }
+    _Ready_queue_Requeue(&_Thread_Ready_queue, executing);
+#if 0
     _Chain_Extract_unprotected( &executing->Object.Node );
     _Chain_Append_unprotected( ready, &executing->Object.Node );
+#endif
 
   _ISR_Flash( level );
 
