@@ -66,4 +66,6 @@ Additional concerns here would be for supporting alternate ready queue implement
 === Priority ===
 The current priority management is captured in the [ReadyQueue#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Handler interface to encapsulate the particulars of how priority is determined.
 
+_Note: Altering the priority handler may require updating the threadq implementation for blocked and sleeping threads._
+
 The most important function of the Priority Handler is `_Priority_Get_highest`.
