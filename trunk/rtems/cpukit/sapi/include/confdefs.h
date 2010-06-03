@@ -33,7 +33,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: confdefs.h,v 1.134 2010/06/02 00:43:13 ccj Exp $
+ *  $Id: confdefs.h,v 1.135 2010/06/03 06:46:51 ccj Exp $
  */
 
 #ifndef __CONFIGURATION_TEMPLATE_h
@@ -447,12 +447,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifndef CONFIGURE_HAS_OWN_MOUNT_TABLE
     const rtems_filesystem_mount_table_t configuration_mount_table = {
-      #ifdef CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-        "imfs",
-      #elif defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
+      #if defined(CONFIGURE_USE_DEVFS_AS_BASE_FILESYSTEM)
         "devfs",
-      #else  /* using miniIMFS as base filesystem */
+      #elif defined(CONFIGURE_USE_MINIIMFS_AS_BASE_FILESYSTEM)
         "mimfs",
+      #else  /* using IMFS as base filesystem */
+        "imfs",
       #endif
       RTEMS_FILESYSTEM_READ_WRITE,
       NULL,
