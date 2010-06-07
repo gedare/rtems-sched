@@ -1,0 +1,6 @@
+
+export R=/home/gedare/work/rtems/gsoc/rtems-sched
+export r=${R}/rtems
+export b=${r}/c/src/lib/libbsp
+export c=${r}/c/src/lib/libcpu
+
