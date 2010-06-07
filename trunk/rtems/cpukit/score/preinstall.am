@@ -111,6 +111,10 @@ $(PROJECT_INCLUDE)/rtems/score/rqdata.h: include/rtems/score/rqdata.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rqdata.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rqdata.h
 
+$(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+
 $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
@@ -248,6 +252,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.inl
 $(PROJECT_INCLUDE)/rtems/score/rqdata.inl: inline/rtems/score/rqdata.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
+
+$(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
 
 $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl
