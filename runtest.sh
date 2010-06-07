@@ -12,5 +12,5 @@ EXTENSION=
 
 PWD=`pwd`
 
-$R/gcc-testing/sim-scripts/pc386 -i b-${BSP}${EXTENSION}/${TARGET}/c/${BSP}/testsuites/${1}/${2}/${2}.exe
+$R/rtems-testing/sim-scripts/pc386 -i b-${BSP}${EXTENSION}/${TARGET}/c/${BSP}/testsuites/${1}/${2}/${2}.exe
 
