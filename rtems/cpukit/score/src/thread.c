@@ -25,6 +25,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/readyq.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -85,12 +86,24 @@ void _Thread_Handler_initialization(void)
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
-  /* TODO: make ready queue discipline configurable and give control of 
-   * the following ready chain allocation. */
-  _Ready_queue_Initialize(
-      &_Thread_Ready_queue, 
-      READY_QUEUE_DISCIPLINE_PRIORITY
-  );
+  switch (Configuration.scheduler_policy) {
+    case _SCHED_PRI:
+      _Ready_queue_Initialize(
+        &_Thread_Ready_queue, 
+        READY_QUEUE_DISCIPLINE_PRIORITY
+      );
+      break;
+
+    case _SCHED_FIFO:
+      _Ready_queue_Initialize(
+        &_Thread_Ready_queue, 
+        READY_QUEUE_DISCIPLINE_FIFO
+      );
+      break;     
+
+    default:
+      while (1);  /* should be _Internal_error_Occurred */
+  }
 
 #if 0
   _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(

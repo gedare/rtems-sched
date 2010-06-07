@@ -26,6 +26,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/priority.h \
     include/rtems/score/readyq.h include/rtems/score/rqdata.h \
+		include/rtems/score/scheduler.h \
     include/rtems/score/stack.h include/rtems/score/states.h \
     include/rtems/score/sysstate.h include/rtems/score/thread.h \
     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
@@ -55,6 +56,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
     inline/rtems/score/readyq.inl inline/rtems/score/rqdata.inl \
+		inline/rtems/score/scheduler.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
     inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
     inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \

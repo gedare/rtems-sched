@@ -1220,6 +1220,10 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
   #endif
 
+  #ifndef CONFIGURE_SCHEDULER_POLICY
+    #define CONFIGURE_SCHEDULER_POLICY SCHEDULER_DEFAULT_POLICY
+  #endif
+
 /*
  *  Initial Extension Set
  */
@@ -2164,6 +2168,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
+    CONFIGURE_SCHEDULER_POLICY,               /* scheduling policy */
     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
     CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */
