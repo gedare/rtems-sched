@@ -28,5 +28,4 @@ We can provide a more generic interface by not specifying how priority is stored
   void _Priority_Set ( Priority_Information *, Priority_Control ) ; /* replace _Priority_Initialize_information */
 }}}
 
-This new interface allows for opaque priority management, encapsulated as part of the Priority_Information and Priority_Control types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.
-
+This new interface allows for opaque priority management, encapsulated as part of the `Priority_Information` and `Priority_Control` types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.
