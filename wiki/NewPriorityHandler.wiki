@@ -42,4 +42,4 @@ These structures are used in the thread management (scheduler). `Priority_Contro
 
 However, some of the `Priority_Control` fields are used directly, especially in comparison and assignment of priority values.  So either we need to remove all direct uses of `Priority_Control` values, or we need to impose the assumption that `Priority_Control` is a primitive type capable of comparison and assignment (and further that a smaller priority value means higher priority).
 
-*Note: changing the `Priority_Control` type will require updating mutex and priority inheritance/ceiling code.*
+_Note: changing the `Priority_Control` type will require updating mutex and priority inheritance/ceiling code._
