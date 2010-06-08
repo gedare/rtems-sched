@@ -1,0 +1,32 @@
+#summary Design of refactored Priority Handler.
+#labels Phase-Design
+
+= Introduction =
+
+This page provides the design of how the Priority Handler will be refactored as part of this project.  See ReadyQueueAndPriority for an overview of the current queue structure and some background on RTEMS chains and priority bit maps.
+
+== Broad Goals ==
+
+At a high-level, the RTEMS' Priority Handler should be modular and configurable so that the existing bit map priority structure can be used but an alternate priority structure can be optionally added. The Priority Handler should have an opaque interface to the rest of the system, including the scheduler manager. 
+
+== Supporting the Current Scheduler ==
+
+This section describes how the existing scheduler can be improved by more generic supporting interface in the Priority Handler.
+
+The current priority management is captured in the [ReadyQueueAndPriority#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Handler interface to encapsulate the particulars of how priority is determined.
+
+The important interface functions of the Priority Handler include: `_Priority_Get_highest()`, `_Priority_Remove_from_bit_map()`, `_Priority_Add_to_bit_map()`, and `_Priority_Initialize_information`.  These functions return the value of the highest priority ready task, update priority state information (bit maps) when a thread is removed from or set to the ready state, and sets the priority information to a new priority value respectively.  Currently these are the only functions that are called external to the Priority Handler.
+
+We can provide a more generic interface by not specifying how priority is stored, that is by eliding the bit map from the interface function name.  Thus, the external interface of the Priority Handler would instead comprise the following functions:
+{{{
+  Priority_Control _Priority_Get_highest ( void ) ; /* unchanged */
+
+  void _Priority_Add ( Priority_Information * ) ;
+
+  void _Priority_Remove ( Priority_Information * ) ;
+
+  void _Priority_Set ( Priority_Information *, Priority_Control ) ; /* replace _Priority_Initialize_information */
+}}}
+
+This new interface allows for opaque priority management, encapsulated as part of the Priority_Information and Priority_Control types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.
+

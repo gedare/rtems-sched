@@ -3,7 +3,7 @@
 
 = Introduction =
 
-This page provides the design of how the ready queue will be refactored as part of this project.  See ReadyQueue for an overview of the current queue structure and some background on RTEMS chains and priority bit maps.
+This page provides the design of how the ready queue will be refactored as part of this project.  See ReadyQueueAndPriority for an overview of the current queue structure and some background on RTEMS chains and priority bit maps.
 
 == Broad Goals ==
 
@@ -11,7 +11,8 @@ At a high-level, the RTEMS' ready queue should be modular and configurable so th
 
 == Supporting the Current Scheduler ==
 
-=== Ready Chains ===
+This section describes how the existing scheduler can be improved by more generic supporting interface in the ready queue.
+
 From the current use of the ready chains, we can see the following interface functions:
 {{{
 void _RQ_enqueue_last( readyq*, Thread_Control* ); /* fifo */
@@ -63,9 +64,4 @@ These functions assume the current priority management scheme.  However, we shou
 
 Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
 
-=== Priority ===
-The current priority management is captured in the [ReadyQueue#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Handler interface to encapsulate the particulars of how priority is determined.
 
-_Note: Altering the priority handler may require updating the threadq implementation for blocked and sleeping threads._
-
-The most important function of the Priority Handler is `_Priority_Get_highest`.
