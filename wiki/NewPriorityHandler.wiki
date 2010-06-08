@@ -15,6 +15,8 @@ This section describes how the existing scheduler can be improved by more generi
 
 The current priority management is captured in the [ReadyQueueAndPriority#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Handler interface to encapsulate the particulars of how priority is determined.
 
+=== Interface ===
+
 The important interface functions of the Priority Handler include: `_Priority_Get_highest()`, `_Priority_Remove_from_bit_map()`, `_Priority_Add_to_bit_map()`, and `_Priority_Initialize_information`.  These functions return the value of the highest priority ready task, update priority state information (bit maps) when a thread is removed from or set to the ready state, and sets the priority information to a new priority value respectively.  Currently these are the only functions that are called external to the Priority Handler.
 
 We can provide a more generic interface by not specifying how priority is stored, that is by eliding the bit map from the interface function name.  Thus, the external interface of the Priority Handler would instead comprise the following functions:
@@ -29,3 +31,14 @@ We can provide a more generic interface by not specifying how priority is stored
 }}}
 
 This new interface allows for opaque priority management, encapsulated as part of the `Priority_Information` and `Priority_Control` types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.
+
+=== Data Structures ===
+
+The externally visible data structures of the Priority Handler include the `Priority_Information` and `Priority_Control` structures.  In the current implementation, the Priority Information structure is used on a per-thread basis to manipulate the priority map, and the Priority Control type is simply an integer that represents a priority level (i.e. a number between 0 and 255).
+
+These structures are used in the thread management (scheduler). `Priority_Control` is used as `Thread_Start_information.initial_priority`, `Thread_Control.current_priority`, and `Thread_Control.real_priority`. `Priority_Information` is the `Thread_Control.Priority_map` field.
+
+`Priority_map` does not appear to be directly manipulated in the current RTEMS code, so it seems that `Priority_Information` is already essentially an opaque type.  
+
+However, some of the `Priority_Control` fields are used directly, especially in comparison and assignment of priority values.  So either we need to remove all direct uses of `Priority_Control` values, or we need to impose the assumption that `Priority_Control` is a primitive type capable of comparison and assignment (and further that a smaller priority value means higher priority).
+
