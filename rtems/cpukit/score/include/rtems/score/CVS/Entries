@@ -12,14 +12,12 @@
 /corerwlock.h/1.6/Sat Nov 28 05:58:53 2009//
 /coresem.h/1.28/Sat Nov 28 05:58:54 2009//
 /corespinlock.h/1.4/Sat Nov 28 05:58:54 2009//
-/heap.h/1.41/Fri Sep 25 17:49:27 2009//
 /interr.h/1.29/Wed Mar 10 22:55:53 2010//
 /isr.h/1.31/Sat Nov 28 05:58:54 2009//
 /mpci.h/1.27/Sat Nov 28 05:58:54 2009//
 /mppkt.h/1.22/Sat Nov 28 05:58:54 2009//
 /object.h/1.77/Wed Apr 14 17:14:47 2010//
 /objectmp.h/1.28/Sat Nov 28 05:58:54 2009//
-/priority.h/1.25/Sat Nov 28 05:58:54 2009//
 /protectedheap.h/1.11/Mon Nov 30 13:05:29 2009//
 /stack.h/1.19/Sat Nov 28 05:58:54 2009//
 /states.h/1.22/Sat Nov 28 05:58:54 2009//
@@ -36,4 +34,6 @@
 /userext.h/1.32/Fri Jan 29 15:57:19 2010//
 /watchdog.h/1.29/Sat Nov 28 05:58:54 2009//
 /wkspace.h/1.30/Sat Nov 28 05:58:54 2009//
+/heap.h/1.42/Wed Jun  9 22:19:08 2010//
+/priority.h/1.25/Wed Jun  9 19:16:22 2010//
 D

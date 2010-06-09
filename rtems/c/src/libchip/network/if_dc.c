@@ -1,4 +1,4 @@
-/* $Id: if_dc.c,v 1.18 2010/04/28 13:23:41 joel Exp $
+/* $Id: if_dc.c,v 1.19 2010/06/03 21:00:23 joel Exp $
  *
  * Ported from FreeBSD --> RTEMS, december 03.
  * 	Daron Chabot <daron@nucleus.usask.ca>
@@ -151,11 +151,7 @@
 #include <vm/vm.h>              /* for vtophys */
 
 
-#if defined(__i386__)
-#define vtophys(p)  (u_int32_t)(p)
-#else
-#define vtophys(p)  vtophys(p)
-#endif
+#define vtophys(p)  (uintptr_t)(p)
 
 /*
 #include <net/if_arp.h>

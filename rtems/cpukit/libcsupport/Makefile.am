@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.118 2010/05/31 13:56:36 ccj Exp $
+##  $Id: Makefile.am,v 1.120 2010/06/08 12:59:51 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -46,7 +46,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/libio_init.c \
     src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c \
-    src/open_dev_console.c src/__usrenv.c
+    src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
@@ -110,6 +110,8 @@ BSD_LIBC_C_FILES = src/strlcpy.c src/strlcat.c src/issetugid.c
 
 libcsupport_a_SOURCES = src/gxx_wrappers.c src/getchark.c src/printk.c \
     src/printk_plugin.c src/putk.c src/vprintk.c \
+    src/sup_fs_is_separator.c src/sup_fs_get_start_loc.c \
+    src/sup_fs_get_sym_start_loc.c \
     $(BSD_LIBC_C_FILES) $(BASE_FS_C_FILES) $(MALLOC_C_FILES) \
     $(ERROR_C_FILES) $(ASSOCIATION_C_FILES)
 

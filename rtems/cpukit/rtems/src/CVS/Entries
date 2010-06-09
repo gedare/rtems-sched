@@ -76,7 +76,6 @@
 /regioncreate.c/1.13/Tue Dec 15 18:26:41 2009//
 /regiondata.c/1.1/Mon May 21 23:19:20 2007//
 /regiondelete.c/1.12/Tue Dec 15 18:26:41 2009//
-/regionextend.c/1.16/Tue Dec 15 18:26:41 2009//
 /regiongetfreeinfo.c/1.9/Tue Dec 15 18:26:41 2009//
 /regiongetinfo.c/1.13/Tue Dec 15 18:26:41 2009//
 /regiongetsegment.c/1.17/Tue Dec 15 18:26:41 2009//
@@ -154,4 +153,5 @@
 /timerserverfireafter.c/1.15/Tue Dec 15 18:26:42 2009//
 /timerserverfirewhen.c/1.14/Tue Dec 15 18:26:42 2009//
 /workspace.c/1.5/Wed May 13 16:48:08 2009//
+/regionextend.c/1.17/Wed Jun  9 22:19:08 2010//
 D

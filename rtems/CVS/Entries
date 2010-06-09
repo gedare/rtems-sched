@@ -10,7 +10,6 @@ D/testsuites////
 D/tools////
 /.cvsignore/1.7/Fri Jan  9 13:38:16 2004//
 /COPYING/1.2/Wed Nov 14 00:04:32 2001//
-/ChangeLog/1.378/Wed Jun  2 13:22:09 2010//
 /INSTALL/1.6/Tue Feb  8 18:35:07 2000//
 /LICENSE/1.6/Tue Apr 22 16:50:29 1997//
 /LICENSE.NET/1.2/Fri Sep  1 07:19:16 2000//
@@ -30,3 +29,4 @@ D/tools////
 /config-ml.in/1.8/Wed Dec 31 03:16:01 2008//
 /configure.ac/1.29/Sun Jun  1 05:07:57 2008//
 /release_support/1.7/Thu Aug  2 15:01:29 2007//
+/ChangeLog/1.379/Wed Jun  9 22:19:03 2010//

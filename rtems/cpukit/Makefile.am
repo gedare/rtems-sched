@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.94 2010/02/18 00:24:24 ccj Exp $
+## $Id: Makefile.am,v 1.96 2010/06/09 08:06:25 ralf Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I aclocal
@@ -20,11 +20,9 @@ SUBDIRS += wrapup
 SUBDIRS += zlib
 
 # applications
-SUBDIRS += httpd
 SUBDIRS += ftpd
 SUBDIRS += telnetd
 SUBDIRS += pppd
-SUBDIRS += shttpd
 SUBDIRS += mghttpd
 
 noinst_DATA = preinstall-stamp
