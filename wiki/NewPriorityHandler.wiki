@@ -54,3 +54,8 @@ _TODO: Use Priority Queue terminology, and add a `get_highest` that operates on 
 This new interface allows for opaque priority management, encapsulated as part of the `Priority_Information` and `Priority_Control` types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.  Note that this implies the Priority Handler consists of a priority queue and priority values, and that the priority queue is not strictly identical with the thread ready queue.
 
 `Priority_Control` value comparison is accomplished by converting to `uint32_t` representation and then treating it like a primitive.  Assignment to `Priority_Control` is done either with `Priority_Set`, which assigns from a `Priority_Control` variable, or with `Priority_Set_value`, which assigns from a `uint32_t` primitive.
+
+=== Miscellaneous ===
+
+The `_Priority_Is_group_empty` function of the Priority Handler is dead code. It has been removed.
+
