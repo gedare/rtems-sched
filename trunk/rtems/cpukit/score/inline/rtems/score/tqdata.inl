@@ -37,7 +37,7 @@ RTEMS_INLINE_ROUTINE uint32_t   _Thread_queue_Header_number (
   Priority_Control the_priority
 )
 {
-  return (the_priority / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER);
+  return (_Priority_Get_value(the_priority) / TASK_QUEUE_DATA_PRIORITIES_PER_HEADER);
 }
 
 /**
@@ -50,7 +50,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_queue_Is_reverse_search (
   Priority_Control the_priority
 )
 {
-  return ( the_priority & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK );
+  return ( _Priority_Get_value(the_priority) & TASK_QUEUE_DATA_REVERSE_SEARCH_MASK );
 }
 
 /**

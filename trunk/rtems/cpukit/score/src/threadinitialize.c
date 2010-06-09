@@ -193,8 +193,8 @@ bool _Thread_Initialize(
   #if defined(RTEMS_ITRON_API)
     the_thread->suspend_count         = 0;
   #endif
-  the_thread->real_priority           = priority;
-  the_thread->Start.initial_priority  = priority;
+  _Priority_Set(&the_thread->real_priority, &priority);
+  _Priority_Set(&the_thread->Start.initial_priority, &priority);
   _Thread_Set_priority( the_thread, priority );
 
   /*

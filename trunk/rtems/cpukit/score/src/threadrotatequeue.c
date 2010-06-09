@@ -65,7 +65,7 @@ void _Thread_Rotate_Ready_Queue(
 #if 0
   ready     = &_Thread_Ready_chain[ priority ];
 #endif
-  ready     = &_Thread_Ready_queue.Queues.Priority[ priority ];
+  ready = &_Thread_Ready_queue.Queues.Priority[ _Priority_Get_value(priority) ];
   executing = _Thread_Executing;
 
   if ( ready == executing->ready ) {
