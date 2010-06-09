@@ -127,7 +127,7 @@ void _Thread_Change_priority(
     else
       _Ready_queue_Enqueue( &_Thread_Ready_queue, the_thread );
 #if 0
-    _Priority_Add_to_bit_map( &the_thread->Priority_map );
+    _Priority_Add( &the_thread->Priority_map );
     if ( prepend_it )
       _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
     else

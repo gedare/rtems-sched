@@ -168,11 +168,15 @@ RTEMS_INLINE_ROUTINE uint32_t   _Priority_Bits_index (
 #endif
 
 /**
+ * Priority Queue implemented by bit map
+ */
+
+/**
  *  This routine uses the_priority_map to update the priority
  *  bit maps to indicate that a thread has been readied.
  */
 
-RTEMS_INLINE_ROUTINE void _Priority_Add_to_bit_map (
+RTEMS_INLINE_ROUTINE void _Priority_Add_bit_map (
   Priority_Information *the_priority_map
 )
 {
@@ -186,7 +190,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Add_to_bit_map (
  *  ready state.
  */
 
-RTEMS_INLINE_ROUTINE void _Priority_Remove_from_bit_map (
+RTEMS_INLINE_ROUTINE void _Priority_Remove_bit_map (
   Priority_Information *the_priority_map
 )
 {
@@ -200,7 +204,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Remove_from_bit_map (
  *  ready thread.
  */
 
-RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest( void )
+RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest_bit_map( void )
 {
   Priority_Bit_map_control minor;
   Priority_Bit_map_control major;
@@ -218,7 +222,7 @@ RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest( void )
  *  at new_priority.
  */
 
-RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
+RTEMS_INLINE_ROUTINE void _Priority_Initialize_information_bit_map(
   Priority_Information *the_priority_map,
   Priority_Control      new_priority
 )
@@ -244,16 +248,60 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information(
   the_priority_map->block_minor = (Priority_Bit_map_control)(~((uint32_t)mask));
 }
 
-/**
- *  This function returns true if the priority GROUP is empty, and
- *  false otherwise.
- */
 
-RTEMS_INLINE_ROUTINE bool _Priority_Is_group_empty (
-  Priority_Control      the_priority
+/**
+ * Priority Queue Interface functions
+ *
+ * Currently supports the following priority queue implementations:
+ *   Bit map
+ */
+/**
+ * @brief Add @a the_priority_map information to the (global) priority queue.
+ *
+ */
+RTEMS_INLINE_ROUTINE void _Priority_Add( 
+    Priority_Information *the_priority_map 
 )
 {
-  return _Priority_Get_value(the_priority) == 0;
+  _Priority_Add_bit_map(the_priority_map);
+}
+
+/**
+ * @brief Remove @a the_priority information from the (global) priority queue.
+ *
+ */
+RTEMS_INLINE_ROUTINE void _Priority_Remove(
+    Priority_Information *the_priority_map
+)
+{
+  _Priority_Remove_bit_map(the_priority_map);
+}
+
+/**
+ * @brief Get the highest priority in the (global) priority queue. This 
+ * corresponds with the priority of the highest priority ready task.
+ *
+ */
+RTEMS_INLINE_ROUTINE Priority_Control _Priority_Get_highest( void )
+{
+  return ( _Priority_Get_highest_bit_map() );
+}
+
+/**
+ * @brief Initializes @a the_priority_map so that it can manage a thread at 
+ * priority level @a new_priority.
+ *
+ * This function should be called whenever a thread is assigned a 
+ * priority value, in order to set up its metadata about the (global) 
+ * priority queue.
+ *
+ */
+RTEMS_INLINE_ROUTINE void _Priority_Initialize_information (
+  Priority_Information *the_priority_map,
+  Priority_Control      new_priority
+) 
+{
+  _Priority_Initialize_information_bit_map(the_priority_map, new_priority);
 }
 
 /**@}*/
