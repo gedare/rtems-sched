@@ -15,31 +15,42 @@ This section describes how the existing scheduler can be improved by more generi
 
 The current priority management is captured in the [ReadyQueueAndPriority#Priority_Bitmaps Thread Priority Handler] functions of priority.h and priority.inl.  However, this interface is tailored toward the bitfield approach to priority management.  To support alternate priority schemes, such as deadline-based scheduling, we should re-define the Priority Handler interface to encapsulate the particulars of how priority is determined.
 
-=== Interface ===
-
-The important interface functions of the Priority Handler include: `_Priority_Get_highest()`, `_Priority_Remove_from_bit_map()`, `_Priority_Add_to_bit_map()`, and `_Priority_Initialize_information`.  These functions return the value of the highest priority ready task, update priority state information (bit maps) when a thread is removed from or set to the ready state, and sets the priority information to a new priority value respectively.  Currently these are the only functions that are called external to the Priority Handler.
-
-We can provide a more generic interface by not specifying how priority is stored, that is by eliding the bit map from the interface function name.  Thus, the external interface of the Priority Handler would instead comprise the following functions:
-{{{
-  Priority_Control _Priority_Get_highest ( void ) ; /* unchanged */
-
-  void _Priority_Add ( Priority_Information * ) ;
-
-  void _Priority_Remove ( Priority_Information * ) ;
-
-  void _Priority_Set ( Priority_Information *, Priority_Control ) ; /* replace _Priority_Initialize_information */
-}}}
-
-This new interface allows for opaque priority management, encapsulated as part of the `Priority_Information` and `Priority_Control` types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.
-
 === Data Structures ===
 
 The externally visible data structures of the Priority Handler include the `Priority_Information` and `Priority_Control` structures.  In the current implementation, the Priority Information structure is used on a per-thread basis to manipulate the priority map, and the Priority Control type is simply an integer that represents a priority level (i.e. a number between 0 and 255).
 
 These structures are used in the thread management (scheduler). `Priority_Control` is used as `Thread_Start_information.initial_priority`, `Thread_Control.current_priority`, and `Thread_Control.real_priority`. `Priority_Information` is the `Thread_Control.Priority_map` field.
 
-`Priority_map` does not appear to be directly manipulated in the current RTEMS code, so it seems that `Priority_Information` is already essentially an opaque type.  
+`Priority_map` does not appear to be directly manipulated in the current RTEMS code, so it seems that `Priority_Information` is already essentially an opaque type.  It is, however, implicit throughout the Priority Handler that the `Priority_Information` argument is embedded within a thread.
 
-However, some of the `Priority_Control` fields are used directly, especially in comparison and assignment of priority values.  So either we need to remove all direct uses of `Priority_Control` values, or we need to impose the assumption that `Priority_Control` is a primitive type capable of comparison and assignment (and further that a smaller priority value means higher priority).
+However, `Priority_Control` values are used directly, especially in comparison and assignment of priority values.  So either we need to remove all direct uses of `Priority_Control` values, or we need to impose the assumption that `Priority_Control` is a primitive type capable of comparison and assignment (and further that a smaller priority value means higher priority). For forward compatibility, we will add an explicit interface to `Priority_Control` values so that it is an opaque type, but will allow for conversion between `Priority_Control` types and primitive `uint32_t` types for the purposes of assignment and comparison.
 
-_Note: changing the `Priority_Control` type will require updating mutex and priority inheritance/ceiling code._
+_Note: The `Priority_Control` type is also used in the MPCI packet processing. The refactoring of the Priority Handler also includes updating the MPCI code to use the new interface functions when manipulating `Priority_Control` values. However, there are other priority values that are not based on `Priority_Control`, e.g. in `_CORE_message_queue_XXX`._
+
+=== Interface ===
+
+The important interface functions of the Priority Handler include: `_Priority_Get_highest()`, `_Priority_Remove_from_bit_map()`, `_Priority_Add_to_bit_map()`, and `_Priority_Initialize_information`.  These functions return the value of the highest priority ready task, update priority state information (bit maps) when a thread is removed from or set to the ready state, and sets the priority information to a new priority value respectively.  
+
+Currently, the above are the only functions that are called external to the Priority Handler. There is also manipulation of the `Priority_Control` type, which dfines additional functionality and therefore an implicit interface.
+
+We can provide a more generic interface by not specifying how priority is stored, that is by eliding the bit map from the interface function name. We also will capture the implicit interface to the `Priority_Control` type. Thus, the external interface of the Priority Handler will now comprise the following functions:
+{{{
+  Priority_Control _Priority_Get_highest ( void ) ; /* unchanged */
+
+  void _Priority_Initialize_information ( Priority_Information *, Priority_Control ) ; /* unchanged */
+
+  void _Priority_Add ( Priority_Information * ) ;
+
+  void _Priority_Remove ( Priority_Information * ) ;
+
+  uint32_t _Priority_Get_value ( Priority_Control a ) /* return integer priority representation of a */
+  
+  void _Priority_Set_value ( Priority_Control a, uint32_t b ) /* a = (Priority_Control)b */
+
+  void _Priority_Set ( Priority_Control a, Priority_Control b ) ; /* a = b */
+}}}
+_TODO: Use Priority Queue terminology, and add a `get_highest` that operates on a given queue_
+
+This new interface allows for opaque priority management, encapsulated as part of the `Priority_Information` and `Priority_Control` types.  Importantly, code outside of the Priority Handler should not make any other manipulations of Priority fields.  Thus the Priority Handler could be implemented as a bit map, a heap, or any other equivalent priority queue, and the other Handlers in the SCORE need not care about the implementation details.  Note that this implies the Priority Handler consists of a priority queue and priority values, and that the priority queue is not strictly identical with the thread ready queue.
+
+`Priority_Control` value comparison is accomplished by converting to `uint32_t` representation and then treating it like a primitive.  Assignment to `Priority_Control` is done either with `Priority_Set`, which assigns from a `Priority_Control` variable, or with `Priority_Set_value`, which assigns from a `uint32_t` primitive.
