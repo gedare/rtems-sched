@@ -47,9 +47,6 @@
 
 void _Thread_Handler_initialization(void)
 {
-#if 0
-  uint32_t     index;
-#endif
   uint32_t     ticks_per_timeslice;
   uint32_t     maximum_extensions;
   #if defined(RTEMS_MULTIPROCESSING)
@@ -104,15 +101,6 @@ void _Thread_Handler_initialization(void)
     default:
       while (1);  /* should be _Internal_error_Occurred */
   }
-
-#if 0
-  _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
-    (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
-  );
-
-  for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
-    _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
-#endif
 
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Handler_initialization( maximum_proxies );

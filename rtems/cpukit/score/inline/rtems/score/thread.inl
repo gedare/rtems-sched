@@ -25,6 +25,7 @@
 
 #include <rtems/score/sysstate.h>
 #include <rtems/score/context.h>
+#include <rtems/score/readyq.h>
 
 /**
  *  @addtogroup ScoreThread 
@@ -126,8 +127,7 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 
 RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
 {
-  _Thread_Heir = (Thread_Control *)
-    _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+  _Thread_Heir = _Ready_queue_First(&_Thread_Ready_queue);
 }
 
 /**

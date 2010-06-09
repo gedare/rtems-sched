@@ -62,10 +62,6 @@ void _Thread_Yield_processor( void )
   _ISR_Disable( level );
     if ( !_Chain_Has_only_one_node( ready ) ) {
       _Ready_queue_Requeue(&_Thread_Ready_queue, executing);
-#if 0
-      _Chain_Extract_unprotected( &executing->Object.Node );
-      _Chain_Append_unprotected( ready, &executing->Object.Node );
-#endif
 
       _ISR_Flash( level );
 

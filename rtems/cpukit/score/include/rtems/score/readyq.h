@@ -43,9 +43,6 @@ extern "C" {
 typedef void ( *Ready_queue_Flush_callout )(
                   Thread_Control *
              );
-void _Ready_queue_Process_timeout(
-  Thread_Control *the_thread
-);
 
 
 
@@ -77,14 +74,18 @@ void _Ready_queue_Enqueue(
   Thread_Control             *the_thread
 );
 
-/** @brief Ready queue Enqueue first
+/*
+ *  @brief  _Ready_queue_Enqueue_first
  *
- * This routine enqueues @a the_thread to the head
- * of @a the_ready_queue.
+ *  This routine puts @a the_thread to the head of the ready queue. If the 
+ *  queueing discipling is priority, then the thread will be the first thread
+ *  at it's priority level.
+ *  
  */
+
 void _Ready_queue_Enqueue_first(
-  Ready_queue_Control     *the_ready_queue,
-  Thread_Control          *the_thread
+  Ready_queue_Control         *the_ready_queue,
+  Thread_Control                   *the_thread
 );
 
 /**
@@ -110,16 +111,6 @@ void _Ready_queue_Extract(
   Thread_Control       *the_thread
 );
 
-/** @brief  Ready queue Extract with proxy
- *
- *  This routine extracts the_thread from the_ready_queue
- *  and ensures that if there is a proxy for this task on
- *  another node, it is also dealt with.
- */
-bool _Ready_queue_Extract_with_proxy(
-  Thread_Control       *the_thread
-);
-
 /** @brief  Ready queue First
  *
  *  This function returns a pointer to the "first" thread
@@ -130,48 +121,6 @@ Thread_Control *_Ready_queue_First(
   Ready_queue_Control *the_ready_queue
 );
 
-
-/** @brief  Ready queue Dequeue priority
- *
- *  This function returns a pointer to the highest priority
- *  thread on the_ready_queue.  If no threads are 
- *  on the_ready_queue, then NULL is returned.
- */
-Thread_Control *_Ready_queue_Dequeue_priority(
-  Ready_queue_Control *the_ready_queue
-);
-
-/** @brief  Ready queue Enqueue priority
- *
- *  This routine enqueues the currently executing thread on
- *  the_ready_queue using the
- *  priority discipline.
- */
-void _Ready_queue_Enqueue_priority (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
-/** @brief Ready queue Enqueue first priority
- *
- * This routine enqueues @a the_thread to the head
- * of @a the_ready_queue using the priority discipline.
- */
-void _Ready_queue_Enqueue_first_priority(
-  Ready_queue_Control     *the_ready_queue,
-  Thread_Control          *the_thread
-);
-
-/** @brief  Ready queue Extract priority Helper
- *
- *  This routine removes the_thread from the_ready_queue
- */
-void _Ready_queue_Extract_priority_helper(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread,
-  bool                  requeuing
-);
-
 /**
  * @brief Ready queue Extract priority
  *
@@ -180,67 +129,6 @@ void _Ready_queue_Extract_priority_helper(
 
 #define _Ready_queue_Extract_priority( _the_ready_queue, _the_thread ) \
   _Ready_queue_Extract_priority_helper( _the_ready_queue, _the_thread, false )
-
-
-/** @brief  Ready queue First priority
- *
- *  This function returns a pointer to the "first" thread
- *  on the_ready_queue.  The "first" thread is the highest
- *  priority thread waiting on the_ready_queue.
- */
-Thread_Control *_Ready_queue_First_priority(
-  Ready_queue_Control *the_ready_queue
-);
-
-/** @brief  Ready queue Dequeue FIFO
- *
- *  This function returns a pointer to the thread which has
- *  been ready the longest on  the_ready_queue.  If no
- *  threads are on the_ready_queue, then NULL is returned.
- */
-Thread_Control *_Ready_queue_Dequeue_fifo(
-  Ready_queue_Control *the_ready_queue
-);
-
-/** @brief  Ready queue Enqueue FIFO
- *
- *  This routine enqueues the currently executing thread on
- *  the_ready_queue 
- *  FIFO discipline.
- */
-void _Ready_queue_Enqueue_fifo (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
-/** @brief Ready queue Enqueue first fifo
- *
- * This routine enqueues @a the_thread to the head
- * of @a the_ready_queue using the FIFO discipline.
- */
-void _Ready_queue_Enqueue_first_fifo(
-  Ready_queue_Control     *the_ready_queue,
-  Thread_Control          *the_thread
-);
-
-/** @brief  Ready queue Extract FIFO
- *
- *  This routine removes the_thread from the_ready_queue
- */
-void _Ready_queue_Extract_fifo(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
-/** @brief  Ready queue First FIFO
- *
- *  This function returns a pointer to the "first" thread
- *  on the_ready_queue.  The first thread is the thread
- *  which has been waiting longest on the_ready_queue.
- */
-Thread_Control *_Ready_queue_First_fifo(
-  Ready_queue_Control *the_ready_queue
-);
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/readyq.inl>

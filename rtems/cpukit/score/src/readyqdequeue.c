@@ -54,18 +54,5 @@ Thread_Control *_Ready_queue_Dequeue(
 
   the_thread = (*dequeue_p)( the_ready_queue );
 
-#if 0  
-  _ISR_Disable( level );
-    if ( !the_thread ) {
-      sync_state = the_ready_queue->sync_state;
-      if ( (sync_state == THREAD_BLOCKING_OPERATION_TIMEOUT) ||
-           (sync_state == THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED) ) {
-        the_ready_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
-        the_thread = _Thread_Executing;
-      }
-    }
-  _ISR_Enable( level );
-#endif
-
   return the_thread;
 }

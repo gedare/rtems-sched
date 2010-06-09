@@ -83,11 +83,6 @@ void _Thread_Resume(
     if ( _States_Is_ready( current_state ) ) {
 
       _Ready_queue_Enqueue(&_Thread_Ready_queue, the_thread);
-#if 0
-      _Priority_Add( &the_thread->Priority_map );
-
-      _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
-#endif
 
       _ISR_Flash( level );
 

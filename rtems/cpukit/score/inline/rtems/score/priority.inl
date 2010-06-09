@@ -32,7 +32,34 @@
 
 
 /**
- *  Primitive (uint32_t) based Priority_Control
+ *  Transparent, identically mapped uint32_t-based Priority_Control
+ */
+RTEMS_INLINE_ROUTINE void _Priority_Set_transparent ( 
+    Priority_Control *priority_lhs,
+    Priority_Control *priority_rhs
+  )
+{
+  *priority_lhs = *priority_rhs;
+}
+
+RTEMS_INLINE_ROUTINE uint32_t _Priority_Get_value_transparent ( 
+    Priority_Control priority 
+)
+{
+  return ( priority );
+}
+
+RTEMS_INLINE_ROUTINE void _Priority_Set_value_transparent (
+    Priority_Control *priority_lhs,
+    uint32_t value
+  )
+{
+  *priority_lhs = value;
+}
+
+
+/**
+ * Priority_Control external interface
  */
 /**
  * @brief Priority set operator
@@ -44,7 +71,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Set (
     Priority_Control *priority_rhs
   )
 {
-  *priority_lhs = *priority_rhs;
+  _Priority_Set_transparent(priority_lhs, priority_rhs);
 }
 
 /**
@@ -55,7 +82,7 @@ RTEMS_INLINE_ROUTINE void _Priority_Set (
  */
 RTEMS_INLINE_ROUTINE uint32_t _Priority_Get_value ( Priority_Control priority )
 {
-  return ( priority );
+  return(_Priority_Get_value_transparent( priority ));
 }
 
 /**
@@ -70,9 +97,8 @@ RTEMS_INLINE_ROUTINE void _Priority_Set_value (
     uint32_t value
   )
 {
-  *priority_lhs = value;
+  _Priority_Set_value_transparent(priority_lhs, value);
 }
-
 
 /**
  *  This routine performs the initialization necessary for this handler.
