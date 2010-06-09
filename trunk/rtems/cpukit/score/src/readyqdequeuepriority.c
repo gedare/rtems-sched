@@ -50,13 +50,13 @@ Thread_Control *_Ready_queue_Dequeue_priority(
   Chain_Control *rq;
   Thread_Control *the_thread;
 
-  index = _Priority_Get_highest();
+  index = _Priority_Get_value(_Priority_Get_highest());
   rq = &_Thread_Ready_queue.Queues.Priority[index];
   the_thread = (Thread_Control*) _Chain_First(rq);
   
   if ( _Chain_Has_only_one_node( rq ) ) {
     _Chain_Initialize_empty( rq );
-    _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+    _Priority_Remove( &the_thread->Priority_map );
   } else
     _Chain_Extract_unprotected( &the_thread->Object.Node );
  
