@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.181 2010/05/29 02:31:09 ralf Exp $
+## $Id: configure.ac,v 1.183 2010/06/09 08:06:26 ralf Exp $
 
 AC_PREREQ(2.61)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -18,8 +18,6 @@ RTEMS_ENABLE_POSIX
 RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_RTEMS_DEBUG
 RTEMS_ENABLE_NETWORKING
-RTEMS_ENABLE_HTTPD
-RTEMS_ENABLE_SHTTPD
 
 RTEMS_ENV_RTEMSCPU
 RTEMS_CHECK_RTEMS_DEBUG
@@ -275,10 +273,6 @@ AM_CONDITIONAL(HAS_MP,test x"$enable_multiprocessing" = x"yes" )
 AM_CONDITIONAL(HAS_PTHREADS,test x"$rtems_cv_HAS_POSIX_API" = x"yes")
 AM_CONDITIONAL(LIBITRON,test x"$rtems_cv_HAS_ITRON_API" = x"yes")
 AM_CONDITIONAL(LIBNETWORKING,test x"$rtems_cv_HAS_NETWORKING" = x"yes")
-AM_CONDITIONAL([LIBHTTPD],[test x"$rtems_cv_HAS_NETWORKING" = xyes \
-&& test x"$enable_httpd" = xyes])
-AM_CONDITIONAL([LIBSHTTPD],[test x"$rtems_cv_HAS_NETWORKING" = xyes \
-&& test x"$enable_shttpd" = xyes])
 
 AM_CONDITIONAL([NEED_SYS_CDEFS_H],[test x"$NEED_SYS_CDEFS_H" = x"yes"])
 AM_CONDITIONAL([NEED_SYS_QUEUE_H],[test x"$NEED_SYS_QUEUE_H" = x"yes"])
@@ -339,11 +333,9 @@ libmisc/Makefile
 libi2c/Makefile
 libmd/Makefile
 zlib/Makefile
-httpd/Makefile
 ftpd/Makefile
 telnetd/Makefile
 pppd/Makefile
-shttpd/Makefile
 mghttpd/Makefile
 wrapup/Makefile])
 

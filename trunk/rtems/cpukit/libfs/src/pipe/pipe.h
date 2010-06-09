@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: pipe.h,v 1.3 2009/11/29 13:18:56 ralf Exp $
+ * $Id: pipe.h,v 1.4 2010/06/08 10:25:46 sh Exp $
  */
 
 #ifndef _RTEMS_PIPE_H
@@ -108,11 +108,6 @@ extern int pipe_lseek(
   int             whence,
   rtems_libio_t  *iop
 );
-
-/*
- * Initialization of FIFO/pipe module.
- */
-extern void rtems_pipe_initialize (void);
 
 #ifdef __cplusplus
 }
