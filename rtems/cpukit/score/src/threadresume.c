@@ -91,10 +91,11 @@ void _Thread_Resume(
 
       _ISR_Flash( level );
 
-      if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+      if ( _Priority_Get_value(the_thread->current_priority) < 
+           _Priority_Get_value(_Thread_Heir->current_priority) ) {
         _Thread_Heir = the_thread;
         if ( _Thread_Executing->is_preemptible ||
-             the_thread->current_priority == 0 )
+             _Priority_Get_value(the_thread->current_priority) == 0 )
           _Context_Switch_necessary = true;
       }
     }
