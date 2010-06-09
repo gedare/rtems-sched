@@ -71,15 +71,6 @@ void _Thread_Suspend(
 
 
   _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
-#if 0
-  if ( _Chain_Has_only_one_node( ready ) ) {
-
-    _Chain_Initialize_empty( ready );
-    _Priority_Remove( &the_thread->Priority_map );
-
-  } else
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-#endif
 
   _ISR_Flash( level );
 

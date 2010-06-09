@@ -149,15 +149,10 @@ libscore_a_SOURCES += src/pheapallocate.c \
 
 ## READYQ_C_FILES
 libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
-    src/readyqdequeuefifo.c src/readyqdequeuepriority.c \
-    src/readyqenqueue.c src/readyqenqueuefifo.c \
-    src/readyqenqueuefirst.c src/readyqenqueuefirstfifo.c \
-		src/readyqenqueuefirstpriority.c \
-    src/readyqenqueuepriority.c src/readyqextract.c \
-    src/readyqextractfifo.c src/readyqextractpriority.c \
-    src/readyqextractwithproxy.c src/readyqfirst.c src/readyqfirstfifo.c \
-    src/readyqfirstpriority.c src/readyqflush.c src/readyqrequeue.c \
-    src/readyqprocesstimeout.c src/readyqtimeout.c
+    src/readyqenqueue.c src/readyqenqueuefirst.c \
+    src/readyqextract.c \
+		src/readyqfirst.c src/readyqflush.c \
+		src/readyqrequeue.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
