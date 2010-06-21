@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtemsobjectidapimaximum.c,v 1.2 2009/11/23 14:53:04 joel Exp $
+ *  $Id: rtemsobjectidapimaximum.c,v 1.3 2010/06/18 04:22:24 ralf Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -22,5 +22,5 @@
 #undef rtems_object_id_api_maximum
 int rtems_object_id_api_maximum(void)
 {
-  return OBJECTS_ITRON_API;
+  return OBJECTS_APIS_LAST;
 }

@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio.h,v 1.69 2010/06/09 09:38:09 sh Exp $
+ *  $Id: libio.h,v 1.71 2010/06/13 03:02:26 ralf Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO_H
@@ -704,6 +704,25 @@ int mount(
   const void                 *data
 );
 
+/**
+ * @brief Mounts a file system and makes the @a target path.
+ *
+ * The @a target path will be created with rtems_mkdir() and must not be
+ * @c NULL.
+ *
+ * @see mount().
+ *
+ * @retval 0 Successful operation.
+ * @retval -1 An error occured.  The @c errno indicates the error.
+ */
+int mount_and_make_target_path(
+  const char                 *source,
+  const char                 *target,
+  const char                 *filesystemtype,
+  rtems_filesystem_options_t options,
+  const void                 *data
+);
+
 /*
  *  Boot Time Mount Table Structure
  */
@@ -730,13 +749,13 @@ typedef void (*rtems_fs_init_functions_t)(void);
 extern  rtems_fs_init_functions_t    rtems_fs_init_helper;
 
 /**
- * @brief Creates a directory and all its parrent directories according to
+ * @brief Creates a directory and all its parent directories according to
  * @a path.
  *
  * The @a mode value selects the access permissions of the directory.
  *
  * @retval 0 Successful operation.
- * @retval -1 An error occured.  @c errno indicates the error.
+ * @retval -1 An error occured.  The @c errno indicates the error.
  */
 extern int rtems_mkdir(const char *path, mode_t mode);
 

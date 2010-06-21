@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.80 2010/04/03 05:58:06 ralf Exp $
+## $Id: Makefile.am,v 1.81 2010/06/16 19:12:19 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -14,10 +14,9 @@ libposix_a_CPPFLAGS = $(AM_CPPFLAGS)
 libposix_a_SOURCES =
 
 # Some POSIX functions that are nice to always have
-## 20 Nov 2008: Now using these from newlib's posix directory
 libposix_a_SOURCES += src/sleep.c src/usleep.c
 libposix_a_SOURCES += src/nanosleep.c src/clockgettime.c src/clocksettime.c \
-    src/clockgetres.c
+    src/clockgetres.c src/sysconf.c
 
 include_rtems_posixdir = $(includedir)/rtems/posix
 
@@ -189,7 +188,7 @@ EXTRA_DIST += src/README.mqueue
 libposix_a_SOURCES += src/sched_getparam.c src/sched_getprioritymax.c \
     src/sched_getprioritymin.c src/sched_getscheduler.c \
     src/sched_rr_get_interval.c src/sched_setparam.c \
-    src/sched_setscheduler.c src/sched_yield.c src/sysconf.c
+    src/sched_setscheduler.c src/sched_yield.c
 endif
 
 include $(srcdir)/preinstall.am

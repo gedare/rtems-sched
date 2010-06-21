@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-file-system.h,v 1.3 2010/02/26 05:54:59 ccj Exp $
+ *  $Id: rtems-rfs-file-system.h,v 1.7 2010/06/17 22:00:47 ccj Exp $
  */
 /**
  * @file
@@ -46,7 +46,7 @@
  * RFS Version Number Mask. The mask determines which bits of the version
  * number indicate compatility issues.
  */
-#define RTEMS_RFS_VERSION_MASK (0x00000000)
+#define RTEMS_RFS_VERSION_MASK INT32_C(0x00000000)
 
 /**
  * The root inode number. Do not use 0 as this has special meaning in some Unix
@@ -111,7 +111,7 @@ typedef int64_t rtems_rfs_pos_rel;
 /**
  * RFS File System data.
  */
-struct rtems_rfs_file_system_t
+struct _rtems_rfs_file_system
 {
   /**
    * Flags to control the file system. Some can be controlled via the ioctl.
@@ -304,14 +304,6 @@ struct rtems_rfs_file_system_t
 #define rtems_rfs_fs_block_size(_fs) ((_fs)->block_size)
 
 /**
- * The size of the disk in bytes.
- *
- * @param _fs Pointer to the file system.
- */
-#define rtems_rfs_fs_size(_fs) (((uint64_t) rtems_rfs_fs_blocks (_fs)) * \
-                                rtems_rfs_fs_block_size (_fs))
-
-/**
  * The number of inodes.
  *
  * @param _fs Pointer to the file system.
@@ -354,14 +346,6 @@ struct rtems_rfs_file_system_t
 #endif
 
 /**
- * The size of the disk in bytes.
- *
- * @param _fs Pointer to the file system.
- */
-#define rtems_rfs_fs_media_size(_fs) (((uint64_t) rtems_rfs_fs_media_blocks (_fs)) * \
-                                      rtems_rfs_fs_media_block_size (_fs))
-
-/**
  * The maximum length of a name supported by the file system.
  */
 #define rtems_rfs_fs_max_name(_fs) ((_fs)->max_name_length)
@@ -377,6 +361,22 @@ struct rtems_rfs_file_system_t
  * Return the user pointer.
  */
 #define rtems_rfs_fs_user(_fs) ((_fs)->user)
+
+/**
+ * Return the size of the disk in bytes.
+ *
+ * @param fs Pointer to the file system.
+ * @return uint64_t The size of the disk in bytes.
+ */
+uint64_t rtems_rfs_fs_size(rtems_rfs_file_system* fs);
+
+/**
+ * The size of the disk in bytes calculated from the media parameters..
+ *
+ * @param fs Pointer to the file system.
+ * @return uint64_t The size of the disk in bytes.
+ */
+uint64_t rtems_rfs_fs_media_size (rtems_rfs_file_system* fs);
 
 /**
  * Open the file system given a file path.

@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems-dir.c,v 1.3 2010/03/27 04:04:40 ccj Exp $
+ *  $Id: rtems-rfs-rtems-dir.c,v 1.4 2010/06/17 03:48:31 ralf Exp $
  */
 /**
  * @file
@@ -18,6 +18,8 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <inttypes.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -201,7 +203,7 @@ rtems_rfs_rtems_dir_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
   int                    rc;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_DIR_RMNOD))
-    printf ("rtems-rfs: dir-rmnod: parent:%ld doff:%lu, ino:%ld\n",
+    printf ("rtems-rfs: dir-rmnod: parent:%" PRId32 " doff:%" PRIu32 ", ino:%" PRId32 "\n",
             parent, doff, ino);
 
   if (ino == RTEMS_RFS_ROOT_INO)

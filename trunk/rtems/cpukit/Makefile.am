@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.96 2010/06/09 08:06:25 ralf Exp $
+## $Id: Makefile.am,v 1.100 2010/06/17 15:29:22 ralf Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I aclocal
@@ -8,7 +8,7 @@ include $(top_srcdir)/automake/compile.am
 include $(top_srcdir)/automake/multilib.am
 
 # librtemscpu
-SUBDIRS = . score rtems sapi posix itron
+SUBDIRS = . score rtems sapi posix
 SUBDIRS += libcsupport libblock libfs
 SUBDIRS += libnetworking librpc
 SUBDIRS += libi2c
@@ -50,7 +50,9 @@ if NEWLIB
 include_sysdir = $(includedir)/sys
 include_sys_HEADERS =
 
-include_HEADERS += libnetworking/memory.h
+include_HEADERS += libnetworking/memory.h \
+    libmd/md4.h \
+    libmd/md5.h
 
 include_sys_HEADERS += libcsupport/include/sys/ioccom.h \
     libcsupport/include/sys/filio.h libcsupport/include/sys/ioctl.h \
@@ -70,7 +72,7 @@ endif
 
 include_rtems_HEADERS += include/rtems/bspIo.h include/rtems/userenv.h \
     include/rtems/fs.h include/rtems/pci.h \
-    include/rtems/concat.h include/rtems/tar.h \
+    include/rtems/concat.h \
     include/rtems/status-checks.h
 
 include_rtems_HEADERS += include/rtems/endian.h
@@ -176,6 +178,9 @@ include_rtems_HEADERS += libmisc/untar/untar.h
 
 ## fsmount
 include_rtems_HEADERS += libmisc/fsmount/fsmount.h
+
+## HACK: doxygen filter.
+EXTRA_DIST = doxy-filter
 
 include $(srcdir)/preinstall.am
 include $(top_srcdir)/automake/subdirs.am

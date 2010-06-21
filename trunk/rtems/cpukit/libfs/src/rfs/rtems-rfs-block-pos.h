@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-block-pos.h,v 1.1 2010/02/18 00:24:24 ccj Exp $
+ *  $Id: rtems-rfs-block-pos.h,v 1.4 2010/06/17 03:09:00 ccj Exp $
  */
 /**
  * @file
@@ -47,7 +47,7 @@ typedef uint32_t rtems_rfs_block_off;
  * block field can be used hold a block number for the position as a look up
  * cache.
  */
-typedef struct rtems_rfs_block_pos_t
+typedef struct rtems_rfs_block_pos_s
 {
   /**
    * The block index in the map. Range is from 0 to the maps block count minus
@@ -72,7 +72,7 @@ typedef struct rtems_rfs_block_pos_t
  * Copy a block position.
  *
  * @param _lhs The left hand side.
- * @parma _rhs The right handl side.
+ * @param _rhs The right hand side.
  */
 #define rtems_rfs_block_copy_bpos(_lhs, _rhs) \
   do { (_lhs)->bno = (_rhs)->bno; \
@@ -110,8 +110,8 @@ void rtems_rfs_block_get_bpos (rtems_rfs_file_system*  fs,
  * @param bpos Pointer to the block position to fill in.
  * @return rtems_rfs_pos The absolute offset.
  */
-rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system*  fs,
-                                       rtems_rfs_block_pos*    bpos);
+rtems_rfs_pos rtems_rfs_block_get_pos (rtems_rfs_file_system* fs,
+                                       rtems_rfs_block_pos*   bpos);
 
 /**
  * Add the relative position to the block position. The relative position is
@@ -136,7 +136,7 @@ rtems_rfs_block_add_pos (rtems_rfs_file_system*  fs,
  * A block size is the number of blocks less one plus the offset where the
  * offset must be less than the block size.
  */
-typedef struct rtems_rfs_block_size_t
+typedef struct rtems_rfs_block_size_s
 {
   /**
    * The count of blocks in a map. A 0 means no blocks and a zero length and
@@ -156,7 +156,7 @@ typedef struct rtems_rfs_block_size_t
  * Copy a block size.
  *
  * @param _lhs The left hand side.
- * @parma _rhs The right handl side.
+ * @param _rhs The right hand side.
  */
 #define rtems_rfs_block_copy_size(_lhs, _rhs) \
   do { (_lhs)->count = (_rhs)->count; \

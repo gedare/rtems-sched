@@ -2,8 +2,7 @@
  * @file rtems/posix/pthread.h
  */
 
-/*  rtems/posix/pthread.h
- *
+/*
  *  This include file contains all the private support information for
  *  POSIX threads.
  *
@@ -14,19 +13,19 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: pthread.h,v 1.28 2009/11/30 15:44:20 ralf Exp $
+ *  $Id: pthread.h,v 1.31 2010/06/15 15:52:29 joel Exp $
  */
 
 #ifndef _RTEMS_POSIX_PTHREAD_H
 #define _RTEMS_POSIX_PTHREAD_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #include <rtems/posix/config.h>
 #include <rtems/posix/threadsup.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 /**
  *  The following sets the minimum stack size for POSIX threads.
  */
@@ -129,9 +128,17 @@ void _POSIX_Threads_Sporadic_budget_callout(
 /**
  *  _POSIX_Threads_Sporadic_budget_TSR
  *
- *  This routine supports the sporadic scheduling algorithm.
+ *  This routine supports the sporadic scheduling algorithm.  It
+ *  is scheduled to be executed at the end of each replenishment
+ *  period.  In sporadic scheduling a thread will execute at a
+ *  high priority for a user specified amount of CPU time.  When
+ *  it exceeds that amount of CPU time, its priority is automatically
+ *  lowered. This TSR is executed when it is time to replenish
+ *  the thread's processor budget and raise its priority.
  *
- *  @param[in] the_thread is the thread whose budget has been exceeded.
+ *  @param[in] id is ignored
+ *  @param[in] argument is a pointer to the Thread_Control structure
+ *             for the thread being replenished.
  */
 void _POSIX_Threads_Sporadic_budget_TSR(
   Objects_Id      id,

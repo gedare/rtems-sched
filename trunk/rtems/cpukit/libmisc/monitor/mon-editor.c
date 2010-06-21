@@ -5,7 +5,7 @@
  */
 
 /*
- * $Id: mon-editor.c,v 1.4 2009/11/29 12:12:39 ralf Exp $
+ * $Id: mon-editor.c,v 1.5 2010/06/21 16:25:09 joel Exp $
  *
  * 2001-01-30 KJO (vac4050@cae597.rsc.raytheon.com):
  *  Fixed rtems_monitor_command_lookup() to accept partial
@@ -428,7 +428,7 @@ rtems_monitor_line_editor (
               if ((pos < end) && (end < RTEMS_COMMAND_BUFFER_SIZE))
               {
                 int ch, bs;
-                for (ch = end + 1; ch > pos; ch--)
+                for (ch = end; ch > pos; ch--)
                   buffer[ch] = buffer[ch - 1];
                 fprintf(stdout,buffer + pos);
                 for (bs = 0; bs < (end - pos + 1); bs++)

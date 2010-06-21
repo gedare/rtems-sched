@@ -1,12 +1,12 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
- *  On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2010
+ *  Bharath Suri<bharath.s.jois@gmail.com>.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.2 2010/06/08 14:06:42 sh Exp $
+ *  $Id: init.c,v 1.3 2010/06/10 14:44:26 jennifer Exp $
  */
 
 #include <sys/stat.h>

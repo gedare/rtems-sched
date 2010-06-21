@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.21 2009/10/20 04:14:56 ralf Exp $
+## $Id: configure.ac,v 1.22 2010/06/21 16:53:50 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-tmtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -61,5 +61,6 @@ tm26/Makefile
 tm27/Makefile
 tm28/Makefile
 tm29/Makefile
+tm30/Makefile
 ])
 AC_OUTPUT

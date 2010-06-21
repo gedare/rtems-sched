@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: objectextendinformation.c,v 1.21 2010/01/20 17:08:19 joel Exp $
+ *  $Id: objectextendinformation.c,v 1.22 2010/06/21 16:27:37 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -56,11 +56,13 @@ void _Objects_Extend_information(
   uint32_t          maximum;
   size_t            block_size;
   void             *new_object_block;
+  bool              do_extend;
 
   /*
-   *  Search for a free block of indexes. The block variable ends up set
-   *  to block_count + 1 if the table needs to be extended.
+   *  Search for a free block of indexes. If we do NOT need to allocate or
+   *  extend the block table, then we will change do_extend.
    */
+  do_extend     = true;
   minimum_index = _Objects_Get_index( information->minimum_id );
   index_base    = minimum_index;
   block         = 0;
@@ -72,9 +74,10 @@ void _Objects_Extend_information(
     block_count = information->maximum / information->allocation_size;
 
     for ( ; block < block_count; block++ ) {
-      if ( information->object_blocks[ block ] == NULL )
+      if ( information->object_blocks[ block ] == NULL ) {
+        do_extend = false;
         break;
-      else
+      } else
         index_base += information->allocation_size;
     }
   }
@@ -104,9 +107,9 @@ void _Objects_Extend_information(
   }
 
   /*
-   *  If the index_base is the maximum we need to grow the tables.
+   *  Do we need to grow the tables?
    */
-  if (index_base >= information->maximum ) {
+  if ( do_extend ) {
     ISR_Level         level;
     void            **object_blocks;
     uint32_t         *inactive_per_block;

@@ -1,6 +1,6 @@
 /*
   ------------------------------------------------------------------------
-  $Id: mkrootfs.c,v 1.12 2010/06/08 12:59:51 sh Exp $
+  $Id: mkrootfs.c,v 1.14 2010/06/16 13:50:22 ralf Exp $
   ------------------------------------------------------------------------
 
   Copyright Cybertec Pty Ltd, 2000
@@ -41,6 +41,7 @@
 #include <arpa/inet.h>
 
 #include <rtems/mkrootfs.h>
+#include <rtems/libio.h>
 
 /*
  * A table a list of names and their modes.
@@ -165,7 +166,7 @@ rtems_rootfs_file_append (const char *file,
  */
 
 int
-rtems_rootfs_append_host_rec (unsigned long cip,
+rtems_rootfs_append_host_rec (in_addr_t cip,
                               const char    *cname,
                               const char    *dname)
 {

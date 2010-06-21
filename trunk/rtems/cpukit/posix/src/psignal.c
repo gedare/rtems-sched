@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: psignal.c,v 1.67 2010/04/30 08:37:26 sh Exp $
+ *  $Id: psignal.c,v 1.68 2010/06/15 16:25:23 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -121,7 +121,7 @@ void _POSIX_signals_Post_switch_extension(
    */
   #if defined(RTEMS_DEBUG)
     if ( !api )
-    return;
+      return;
   #endif
 
   /*

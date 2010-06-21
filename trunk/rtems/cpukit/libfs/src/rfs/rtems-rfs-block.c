@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-block.c,v 1.4 2010/03/27 04:04:40 ccj Exp $
+ *  $Id: rtems-rfs-block.c,v 1.6 2010/06/17 22:04:51 ccj Exp $
  */
 /**
  * @file
@@ -37,6 +37,8 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <inttypes.h>
 
 #include <rtems/rfs/rtems-rfs-block.h>
 #include <rtems/rfs/rtems-rfs-data.h>
@@ -86,13 +88,15 @@ rtems_rfs_block_get_size (rtems_rfs_file_system* fs,
                           rtems_rfs_block_size*  size)
 {
   uint32_t offset;
+  uint64_t block_size;
   if (size->count == 0)
     return 0;
   if (size->offset == 0)
     offset = rtems_rfs_fs_block_size (fs);
   else
     offset = size->offset;
-  return (((uint64_t) (size->count - 1)) * rtems_rfs_fs_block_size (fs)) + offset;
+  block_size = rtems_rfs_fs_block_size (fs);
+  return (((uint64_t) (size->count - 1)) * block_size) + offset;
 }
 
 int
@@ -224,8 +228,8 @@ rtems_rfs_block_find_indirect (rtems_rfs_file_system*   fs,
   if (*result >= rtems_rfs_fs_blocks (fs))
   {
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_FIND))
-      printf ("rtems-rfs: block-find: invalid block in table:" \
-              " block=%ld, indirect=%ld/%d\n", *result, block, offset);
+      printf ("rtems-rfs: block-find: invalid block in table:"
+              " block=%" PRId32 ", indirect=%" PRId32 "/%d\n", *result, block, offset);
     *result = 0;
     rc = EIO;
   }
@@ -394,7 +398,7 @@ rtems_rfs_block_map_indirect_alloc (rtems_rfs_file_system*   fs,
   {
     int b;
     if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
-      printf ("rtems-rfs: block-map-grow: upping: block-count=%ld\n",
+      printf ("rtems-rfs: block-map-grow: upping: block-count=%" PRId32 "\n",
               map->size.count);
     for (b = 0; b < RTEMS_RFS_INODE_BLOCKS; b++)
       rtems_rfs_block_set_number (buffer, b, map->blocks[b]);
@@ -415,9 +419,9 @@ rtems_rfs_block_map_grow (rtems_rfs_file_system* fs,
   int b;
   
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_GROW))
-    printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%lu\n",
+    printf ("rtems-rfs: block-map-grow: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
-            
+
   if ((map->size.count + blocks) >= rtems_rfs_fs_max_block_map_blocks (fs))
     return EFBIG;
 
@@ -657,7 +661,7 @@ rtems_rfs_block_map_shrink (rtems_rfs_file_system* fs,
                             size_t                 blocks)
 {
   if (rtems_rfs_trace (RTEMS_RFS_TRACE_BLOCK_MAP_SHRINK))
-    printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%lu\n",
+    printf ("rtems-rfs: block-map-shrink: entry: blocks=%zd count=%" PRIu32 "\n",
             blocks, map->size.count);
             
   if (map->size.count == 0)

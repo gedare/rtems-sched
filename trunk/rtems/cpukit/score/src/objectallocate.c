@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: objectallocate.c,v 1.9 2009/10/08 07:07:36 ccj Exp $
+ *  $Id: objectallocate.c,v 1.10 2010/06/16 17:35:25 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -27,6 +27,12 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/isr.h>
+
+/* #define RTEMS_DEBUG_OBJECT_ALLOCATION */
+
+#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
+#include <rtems/bspIo.h>
+#endif
 
 /*PAGE
  *
@@ -81,6 +87,16 @@ Objects_Control *_Objects_Allocate(
       information->inactive--;
     }
   }
+
+#if defined(RTEMS_DEBUG_OBJECT_ALLOCATION)
+  if ( !the_object ) {
+    printk(
+      "OBJECT ALLOCATION FAILURE! API/Class %d/%d\n",
+      information->the_api,
+      information->the_class
+    );
+  }
+#endif
 
   return the_object;
 }

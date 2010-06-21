@@ -1,4 +1,4 @@
-/* $Id: rpcio.c,v 1.13 2010/05/30 10:18:41 ralf Exp $ */
+/* $Id: rpcio.c,v 1.14 2010/06/18 09:36:02 ralf Exp $ */
 
 /* RPC multiplexor for a multitasking environment */
 
@@ -64,6 +64,8 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <inttypes.h>
 
 #include <rtems.h>
 #include <rtems/error.h>
@@ -1658,7 +1660,7 @@ static RpcUdpXact
 sockRcv(void)
 {
 int					len,i;
-u_long				xid;
+uint32_t				xid;
 union {
 	struct sockaddr_in	sin;
 	struct sockaddr     sa;
@@ -1743,9 +1745,9 @@ RpcUdpXact			xact     = 0;
 #endif
 			} else {
 			fprintf(stderr,"RPCIO WARNING sockRcv(): transaction mismatch\n");
-			fprintf(stderr,"xact: xid  0x%08lx  -- got 0x%08lx\n",
+			fprintf(stderr,"xact: xid  0x%08" PRIx32 "  -- got 0x%08" PRIx32 "\n",
 							xact->obuf.xid, xid);
-			fprintf(stderr,"xact: addr 0x%08lx  -- got 0x%08lx\n",
+			fprintf(stderr,"xact: addr 0x%08" PRIx32 "  -- got 0x%08" PRIx32 "\n",
 							xact->server->addr.sin.sin_addr.s_addr,
 							fromAddr.sin.sin_addr.s_addr);
 			fprintf(stderr,"xact: port 0x%08x  -- got 0x%08x\n",
@@ -1754,7 +1756,7 @@ RpcUdpXact			xact     = 0;
 			}
 		} else {
 			fprintf(stderr,
-					"RPCIO WARNING sockRcv(): got xid 0x%08lx but its slot is empty\n",
+					"RPCIO WARNING sockRcv(): got xid 0x%08" PRIx32 " but its slot is empty\n",
 					xid);
 		}
 		/* forget about this one and try again */

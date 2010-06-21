@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.21 2010/03/12 16:26:36 joel Exp $
+ *  $Id: init.c,v 1.22 2010/06/19 20:55:03 joel Exp $
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
@@ -323,11 +323,6 @@ rtems_task Init(
   printf( "rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) returned %d\n",
           rtems_object_api_maximum_class(OBJECTS_CLASSIC_API) );
 
-  printf( "rtems_object_api_minimum_class(OBJECTS_ITRON_API) returned %d\n",
-          rtems_object_api_minimum_class(OBJECTS_ITRON_API) );
-  printf( "rtems_object_api_maximum_class(OBJECTS_ITRON_API) returned %d\n",
-          rtems_object_api_maximum_class(OBJECTS_ITRON_API) );
-
   /*
    *  Another screen break for the API and class name tests
    */
@@ -341,8 +336,10 @@ rtems_task Init(
      rtems_object_get_api_name(OBJECTS_INTERNAL_API) );
   printf( "rtems_object_get_api_name(CLASSIC_API) = %s\n",
      rtems_object_get_api_name(OBJECTS_CLASSIC_API) );
+#if 0
   printf( "rtems_object_get_api_name(ITRON_API) = %s\n",
      rtems_object_get_api_name(OBJECTS_ITRON_API) );
+#endif
 
   printf( "rtems_object_get_api_class_name(0, RTEMS_TASKS) = %s\n",
     rtems_object_get_api_class_name( 0, OBJECTS_RTEMS_TASKS ) );

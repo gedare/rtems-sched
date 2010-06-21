@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.29 2008/06/01 05:07:57 ralf Exp $
+## $Id: configure.ac,v 1.30 2010/06/17 15:38:54 ralf Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -23,7 +23,6 @@ AM_MAINTAINER_MODE
 ## options.
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
-RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_CXX
 RTEMS_ENABLE_TESTS  

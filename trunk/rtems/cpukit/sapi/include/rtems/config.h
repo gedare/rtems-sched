@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: config.h,v 1.51 2009/11/29 13:51:51 ralf Exp $
+ *  $Id: config.h,v 1.53 2010/06/18 04:04:05 ralf Exp $
  */
 
 #ifndef _RTEMS_CONFIG_H
@@ -39,20 +39,13 @@ extern "C" {
 
 /*
  *  This is kind of kludgy but it allows targets to totally ignore the
- *  optional APIs like POSIX and ITRON safely.
+ *  optional APIs like POSIX safely.
  */
 
 #ifdef RTEMS_POSIX_API
 #include <rtems/posix/config.h>
 #else
 typedef void *posix_api_configuration_table;
-#endif
-
-#ifdef RTEMS_ITRON_API
-#include <rtems/itron.h>
-#include <rtems/itron/config.h>
-#else
-typedef void *itron_api_configuration_table;
 #endif
 
 #include <rtems/rtems/config.h>
@@ -275,9 +268,6 @@ extern rtems_configuration_table    Configuration;
 
 #define rtems_configuration_get_posix_api_configuration() \
         (&Configuration_POSIX_API)
-
-#define rtems_configuration_get_itron_api_configuration() \
-        (&Configuration_ITRON_API)
 
 #ifdef __cplusplus
 }

@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.S,v 1.11 2010/03/27 15:01:47 joel Exp $
+ *  $Id: cpu_asm.S,v 1.12 2010/06/15 16:25:16 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -87,7 +87,6 @@ restore:
 .set NEWCONTEXT_ARG,   4                   /* context to restore argument */
 
 SYM (_CPU_Context_restore):
-
         movl      NEWCONTEXT_ARG(esp),eax  /* eax = running threads context */
         jmp       restore
 

@@ -4,7 +4,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id: nextstep.t,v 1.7 2003/10/02 18:01:48 joel Exp $
+@c  $Id: nextstep.t,v 1.8 2010/06/17 18:45:36 joel Exp $
 @c
 
 @chapter Where To Go From Here
@@ -43,9 +43,6 @@ Classic RTEMS API based on the RTEID specification.
 
 @item @b{RTEMS POSIX API User's Guide} describes the 
 RTEMS POSIX API that is based on the POSIX 1003.1b API.
-
-@item @b{RTEMS ITRON 3.0 API User's Guide} describes
-the RTEMS implementation of the ITRON 3.0 API.
 
 @item @b{RTEMS Network Supplement} provides information
 on the network services provided by RTEMS.
@@ -103,7 +100,7 @@ initialization tasks or threads.  It is possible
 to configure an application to start with a 
 single thread that whose entry point is @code{main()}.
 
-Each API supported by RTEMS (Classic, POSIX, and ITRON)
+Each API supported by RTEMS (Internal, Classic, and POSIX)
 allows the user to configure a set of one or more tasks
 that are created and started automatically
 during RTEMS initialization.  The RTEMS Automatic
@@ -117,8 +114,6 @@ initialization task varies based up API.
 @item @code{Init} - single Classic API Initialization Task
 
 @item @code{POSIX_Init} - single POSIX API Initialization Thread
-
-@item @code{ITRON_Init} - single ITRON API Initialization Task
 @end itemize
 
 Regardless of the API used, when the initialization task executes,

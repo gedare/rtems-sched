@@ -3,7 +3,6 @@
 /check-bsps.m4/1.51/Sat Oct 17 15:53:54 2009//
 /check-custom-bsp.m4/1.8/Fri Oct 23 13:09:30 2009//
 /enable-cxx.m4/1.7/Wed Feb 20 13:09:29 2008//
-/enable-itron.m4/1.13/Thu Jul 23 21:23:13 2009//
 /enable-multiprocessing.m4/1.8/Wed Feb 20 13:09:29 2008//
 /enable-networking.m4/1.9/Wed Feb 20 13:09:29 2008//
 /enable-posix.m4/1.15/Wed Oct 14 12:10:29 2009//

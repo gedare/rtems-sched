@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.71 2010/02/18 00:24:25 ccj Exp $
+## $Id: Makefile.am,v 1.72 2010/06/17 15:29:44 ralf Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -20,10 +20,6 @@ TMP_LIBS += ../posix/libposix.a
 
 if LIBGNAT
 TMP_LIBS += ../libgnat/libgnat.a
-endif
-
-if LIBITRON
-TMP_LIBS += ../itron/libitron.a
 endif
 
 TMP_LIBS += ../libcsupport/libcsupport.a

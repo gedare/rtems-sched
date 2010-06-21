@@ -6,7 +6,7 @@
 #  environment.  This is VERY ugly and could be replaced by something
 #  nicer in the future if this report style is useful.
 #
-#  $Id: gen_size_report,v 1.5 2002/01/17 21:47:45 joel Exp $
+#  $Id: gen_size_report,v 1.6 2010/06/17 18:45:36 joel Exp $
 # 
 
 #cpu=sparc
@@ -189,25 +189,5 @@ for i in libm.t
 do
   per_manager $i exec/posix/src lib/libc libm_extract
 done
-
-# Grab the size of the ITRON API
-cd ${docdir}/itron3.0
-echo
-echo "=============================================================="
-echo "=============================================================="
-echo "====                                                      ===="
-echo "====           ITRON 3.0 API SIZE INFORMATION             ===="
-echo "====                                                      ===="
-echo "=============================================================="
-echo "=============================================================="
-echo
-if [ -r ${objdir}/../../../${bsp}/lib/libitron.a ] ; then
-  for i in *.t
-  do
-    per_manager $i exec/itron/src
-  done
-else
-  echo "ITRON API not configured."
-fi
 
 

@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.30 2009/11/28 06:28:41 ralf Exp $
+## $Id: configure.ac,v 1.31 2010/06/17 16:30:05 ralf Exp $
 
 ##
 ## This script configures the configuration files below make/
@@ -19,7 +19,6 @@ AM_MAINTAINER_MODE
 
 RTEMS_ENABLE_MULTIPROCESSING
 RTEMS_ENABLE_POSIX
-RTEMS_ENABLE_ITRON
 RTEMS_ENABLE_NETWORKING
 RTEMS_ENABLE_CXX
 
@@ -64,7 +63,6 @@ RTEMS_CHECK_MULTIPROCESSING(RTEMS_BSP)
 RTEMS_CHECK_NETWORKING(RTEMS_BSP)
 RTEMS_CHECK_POSIX_API(RTEMS_BSP)
 RTEMS_CHECK_CXX(RTEMS_BSP)
-RTEMS_CHECK_ITRON_API(RTEMS_BSP)
 
 AC_SUBST(rtems_cv_prog_cc_cross)
 AC_SUBST(RTEMS_HAS_CPLUSPLUS)

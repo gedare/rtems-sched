@@ -1,3 +1,415 @@
+2010-06-21	Peter Dufault <dufault@hda.com>
+
+	PR 1570/cpukit
+	* posix/src/semtimedwait.c: This routine is supposed to return -1/errno
+	NOT the status directly.
+
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1554/cpukit
+	Coverity Id 17
+	* libi2c/libi2c.c, score/src/objectextendinformation.c: Fix memory leak
+	on error.
+
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1559/misc
+	Coverity Id 16
+	* libmisc/monitor/mon-editor.c: Fix buffer overflow.
+
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Add parameters for FIFOs and pipes since
+	they are distinct to the user.
+
+2010-06-19	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sapi/include/confdefs.h: Add CONFIGURE_MAXIMUM_FIFOS to account for
+	resources per FIFO instance.
+
+2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems/mkrootfs.h: doxygen cosmetics.
+	* libnetworking/netinet/if_ether.c: Misc. 64bit fixes from FreeBSD.
+	* libfs/src/nfsclient/src/rpcio.c: Misc. 64bit fixes.
+
+2010-06-18	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/include/rtems/rtems/object.h: Remove OBJECTS_ITRON_API.
+	* rtems/src/rtemsobjectidapimaximum.c: Remove OBJECTS_ITRON_API.
+	* score/include/rtems/score/object.h: Remove OBJECTS_ITRON_API.
+	* score/include/rtems/score/thread.h: Remove ITRON.
+	* score/include/rtems/score/interr.h: Remove ITRON.
+	* rtems/mainpage.h: Remove comment referring to ITRON.
+	* rtems/src/rtemsobjectgetapiname.c: Remove ITRON.
+	* sapi/include/rtems/config.h: Remove ITRON.
+	* score/src/objectapimaximumclass.c: Remove OBJECTS_ITRON_API.
+	* score/include/rtems/system.h: Remove ITRON_EXTERN.
+	* score/src/apiext.c: Remove comment referring to ITRON.
+	* score/include/rtems/score/object.h: Remove Objects_ITRON_API.
+	* rtems/src/rtemsobjectgetapiclassname.c,
+	sapi/include/rtems/config.h, sapi/src/exinit.c:
+	Remove RTEMS_ITRON_API conditional blocks.
+	* sapi/Makefile.am: Remove src/itronapi.c.
+	* sapi/src/itronapi.c: Remove.
+	* score/src/threadsuspend.c, score/src/threadresume.c,
+	score/src/threadreset.c, score/src/threadinitialize.c,
+	score/src/apiext.c, score/include/rtems/score/thread.h,
+	score/include/rtems/score/coresem.h:
+	Remove RTEMS_ITRON_API conditional blocks.
+
+2010-06-18	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file-block.c: Clean up uint64_t maths.
+
+2010-06-18	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-file-system.c: Move questionable macros to
+	C functions.
+
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Remove ITRON configuration parameters.
+
+2010-06-17	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* sapi/include/confdefs.h: Remove RTEMS_COVERAGE conditionals.
+
+2010-06-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/include/rtems/score/object.h,
+	score/include/rtems/score/thread.h: Remove prototypes for ITRON
+	only methods removed by Ralf.
+
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* itron/Makefile.am, itron/preinstall.am
+	itron/include/itron.h, itron/include/itronsys/README
+	itron/include/itronsys/eventflags.h,
+	itron/include/itronsys/fmempool.h,
+	itron/include/itronsys/intr.h,
+	itron/include/itronsys/mbox.h,
+	itron/include/itronsys/msgbuffer.h,
+	itron/include/itronsys/network.h,
+	itron/include/itronsys/port.h,
+	itron/include/itronsys/semaphore.h,
+	itron/include/itronsys/status.h,
+	itron/include/itronsys/sysmgmt.h,
+	itron/include/itronsys/task.h,
+	itron/include/itronsys/time.h,
+	itron/include/itronsys/types.h,
+	itron/include/itronsys/vmempool.h,
+	itron/include/rtems/itron/README,
+	itron/include/rtems/itron/config.h,
+	itron/include/rtems/itron/eventflags.h,
+	itron/include/rtems/itron/fmempool.h,
+	itron/include/rtems/itron/intr.h,
+	itron/include/rtems/itron/itronapi.h,
+	itron/include/rtems/itron/mbox.h,
+	itron/include/rtems/itron/msgbuffer.h,
+	itron/include/rtems/itron/network.h,
+	itron/include/rtems/itron/object.h,
+	itron/include/rtems/itron/port.h,
+	itron/include/rtems/itron/semaphore.h,
+	itron/include/rtems/itron/sysmgmt.h,
+	itron/include/rtems/itron/task.h,
+	itron/include/rtems/itron/time.h,
+	itron/include/rtems/itron/vmempool.h,
+	itron/inline/rtems/itron/eventflags.inl,
+	itron/inline/rtems/itron/fmempool.inl,
+	itron/inline/rtems/itron/intr.inl,
+	itron/inline/rtems/itron/mbox.inl,
+	itron/inline/rtems/itron/msgbuffer.inl,
+	itron/inline/rtems/itron/network.inl,
+	itron/inline/rtems/itron/port.inl,
+	itron/inline/rtems/itron/semaphore.inl,
+	itron/inline/rtems/itron/sysmgmt.inl,
+	itron/inline/rtems/itron/task.inl,
+	itron/inline/rtems/itron/time.inl,
+	itron/inline/rtems/itron/vmempool.inl,
+	itron/src/TODO, itron/src/acp_por.c,
+	itron/src/act_cyc.c, itron/src/cal_por.c, itron/src/can_wup.c,
+	itron/src/chg_iXX.c, itron/src/chg_pri.c, itron/src/clr_flg.c,
+	itron/src/cre_flg.c, itron/src/cre_mbf.c, itron/src/cre_mbx.c,
+	itron/src/cre_mpf.c, itron/src/cre_mpl.c, itron/src/cre_por.c,
+	itron/src/cre_sem.c, itron/src/cre_tsk.c, itron/src/def_alm.c,
+	itron/src/def_cyc.c, itron/src/def_exc.c, itron/src/def_int.c,
+	itron/src/def_svc.c, itron/src/del_flg.c, itron/src/del_mbf.c,
+	itron/src/del_mbx.c, itron/src/del_mpf.c, itron/src/del_mpl.c,
+	itron/src/del_por.c, itron/src/del_sem.c, itron/src/del_tsk.c,
+	itron/src/dis_dsp.c, itron/src/dis_int.c, itron/src/dly_tsk.c,
+	itron/src/ena_dsp.c, itron/src/ena_int.c, itron/src/eventflags.c,
+	itron/src/exd_tsk.c, itron/src/ext_tsk.c, itron/src/fmempool.c,
+	itron/src/frsm_tsk.c, itron/src/fwd_por.c, itron/src/get_blf.c,
+	itron/src/get_blk.c, itron/src/get_tid.c, itron/src/get_tim.c,
+	itron/src/get_ver.c, itron/src/itroninittasks.c, itron/src/itronintr.c,
+	itron/src/itronsem.c, itron/src/itrontime.c, itron/src/loc_cpu.c,
+	itron/src/mbox.c, itron/src/mboxtranslatereturncode.c,
+	itron/src/msgbuffer.c, itron/src/msgbuffertranslatereturncode.c,
+	itron/src/network.c, itron/src/nget_nod.c, itron/src/nget_ver.c,
+	itron/src/nrea_dat.c, itron/src/nwri_dat.c, itron/src/pacp_por.c,
+	itron/src/pcal_por.c, itron/src/pget_blf.c, itron/src/pget_blk.c,
+	itron/src/pol_flg.c, itron/src/port.c, itron/src/prcv_mbf.c,
+	itron/src/prcv_mbx.c, itron/src/preq_sem.c, itron/src/psnd_mbf.c,
+	itron/src/rcv_mbf.c, itron/src/rcv_mbx.c, itron/src/ref_alm.c,
+	itron/src/ref_cfg.c, itron/src/ref_cyc.c, itron/src/ref_flg.c,
+	itron/src/ref_iXX.c, itron/src/ref_mbf.c, itron/src/ref_mbx.c,
+	itron/src/ref_mpf.c, itron/src/ref_mpl.c, itron/src/ref_por.c,
+	itron/src/ref_sem.c, itron/src/ref_sys.c, itron/src/ref_tsk.c,
+	itron/src/rel_blf.c, itron/src/rel_blk.c, itron/src/rel_wai.c,
+	itron/src/ret_int.c, itron/src/ret_tmr.c, itron/src/ret_wup.c,
+	itron/src/rot_rdq.c, itron/src/rpl_rdv.c, itron/src/rsm_tsk.c,
+	itron/src/set_flg.c, itron/src/set_tim.c, itron/src/sig_sem.c,
+	itron/src/slp_tsk.c, itron/src/snd_mbf.c, itron/src/snd_mbx.c,
+	itron/src/sta_tsk.c, itron/src/sus_tsk.c, itron/src/sysmgmt.c,
+	itron/src/tacp_por.c, itron/src/task.c, itron/src/tcal_por.c,
+	itron/src/ter_tsk.c, itron/src/tget_blf.c, itron/src/tget_blk.c,
+	itron/src/trcv_mbf.c, itron/src/trcv_mbx.c, itron/src/tslp_tsk.c,
+	itron/src/tsnd_mbf.c, itron/src/twai_flg.c, itron/src/twai_sem.c,
+	itron/src/unl_cpu.c, itron/src/vmempool.c, itron/src/wai_flg.c,
+	itron/src/wai_sem.c, itron/src/wup_tsk.c: Remove (Abandoned).
+
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* wrapup/Makefile.am, score/Makefile.am: Remove LIBITRON.
+	* score/src/objectallocatebyindex.c, score/src/objectgetbyindex.c,
+ 	score/src/threadrotatequeue.c: Remove.
+	* Makefile.am: Remove itron.
+	* configure.ac: Remove itron.
+	* aclocal/check-itron.m4, aclocal/enable-itron.m4: Remove.
+
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file-system.h: Revert previous change.
+	Force RTEMS_RFS_VERSION_MASK to be 32bit.
+	* libfs/src/rfs/rtems-rfs-rtems-dir.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-format.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-file-system.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-rtems-file.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-buffer.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-shell.c: Various 64bit fixes.
+
+2010-06-17	Chris Johns <chrisj@rtems.org>
+
+	libfs/src/rfs/rtems-rfs-bitmaps.h,
+	libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-block.h: PR 1556. Struct clean up. 
+
+2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-shell.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-bitmaps-ut.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-group.c: Various 64bit fixes.
+
+2010-06-16	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1453/cpukit
+	* posix/Makefile.am: newlib uses sysconf() for _CLOCKS_PER_SEC_ so
+	enable it even when POSIX threads are disabled.
+
+2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file.c: Various 64bit fixes.
+
+2010-06-16	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/objectallocate.c: Add conditionally compiled debug code to
+	printk a message when an object allocation error occurs. This should
+	be helpful in identifying when a ported package required more
+	resources.
+
+2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-inode.c: Various 64bit fixes.
+	* libfs/src/rfs/rtems-rfs-rtems.c: Various 64bit fixes.
+	Add PRIomode_t.
+	* libfs/src/rfs/rtems-rfs-buffer-bdbuf.c:
+	Various 64bit fixes.
+
+2010-06-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1556/cpukit
+	* libfs/src/rfs/rtems-rfs-bitmaps.h,
+	libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-buffer.h,
+	libfs/src/rfs/rtems-rfs-file-system-fwd.h,
+	libfs/src/rfs/rtems-rfs-file-system.h,
+	libfs/src/rfs/rtems-rfs-file.h,
+	libfs/src/rfs/rtems-rfs-format.h,
+	libfs/src/rfs/rtems-rfs-group.h,
+	libfs/src/rfs/rtems-rfs-inode.h:
+	Rename "struct rtems_rfs_*_t" into "struct _rtems_rfs_*".
+	* libfs/src/rfs/rtems-rfs-shell.c: Remove rtems_rfs_shell_cmd_t.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1566/filesystem
+	* libnetworking/rtems/mkrootfs.c,  libnetworking/rtems/mkrootfs.h:
+	Let rtems_rootfs_append_host_rec take an in_addr_t as first arg.
+	* libnetworking/rtems/rtems_dhcp.c, libnetworking/nfs/bootp_subr.c:
+	Reflect changes above.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-dir.c: Various 64bit compatibility fixes.
+	Add PRIdoff_t.
+	Remove stray "\"s.
+	* libfs/src/rfs/rtems-rfs-link.c: Various 64bit compatibility fixes.
+
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1561/cpukit
+	* configure.ac, score/cpu/Makefile.am: Merge SPARC64 port.
+
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/psignal.c: Formatting.
+
+2010-06-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/include/rtems/posix/pthread.h: Improve comments.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/rfs/rtems-rfs-file-system.h: Remove bogus typecast.
+	* libfs/src/rfs/rtems-rfs-block.c, libfs/src/rfs/rtems-rfs-buffer.c,
+	libnetworking/nfs/bootp_subr.c: Misc. 64bit-compatibility fixes.
+	* posix/include/rtems/posix/pthread.h: Remove stray comment.
+	Work-around doxygen comment bug.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/netinet/ip_fw.c, libnetworking/netinet/ip_input.c:
+	Misc. 64bit-compatibility fixes.
+
+2010-06-15	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/shell/print-ls.c, libmisc/shell/main_msdosfmt.c:
+	Include <inttypes.h>.
+	Misc. 64bit-compatibility fixes.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmd/md5.h: Revert Sebastian's patch.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/libio_.h: Fix broken doxygen
+	meta comment.
+
+2010-06-14	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1553/filesystem
+	Coverity Id 37
+	* libblock/src/flashdisk.c: Fix two paths which should have returned an
+	error but did not have the return statement.
+
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmd/md5.h: Define MD5_DIGEST_SIZE.
+
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1555/cpukit
+	* Makefile.am, preinstall.am: Install md4.h and md5.h headers.
+
+2010-06-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h: Do not define a filesystem if
+	CONFIGURE_APPLICATION_DISABLE_FILESYSTEM is defined.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Doxygen.in: Use @PERL@ instead of hard-coded /usr/bin/perl.
+
+2010-06-14	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/rtems/mkrootfs.h,
+	posix/include/rtems/posix/pthread.h,
+	score/include/rtems/score/coresem.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/threadq.h,
+	score/include/rtems/score/timestamp.h: Move 'extern "C"'.
+	* posix/include/rtems/posix/threadsup.h: Add extern "C".
+	* libnetworking/netinet/in_pcb.c:
+	Eliminate "ushort".
+	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h:
+	Eliminate "uint".
+
+2010-06-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* include/rtems/tar.h, libcsupport/include/tar.h: Remove.
+	* configure.ac: Require toolchain to provide tar.h.
+	* libfs/src/imfs/imfs_load_tar.c, libmisc/untar/untar.h:
+	Use <tar.h> instead of <rtems/tar.h>.
+
+2010-06-13	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/rtems/libio.h: Fix typo in doxygen comment.
+
+2010-06-12	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/pipe/fifo.c: Remove unused variable to fix warning.
+	* libnetworking/rtems/mkrootfs.c: Add include to fix warning.
+	* rtems/src/tasksetpriority.c: Fix spacing.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* rtems/inline/rtems/rtems/status.inl: Fix broken doxygen comment.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Doxygen.in: Activate INCLUDE_GRAPH and 
+	INCLUDED_BY_GRAPH.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* score/include/rtems/score/timestamp.h,
+	score/include/rtems/score/timestamp64.h,
+	score/include/rtems/score/watchdog.h:
+	Misc. doxygen fixes.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/devctl.h: Move mal-placed @file.
+
+2010-06-12	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libfs/src/devfs/devfs.h, libfs/src/rfs/rtems-rfs-block-pos.h,
+	libfs/src/rfs/rtems-rfs-block.h, libfs/src/rfs/rtems-rfs-dir.h,
+	libfs/src/rfs/rtems-rfs-group.h, libfs/src/rfs/rtems-rfs-inode.h:
+	Fix broken doxygen commands.
+
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* Doxygen.in: Update.
+	Misc. fixes.
+	* doxy-filter: New (Copy of ../tools/build/doxy-filter).
+	* Makefile.am: Add doxy-filter.
+
+2010-06-11	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Remove c4x.
+	* score/cpu/Makefile.am: Remove c4x.
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/unmount.c: Removed obsolete declarations.  Fixed
+	invalid memory free.
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Removed
+	rtems_ftpfs_mount().
+
+2010-06-10	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount-mktgt.c: New file.
+	* libcsupport/Makefile.am: Reflect change above.
+	* libcsupport/include/rtems/libio.h: Declare
+	mount_and_make_target_path().
+
 2010-06-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libnetworking/rtems/ftpfs.h, libnetworking/lib/ftpfs.c:  Added

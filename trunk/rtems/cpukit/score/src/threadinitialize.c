@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadinitialize.c,v 1.38 2009/12/02 18:22:18 humph Exp $
+ *  $Id: threadinitialize.c,v 1.39 2010/06/18 02:56:26 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -190,9 +190,6 @@ bool _Thread_Initialize(
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;
-  #if defined(RTEMS_ITRON_API)
-    the_thread->suspend_count         = 0;
-  #endif
   _Priority_Set(&the_thread->real_priority, &priority);
   _Priority_Set(&the_thread->Start.initial_priority, &priority);
   _Thread_Set_priority( the_thread, priority );

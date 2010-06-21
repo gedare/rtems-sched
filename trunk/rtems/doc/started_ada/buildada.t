@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id: buildada.t,v 1.24 2009/10/14 13:08:39 ralf Exp $
+@c  $Id: buildada.t,v 1.25 2010/06/17 18:45:36 joel Exp $
 @c
 
 @chapter Building the GNAT Cross Compiler Toolset
@@ -491,11 +491,6 @@ This corresponds to the
 @code{configure} option @code{--enable-posix}.
 
 This must be enabled to support the GNAT/RTEMS run-time.
-
-@item ENABLE_RTEMS_ITRON
-is set to "yes" if you want to enable the RTEMS ITRON API support.
-This corresponds to the
-@code{configure} option @code{--enable-itron}.
 
 @item ENABLE_RTEMS_MP
 is set to "yes" if you want to enable the RTEMS multiprocessing
