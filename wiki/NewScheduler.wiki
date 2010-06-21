@@ -3,7 +3,7 @@
 
 = Introduction =
 
-This page provides the design of how the scheduler will be refactored as part of this project.  See CurrentScheduler for an overview of the current RTEMS scheduler.
+This page provides the design of how the scheduler will be refactored as part of this project.
 
 == Broad Goals ==
 
@@ -107,3 +107,4 @@ void _Scheduler_Unblock( Thread_Control *the_thread ) {
 }}}
 _Note: One thing that needs to be determined is how to deal with opening up the scheduling critical section to allow for new threads to enter the scheduler._
 
+_Note: Another concern is ports that can "dispatch from ISR", as this represents another scheduling point._
