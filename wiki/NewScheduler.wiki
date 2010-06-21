@@ -1,0 +1,29 @@
+#summary Design of refactored scheduler infrastructure.
+#labels Phase-Design
+
+= Introduction =
+
+This page provides the design of how the scheduler will be refactored as part of this project.  See CurrentScheduler for an overview of the current RTEMS scheduler.
+
+== Broad Goals ==
+
+At a high-level, the RTEMS' scheduler should be modular and configurable to support the existing scheduling mechanisms and new scheduling mechanisms for uniproccessors and multiprocessors. Part of this modularity is captured by providing abstract NewReadyQueue and NewPriorityHandler interfaces.
+
+== Supporting the Current Scheduler ==
+
+This section describes how the existing scheduler mechanism can be improved.  This is in addition to changes made already to refactor the ready queue and priority handlers. 
+
+The interface to the scheduling subsystem should be simply and concisely captured.  The necessary functions along the interface boundary include:
+{{{
+
+  _Scheduler_schedule( )
+
+  _Scheduler_dispatch( )
+
+  _Scheduler_yield( )
+
+  _Scheduler_timeout( )
+
+  _Scheduler_wake( )
+
+}}}
