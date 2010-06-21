@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: objectapimaximumclass.c,v 1.2 2009/07/07 23:33:17 joel Exp $
+ *  $Id: objectapimaximumclass.c,v 1.3 2010/06/18 04:03:04 ralf Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -27,8 +27,6 @@ unsigned int _Objects_API_maximum_class(
       return OBJECTS_RTEMS_CLASSES_LAST;
     case OBJECTS_POSIX_API:
       return OBJECTS_POSIX_CLASSES_LAST;
-    case OBJECTS_ITRON_API:
-      return OBJECTS_ITRON_CLASSES_LAST;
     case OBJECTS_NO_API:
     default:
       break;

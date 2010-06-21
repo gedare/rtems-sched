@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems-file.c,v 1.4 2010/03/27 04:04:40 ccj Exp $
+ *  $Id: rtems-rfs-rtems-file.c,v 1.5 2010/06/17 03:36:04 ralf Exp $
  */
 /**
  * @file
@@ -21,6 +21,8 @@
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
+
+#include <inttypes.h>
 
 #include <rtems/rfs/rtems-rfs-file.h>
 #include "rtems-rfs-rtems.h"
@@ -51,7 +53,7 @@ rtems_rfs_rtems_file_open (rtems_libio_t* iop,
   flags = 0;
 
   if (rtems_rfs_rtems_trace (RTEMS_RFS_RTEMS_DEBUG_FILE_OPEN))
-    printf("rtems-rfs: file-open: path:%s ino:%ld flags:%04lx mode:%04lx\n",
+    printf("rtems-rfs: file-open: path:%s ino:%" PRId32 " flags:%04" PRIx32 " mode:%04" PRIx32 "\n",
            pathname, ino, flags, mode);
 
   rtems_rfs_rtems_lock (fs);

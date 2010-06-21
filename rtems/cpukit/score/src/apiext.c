@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: apiext.c,v 1.13 2009/07/03 20:57:21 joel Exp $
+ *  $Id: apiext.c,v 1.15 2010/06/18 03:59:55 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -106,14 +106,7 @@ void _API_extensions_Run_postswitch( void )
 
     the_extension = (API_extensions_Control *) the_node;
 
-    /*
-     *  Currently the ITRON API is the only API which does not
-     *  provide this hook.
-     */
-#if defined(RTEMS_ITRON_API)
-    if ( the_extension->postswitch_hook )
-#endif
-      (*the_extension->postswitch_hook)( _Thread_Executing );
+    (*the_extension->postswitch_hook)( _Thread_Executing );
   }
 }
 

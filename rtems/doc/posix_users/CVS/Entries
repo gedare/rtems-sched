@@ -1,12 +1,9 @@
-/.cvsignore/1.7/Wed Oct 25 11:22:13 2006//
-/Makefile.am/1.11/Fri Dec 12 13:09:54 2003//
 /cancel.t/1.5/Thu Jan 17 21:47:45 2002//
 /clock.t/1.7/Fri Jan  9 23:39:14 2004//
 /cond.t/1.7/Thu Jan 17 21:47:45 2002//
 /cspecific.t/1.5/Thu Jan 17 21:47:45 2002//
 /device.t/1.5/Thu Jan 17 21:47:45 2002//
 /files.t/1.11/Thu Jan 17 21:47:45 2002//
-/gen_size_report/1.5/Thu Jan 17 21:47:45 2002//
 /io.t/1.12/Mon Sep 24 21:35:19 2007//
 /key.t/1.6/Thu Jan 17 21:47:45 2002//
 /libc.t/1.6/Thu Jan 17 21:47:45 2002//
@@ -25,4 +22,9 @@
 /systemdb.t/1.6/Thu Jan 17 21:47:45 2002//
 /thread.t/1.10/Wed Dec 20 21:15:03 2006//
 /timer.t/1.2/Thu Jan 17 21:47:45 2002//
+/.cvsignore/1.8/Mon Jun 21 16:59:45 2010//
+/Makefile.am/1.12/Mon Jun 21 16:59:45 2010//
+/gen_size_report/1.6/Mon Jun 21 16:59:45 2010//
+/stamp-vti/1.11/Fri Jun 11 07:45:46 2010//
+/version.texi/1.11/Fri Jun 11 07:45:46 2010//
 D

@@ -1,4 +1,4 @@
-/*
+/**
  * @file rtems/libio_.h
  */
 
@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_.h,v 1.36 2010/06/07 15:35:24 sh Exp $
+ *  $Id: libio_.h,v 1.37 2010/06/14 13:35:45 ralf Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H

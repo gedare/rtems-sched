@@ -12,7 +12,7 @@
  *
  * This software is provided ``AS IS'' without any warranties of any kind.
  *
- *	$Id: ip_fw.c,v 1.5 2010/03/28 05:47:49 ralf Exp $
+ *	$Id: ip_fw.c,v 1.6 2010/06/15 11:33:51 ralf Exp $
  */
 
 /*
@@ -78,7 +78,8 @@ SYSCTL_INT(_net_inet_ip_fw, OID_AUTO, verbose_limit, CTLFLAG_RW, &fw_verbose_lim
 
 #define dprintf(a)	if (!fw_debug); else printf a
 
-#define print_ip(a)	 printf("%ld.%ld.%ld.%ld",(ntohl(a.s_addr)>>24)&0xFF,\
+#define print_ip(a)	 printf("%"PRId32".%"PRId32".%"PRId32".%"PRId32,\
+				 		  (ntohl(a.s_addr)>>24)&0xFF,\
 				 		  (ntohl(a.s_addr)>>16)&0xFF,\
 						  (ntohl(a.s_addr)>>8)&0xFF,\
 						  (ntohl(a.s_addr))&0xFF);

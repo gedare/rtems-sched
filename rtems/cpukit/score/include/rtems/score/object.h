@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: object.h,v 1.77 2010/04/08 10:13:46 thomas Exp $
+ *  $Id: object.h,v 1.80 2010/06/18 04:21:19 ralf Exp $
  */
 
 #ifndef _RTEMS_SCORE_OBJECT_H
@@ -222,12 +222,11 @@ typedef enum {
   OBJECTS_NO_API       = 0,
   OBJECTS_INTERNAL_API = 1,
   OBJECTS_CLASSIC_API  = 2,
-  OBJECTS_POSIX_API    = 3,
-  OBJECTS_ITRON_API    = 4
+  OBJECTS_POSIX_API    = 3
 } Objects_APIs;
 
 /** This macro is used to generically specify the last API index. */
-#define OBJECTS_APIS_LAST OBJECTS_ITRON_API
+#define OBJECTS_APIS_LAST OBJECTS_POSIX_API
 
 /**
  *  This enumerated type is used in the class field of the object ID
@@ -285,25 +284,6 @@ typedef enum {
 
 /** This macro is used to generically specify the last API index. */
 #define OBJECTS_POSIX_CLASSES_LAST OBJECTS_POSIX_RWLOCKS
-
-/**
- *  This enumerated type is used in the class field of the object ID
- *  for the ITRON API.
- */
-typedef enum {
-  OBJECTS_ITRON_NO_CLASS              = 0,
-  OBJECTS_ITRON_TASKS                 = 1,
-  OBJECTS_ITRON_EVENTFLAGS            = 2,
-  OBJECTS_ITRON_MAILBOXES             = 3,
-  OBJECTS_ITRON_MESSAGE_BUFFERS       = 4,
-  OBJECTS_ITRON_PORTS                 = 5,
-  OBJECTS_ITRON_SEMAPHORES            = 6,
-  OBJECTS_ITRON_VARIABLE_MEMORY_POOLS = 7,
-  OBJECTS_ITRON_FIXED_MEMORY_POOLS    = 8
-} Objects_ITRON_API;
-
-/** This macro is used to generically specify the last API index. */
-#define OBJECTS_ITRON_CLASSES_LAST OBJECTS_ITRON_FIXED_MEMORY_POOLS
 
 /**
  *  This enumerated type lists the locations which may be returned
@@ -531,21 +511,6 @@ Objects_Control *_Objects_Allocate(
 );
 
 /**
- *  This function allocates the object control block
- *  specified by the index from the inactive chain of
- *  free object control blocks.
- *
- *  @param[in] information points to an object class information block.
- *  @param[in] the_index is the index of the object to allocate.
- *  @param[in] sizeof_control is the size of the object control block.
- */
-Objects_Control *_Objects_Allocate_by_index(
-  Objects_Information *information,
-  int                  the_index,
-  uint16_t             sizeof_control
-);
-
-/**
  *
  *  This function frees a object control block to the
  *  inactive chain of free object control blocks.
@@ -726,34 +691,6 @@ Objects_Control *_Objects_Get_isr_disable(
   Objects_Id           id,
   Objects_Locations   *location,
   ISR_Level           *level
-);
-
-/**
- *  This function maps object index to object control blocks which must.
- *  be local.  The parameter the_object control pointer which maps to id
- *  and location is set to OBJECTS_LOCAL.  Otherwise, location is set to
-    OBJECTS_ERROR and the_object is undefined.
- *
- *  @param[in] information points to an object class information block.
- *  @param[in] id is the Id of the object whose name we are locating.
- *  @param[in] location will contain an indication of success or failure.
- *
- *  @return This method returns a pointer to the object associated with ID.
- *
- *  @return This method returns one of the values from the
- *          @ref Objects_Name_or_id_lookup_errors enumeration to indicate
- *          successful or failure.  On success @a id will contain the id of
- *          the requested object.
- *
- *  @note _Objects_Get returns with dispatching disabled for
- *  local and remote objects.  _Objects_Get_isr_disable returns with
- *  dispatching disabled for remote objects and interrupts for local
- *  objects.
- */
-Objects_Control *_Objects_Get_by_index (
-  Objects_Information *information,
-  Objects_Id           id,
-  Objects_Locations   *location
 );
 
 /**

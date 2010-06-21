@@ -18,7 +18,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.5 2009/11/30 03:33:23 ralf Exp $
+ *  $Id: init.c,v 1.6 2010/06/19 20:55:30 joel Exp $
  */
 
 #define CONFIGURE_INIT
@@ -37,7 +37,6 @@ char *Sources[] = {
   "INTERNAL_ERROR_CORE",
   "INTERNAL_ERROR_RTEMS_API",
   "INTERNAL_ERROR_POSIX_API",
-  "INTERNAL_ERROR_ITRON_API"
 };
 
 char *Errors_Rtems[] = {
@@ -112,7 +111,7 @@ void Put_Error( uint32_t source, uint32_t error )
 
 void Put_Source( uint32_t source )
 {
-  if ( source > INTERNAL_ERROR_ITRON_API )
+  if ( source > INTERNAL_ERROR_POSIX_API )
     printk("Unknown Source (%d)", source);
   else
     printk( Sources[ source ] );

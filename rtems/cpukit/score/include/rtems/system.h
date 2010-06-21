@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: system.h,v 1.63 2010/04/12 15:28:03 ralf Exp $
+ *  $Id: system.h,v 1.64 2010/06/18 04:00:54 ralf Exp $
  */
 
 #ifndef _RTEMS_SYSTEM_H
@@ -85,20 +85,6 @@ extern "C" {
 #else
 #undef  POSIX_EXTERN
 #define POSIX_EXTERN  extern
-#endif
-
-/**
- *  The following ensures that all data is declared in the space
- *  of the initialization routine for either the Initialization Manager
- *  or the initialization file for the appropriate API.  It is
- *  referenced as "external" in every other file.
- */
-#ifdef ITRON_API_INIT
-#undef  ITRON_EXTERN
-#define ITRON_EXTERN
-#else
-#undef  ITRON_EXTERN
-#define ITRON_EXTERN  extern
 #endif
 
 /**

@@ -1,12 +1,12 @@
 /*
- *  COPYRIGHT (c) 1989-2010.
- *  On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2010
+ *  Bharath Suri<bharath.s.jois@gmail.com>.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/06/08 13:59:17 jennifer Exp $
+ *  $Id: init.c,v 1.3 2010/06/20 22:02:24 joel Exp $
  */
 
 /* Includes */
@@ -81,10 +81,11 @@ rtems_task Init(
 #define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
 #define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 6
 
+#define CONFIGURE_PIPES_ENABLED
+#define CONFIGURE_MAXIMUM_PIPES 1
 #define CONFIGURE_MAXIMUM_TASKS 1
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
-#define CONFIGURE_PIPES_ENABLED
 #define CONFIGURE_INIT
 
 #include <rtems/confdefs.h>

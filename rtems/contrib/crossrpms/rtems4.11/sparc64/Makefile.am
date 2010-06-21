@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.6 2010/06/09 06:59:05 ralf Exp $
+# $Id: Makefile.am,v 1.7 2010/06/17 16:33:51 ralf Exp $
 
 rtems_api = 4.11
 TARGET = sparc64-rtems4.11
@@ -13,7 +13,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.5.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 13
+GCC_RPMREL = 14
 NEWLIB_VERS = 1.18.0
 NEWLIB_PKGVERS = $(NEWLIB_VERS)
 NEWLIB_RPMREL = `expr $(GCC_RPMREL)`

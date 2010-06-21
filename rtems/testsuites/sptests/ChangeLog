@@ -1,3 +1,31 @@
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spfifo08/init.c: Catch more cases but discussion on errors and proper
+	behaviour remain.
+
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* spfifo02/init.c, spfifo03/init.c, spfifo04/init.c: Configure pipes
+	used.
+
+2010-06-20	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: New test for error cases in FIFO creation.
+	* spfifo08/.cvsignore, spfifo08/Makefile.am, spfifo08/init.c,
+	spfifo08/spfifo08.doc, spfifo08/spfifo08.scn: New files.
+
+2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp09/screen01.c, sp09/sp09.scn, sp43/init.c, sp43/sp43.scn,
+	spfatal_support/init.c: Remove references to ITRON constants.
+
+2010-06-19	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add sp70 to test slot
+	reclamation and reuse for unlimited object configuration.
+	* sp70/.cvsignore, sp70/Makefile.am, sp70/init.c, sp70/sp70.doc,
+	sp70/sp70.scn: New files.
+
 2010-06-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* sp16/task1.c: Update for heap extend changes.

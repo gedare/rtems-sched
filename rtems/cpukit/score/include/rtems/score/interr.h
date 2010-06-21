@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: interr.h,v 1.29 2010/03/10 18:15:33 joel Exp $
+ *  $Id: interr.h,v 1.30 2010/06/18 04:08:47 ralf Exp $
  */
 
 #ifndef _RTEMS_SCORE_INTERR_H
@@ -43,8 +43,7 @@ extern "C" {
 typedef enum {
   INTERNAL_ERROR_CORE,
   INTERNAL_ERROR_RTEMS_API,
-  INTERNAL_ERROR_POSIX_API,
-  INTERNAL_ERROR_ITRON_API
+  INTERNAL_ERROR_POSIX_API
 } Internal_errors_Source;
 
 /**

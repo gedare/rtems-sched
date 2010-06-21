@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.26 2009/09/13 21:09:47 joel Exp $
+## $Id: configure.ac,v 1.27 2010/06/17 16:02:31 ralf Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -23,7 +23,6 @@ RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_PROG_CC
 
 RTEMS_CHECK_CPUOPTS([RTEMS_POSIX_API])
-RTEMS_CHECK_CPUOPTS([RTEMS_ITRON_API])
 RTEMS_CHECK_CPUOPTS([RTEMS_MULTIPROCESSING])
 RTEMS_CHECK_CPUOPTS([RTEMS_NETWORKING])
 
@@ -39,14 +38,8 @@ if test "$enable_tests" = "yes"; then
   if test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes"; then
     AC_CONFIG_SUBDIRS(mptests)
   fi
-  if test "$rtems_cv_RTEMS_ITRON_API" = "yes"; then
-    AC_CONFIG_SUBDIRS(itrontests)
-  fi
   # Now do performance tests
   AC_CONFIG_SUBDIRS(tmtests)
-  if test "$rtems_cv_RTEMS_ITRON_API" = "yes"; then
-    AC_CONFIG_SUBDIRS(tmitrontests)
-  fi
 fi
 
 # Explicitly list all Makefiles here

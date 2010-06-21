@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.22 2009/10/22 17:10:59 ralf Exp $
+##  $Id: Makefile.am,v 1.24 2010/06/15 22:45:17 joel Exp $
 ##
 
 SUBDIRS = @RTEMS_CPU@
@@ -8,7 +8,6 @@ DIST_SUBDIRS =
 DIST_SUBDIRS += arm
 DIST_SUBDIRS += avr
 DIST_SUBDIRS += bfin
-DIST_SUBDIRS += c4x
 DIST_SUBDIRS += h8300
 DIST_SUBDIRS += i386
 DIST_SUBDIRS += lm32
@@ -21,6 +20,7 @@ DIST_SUBDIRS += no_cpu
 DIST_SUBDIRS += powerpc
 DIST_SUBDIRS += sh
 DIST_SUBDIRS += sparc
+DIST_SUBDIRS += sparc64
 
 include $(top_srcdir)/automake/subdirs.am
 include $(top_srcdir)/automake/local.am

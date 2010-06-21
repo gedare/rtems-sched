@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.h,v 1.90 2009/12/02 18:15:16 humph Exp $
+ *  $Id: thread.h,v 1.93 2010/06/18 04:20:06 ralf Exp $
  */
 
 #ifndef _RTEMS_SCORE_THREAD_H
@@ -27,7 +27,7 @@
  */
 /**@{*/
 
-#if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
+#if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_THREAD_ENABLE_EXHAUST_TIMESLICE
 #endif
 
@@ -321,16 +321,14 @@ typedef enum {
   /** This value is for the Classic RTEMS API. */
   THREAD_API_RTEMS,
   /** This value is for the POSIX API. */
-  THREAD_API_POSIX,
-  /** This value is for the ITRON API. */
-  THREAD_API_ITRON
+  THREAD_API_POSIX
 }  Thread_APIs;
 
 /** This macro defines the first API which has threads. */
 #define THREAD_API_FIRST THREAD_API_RTEMS
 
 /** This macro defines the last API which has threads. */
-#define THREAD_API_LAST  THREAD_API_ITRON
+#define THREAD_API_LAST  THREAD_API_POSIX
 
 /**
  *  This structure defines the Thread Control Block (TCB).
@@ -698,15 +696,6 @@ void _Thread_Tickle_timeslice( void );
  *  or greater priority.
  */
 void _Thread_Yield_processor( void );
-
-/**
- *  This routine is invoked to rotate the ready queue for the
- *  given priority.  It can be used to yeild the processor
- *  by rotating the executing threads ready queue.
- */
-void _Thread_Rotate_Ready_Queue(
-  Priority_Control  priority
-);
 
 /**
  *  This routine initializes the context of the_thread to its

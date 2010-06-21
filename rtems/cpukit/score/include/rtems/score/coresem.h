@@ -15,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: coresem.h,v 1.28 2009/11/28 05:58:54 ralf Exp $
+ *  $Id: coresem.h,v 1.30 2010/06/18 02:56:26 ralf Exp $
  */
 
 #ifndef _RTEMS_SCORE_CORESEM_H
@@ -29,16 +29,16 @@
  */
 /**@{*/
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/watchdog.h>
 
-#if defined(RTEMS_POSIX_API) || defined(RTEMS_ITRON_API)
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if defined(RTEMS_POSIX_API)
   #define RTEMS_SCORE_CORESEM_ENABLE_SEIZE_BODY
 #endif
 

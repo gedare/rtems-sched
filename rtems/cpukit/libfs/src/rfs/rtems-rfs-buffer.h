@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-buffer.h,v 1.2 2010/02/28 22:36:28 ccj Exp $
+ *  $Id: rtems-rfs-buffer.h,v 1.3 2010/06/16 14:39:14 ralf Exp $
  */
 /**
  * @file
@@ -60,7 +60,7 @@ int rtems_rfs_buffer_bdbuf_release (rtems_rfs_buffer* handle,
                                     bool              modified);
 #else /* Device I/O */
 typedef uint32_t rtems_rfs_buffer_block;
-typedef struct rtems_rfs_buffer_t
+typedef struct _rtems_rfs_buffer
 {
   rtems_chain_node       link;
   rtems_rfs_buffer_block user;

@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-format.h,v 1.1 2010/02/18 00:24:25 ccj Exp $
+ *  $Id: rtems-rfs-format.h,v 1.2 2010/06/16 14:39:14 ralf Exp $
  */
 /**
  * @file
@@ -34,7 +34,7 @@ extern "C" {
  * RFS File System Configuration data used to format the file system. For
  * default values leave the field set to 0.
  */
-typedef struct rtems_rfs_format_config_t
+typedef struct _rtems_rfs_format_config
 {
   /**
    * The size of a block.

@@ -2,13 +2,13 @@
  *
  *  This file contains the implementation of the function described in irq.h
  *
- *  CopyRight (C) 1998 valette@crf.canon.fr
+ *  Copyright (C) 1998 valette@crf.canon.fr
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: irq_asm.S,v 1.16 2009/11/30 03:47:10 ralf Exp $
+ *  $Id: irq_asm.S,v 1.17 2010/06/15 16:36:19 joel Exp $
  */
 
 #include <rtems/asm.h>

@@ -12,7 +12,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id: cpu_supplement.texi,v 1.6 2009/04/19 15:49:20 joel Exp $
+@c  $Id: cpu_supplement.texi,v 1.7 2010/06/15 22:48:08 joel Exp $
 @c
 
 @c
@@ -70,6 +70,7 @@
 @include powerpc.texi
 @include sh.texi
 @include sparc.texi
+@include sparc64.texi
 @include tic4x.texi
 @ifinfo
 @node Top, Preface, (dir), (dir)
@@ -90,6 +91,7 @@ This is the online version of the RTEMS CPU Architecture Supplement.
 * PowerPC Specific Information::
 * SuperH Specific Information::
 * SPARC Specific Information::
+* SPARC-64 Specific Information::
 * Texas Instruments C3x/C4x Specific Information::
 * Command and Variable Index::
 * Concept Index::

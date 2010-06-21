@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadresume.c,v 1.9 2009/06/01 21:44:01 joel Exp $
+ *  $Id: threadresume.c,v 1.10 2010/06/18 02:56:26 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -62,18 +62,6 @@ void _Thread_Resume(
   States_Control  current_state;
 
   _ISR_Disable( level );
-
-  #if defined(RTEMS_ITRON_API)
-    if ( force == true )
-      the_thread->suspend_count = 0;
-    else
-      the_thread->suspend_count--;
-
-    if ( the_thread->suspend_count > 0 ) {
-      _ISR_Enable( level );
-      return;
-    }
-  #endif
 
   current_state = the_thread->current_state;
   if ( current_state & STATES_SUSPENDED ) {

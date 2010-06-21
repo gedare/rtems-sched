@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: fifo.c,v 1.5 2010/06/08 10:25:45 sh Exp $
+ * $Id: fifo.c,v 1.7 2010/06/14 05:49:44 ralf Exp $
  */
 
 
@@ -247,8 +247,6 @@ int pipe_release(
   pipe_control_t *pipe = *pipep;
   uint32_t mode;
 
-  rtems_status_code sc;
-
   if (pipe_lock())
     /* WARN pipe not freed and pipep not set to NULL! */
     /* FIXME */
@@ -312,7 +310,7 @@ int fifo_open(
 )
 {
   pipe_control_t *pipe;
-  uint prevCounter;
+  unsigned int prevCounter;
   int err;
 
   err = pipe_new(pipep);
@@ -561,7 +559,7 @@ int pipe_ioctl(
       return -EINTR;
 
     /* Return length of pipe */
-    *(uint *)buffer = pipe->Length;
+    *(unsigned int *)buffer = pipe->Length;
     PIPE_UNLOCK(pipe);
     return 0;
   }

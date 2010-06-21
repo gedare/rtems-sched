@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: object.h,v 1.9 2009/11/29 11:55:14 ralf Exp $
+ *  $Id: object.h,v 1.10 2010/06/18 05:28:04 ralf Exp $
  */
 
 #ifndef _RTEMS_RTEMS_OBJECT_H
@@ -240,7 +240,7 @@ rtems_status_code rtems_object_set_name(
  *  @note A body is also provided.
  */
 #define rtems_object_id_api_maximum() \
-  OBJECTS_ITRON_API
+  OBJECTS_APIS_LAST
 
 /**
  *  @brief Get Lowest Valid Class Value

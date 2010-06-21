@@ -28,7 +28,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: ftpfs.c,v 1.30 2010/06/09 11:36:08 sh Exp $
+ * $Id: ftpfs.c,v 1.31 2010/06/10 09:20:28 sh Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -130,33 +130,6 @@ static int rtems_ftpfs_set_connection_timeout(
   }
 
   return 0;
-}
-
-rtems_status_code rtems_ftpfs_mount(const char *mount_point)
-{
-  int rv = 0;
-
-  if (mount_point == NULL) {
-    mount_point = RTEMS_FTPFS_MOUNT_POINT_DEFAULT;
-  }
-
-  rv = rtems_mkdir(mount_point, S_IRWXU | S_IRWXG | S_IRWXO);
-  if (rv != 0) {
-    return RTEMS_IO_ERROR;
-  }
-
-  rv = mount(
-    NULL,
-    mount_point,
-    RTEMS_FILESYSTEM_TYPE_FTPFS,
-    RTEMS_FILESYSTEM_READ_WRITE,
-    NULL
-  );
-  if (rv != 0) {
-    return RTEMS_IO_ERROR;
-  }
-
-  return RTEMS_SUCCESSFUL;
 }
 
 static rtems_status_code rtems_ftpfs_do_ioctl(

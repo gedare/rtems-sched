@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test_support.h,v 1.3 2009/12/08 21:39:21 humph Exp $
+ *  $Id: test_support.h,v 1.4 2010/06/21 16:54:17 joel Exp $
  */
 
 #ifndef __TEST_SUPPORT_h
@@ -45,6 +45,31 @@ void rtems_test_spin_for_ticks(int ticks);
  *  Spin until the next clock tick
  */
 void rtems_test_spin_until_next_tick( void );
+
+/*********************************************************************/
+/*********************************************************************/
+/**************              TMTEST SUPPORT             **************/
+/*********************************************************************/
+/*********************************************************************/
+
+/*
+ *  Type of method used for timing operations
+ */
+typedef void (*rtems_time_test_method_t)(
+  int    iteration,
+  void  *argument
+);
+
+/*
+ *  Obtain baseline timing information for benchmark tests.
+ */
+void rtems_time_test_measure_operation(
+  const char               *description,
+  rtems_time_test_method_t  operation,
+  void                     *argument,
+  int                       iterations,
+  int                       overhead
+);
 
 #ifdef __cplusplus
 };

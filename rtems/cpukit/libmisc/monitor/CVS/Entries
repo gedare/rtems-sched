@@ -2,7 +2,6 @@
 /mon-command.c/1.27/Wed Apr 14 17:14:42 2010//
 /mon-config.c/1.17/Fri Jan  2 13:01:21 2009//
 /mon-driver.c/1.18/Fri Oct  2 15:54:47 2009//
-/mon-editor.c/1.4/Sun Nov 29 12:12:39 2009//
 /mon-extension.c/1.14/Fri Jan  2 13:01:21 2009//
 /mon-itask.c/1.20/Sun Nov 29 12:12:39 2009//
 /mon-manager.c/1.13/Wed Jan 23 22:57:43 2008//
@@ -20,4 +19,5 @@
 /mon-task.c/1.17/Sun Nov 29 12:12:39 2009//
 /monitor.h/1.42/Wed Apr 14 17:14:42 2010//
 /symbols.h/1.7/Fri Mar 26 06:59:18 2004//
+/mon-editor.c/1.5/Mon Jun 21 16:59:45 2010//
 D

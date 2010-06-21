@@ -118,7 +118,6 @@
 /prwlocktrywrlock.c/1.6/Mon Nov 30 15:44:21 2009//
 /prwlockunlock.c/1.5/Mon Nov 30 15:44:21 2009//
 /prwlockwrlock.c/1.6/Mon Nov 30 15:44:21 2009//
-/psignal.c/1.67/Fri Apr 30 19:21:55 2010//
 /psignalchecksignal.c/1.9/Mon Jun 29 23:19:28 2009//
 /psignalclearprocesssignals.c/1.6/Wed Aug  5 15:39:59 2009//
 /psignalclearsignals.c/1.10/Mon Nov 30 15:44:21 2009//
@@ -191,7 +190,6 @@
 /seminit.c/1.8/Mon Dec 17 16:19:14 2007//
 /semopen.c/1.15/Sun May  3 23:10:02 2009//
 /sempost.c/1.10/Mon Dec 17 16:19:14 2007//
-/semtimedwait.c/1.13/Mon Nov 30 15:44:21 2009//
 /semtrywait.c/1.6/Tue Feb  3 10:10:57 2009//
 /semunlink.c/1.14/Tue Feb  3 10:10:57 2009//
 /semwait.c/1.7/Tue Feb  3 10:10:57 2009//
@@ -227,4 +225,6 @@
 /vfork.c/1.1/Thu Nov 20 16:56:53 2008//
 /wait.c/1.4/Thu Dec 13 16:52:21 2007//
 /waitpid.c/1.6/Thu Dec 13 16:52:21 2007//
+/psignal.c/1.68/Mon Jun 21 16:59:45 2010//
+/semtimedwait.c/1.14/Mon Jun 21 16:59:45 2010//
 D
