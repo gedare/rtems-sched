@@ -16,14 +16,94 @@ This section describes how the existing scheduler mechanism can be improved.  Th
 The interface to the scheduling subsystem should be simply and concisely captured.  The necessary functions along the interface boundary include:
 {{{
 
-  _Scheduler_schedule( )
+  _Scheduler_Schedule( void )
 
-  _Scheduler_dispatch( )
+  _Scheduler_Dispatch( void )
 
-  _Scheduler_yield( )
+  _Scheduler_Yield( void )
 
-  _Scheduler_timeout( )
+  _Scheduler_Block( Thread_Control * )
 
-  _Scheduler_wake( )
+  _Scheduler_Unblock( Thread_Control * )
 
 }}}
+
+_Note: The Scheduler Handler does not care why a thread is blocked or unblocked, thread state management is not the responsibility of the scheduler._
+
+=== Description ===
+
+The functionality of these functions already exist in various RTEMS functions:
+  * `_Scheduler_Schedule`: Scheduling decision logic, determines the next thread to run. In RTEMS, this is currently realized by the `_Thread_Calculate_heir` function in thread.inl.
+  * `_Scheduler_Dispatch`: Scheduling mechanism, executes the context switch to dispatch the heir thread chosen by `_Scheduler_schedule` function.  In RTEMS, this is currently realized by the `_Thread_Dispatch` function in threaddispatch.c.
+  * `_Scheduler_Yield`: When a thread has no work to do, it should yield the processor by calling this function, but would remain in the ready state.  In RTEMS, this is currently realized by the `_Thread_Yield_processor` and `_Thread_Reset_timeslice`.
+  * `_Scheduler_Block`: When a thread is removed from the ready state for whatever reason, it is considered blocked. In RTEMS, this is currently realized by a few functions:
+    * `_Thread_Suspend`
+    * `_Thread_Set_state`
+    * `_Thread_Set_transient`
+  * `_Scheduler_Unblock`: When a thread is readied, it is considered unblocked. In RTEMS, this is currently realized by a few functions:
+    * `_Thread_Ready`
+    * `_Thread_Clear_state`
+    * `_Thread_Resume`
+    * `_Thread_Unblock`
+
+=== Prototypes ===
+Here are some prototypical implementations of these interface functions:
+{{{
+
+void _Scheduler_Schedule( void ) {
+  /* Copy _Thread_Calculate_heir body here */
+}
+
+void _Scheduler_Dispatch( void ) {
+  /* Copy _Thread_Dispatch body here */
+}
+
+void _Scheduler_Yield( void ) {
+  /* Copy _Thread_Yield_processor body here */
+}
+
+void _Scheduler_Block( Thread_Control *the_thread ) {
+  _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
+  
+  /* Flash ISRs or similar mechanism for SMP?? */
+
+  if ( _Thread_Is_heir( the_thread ) )
+    _Thread_Calculate_heir();
+
+  if ( _Thread_Is_executing( the_thread ) )
+    _Context_Switch_necessary = true;
+
+  return;
+}
+
+void _Scheduler_Unblock( Thread_Control *the_thread ) {
+  _Ready_queue_Enqueue( &_Thread_Ready_queue, the_thread );
+
+  /* Flash ISRs or similar mechanism for SMP?? */
+
+  /*
+   *  If the thread that was unblocked is more important than the heir,
+   *  then we have a new heir.  This may or may not result in a
+   *  context switch.
+   *
+   *  Normal case:
+   *    If the current thread is preemptible, then we need to do
+   *    a context switch.
+   *  Pseudo-ISR case:
+   *    Even if the thread isn't preemptible, if the new heir is
+   *    a pseudo-ISR system task, we need to do a context switch.
+   */
+  if ( _Priority_Get_value(the_thread->current_priority) <
+      _Priority_Get_value(_Thread_Heir->current_priority) ) {
+    _Thread_Heir = the_thread;
+    if ( _Thread_Executing->is_preemptible ||
+        _Priority_Get_value(the_thread->current_priority) == 0 )
+      _Context_Switch_necessary = true;
+  }
+
+  return;
+}
+
+}}}
+_Note: One thing that needs to be determined is how to deal with opening up the scheduling critical section to allow for new threads to enter the scheduler._
+
