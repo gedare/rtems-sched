@@ -1,5 +1,5 @@
 /*
- *  Thread Handler
+ *  Scheduler Handler
  *
  *
  *  COPYRIGHT (c) 1989-2006.
@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadready.c,v 1.7 2008/12/22 05:52:32 ralf Exp $
+ *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -24,6 +24,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/readyq.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -33,7 +34,7 @@
 
 /*PAGE
  *
- *  _Thread_Ready
+ *  _Scheduler_Unblock
  *
  *  This kernel routine readies the requested thread, the thread chain
  *  is adjusted.  A new heir thread may be selected.
@@ -47,22 +48,40 @@
  *         This ensures the correct heir after a thread restart.
  *
  *  INTERRUPT LATENCY:
- *    ready chain
- *    select heir
  */
 
-void _Thread_Ready(
+void _Scheduler_Unblock(
   Thread_Control *the_thread
 )
 {
-  ISR_Level              level;
   Thread_Control *heir;
 
-  _ISR_Disable( level );
+  _Ready_queue_Enqueue(&_Thread_Ready_queue, the_thread);
 
-  the_thread->current_state = STATES_READY;
+  /* TODO: flash critical section */
+  /* XXX */
 
-  _Scheduler_Unblock(the_thread);
+  _Scheduler_Schedule();
 
-  _ISR_Enable( level );
+  heir = _Thread_Heir;
+
+  /*
+   * See if the heir is executing. if not, then the newly queue'd thread may
+   * cause a new dispatch.
+   *
+   *  Normal case:
+   *    If the current thread is preemptible, then we need to do
+   *    a context switch.
+   *  Pseudo-ISR case:
+   *    Even if the thread isn't preemptible, if the new heir is
+   *    a pseudo-ISR system task, we need to do a context switch.
+   */
+  /* TODO: rewrite _Context_Switch_necessary to dispatch_needed */
+  if ( !_Thread_Is_executing( heir ) ) {
+    if ( _Thread_Executing->is_preemptible || 
+         _Priority_Get_value(the_thread->current_priority) == 0 )
+      _Context_Switch_necessary = true;
+  }
+
+  return;
 }

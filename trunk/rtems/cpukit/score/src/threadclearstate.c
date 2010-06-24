@@ -67,30 +67,7 @@ void _Thread_Clear_state(
       the_thread->current_state = _States_Clear( state, current_state );
 
       if ( _States_Is_ready( current_state ) ) {
-
-        _Ready_queue_Enqueue( &_Thread_Ready_queue, the_thread );
-
-        _ISR_Flash( level );
-
-        /*
-         *  If the thread that was unblocked is more important than the heir,
-         *  then we have a new heir.  This may or may not result in a
-         *  context switch.
-         *
-         *  Normal case:
-         *    If the current thread is preemptible, then we need to do
-         *    a context switch.
-         *  Pseudo-ISR case:
-         *    Even if the thread isn't preemptible, if the new heir is
-         *    a pseudo-ISR system task, we need to do a context switch.
-         */
-        if ( _Priority_Get_value(the_thread->current_priority) < 
-             _Priority_Get_value(_Thread_Heir->current_priority) ) {
-          _Thread_Heir = the_thread;
-          if ( _Thread_Executing->is_preemptible ||
-               _Priority_Get_value(the_thread->current_priority) == 0 )
-            _Context_Switch_necessary = true;
-        }
+        _Scheduler_Unblock(the_thread);
       }
   }
   _ISR_Enable( level );

@@ -68,15 +68,7 @@ void _Thread_Set_state(
 
   the_thread->current_state = state;
 
-  _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
-
-  _ISR_Flash( level );
-
-  if ( _Thread_Is_heir( the_thread ) )
-     _Thread_Calculate_heir();
-
-  if ( _Thread_Is_executing( the_thread ) )
-    _Context_Switch_necessary = true;
+  _Scheduler_Block(the_thread);
 
   _ISR_Enable( level );
 }

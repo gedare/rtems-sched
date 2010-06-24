@@ -69,18 +69,7 @@ void _Thread_Resume(
     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
 
     if ( _States_Is_ready( current_state ) ) {
-
-      _Ready_queue_Enqueue(&_Thread_Ready_queue, the_thread);
-
-      _ISR_Flash( level );
-
-      if ( _Priority_Get_value(the_thread->current_priority) < 
-           _Priority_Get_value(_Thread_Heir->current_priority) ) {
-        _Thread_Heir = the_thread;
-        if ( _Thread_Executing->is_preemptible ||
-             _Priority_Get_value(the_thread->current_priority) == 0 )
-          _Context_Switch_necessary = true;
-      }
+      _Scheduler_Unblock(the_thread);
     }
   }
 
