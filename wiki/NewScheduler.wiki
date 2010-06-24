@@ -31,13 +31,13 @@ _Note: The Scheduler Handler does not care why a thread is blocked or unblocked,
 === Description ===
 
 The functionality of these functions already exist in various RTEMS functions:
-  * `_Scheduler_Schedule`: Scheduling decision logic, determines the next thread to run. In RTEMS, this is currently realized by the `_Thread_Calculate_heir` function in thread.inl.
-  * `_Scheduler_Yield`: When a thread has no work to do, it should yield the processor by calling this function, but would remain in the ready state.  In RTEMS, this is currently realized by the `_Thread_Yield_processor` and `_Thread_Reset_timeslice`.
-  * `_Scheduler_Block`: When a thread is removed from the ready state for whatever reason, it is considered blocked. In RTEMS, this is currently realized by a few functions:
+  * `_Scheduler_Schedule`: Scheduling decision logic, determines the next thread to run. In RTEMS, this is currently done by the `_Thread_Calculate_heir` function in thread.inl.
+  * `_Scheduler_Yield`: When a thread has no work to do, it should yield the processor by calling this function, but would remain in the ready state.  In RTEMS, this is currently done by the `_Thread_Yield_processor` and `_Thread_Reset_timeslice`.
+  * `_Scheduler_Block`: When a thread is removed from the ready state for whatever reason, it is considered blocked. In RTEMS, this is currently done by a few functions:
     * `_Thread_Suspend`
     * `_Thread_Set_state`
-    * `_Thread_Set_transient`
-  * `_Scheduler_Unblock`: When a thread is readied, it is considered unblocked. In RTEMS, this is currently realized by a few functions:
+    * ~~`_Thread_Set_transient`~~
+  * `_Scheduler_Unblock`: When a thread is readied, it is considered unblocked. In RTEMS, this is currently done by a few functions:
     * `_Thread_Ready`
     * `_Thread_Clear_state`
     * `_Thread_Resume`
