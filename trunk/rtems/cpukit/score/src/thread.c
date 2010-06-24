@@ -83,24 +83,7 @@ void _Thread_Handler_initialization(void)
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
-  switch (Configuration.scheduler_policy) {
-    case _SCHED_PRI:
-      _Ready_queue_Initialize(
-        &_Thread_Ready_queue, 
-        READY_QUEUE_DISCIPLINE_PRIORITY
-      );
-      break;
-
-    case _SCHED_FIFO:
-      _Ready_queue_Initialize(
-        &_Thread_Ready_queue, 
-        READY_QUEUE_DISCIPLINE_FIFO
-      );
-      break;     
-
-    default:
-      while (1);  /* should be _Internal_error_Occurred */
-  }
+  _Scheduler_Initialize( void );
 
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Handler_initialization( maximum_proxies );
