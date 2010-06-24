@@ -24,6 +24,7 @@
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/readyq.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -134,10 +135,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Thread_Calculate_heir();
+  _Scheduler_Schedule();
 
-  if ( !_Thread_Is_executing_also_the_heir() &&
-       _Thread_Executing->is_preemptible )
-    _Context_Switch_necessary = true;
   _ISR_Enable( level );
 }

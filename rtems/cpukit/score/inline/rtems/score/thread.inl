@@ -121,16 +121,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Restart_self( void )
 }
 
 /**
- *  This function returns a pointer to the highest priority
- *  ready thread.
- */
-
-RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
-{
-  _Thread_Heir = _Ready_queue_First(&_Thread_Ready_queue);
-}
-
-/**
  *  This function returns true if the floating point context of
  *  the_thread is currently loaded in the floating point unit, and
  *  false otherwise.

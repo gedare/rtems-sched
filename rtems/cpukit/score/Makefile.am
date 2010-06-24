@@ -149,6 +149,10 @@ libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
 		src/readyqfirst.c src/readyqflush.c \
 		src/readyqrequeue.c
 
+## SCHEDULER_C_FILES
+libscore_a_SOURCES += src/scheduler.c src/schedulerblock.c \
+		src/schedulerunblock.c src/scheduleryield.c
+
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \

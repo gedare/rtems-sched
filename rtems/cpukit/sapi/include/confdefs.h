@@ -535,6 +535,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #endif
 
 /*
+ * Scheduler configuration.
+ * TODO: Where to place this in confdefs?
+ */
+#include <rtems/score/scheduler.h>
+
+#ifndef CONFIGURE_SCHEDULER_POLICY
+  #define CONFIGURE_SCHEDULER_POLICY SCHEDULER_DEFAULT_POLICY
+#endif
+
+/*
  *  If you said the IDLE task was going to do application initialization
  *  and didn't override the IDLE body, then something is amiss.
  */
@@ -1244,10 +1254,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
   #ifndef CONFIGURE_TICKS_PER_TIMESLICE
     #define CONFIGURE_TICKS_PER_TIMESLICE        50
-  #endif
-
-  #ifndef CONFIGURE_SCHEDULER_POLICY
-    #define CONFIGURE_SCHEDULER_POLICY SCHEDULER_DEFAULT_POLICY
   #endif
 
 /*

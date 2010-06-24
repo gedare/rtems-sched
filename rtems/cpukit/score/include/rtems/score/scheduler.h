@@ -50,7 +50,7 @@ extern "C" {
 /**
  *  This routine initializes the scheduler.  
  */
-bool _Scheduler_Initialize( void );
+void _Scheduler_Initialize( void );
 
 /**
  *  This routine is invoked when a thread wishes to voluntarily
