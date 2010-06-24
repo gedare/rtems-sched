@@ -30,6 +30,18 @@
  * @{
  */
 
+/**
+ *  This kernel routine sets the heir thread to be the highest priority
+ *  ready thread.  This implements the scheduling decision logic. It does 
+ *  NOT dispatch.
+ */
+
+RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( void )
+{
+  _Thread_Heir = _Ready_queue_First(&_Thread_Ready_queue);
+}
+
+
 /**@}*/
 
 #endif

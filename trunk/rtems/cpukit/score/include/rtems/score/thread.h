@@ -63,7 +63,6 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/rqdata.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
