@@ -18,8 +18,6 @@ The interface to the scheduling subsystem should be simply and concisely capture
 
   _Scheduler_Schedule( void )
 
-  _Scheduler_Dispatch( void )
-
   _Scheduler_Yield( void )
 
   _Scheduler_Block( Thread_Control * )
@@ -34,7 +32,6 @@ _Note: The Scheduler Handler does not care why a thread is blocked or unblocked,
 
 The functionality of these functions already exist in various RTEMS functions:
   * `_Scheduler_Schedule`: Scheduling decision logic, determines the next thread to run. In RTEMS, this is currently realized by the `_Thread_Calculate_heir` function in thread.inl.
-  * `_Scheduler_Dispatch`: Scheduling mechanism, executes the context switch to dispatch the heir thread chosen by `_Scheduler_schedule` function.  In RTEMS, this is currently realized by the `_Thread_Dispatch` function in threaddispatch.c.
   * `_Scheduler_Yield`: When a thread has no work to do, it should yield the processor by calling this function, but would remain in the ready state.  In RTEMS, this is currently realized by the `_Thread_Yield_processor` and `_Thread_Reset_timeslice`.
   * `_Scheduler_Block`: When a thread is removed from the ready state for whatever reason, it is considered blocked. In RTEMS, this is currently realized by a few functions:
     * `_Thread_Suspend`
@@ -52,10 +49,6 @@ Here are some prototypical implementations of these interface functions:
 
 void _Scheduler_Schedule( void ) {
   /* Copy _Thread_Calculate_heir body here */
-}
-
-void _Scheduler_Dispatch( void ) {
-  /* Copy _Thread_Dispatch body here */
 }
 
 void _Scheduler_Yield( void ) {
@@ -108,3 +101,5 @@ void _Scheduler_Unblock( Thread_Control *the_thread ) {
 _Note: One thing that needs to be determined is how to deal with opening up the scheduling critical section to allow for new threads to enter the scheduler._
 
 _Note: Another concern is ports that can "dispatch from ISR", as this represents another scheduling point._
+
+_Note: I have removed dispatch from the scheduler object. It seems better to isolate dispatch as a mechanism separate from the scheduler logic_
