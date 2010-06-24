@@ -61,7 +61,7 @@ void _Scheduler_Block( Thread_Control *the_thread ) {
   /* Flash ISRs or similar mechanism for SMP?? */
 
   if ( _Thread_Is_heir( the_thread ) )
-    _Thread_Calculate_heir();
+    _Scheduler_Schedule();
 
   if ( _Thread_Is_executing( the_thread ) )
     _Context_Switch_necessary = true;
@@ -73,6 +73,8 @@ void _Scheduler_Unblock( Thread_Control *the_thread ) {
   _Ready_queue_Enqueue( &_Thread_Ready_queue, the_thread );
 
   /* Flash ISRs or similar mechanism for SMP?? */
+
+  _Scheduler_Schedule();
 
   /*
    *  If the thread that was unblocked is more important than the heir,
@@ -86,11 +88,9 @@ void _Scheduler_Unblock( Thread_Control *the_thread ) {
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  if ( _Priority_Get_value(the_thread->current_priority) <
-      _Priority_Get_value(_Thread_Heir->current_priority) ) {
-    _Thread_Heir = the_thread;
+  if ( !_Thread_Is_executing( heir ) ) {
     if ( _Thread_Executing->is_preemptible ||
-        _Priority_Get_value(the_thread->current_priority) == 0 )
+         _Priority_Get_value(the_thread->current_priority) == 0 )
       _Context_Switch_necessary = true;
   }
 
