@@ -7,7 +7,7 @@ then
 fi
 
 BSP=pc386
-TARGET=i386-rtems4.10
+TARGET=i386-rtems4.11
 EXTENSION=
 
 PWD=`pwd`
