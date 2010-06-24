@@ -1,3 +1,11 @@
+2010-06-23	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: autoconf >= 2.65, automake >= 1.11.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.maint, README.configure: Remove more ITRON references.
+
 2010-06-17	Ralf Corsépius <ralf.corsepius@rtems.org>
 
 	* aclocal/enable-itron.m4: Remove.
@@ -1479,7 +1487,7 @@
 
 2001-11-13	Joel Sherrill <joel@OARcorp.com>
 
-	* COPYING: Test of $Id: ChangeLog,v 1.380 2010/06/17 15:38:54 ralf Exp $ -> $RTEMS$.
+	* COPYING: Test of $Id: ChangeLog,v 1.382 2010/06/23 13:32:58 ralf Exp $ -> $RTEMS$.
 
 2001-11-08	Dennis Ehlin (ECS) <Dennis.Ehlin@ecs.ericsson.se>
 

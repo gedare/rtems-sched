@@ -33,7 +33,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: confdefs.h,v 1.143 2010/06/20 19:41:33 joel Exp $
+ *  $Id: confdefs.h,v 1.144 2010/06/21 21:13:42 joel Exp $
  */
 
 #ifndef __CONFIGURATION_TEMPLATE_h
@@ -703,7 +703,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
    *  allocated.  This is helpful for finding unitialized data structure
    *  problems.
    */
-  rtems_malloc_dirtier_t *rtems_malloc_dirty_helper =
+  rtems_malloc_dirtier_t rtems_malloc_dirty_helper =
     #if defined(CONFIGURE_MALLOC_DIRTY)
       rtems_malloc_dirty_memory;
     #else

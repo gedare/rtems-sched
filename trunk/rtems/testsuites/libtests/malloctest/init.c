@@ -20,7 +20,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.37 2010/06/07 09:33:32 sh Exp $
+ *  $Id: init.c,v 1.39 2010/06/22 18:20:47 jennifer Exp $
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
@@ -1076,6 +1076,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
+  void             *p1;
   rtems_time_of_day time;
   rtems_status_code status;
 
@@ -1084,6 +1085,26 @@ rtems_task Init(
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );
   directive_failed( status, "rtems_clock_set" );
+
+  /*
+   * Verify case where block is too large to calloc.
+   */
+  p1 = calloc( 1, SIZE_MAX );
+  if (p1) {
+    printf("ERROR on attempt to calloc SIZE_MAX block expected failure.");
+    free( p1 );
+  }
+
+  /*
+   * Verify error case where malloc of size 0.
+   */
+  p1 = malloc( 0 );
+  if (p1) {
+    printf("ERROR on attempt to malloc size 0 block expected failure.");
+    free( p1 );
+  }
+
+
 
   test_heap_initialize();
   test_heap_block_allocate();

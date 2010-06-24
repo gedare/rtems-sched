@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount.c,v 1.35 2010/06/09 09:15:50 sh Exp $
+ *  $Id: mount.c,v 1.37 2010/06/22 14:20:49 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -111,18 +111,18 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
   if ( mt_entry != NULL ) {
     char *str = (char *) mt_entry + sizeof( *mt_entry );
 
-    mt_entry->type = str;
     strcpy( str, filesystemtype );
+    mt_entry->type = str;
+    str += filesystemtype_size;
 
     if ( source_or_null != NULL ) {
-      str += filesystemtype_size;
-      mt_entry->dev = str;
       strcpy( str, source_or_null );
+      mt_entry->dev = str;
+      str += source_size;
     }
 
-    str += source_size;
-    mt_entry->target = str;
     strcpy( str, target );
+    mt_entry->target = str;
   }
 
   *target_length_ptr = target_length;

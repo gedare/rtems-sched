@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.61 2010/05/29 05:31:45 ralf Exp $
+## $Id: configure.ac,v 1.64 2010/06/23 22:50:49 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-psxtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -21,6 +21,8 @@ RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
+
+RTEMS_OBJECT_FORMAT
 
 AM_CONDITIONAL([HAS_NETWORKING],[test "$HAS_NETWORKING" = "yes"])
 
@@ -87,6 +89,7 @@ psxenosys/Makefile
 psxfatal01/Makefile
 psxfatal02/Makefile
 psxfile01/Makefile
+psxfile02/Makefile
 psxhdrs/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile

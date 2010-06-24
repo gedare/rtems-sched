@@ -26,9 +26,9 @@
  *   <tr><td>.start</td><td>ROM_INT</td><td></td></tr>
  *   <tr><td>.text</td><td>ROM_INT</td><td>ROM_INT</td></tr>
  *   <tr><td>.rodata</td><td>ROM_INT</td><td>ROM_INT</td></tr>
- *   <tr><td>.data</td><td>RAM_ETH</td><td>ROM_INT</td></tr>
+ *   <tr><td>.data</td><td>RAM_INT</td><td>ROM_INT</td></tr>
  *   <tr><td>.fast</td><td>RAM_INT</td><td>ROM_INT</td></tr>
- *   <tr><td>.bss</td><td>RAM_ETH</td><td></td></tr>
+ *   <tr><td>.bss</td><td>RAM_INT</td><td></td></tr>
  *   <tr><td>.work</td><td>RAM_INT</td><td></td></tr>
  *   <tr><td>.stack</td><td>RAM_INT</td><td></td></tr>
  * </table>

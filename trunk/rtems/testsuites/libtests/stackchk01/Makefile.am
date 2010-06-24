@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.1 2009/09/21 20:12:08 joel Exp $
+## $Id: Makefile.am,v 1.3 2010/06/23 23:26:08 joel Exp $
 ##
 
 MANAGERS = io semaphore

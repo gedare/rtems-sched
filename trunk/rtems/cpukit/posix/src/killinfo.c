@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: killinfo.c,v 1.23 2009/11/30 15:44:20 ralf Exp $
+ *  $Id: killinfo.c,v 1.24 2010/06/21 22:54:54 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -184,7 +184,7 @@ int killinfo(
   for (the_api = OBJECTS_CLASSIC_API; the_api <= OBJECTS_APIS_LAST; the_api++) {
 
     /*
-     *  This can occur when no one is interested and ITRON is not configured.
+     *  This can occur when no one is interested and an API is not configured.
      */
     if ( !_Objects_Information_table[ the_api ] )
       continue;

@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.2 2009/04/03 12:46:19 ralf Exp $
+## $Id: Makefile.am,v 1.4 2010/06/23 23:26:07 joel Exp $
 ##
 
 MANAGERS = dpmem event io msg mp part region sem signal timer rate_monotonic \

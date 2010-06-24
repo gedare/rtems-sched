@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: system.h,v 1.4 2009/09/26 15:47:16 joel Exp $
+ *  $Id: system.h,v 1.5 2010/06/22 01:28:13 joel Exp $
  */
 
 /*
@@ -44,6 +44,15 @@ void Put_Source(
 void force_error(void);
 
 /* need some prototypes for test cases */
+
+rtems_device_driver consume_semaphores_initialize(
+  rtems_device_major_number major __attribute__((unused)),
+  rtems_device_minor_number minor __attribute__((unused)),
+  void *pargp __attribute__((unused))
+);
+
+#define CONSUME_SEMAPHORE_DRIVERS \
+  { consume_semaphores_initialize, NULL, NULL, NULL, NULL, NULL }
 
 #include "testcase.h"
 

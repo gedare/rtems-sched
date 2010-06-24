@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.1 2009/10/11 22:32:03 joel Exp $
+## $Id: Makefile.am,v 1.3 2010/06/23 22:49:57 joel Exp $
 ##
 
 MANAGERS = all

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_.h,v 1.37 2010/06/14 13:35:45 ralf Exp $
+ *  $Id: libio_.h,v 1.38 2010/06/22 20:03:41 jennifer Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H
@@ -148,13 +148,7 @@ extern rtems_libio_t *rtems_libio_iop_freelist;
  *  Macro to free a node.
  */
 
-#define rtems_filesystem_freenode( _node ) \
-  do { \
-    if ( (_node)->ops )\
-      if ( (_node)->ops->freenod_h ) \
-        (*(_node)->ops->freenod_h)( (_node) ); \
-  } while (0)
-
+void rtems_filesystem_freenode( rtems_filesystem_location_info_t*  node );
 
 /*
  *  External structures

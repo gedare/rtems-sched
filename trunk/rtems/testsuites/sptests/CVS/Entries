@@ -118,8 +118,8 @@ D/spfifo02////
 D/spfifo03////
 D/spfifo04////
 D/spmkdir////
-/ChangeLog/1.377/Mon Jun 21 16:59:48 2010//
-/Makefile.am/1.87/Mon Jun 21 16:59:48 2010//
-/configure.ac/1.92/Mon Jun 21 16:59:48 2010//
 D/sp70////
 D/spfifo08////
+/ChangeLog/1.383/Thu Jun 24 15:27:00 2010//
+/Makefile.am/1.91/Thu Jun 24 15:27:00 2010//
+/configure.ac/1.96/Thu Jun 24 15:27:00 2010//

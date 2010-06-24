@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.28 2009/04/03 12:46:19 ralf Exp $
+## $Id: Makefile.am,v 1.30 2010/06/23 23:26:08 joel Exp $
 ##
 
 MANAGERS = event io msg sem signal timer rate_monotonic

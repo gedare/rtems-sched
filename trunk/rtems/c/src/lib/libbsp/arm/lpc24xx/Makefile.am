@@ -5,7 +5,7 @@
 # @brief Makefile of LibBSP for the LPC24XX boards.
 #
 
-# $Id: Makefile.am,v 1.28 2010/05/20 13:10:56 sh Exp $
+# $Id: Makefile.am,v 1.29 2010/06/23 08:11:28 sh Exp $
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
 
@@ -68,6 +68,7 @@ EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_int
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_rom_ext
 EXTRA_DIST += startup/linkcmds.lpc24xx_ncs_ram
 EXTRA_DIST += startup/linkcmds.lpc2362
+EXTRA_DIST += startup/linkcmds.lpc23xx_tli800
 
 ###############################################################################
 #                  LibBSP                                                     #

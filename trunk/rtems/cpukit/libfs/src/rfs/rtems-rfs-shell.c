@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-shell.c,v 1.9 2010/06/17 03:13:32 ralf Exp $
+ *  $Id: rtems-rfs-shell.c,v 1.10 2010/06/24 13:28:39 joel Exp $
  */
 /**
  * @file
@@ -736,6 +736,11 @@ rtems_shell_rfs_format (int argc, char* argv[])
         return 1;
       }
     }
+  }
+
+  if (!driver) {
+    printf ("error: no driver name provided\n");
+    return 1;
   }
 
   if (rtems_rfs_format (driver, &config) < 0)

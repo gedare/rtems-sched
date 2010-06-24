@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: keycreate.c,v 1.14 2009/11/30 15:44:20 ralf Exp $
+ *  $Id: keycreate.c,v 1.15 2010/06/21 22:54:54 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -52,8 +52,9 @@ int pthread_key_create(
 
   /*
    *  This is a bit more complex than one might initially expect because
-   *  APIs are optional.  Thus there may be no ITRON tasks to have keys
-   *  for.  [NOTE: Currently RTEMS Classic API tasks are always enabled.]
+   *  APIs are optional.
+   *
+   *  NOTE: Currently RTEMS Classic API tasks are always enabled.
    */
 
   for ( the_api = 1;
