@@ -1,3 +1,53 @@
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1587/filesystem
+	Coverity Id 35
+	* libfs/src/rfs/rtems-rfs-shell.c: Address possible NULL dereference.
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libmisc/stackchk/check.c: More clean up and coverage improvements..
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libmisc/stackchk/check.c: Clean up to improve coverage.
+
+2010-06-23	Chris Johns <chrisj@rtems.org>
+
+	PR 1577/filesystem
+	* libfs/src/pipe/fifo.c: Fixed the error codes returned on open.
+
+2010-06-23      Chris Johns <chrisj@rtems.org>
+
+	* rtems/Makefile.am: Remove the stray 'c' file. 
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/include/rtems/libio_.h: Moved
+	method to free a node from a define to an external method.
+	* libcsupport/src/freenode.c: New file.
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* posix/src/nanosleep.c, posix/src/timersettime.c: Removed redundent
+	code and cleaned up error checking code.
+
+2010-06-22	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c: Fixed string assignment in mount entry
+	allocation.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* posix/src/keycreate.c, posix/src/killinfo.c: Remove more ITRON
+	references.
+
+2010-06-21	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1581/cpukit
+	* libcsupport/include/rtems/malloc.h, sapi/include/confdefs.h: Remove
+	extra * on function pointer declaration.
+
 2010-06-21	Peter Dufault <dufault@hda.com>
 
 	PR 1570/cpukit

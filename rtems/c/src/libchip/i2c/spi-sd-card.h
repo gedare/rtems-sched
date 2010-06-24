@@ -52,7 +52,8 @@ extern "C" {
 	SD_CARD_IDLE_TOKEN \
 }
 
-#define SD_CARD_N_AC_MAX_DEFAULT 8
+/* Default speed = 400kbps, default timeout = 100ms, n_ac_max is in bytes */
+#define SD_CARD_N_AC_MAX_DEFAULT 5000
 
 typedef struct {
 	const char *device_name;
@@ -68,6 +69,7 @@ typedef struct {
 	bool busy;
 	bool verbose;
 	bool schedule_if_busy;
+	uint32_t retries;
 } sd_card_driver_entry;
 
 extern sd_card_driver_entry sd_card_driver_table [];

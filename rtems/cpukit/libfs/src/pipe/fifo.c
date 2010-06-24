@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: fifo.c,v 1.7 2010/06/14 05:49:44 ralf Exp $
+ * $Id: fifo.c,v 1.8 2010/06/23 05:01:46 ccj Exp $
  */
 
 
@@ -104,7 +104,6 @@ static int pipe_alloc(
   if (! pipe->Buffer)
     goto err_buf;
 
-  err = -EINTR;
   if (rtems_barrier_create(
         rtems_build_name ('P', 'I', 'r', c),
         RTEMS_BARRIER_MANUAL_RELEASE, 0,
@@ -180,7 +179,7 @@ static rtems_status_code pipe_lock(void)
   if (sc == RTEMS_SUCCESSFUL) {
     return 0;
   } else {
-    return -EINTR;
+    return -ENOMEM;
   }
 }
 

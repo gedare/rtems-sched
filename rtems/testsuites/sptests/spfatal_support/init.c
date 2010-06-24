@@ -18,7 +18,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.7 2010/06/19 20:55:03 joel Exp $
+ *  $Id: init.c,v 1.8 2010/06/22 01:28:13 joel Exp $
  */
 
 #define CONFIGURE_INIT
@@ -102,7 +102,7 @@ void Put_Error( uint32_t source, uint32_t error )
   }
   else if (source == INTERNAL_ERROR_RTEMS_API ){
     if (error >  RTEMS_NOT_IMPLEMENTED )
-      printk("Unknown Internal Rtems Error (%d)", error);
+      printk("Unknown Internal Rtems Error (0x%08x)", error);
     else
       printk( Errors_Rtems[ error ] );
   }

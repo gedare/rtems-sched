@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: nanosleep.c,v 1.10 2009/09/14 00:14:22 joel Exp $
+ *  $Id: nanosleep.c,v 1.11 2010/06/22 15:36:06 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -36,8 +36,6 @@ int nanosleep(
 {
   Watchdog_Interval  ticks;
 
-  if ( !_Timespec_Is_valid( rqtp ) )
-    rtems_set_errno_and_return_minus_one( EINVAL );
 
   /*
    *  Return EINVAL if the delay interval is negative.
@@ -45,7 +43,7 @@ int nanosleep(
    *  NOTE:  This behavior is beyond the POSIX specification.
    *         FSU and GNU/Linux pthreads shares this behavior.
    */
-  if ( rqtp->tv_sec < 0 || rqtp->tv_nsec < 0 )
+  if ( !_Timespec_Is_valid( rqtp ) )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
   ticks = _Timespec_To_ticks( rqtp );

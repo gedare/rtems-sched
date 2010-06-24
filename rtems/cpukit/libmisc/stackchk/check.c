@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: check.c,v 1.66 2010/04/10 07:32:13 ralf Exp $
+ *  $Id: check.c,v 1.68 2010/06/23 23:28:46 joel Exp $
  *
  */
 
@@ -116,12 +116,13 @@ static inline bool Stack_check_Frame_pointer_in_range(
 #define Stack_check_usable_stack_size(_the_stack) \
     ((_the_stack)->size - sizeof(Stack_check_Control))
 
-/*
- * Do we have an interrupt stack?
- * XXX it would sure be nice if the interrupt stack were also
- *     stored in a "stack" structure!
- */
-Stack_Control Stack_check_Interrupt_stack;
+#if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+  /*
+   *  Did RTEMS allocate the interrupt stack? If so, put it in
+   *  Stack_Control format.
+   */
+  Stack_Control Stack_check_Interrupt_stack;
+#endif
 
 /*
  *  Fill an entire stack area with BYTE_PATTERN.  This will be used
@@ -142,7 +143,6 @@ void Stack_check_Initialize( void )
     0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
   };
 
-  if (Stack_check_Initialized)
     return;
 
   /*
@@ -163,7 +163,7 @@ void Stack_check_Initialize( void )
       Stack_check_Interrupt_stack.size = (char *) _CPU_Interrupt_stack_high -
                                   (char *) _CPU_Interrupt_stack_low;
       Stack_check_Dope_stack(&Stack_check_Interrupt_stack);
-  }
+   }
   #endif
 
   Stack_check_Initialized = 1;
@@ -211,6 +211,11 @@ void rtems_stack_checker_begin_extension(
  *  NOTE: The system is in a questionable state... we may not get
  *        the following message out.
  */
+void Stack_check_report_blown_task(
+  Thread_Control *running,
+  bool pattern_ok
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
+
 void Stack_check_report_blown_task(Thread_Control *running, bool pattern_ok)
 {
   Stack_Control *stack = &running->Start.Initial_stack;
@@ -310,23 +315,25 @@ bool rtems_stack_checker_is_blown( void )
     ));
   }
 
-  /*
-   * The Stack Pointer and the Pattern Area are OK so return false.
-   */
-  if ( sp_ok && pattern_ok )
-    return false;
 
   /*
    * Let's report as much as we can.
    */
-  Stack_check_report_blown_task( _Thread_Executing, pattern_ok );
-  return true;
+  if ( !sp_ok || !pattern_ok ) {
+    Stack_check_report_blown_task( _Thread_Executing, pattern_ok );
+    /* DOES NOT RETURN */
+  }
+
+  /*
+   * The Stack Pointer and the Pattern Area are OK so return false.
+   */
+  return false;
 }
 
 /*
  * Stack_check_find_high_water_mark
  */
-void *Stack_check_find_high_water_mark(
+static inline void *Stack_check_find_high_water_mark(
   const void *s,
   size_t      n
 )
@@ -381,28 +388,28 @@ void Stack_check_Dump_threads_usage(
   Stack_Control  *stack;
   char            name[5];
 
-  if ( !the_thread )
-    return;
-
-  if ( !print_handler )
-    return;
+  /*
+   *  The pointer passed in for the_thread is guaranteed to be non-NULL from
+   *  rtems_iterate_over_all_threads() so no need to check it here.
+   */
 
   /*
    *  Obtain interrupt stack information
    */
-
-  if (the_thread == (Thread_Control *) -1) {
-    if (Stack_check_Interrupt_stack.area) {
+  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+    if (the_thread == (Thread_Control *) -1) {
+      if (!Stack_check_Interrupt_stack.area)
+        return;
       stack = &Stack_check_Interrupt_stack;
       the_thread = 0;
       current = 0;
+    } else 
+  #else
+    {
+      stack  = &the_thread->Start.Initial_stack;
+      current = (void *)_CPU_Context_Get_SP( &the_thread->Registers );
     }
-    else
-      return;
-  } else {
-    stack  = &the_thread->Start.Initial_stack;
-    current = (void *)_CPU_Context_Get_SP( &the_thread->Registers );
-  }
+  #endif
 
   low  = Stack_check_usable_stack_start(stack);
   size = Stack_check_usable_stack_size(stack);
@@ -468,6 +475,9 @@ void rtems_stack_checker_report_usage_with_plugin(
   rtems_printk_plugin_t  print
 )
 {
+  if ( !print )
+    return;
+
   print_context = context;
   print_handler = print;
 
@@ -479,12 +489,13 @@ void rtems_stack_checker_report_usage_with_plugin(
   /* iterate over all threads and dump the usage */
   rtems_iterate_over_all_threads( Stack_check_Dump_threads_usage );
 
-  /* dump interrupt stack info if any */
-  Stack_check_Dump_threads_usage((Thread_Control *) -1);
+  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+    /* dump interrupt stack info if any */
+    Stack_check_Dump_threads_usage((Thread_Control *) -1);
+  #endif
 
   print_context = NULL;
   print_handler = NULL;
-
 }
 
 void rtems_stack_checker_report_usage( void )

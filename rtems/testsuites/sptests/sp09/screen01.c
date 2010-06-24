@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: screen01.c,v 1.19 2010/06/19 20:55:03 joel Exp $
+ *  $Id: screen01.c,v 1.20 2010/06/21 22:47:59 joel Exp $
  */
 
 #include "system.h"
@@ -17,7 +17,6 @@
 void Screen1()
 {
   uint32_t            notepad_value;
-  rtems_name          task_name;
   rtems_id            self_id;
   rtems_task_priority previous_priority;
   rtems_status_code   status;

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: timersettime.c,v 1.9 2009/12/10 22:20:11 joel Exp $
+ *  $Id: timersettime.c,v 1.10 2010/06/22 15:36:06 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -42,12 +42,14 @@ int timer_settime(
   if ( !value )
     rtems_set_errno_and_return_minus_one( EINVAL );
 
-  /* First, it verifies if the structure "value" is correct */
-  if ( ( value->it_value.tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) ||
-       ( value->it_value.tv_nsec < 0 ) ||
-       ( value->it_interval.tv_nsec >= TOD_NANOSECONDS_PER_SECOND) ||
-       ( value->it_interval.tv_nsec < 0 )) {
-    /* The number of nanoseconds is not correct */
+  /* 
+   * First, it verifies if the structure "value" is correct   
+   * if the number of nanoseconds is not correct return EINVAL
+   */
+  if ( !_Timespec_Is_valid( &(value->it_value) ) ) {
+    rtems_set_errno_and_return_minus_one( EINVAL );
+  }
+  if ( !_Timespec_Is_valid( &(value->it_interval) ) ) {
     rtems_set_errno_and_return_minus_one( EINVAL );
   }
 

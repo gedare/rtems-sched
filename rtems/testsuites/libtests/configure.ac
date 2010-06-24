@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.33 2010/01/26 15:09:02 thomas Exp $
+## $Id: configure.ac,v 1.35 2010/06/22 19:27:12 jennifer Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -47,6 +47,8 @@ bspcmdline01/Makefile
 cpuuse/Makefile
 heapwalk/Makefile
 malloctest/Makefile
+malloc02/Makefile
+malloc03/Makefile
 monitor/Makefile
 monitor02/Makefile
 putenvtest/Makefile

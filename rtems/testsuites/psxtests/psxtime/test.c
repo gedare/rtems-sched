@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.15 2009/12/08 17:52:53 joel Exp $
+ *  $Id: test.c,v 1.16 2010/06/22 17:44:02 jennifer Exp $
  */
 
 #include <tmacros.h>
@@ -134,6 +134,12 @@ void test_adjtime(void)
   rtems_test_assert(  sc == 0 );
 
   puts( "adjtime - delta too small - do nothing, olddelta=NULL" );
+  sc = adjtime( &delta, NULL );
+  rtems_test_assert(  sc == 0 );
+
+  puts( "adjtime - delta of one second forward, olddelta=NULL" );
+  delta.tv_sec = 1;
+  delta.tv_usec = 0;
   sc = adjtime( &delta, NULL );
   rtems_test_assert(  sc == 0 );
 

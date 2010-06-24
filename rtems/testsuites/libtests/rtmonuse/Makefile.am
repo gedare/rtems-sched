@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.23 2009/04/03 12:46:19 ralf Exp $
+## $Id: Makefile.am,v 1.25 2010/06/23 23:26:08 joel Exp $
 ##
 
 MANAGERS = io rate_monotonic semaphore

@@ -1,3 +1,64 @@
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* block01/Makefile.am, block02/Makefile.am, block03/Makefile.am,
+	block04/Makefile.am, block05/Makefile.am, block06/Makefile.am,
+	block07/Makefile.am, block08/Makefile.am, block09/Makefile.am,
+	block10/Makefile.am, bspcmdline01/Makefile.am, cpuuse/Makefile.am,
+	heapwalk/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
+	monitor02/Makefile.am, putenvtest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am, stackchk01/Makefile.am,
+	stringto01/Makefile.am, termios/Makefile.am, termios01/Makefile.am,
+	termios02/Makefile.am: Revert.
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* termios01/termios01.scn: Fix bug so existing test code for
+	rtems_termios_baud_to_index() is executed.
+
+2010-06-23	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* block01/Makefile.am, block02/Makefile.am, block03/Makefile.am,
+	block04/Makefile.am, block05/Makefile.am, block06/Makefile.am,
+	block07/Makefile.am, block08/Makefile.am, block09/Makefile.am,
+	block10/Makefile.am, bspcmdline01/Makefile.am, cpuuse/Makefile.am,
+	heapwalk/Makefile.am, malloctest/Makefile.am, monitor/Makefile.am,
+	monitor02/Makefile.am, putenvtest/Makefile.am, rtems++/Makefile.am,
+	rtmonuse/Makefile.am, stackchk/Makefile.am, stackchk01/Makefile.am,
+	stringto01/Makefile.am, termios/Makefile.am, termios01/Makefile.am,
+	termios01/init.c, termios02/Makefile.am: Fix bug so existing test
+	code for rtems_termios_baud_to_index() is executed.
+
+2010-06-22	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* stackchk/blow.c, stackchk/stackchk.scn: Print a stack check report
+	before blowing stack.
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* Makefile.am, configure.ac: Added test that attempts to free stack
+	memory. This causes a error to be printed from the free function.
+	* malloc03/.cvsignore, malloc03/Makefile.am, malloc03/init.c,
+	malloc03/malloc03.doc, malloc03/malloc03.scn: New files.
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* malloctest/init.c: Added error case with malloc of size 0.
+
+2010-06-22	Jennifer Averett <Jennifer.Averett@OARcorp.com>
+
+	* malloctest/init.c: Added test to check failure branch on calloc.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* malloc02/init.c, malloc02/malloc02.doc: Enable malloc dirty helper.
+
+2010-06-21	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for deferring free() from ISR and
+	for deferred free() processing.
+	* malloc02/.cvsignore, malloc02/Makefile.am, malloc02/init.c,
+	malloc02/malloc02.doc, malloc02/malloc02.scn: New files.
+
 2010-06-07	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* termios01/init.c, termios01/termios01.scn, termios02/init.c,

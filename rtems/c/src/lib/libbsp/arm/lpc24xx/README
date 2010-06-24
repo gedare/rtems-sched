@@ -1,5 +1,5 @@
 #
-#  $Id: README,v 1.6 2009/10/05 10:33:31 thomas Exp $
+#  $Id: README,v 1.8 2010/06/23 16:32:49 sh Exp $
 #
 
 Development Board: QVGA Base Board from Embedded Artists
@@ -44,3 +44,8 @@ Application Board: NCS (Nurse Control Station)
 	Ext. Flash: 1MByte, 16 bit wide
 	Console:    UART, 115200 Baud
 	Network:    100Base-T
+
+Application Board: TLI800
+	TLI800 is a network node using four serial ports produced by Thorn
+	Security Limited.  It is used by Tyco Fire & Integrated Solutions for a
+	fire control network.
