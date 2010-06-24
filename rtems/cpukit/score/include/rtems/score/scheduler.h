@@ -47,8 +47,37 @@ extern "C" {
  */
 #define SCHEDULER_DEFAULT_POLICY _SCHED_PRI
 
+/**
+ *  This routine initializes the scheduler.  
+ */
+bool _Scheduler_Initialize( void );
 
+/**
+ *  This routine is invoked when a thread wishes to voluntarily
+ *  transfer control of the processor to another thread of equal
+ *  or greater priority.
+ */
+void _Scheduler_Yield( void );
 
+/**
+ *  This routine removes @a the_thread from the scheduling decision, 
+ *  that is, removes it from the ready queue.  It performs
+ *  any necessary scheduling operations including the selection of
+ *  a new heir thread.
+ */
+void _Scheduler_Block(
+  Thread_Control *the_thread
+);
+
+/**
+ *  This routine adds @a the_thread to the scheduling decision, 
+ *  that is, adds it to the ready queue.  It performs
+ *  any necessary scheduling operations including the selection of
+ *  a new heir thread.
+ */
+void _Scheduler_Unblock(
+  Thread_Control *the_thread
+);
 
 
 #ifndef __RTEMS_APPLICATION__
