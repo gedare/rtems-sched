@@ -301,7 +301,7 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_fifo (
   Thread_Control *the_thread
 )
 {
-  the_thread->ready = &_Thread_Ready_queue.Queues.Fifo;
+  the_thread->ready = &the_ready_queue->Queues.Fifo;
 }
 
 /*
@@ -316,7 +316,7 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_priority (
   Thread_Control *the_thread
 )
 {
-  the_thread->ready = &_Thread_Ready_queue.Queues.Priority[ 
+  the_thread->ready = &the_ready_queue->Queues.Priority[ 
     _Priority_Get_value(the_thread->current_priority) 
   ];
 }

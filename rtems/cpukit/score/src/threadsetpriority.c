@@ -53,7 +53,7 @@ void _Thread_Set_priority(
 {
   _Priority_Set(&the_thread->current_priority, &new_priority);
 
-  _Ready_queue_Set_ready(_Thread_Ready_queue, the_thread);
+  _Ready_queue_Set_ready(&_Thread_Ready_queue, the_thread);
 
   _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
 }
