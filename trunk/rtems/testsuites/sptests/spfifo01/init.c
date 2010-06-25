@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.3 2010/06/10 14:44:26 jennifer Exp $
+ *  $Id: init.c,v 1.4 2010/06/24 19:46:40 joel Exp $
  */
 
 #include <sys/stat.h>
@@ -23,7 +23,7 @@ static void test_main(void)
   puts("\n\n*** FIFO / PIPE OPEN TEST - 1 ***");
 
   puts(
-    "Configuration: Pipes disabled.\n"
+    "\nConfiguration: Pipes disabled.\n"
     "Creating named fifo '" FIFO_PATH "'.\n"
     "Must result in failure since pipes are disabled in the configuration."
   );

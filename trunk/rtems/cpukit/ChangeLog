@@ -1,3 +1,79 @@
+2010-06-25	Jennifer Averett <Jennifer.Averett@OARcorp.com
+
+	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added default
+	filesystem handlers.
+	* libfs/src/defaults/default_chown.c,
+	libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_fchmod.c,
+	libfs/src/defaults/default_fcntl.c,
+	libfs/src/defaults/default_fdatasync.c,
+	libfs/src/defaults/default_freenode.c,
+	libfs/src/defaults/default_fsmount.c,
+	libfs/src/defaults/default_fstat.c,
+	libfs/src/defaults/default_fsync.c,
+	libfs/src/defaults/default_ftruncate.c,
+	libfs/src/defaults/default_ioctl.c,
+	libfs/src/defaults/default_link.c,
+	libfs/src/defaults/default_lseek.c,
+	libfs/src/defaults/default_mount.c,
+	libfs/src/defaults/default_read.c,
+	libfs/src/defaults/default_readlink.c,
+	libfs/src/defaults/default_rename.c,
+	libfs/src/defaults/default_rmnod.c,
+	libfs/src/defaults/default_statvfs.c,
+	libfs/src/defaults/default_symlink.c,
+	libfs/src/defaults/default_unlink.c,
+	libfs/src/defaults/default_utime.c,
+	libfs/src/defaults/default_write.c: New files.
+
+2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1589/cpukit
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/inline/rtems/score/thread.inl: Make _Thread_Evaluate_mode() an
+	inline method. It is only used in one place and relatively simple.
+	* score/src/threadevaluatemode.c: Removed.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/imfs/memfile.c: Fix assert.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/src/read.c, libcsupport/src/write.c: read(2) and write(2)
+	should return 0 when passed a count of 0 after verifying other
+	possible errors.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/imfs/imfs_creat.c: Fix warning.
+
+2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_debug.c,
+	libfs/src/imfs/imfs_directory.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_fsunmount.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/imfs_initsupp.c, libfs/src/imfs/ioman.c,
+	libfs/src/imfs/memfile.c: Evaluate all assert calls in IMFS. Either
+	made them conditional on RTEMS_DEBUG or eliminated them.
+
+2010-06-24	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1590/cpukit
+	* score/Makefile.am, score/include/rtems/score/thread.h,
+	score/src/threadtickletimeslice.c: Remove _Thread_Reset_timeslice and
+	replaces its single use with a call to the functionally equivalent
+	_Thread_Yield_processor().
+	* score/src/threadresettimeslice.c: Removed.
+
+2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1542/filesystem
+	PR 1585/filesystem
+	* libfs/src/pipe/fifo.c: pipe_control_t was not deallocated if
+	fifo_open() was attempted with (O_WRONLY|O_NONBLOCK).
+	Mutex was locked too many times on this path and we needed an unlock.
+
 2010-06-24	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	PR 1587/filesystem

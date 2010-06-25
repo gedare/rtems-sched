@@ -1,0 +1,1879 @@
+objectgetnameasstring.c:2: *  COPYRIGHT (c) 1989-2008.
+objectgetnameasstring.c:3: *  On-Line Applications Research Corporation (OAR).
+objectgetnameasstring.c:50:  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+objectgetnameasstring.c:69:        if ( information->is_string ) {
+objectgetnameasstring.c:70:          s = the_object->name.name_p;
+objectgetnameasstring.c:74:        uint32_t  u32_name = (uint32_t) the_object->name.name_u32;
+objectgetnameasstring.c:86:        for ( i=0 ; i<(length-1) && *s ; i++, s++, d++ ) {
+coremsgflushsupp.c:10: *  COPYRIGHT (c) 1989-1999.
+coremsgflushsupp.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgflushsupp.c:42: *    the_message_queue - pointer to message queue
+coremsgflushsupp.c:45: *    returns - number of messages placed on inactive chain
+coremsgflushsupp.c:72:   *  not exist).  This can be implemented without changing the "big-O"
+coremsgflushsupp.c:89:    inactive_first      = the_message_queue->Inactive_messages.first;
+coremsgflushsupp.c:90:    message_queue_first = the_message_queue->Pending_messages.first;
+coremsgflushsupp.c:91:    message_queue_last  = the_message_queue->Pending_messages.last;
+coremsgflushsupp.c:93:    the_message_queue->Inactive_messages.first = message_queue_first;
+coremsgflushsupp.c:94:    message_queue_last->next = inactive_first;
+coremsgflushsupp.c:95:    inactive_first->previous = message_queue_last;
+coremsgflushsupp.c:96:    message_queue_first->previous          =
+coremsgflushsupp.c:97:               _Chain_Head( &the_message_queue->Inactive_messages );
+coremsgflushsupp.c:99:    _Chain_Initialize_empty( &the_message_queue->Pending_messages );
+coremsgflushsupp.c:101:    count = the_message_queue->number_of_pending_messages;
+coremsgflushsupp.c:102:    the_message_queue->number_of_pending_messages = 0;
+pheapresizeblock.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapresizeblock.c:11: *  On-Line Applications Research Corporation (OAR).
+coretodtickle.c:2: *  Time of Day (TOD) Handler -- Tickle Ticks
+coretodtickle.c:5:/*  COPYRIGHT (c) 1989-2007.
+coretodtickle.c:6: *  On-Line Applications Research Corporation (OAR).
+coretodtickle.c:57:    seconds--;
+coremsgsubmit.c:10: *  COPYRIGHT (c) 1989-2009.
+coremsgsubmit.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgsubmit.c:45: *    the_message_queue            - message is submitted to this message queue
+coremsgsubmit.c:46: *    buffer                       - pointer to message buffer
+coremsgsubmit.c:47: *    size                         - size in bytes of message to send
+coremsgsubmit.c:48: *    id                           - id of message queue
+coremsgsubmit.c:49: *    api_message_queue_mp_support - api specific mp support callout
+coremsgsubmit.c:50: *    submit_type                  - send or urgent message
+coremsgsubmit.c:53: *    CORE_MESSAGE_QUEUE_SUCCESSFUL - if successful
+coremsgsubmit.c:54: *    error code                    - if unsuccessful
+coremsgsubmit.c:75:  if ( size > the_message_queue->maximum_message_size ) {
+coremsgsubmit.c:82:  if ( the_message_queue->number_of_pending_messages == 0 ) {
+coremsgsubmit.c:83:    the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
+coremsgsubmit.c:87:        the_thread->Wait.return_argument_second.mutable_object,
+coremsgsubmit.c:90:      *(size_t *) the_thread->Wait.return_argument = size;
+coremsgsubmit.c:91:      the_thread->Wait.count = (uint32_t) submit_type;
+coremsgsubmit.c:94:        if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+coremsgsubmit.c:105:  if ( the_message_queue->number_of_pending_messages <
+coremsgsubmit.c:106:       the_message_queue->maximum_pending_messages ) {
+coremsgsubmit.c:122:      the_message->Contents.buffer,
+coremsgsubmit.c:125:    the_message->Contents.size = size;
+coremsgsubmit.c:167:      _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
+coremsgsubmit.c:168:      executing->Wait.queue = &the_message_queue->Wait_queue;
+coremsgsubmit.c:169:      executing->Wait.id = id;
+coremsgsubmit.c:170:      executing->Wait.return_argument_second.immutable_object = buffer;
+coremsgsubmit.c:171:      executing->Wait.option = (uint32_t) size;
+coremsgsubmit.c:172:      executing->Wait.count = submit_type;
+coremsgsubmit.c:175:      _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+objectgetnoprotection.c:2: *  Object Handler -- Object Get
+objectgetnoprotection.c:5: *  COPYRIGHT (c) 1989-2002.
+objectgetnoprotection.c:6: *  On-Line Applications Research Corporation (OAR).
+objectgetnoprotection.c:39: *   information - pointer to entry in table for this class
+objectgetnoprotection.c:40: *   id          - object id to search for
+objectgetnoprotection.c:41: *   location    - address of where to store the location
+objectgetnoprotection.c:44: *   returns  - address of object if local
+objectgetnoprotection.c:45: *   location - one of the following:
+objectgetnoprotection.c:46: *                  OBJECTS_ERROR  - invalid object ID
+objectgetnoprotection.c:47: *                  OBJECTS_REMOTE - remote object
+objectgetnoprotection.c:48: *                  OBJECTS_LOCAL  - local object
+objectgetnoprotection.c:64:  index = id - information->minimum_id + 1;
+objectgetnoprotection.c:66:  if ( information->maximum >= index ) {
+objectgetnoprotection.c:67:    if ( (the_object = information->local_table[ index ]) != NULL ) {
+corerwlockobtainread.c:2: *  SuperCore RWLock Handler -- Obtain RWLock for reading
+corerwlockobtainread.c:4: *  COPYRIGHT (c) 1989-2006.
+corerwlockobtainread.c:5: *  On-Line Applications Research Corporation (OAR).
+corerwlockobtainread.c:32: *    the_rwlock    - the rwlock control block to initialize
+corerwlockobtainread.c:33: *    timeout_allowed - true if timeout allowed
+corerwlockobtainread.c:34: *    timeout         - the maximum number of ticks to spin
+corerwlockobtainread.c:57:    switch ( the_rwlock->current_state ) {
+corerwlockobtainread.c:59:	the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_READING;
+corerwlockobtainread.c:60:	the_rwlock->number_of_readers += 1;
+corerwlockobtainread.c:62:	executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockobtainread.c:67:        waiter = _Thread_queue_First( &the_rwlock->Wait_queue );
+corerwlockobtainread.c:69:	  the_rwlock->number_of_readers += 1;
+corerwlockobtainread.c:71:	  executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockobtainread.c:86:      executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
+corerwlockobtainread.c:94:    _Thread_queue_Enter_critical_section( &the_rwlock->Wait_queue );
+corerwlockobtainread.c:95:    executing->Wait.queue       = &the_rwlock->Wait_queue;
+corerwlockobtainread.c:96:    executing->Wait.id          = id;
+corerwlockobtainread.c:97:    executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_READ;
+corerwlockobtainread.c:98:    executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockobtainread.c:102:       &the_rwlock->Wait_queue,
+userextaddset.c:10: *  COPYRIGHT (c) 1989-2007.
+userextaddset.c:11: *  On-Line Applications Research Corporation (OAR).
+userextaddset.c:31:  _Chain_Append( &_User_extensions_List, &the_extension->Node );
+userextaddset.c:37:  if ( the_extension->Callouts.thread_switch != NULL ) {
+userextaddset.c:38:    the_extension->Switch.thread_switch =
+userextaddset.c:39:      the_extension->Callouts.thread_switch;
+userextaddset.c:42:      &the_extension->Switch.Node
+readyqextract.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqextract.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqextract.c:35: *    the_ready_queue - pointer to a readyq header
+readyqextract.c:36: *    the_thread       - pointer to a thread control block
+readyqextract.c:52:  if  ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
+userextthreadcreate.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreadcreate.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreadcreate.c:37:        the_node = the_node->next ) {
+userextthreadcreate.c:41:    if ( the_extension->Callouts.thread_create != NULL ) {
+userextthreadcreate.c:42:      status = (*the_extension->Callouts.thread_create)(
+objectnametoidstring.c:2: *  Object Handler - Object ID to Name (String)
+objectnametoidstring.c:5: *  COPYRIGHT (c) 1989-2008.
+objectnametoidstring.c:6: *  On-Line Applications Research Corporation (OAR).
+objectnametoidstring.c:42: *    information - object information
+objectnametoidstring.c:43: *    name        - user defined object name
+objectnametoidstring.c:44: *    id          - address of return ID
+objectnametoidstring.c:47: *    id                                   - object id
+objectnametoidstring.c:48: *    OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL - if successful
+objectnametoidstring.c:49: *    error code                           - if unsuccessful
+objectnametoidstring.c:62:  /* ASSERT: information->is_string == true */
+objectnametoidstring.c:70:  if ( information->maximum != 0 ) {
+objectnametoidstring.c:71:    name_length = information->name_length;
+objectnametoidstring.c:73:    for ( index = 1; index <= information->maximum; index++ ) {
+objectnametoidstring.c:74:      the_object = information->local_table[ index ];
+objectnametoidstring.c:78:      if ( !the_object->name.name_p )
+objectnametoidstring.c:81:      if (!strncmp( name, the_object->name.name_p, information->name_length)) {
+objectnametoidstring.c:82:        *id = the_object->id;
+corerwlocktimeout.c:5: *  COPYRIGHT (c) 1989-2007.
+corerwlocktimeout.c:6: *  On-Line Applications Research Corporation (OAR).
+corerwlocktimeout.c:30: *    id - thread id
+threadqtimeout.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqtimeout.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqtimeout.c:35: *    id - thread id
+threadqprocesstimeout.c:2: *  Thread Queue Handler - Process Timeout Handler
+threadqprocesstimeout.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqprocesstimeout.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqprocesstimeout.c:32:  Thread_queue_Control *the_thread_queue = the_thread->Wait.queue;
+threadqprocesstimeout.c:46:  if ( the_thread_queue->sync_state != THREAD_BLOCKING_OPERATION_SYNCHRONIZED &&
+threadqprocesstimeout.c:48:    if ( the_thread_queue->sync_state != THREAD_BLOCKING_OPERATION_SATISFIED ) {
+threadqprocesstimeout.c:49:      the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+threadqprocesstimeout.c:50:      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_TIMEOUT;
+threadqprocesstimeout.c:53:    the_thread->Wait.return_code = the_thread->Wait.queue->timeout_status;
+threadqprocesstimeout.c:54:    _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+ts64addto.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64addto.c:7: *  On-Line Applications Research Corporation (OAR).
+isr.c:5: *  COPYRIGHT (c) 1989-2008.
+isr.c:6: *  On-Line Applications Research Corporation (OAR).
+heapallocate.c:10: *  COPYRIGHT (c) 1989-1999.
+heapallocate.c:11: *  On-Line Applications Research Corporation (OAR).
+heapallocate.c:40:    uintptr_t const min_block_size = heap->min_block_size;
+heapallocate.c:41:    uintptr_t const page_size = heap->page_size;
+heapallocate.c:50:    uintptr_t const alloc_area_offset = alloc_begin - alloc_area_begin;
+heapallocate.c:91:  uintptr_t const page_size = heap->page_size;
+heapallocate.c:92:  uintptr_t const min_block_size = heap->min_block_size;
+heapallocate.c:99:  uintptr_t const alloc_begin_ceiling = block_end - min_block_size
+heapallocate.c:100:    + HEAP_BLOCK_HEADER_SIZE + page_size - 1;
+heapallocate.c:103:  uintptr_t alloc_begin = alloc_end - alloc_size;
+heapallocate.c:123:      alloc_begin = boundary_line - alloc_size;
+heapallocate.c:134:    uintptr_t const free_size = alloc_block_begin - block_begin;
+heapallocate.c:151:  Heap_Statistics *const stats = &heap->stats;
+heapallocate.c:155:    - HEAP_BLOCK_SIZE_OFFSET;
+heapallocate.c:156:  uintptr_t const page_size = heap->page_size;
+heapallocate.c:186:    if ( block->size_and_flag > block_size_floor ) {
+heapallocate.c:204:    block = block->next;
+heapallocate.c:209:    stats->searches += search_count;
+heapallocate.c:224:  if ( stats->max_search < search_count ) {
+heapallocate.c:225:    stats->max_search = search_count;
+pheapgetfreeinfo.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapgetfreeinfo.c:11: *  On-Line Applications Research Corporation (OAR).
+timespecaddto.c:6: *  COPYRIGHT (c) 1989-2008.
+timespecaddto.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecaddto.c:37:  uint32_t seconds = add->tv_sec;
+timespecaddto.c:40:  time->tv_sec += add->tv_sec;
+timespecaddto.c:41:  time->tv_nsec += add->tv_nsec;
+timespecaddto.c:44:  while ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND ) {
+timespecaddto.c:45:    time->tv_nsec -= TOD_NANOSECONDS_PER_SECOND;
+timespecaddto.c:46:    time->tv_sec++;
+timespecsubtract.c:6: *  COPYRIGHT (c) 1989-2007.
+timespecsubtract.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecsubtract.c:33:  if (end->tv_nsec < start->tv_nsec) {
+timespecsubtract.c:34:    result->tv_sec  = end->tv_sec - start->tv_sec - 1;
+timespecsubtract.c:35:    result->tv_nsec =
+timespecsubtract.c:36:      (TOD_NANOSECONDS_PER_SECOND - start->tv_nsec) + end->tv_nsec;
+timespecsubtract.c:38:    result->tv_sec  = end->tv_sec - start->tv_sec;
+timespecsubtract.c:39:    result->tv_nsec = end->tv_nsec - start->tv_nsec;
+coretodget.c:2: *  Time of Day (TOD) Handler - get TOD
+coretodget.c:4: *  COPYRIGHT (c) 1989-2008.
+coretodget.c:5: *  On-Line Applications Research Corporation (OAR).
+coretodget.c:31: *    time  - pointer to the time and date structure
+coremsgclose.c:10: *  COPYRIGHT (c) 1989-1999.
+coremsgclose.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgclose.c:41: *    the_message_queue      - the message_queue to be flushed
+coremsgclose.c:42: *    remote_extract_callout - function to invoke remotely
+coremsgclose.c:43: *    status                 - status to pass to thread
+coremsgclose.c:61:    &the_message_queue->Wait_queue,
+coremsgclose.c:69:   *  the flush satisfying any blocked senders as a side-effect.
+coremsgclose.c:72:  if ( the_message_queue->number_of_pending_messages != 0 )
+coremsgclose.c:75:  (void) _Workspace_Free( the_message_queue->message_buffers );
+threadstackallocate.c:5: *  COPYRIGHT (c) 1989-2008.
+threadstackallocate.c:6: *  On-Line Applications Research Corporation (OAR).
+threadstackallocate.c:82:  the_thread->Start.stack = stack_addr;
+objectgetinfo.c:2: *  COPYRIGHT (c) 1989-2008.
+objectgetinfo.c:3: *  On-Line Applications Research Corporation (OAR).
+objectgetinfo.c:56:    if ( info->maximum == 0 )
+chainget.c:2: *  COPYRIGHT (c) 1989-2007.
+chainget.c:3: *  On-Line Applications Research Corporation (OAR).
+chainget.c:28: *    the_chain - pointer to chain header
+chainget.c:31: *    return_node - pointer to node in chain allocated
+chainget.c:32: *    CHAIN_END   - if no nodes available
+chainextract.c:2: *  COPYRIGHT (c) 1989-2007.
+chainextract.c:3: *  On-Line Applications Research Corporation (OAR).
+chainextract.c:27: *    node - pointer to node in chain to be deleted
+watchdogreportchain.c:7:/*  COPYRIGHT (c) 1989-2008.
+watchdogreportchain.c:8: *  On-Line Applications Research Corporation (OAR).
+watchdogreportchain.c:37:      for ( node = header->first ;
+watchdogreportchain.c:39:            node = node->next )
+watchdog.c:5: *  COPYRIGHT (c) 1989-1999.
+watchdog.c:6: *  On-Line Applications Research Corporation (OAR).
+pheapextend.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapextend.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsginsert.c:10: *  COPYRIGHT (c) 1989-2005.
+coremsginsert.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsginsert.c:42: *    the_message_queue - pointer to message queue
+coremsginsert.c:43: *    the_message       - message to insert
+coremsginsert.c:44: *    priority          - insert indication
+coremsginsert.c:62:      if ( the_message_queue->number_of_pending_messages == 0 )
+coremsginsert.c:73:      the_message_queue->number_of_pending_messages++;
+coremsginsert.c:83:        the_message_queue->number_of_pending_messages++;
+coremsginsert.c:89:        the_message_queue->number_of_pending_messages++;
+coremsginsert.c:99:      the_header = &the_message_queue->Pending_messages;
+coremsginsert.c:100:      the_node = the_header->first;
+coremsginsert.c:109:          the_node = the_node->next;
+coremsginsert.c:116:        the_message_queue->number_of_pending_messages++;
+coremsginsert.c:117:        _Chain_Insert_unprotected( the_node->previous, &the_message->Node );
+coremsginsert.c:128:    if ( notify && the_message_queue->notify_handler )
+coremsginsert.c:129:      (*the_message_queue->notify_handler)(the_message_queue->notify_argument);
+corebarrierrelease.c:8: *  COPYRIGHT (c) 1989-2006.
+corebarrierrelease.c:9: *  On-Line Applications Research Corporation (OAR).
+corebarrierrelease.c:34: *    the_barrier            - the barrier to be flushed
+corebarrierrelease.c:35: *    id                     - id of the object for a remote unblock
+corebarrierrelease.c:36: *    api_barrier_mp_support - api dependent MP support actions
+corebarrierrelease.c:39: *    CORE_BARRIER_STATUS_SUCCESSFUL - if successful
+corebarrierrelease.c:40: *    core error code                - if unsuccessful
+corebarrierrelease.c:61:  while ( (the_thread = _Thread_queue_Dequeue(&the_barrier->Wait_queue)) ) {
+corebarrierrelease.c:63:    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+corebarrierrelease.c:68:  the_barrier->number_of_waiting_threads = 0;
+coretodgetuptimetimespec.c:2: *  Time of Day (TOD) Handler - get uptime
+coretodgetuptimetimespec.c:5:/*  COPYRIGHT (c) 1989-2008.
+coretodgetuptimetimespec.c:6: *  On-Line Applications Research Corporation (OAR).
+coretodgetuptimetimespec.c:30: *    time  - pointer to the timestamp structure
+heapgetinfo.c:10: *  COPYRIGHT (c) 1989-2009.
+heapgetinfo.c:11: *  On-Line Applications Research Corporation (OAR).
+heapgetinfo.c:35:  Heap_Block *the_block = the_heap->first_block;
+heapgetinfo.c:36:  Heap_Block *const end = the_heap->last_block;
+heapgetinfo.c:46:      info = &the_info->Used;
+heapgetinfo.c:48:      info = &the_info->Free;
+heapgetinfo.c:50:    info->number++;
+heapgetinfo.c:51:    info->total += the_size;
+heapgetinfo.c:52:    if ( info->largest < the_size )
+heapgetinfo.c:53:      info->largest = the_size;
+threadqdequeue.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqdequeue.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqdequeue.c:37: *    the_thread_queue - pointer to threadq
+threadqdequeue.c:40: *    returns - thread dequeued or NULL
+threadqdequeue.c:55:  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+threadqdequeue.c:63:      sync_state = the_thread_queue->sync_state;
+threadqdequeue.c:66:        the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SATISFIED;
+threadget.c:5: *  COPYRIGHT (c) 1989-1999.
+threadget.c:6: *  On-Line Applications Research Corporation (OAR).
+apimutexlock.c:2: *  COPYRIGHT (c) 1989-2007.
+apimutexlock.c:3: *  On-Line Applications Research Corporation (OAR).
+apimutexlock.c:28:    &the_mutex->Mutex,
+apimutexlock.c:29:    the_mutex->Object.id,
+corespinlock.c:8: *  COPYRIGHT (c) 1989-2006.
+corespinlock.c:9: *  On-Line Applications Research Corporation (OAR).
+corespinlock.c:36: *    the_spinlock            - the spinlock control block to initialize
+corespinlock.c:37: *    the_spinlock_attributes - the attributes specified at create time
+corespinlock.c:48:  the_spinlock->Attributes                = *the_spinlock_attributes;
+corespinlock.c:50:  the_spinlock->lock   = 0;
+corespinlock.c:51:  the_spinlock->users  = 0;
+corespinlock.c:52:  the_spinlock->holder = 0;
+coresemsurrender.c:10: *  COPYRIGHT (c) 1989-1999.
+coresemsurrender.c:11: *  On-Line Applications Research Corporation (OAR).
+coresemsurrender.c:36: *    the_semaphore            - the semaphore to be flushed
+coresemsurrender.c:37: *    id                       - id of parent semaphore
+coresemsurrender.c:38: *    api_semaphore_mp_support - api dependent MP support actions
+coresemsurrender.c:41: *    CORE_SEMAPHORE_STATUS_SUCCESSFUL - if successful
+coresemsurrender.c:42: *    core error code                  - if unsuccessful
+coresemsurrender.c:59:  if ( (the_thread = _Thread_queue_Dequeue(&the_semaphore->Wait_queue)) ) {
+coresemsurrender.c:62:    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+coresemsurrender.c:68:      if ( the_semaphore->count < the_semaphore->Attributes.maximum_count )
+coresemsurrender.c:69:        the_semaphore->count += 1;
+pheapwalk.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapwalk.c:11: *  On-Line Applications Research Corporation (OAR).
+objectgetnext.c:5: *  COPYRIGHT (c) 1989-1999.
+objectgetnext.c:6: *  On-Line Applications Research Corporation (OAR).
+objectgetnext.c:40: *   information - pointer to entry in table for this class
+objectgetnext.c:41: *   id          - object id to search for
+objectgetnext.c:42: *   location    - address of where to store the location
+objectgetnext.c:43: *   next_id     - address to store next id to try
+objectgetnext.c:46: *   returns     - address of object if local
+objectgetnext.c:47: *   location    - one of the following:
+objectgetnext.c:48: *                  OBJECTS_ERROR  - invalid object ID
+objectgetnext.c:49: *                  OBJECTS_REMOTE - remote object
+objectgetnext.c:50: *                  OBJECTS_LOCAL  - local object
+objectgetnext.c:51: *   next_id     - will contain a reasonable "next" id to continue traversal
+objectgetnext.c:78:        next_id = information->minimum_id;
+objectgetnext.c:84:        if (_Objects_Get_index(next_id) > information->maximum)
+threadqextractwithproxy.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqextractwithproxy.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqextractwithproxy.c:45:  state = the_thread->current_state;
+threadqextractwithproxy.c:54:        the_information = _Objects_Get_information_id( the_thread->Wait.id );
+threadqextractwithproxy.c:56:          (Objects_Thread_queue_Extract_callout) the_information->extract;
+threadqextractwithproxy.c:62:    _Thread_queue_Extract( the_thread->Wait.queue, the_thread );
+schedulerblock.c:4: *  COPYRIGHT (c) 1989-1999.
+schedulerblock.c:5: *  On-Line Applications Research Corporation (OAR).
+schedulerblock.c:35: *   the_thread   - pointer to thread control block
+threadstart.c:5: *  COPYRIGHT (c) 1989-1999.
+threadstart.c:6: *  On-Line Applications Research Corporation (OAR).
+threadstart.c:51:  if ( _States_Is_dormant( the_thread->current_state ) ) {
+threadstart.c:53:    the_thread->Start.entry_point      = (Thread_Entry) entry_point;
+threadstart.c:55:    the_thread->Start.prototype        = the_prototype;
+threadstart.c:56:    the_thread->Start.pointer_argument = pointer_argument;
+threadstart.c:57:    the_thread->Start.numeric_argument = numeric_argument;
+userextremoveset.c:10: *  COPYRIGHT (c) 1989-2007.
+userextremoveset.c:11: *  On-Line Applications Research Corporation (OAR).
+userextremoveset.c:31:  _Chain_Extract( &the_extension->Node );
+userextremoveset.c:37:  if ( the_extension->Callouts.thread_switch != NULL )
+userextremoveset.c:38:    _Chain_Extract( &the_extension->Switch.Node );
+corerwlockobtainwrite.c:2: *  SuperCore RWLock Handler -- Obtain RWLock for writing
+corerwlockobtainwrite.c:4: *  COPYRIGHT (c) 1989-2006.
+corerwlockobtainwrite.c:5: *  On-Line Applications Research Corporation (OAR).
+corerwlockobtainwrite.c:32: *    the_rwlock    - the rwlock control block to initialize
+corerwlockobtainwrite.c:33: *    timeout_allowed - true if timeout allowed
+corerwlockobtainwrite.c:34: *    timeout         - the maximum number of ticks to spin
+corerwlockobtainwrite.c:58:    switch ( the_rwlock->current_state ) {
+corerwlockobtainwrite.c:60:	the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
+corerwlockobtainwrite.c:62:	executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockobtainwrite.c:76:      executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
+corerwlockobtainwrite.c:84:    _Thread_queue_Enter_critical_section( &the_rwlock->Wait_queue );
+corerwlockobtainwrite.c:85:    executing->Wait.queue       = &the_rwlock->Wait_queue;
+corerwlockobtainwrite.c:86:    executing->Wait.id          = id;
+corerwlockobtainwrite.c:87:    executing->Wait.option      = CORE_RWLOCK_THREAD_WAITING_FOR_WRITE;
+corerwlockobtainwrite.c:88:    executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockobtainwrite.c:92:       &the_rwlock->Wait_queue,
+pheapgetsize.c:10: *  COPYRIGHT (c) 1989-2009.
+pheapgetsize.c:11: *  On-Line Applications Research Corporation (OAR).
+heapfree.c:10: *  COPYRIGHT (c) 1989-2007.
+heapfree.c:11: *  On-Line Applications Research Corporation (OAR).
+heapfree.c:30:  Heap_Statistics *const stats = &heap->stats;
+heapfree.c:33:    _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
+heapfree.c:57:  next_is_free = next_block != heap->last_block
+heapfree.c:61:    uintptr_t const prev_size = block->prev_size;
+heapfree.c:62:    Heap_Block * const prev_block = _Heap_Block_at( block, -prev_size );
+heapfree.c:79:      stats->free_blocks -= 1;
+heapfree.c:80:      prev_block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
+heapfree.c:83:      next_block->prev_size = size;
+heapfree.c:86:      prev_block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
+heapfree.c:87:      next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
+heapfree.c:88:      next_block->prev_size = size;
+heapfree.c:93:    block->size_and_flag = size | HEAP_PREV_BLOCK_USED;
+heapfree.c:95:    next_block->prev_size = size;
+heapfree.c:100:    block->size_and_flag = block_size | HEAP_PREV_BLOCK_USED;
+heapfree.c:101:    next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
+heapfree.c:102:    next_block->prev_size = block_size;
+heapfree.c:105:    ++stats->free_blocks;
+heapfree.c:106:    if ( stats->max_free_blocks < stats->free_blocks ) {
+heapfree.c:107:      stats->max_free_blocks = stats->free_blocks;
+heapfree.c:112:  --stats->used_blocks;
+heapfree.c:113:  ++stats->frees;
+heapfree.c:114:  stats->free_size += block_size;
+ts64divide.c:6: *  COPYRIGHT (c) 1989-2007.
+ts64divide.c:7: *  On-Line Applications Research Corporation (OAR).
+threadsuspend.c:5: *  COPYRIGHT (c) 1989-1999.
+threadsuspend.c:6: *  On-Line Applications Research Corporation (OAR).
+threadsuspend.c:43: *   the_thread   - pointer to thread control block
+threadsuspend.c:59:  ready = the_thread->ready;
+threadsuspend.c:61:  if ( !_States_Is_ready( the_thread->current_state ) ) {
+threadsuspend.c:62:    the_thread->current_state =
+threadsuspend.c:63:       _States_Set( STATES_SUSPENDED, the_thread->current_state );
+threadsuspend.c:68:  the_thread->current_state = STATES_SUSPENDED;
+threadsetstate.c:5: *  COPYRIGHT (c) 1989-1999.
+threadsetstate.c:6: *  On-Line Applications Research Corporation (OAR).
+threadsetstate.c:43: *   the_thread   - pointer to thread control block
+threadsetstate.c:44: *   state - state to be set
+threadsetstate.c:61:  ready = the_thread->ready;
+threadsetstate.c:63:  if ( !_States_Is_ready( the_thread->current_state ) ) {
+threadsetstate.c:64:    the_thread->current_state =
+threadsetstate.c:65:       _States_Set( state, the_thread->current_state );
+threadsetstate.c:70:  the_thread->current_state = state;
+threadqenqueuefifo.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqenqueuefifo.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqenqueuefifo.c:35: *    the_thread_queue - pointer to threadq
+threadqenqueuefifo.c:36: *    the_thread       - pointer to the thread to block
+threadqenqueuefifo.c:55:    sync_state = the_thread_queue->sync_state;
+threadqenqueuefifo.c:56:    the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+threadqenqueuefifo.c:59:        &the_thread_queue->Queues.Fifo,
+threadqenqueuefifo.c:60:        &the_thread->Object.Node
+threadqenqueuefifo.c:62:      the_thread->Wait.queue = the_thread_queue;
+threadqenqueuefifo.c:64:      the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+chain.c:2: *  COPYRIGHT (c) 1989-2007.
+chain.c:3: *  On-Line Applications Research Corporation (OAR).
+chain.c:28: *    the_chain        - pointer to chain header
+chain.c:29: *    starting_address - starting address of first node
+chain.c:30: *    number_nodes     - number of nodes in chain
+chain.c:31: *    node_size        - size of node in bytes
+chain.c:49:  the_chain->permanent_null = NULL;
+chain.c:51:  while ( count-- ) {
+chain.c:52:    current->next  = next;
+chain.c:53:    next->previous = current;
+chain.c:58:  current->next    = _Chain_Tail( the_chain );
+chain.c:59:  the_chain->last  = current;
+threadqenqueuepriority.c:2: *  Thread Queue Handler - Enqueue By Priority
+threadqenqueuepriority.c:4: *  COPYRIGHT (c) 1989-2009.
+threadqenqueuepriority.c:5: *  On-Line Applications Research Corporation (OAR).
+threadqenqueuepriority.c:42: *    the_thread_queue - pointer to threadq
+threadqenqueuepriority.c:43: *    thread           - thread to insert
+threadqenqueuepriority.c:70:  _Chain_Initialize_empty( &the_thread->Wait.Block2n );
+threadqenqueuepriority.c:72:  _Priority_Set(&priority, &the_thread->current_priority);
+threadqenqueuepriority.c:74:  header       = &the_thread_queue->Queues.Priority[ header_index ];
+threadqenqueuepriority.c:75:  block_state  = the_thread_queue->state;
+threadqenqueuepriority.c:81:  _Priority_Set_value(&search_priority, PRIORITY_MINIMUM - 1);
+threadqenqueuepriority.c:83:  search_thread = (Thread_Control *) header->first;
+threadqenqueuepriority.c:85:    _Priority_Set(&search_priority, &search_thread->current_priority);
+threadqenqueuepriority.c:90:    search_thread = (Thread_Control *) search_thread->Object.Node.next;
+threadqenqueuepriority.c:93:    _Priority_Set(&search_priority, &search_thread->current_priority);
+threadqenqueuepriority.c:98:    if ( !_States_Are_set( search_thread->current_state, block_state) ) {
+threadqenqueuepriority.c:103:       (Thread_Control *)search_thread->Object.Node.next;
+threadqenqueuepriority.c:106:  if ( the_thread_queue->sync_state !=
+threadqenqueuepriority.c:110:  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+threadqenqueuepriority.c:116:  previous_node = search_node->previous;
+threadqenqueuepriority.c:119:  the_node->next         = search_node;
+threadqenqueuepriority.c:120:  the_node->previous     = previous_node;
+threadqenqueuepriority.c:121:  previous_node->next    = the_node;
+threadqenqueuepriority.c:122:  search_node->previous  = the_node;
+threadqenqueuepriority.c:123:  the_thread->Wait.queue = the_thread_queue;
+threadqenqueuepriority.c:131:  search_thread = (Thread_Control *) header->last;
+threadqenqueuepriority.c:133:    _Priority_Set(&search_priority, &search_thread->current_priority);
+threadqenqueuepriority.c:137:    search_thread = (Thread_Control *) search_thread->Object.Node.previous;
+threadqenqueuepriority.c:140:    _Priority_Set(&search_priority, &search_thread->current_priority);
+threadqenqueuepriority.c:145:    if ( !_States_Are_set( search_thread->current_state, block_state) ) {
+threadqenqueuepriority.c:150:                         search_thread->Object.Node.previous;
+threadqenqueuepriority.c:153:  if ( the_thread_queue->sync_state !=
+threadqenqueuepriority.c:157:  the_thread_queue->sync_state = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+threadqenqueuepriority.c:163:  next_node   = search_node->next;
+threadqenqueuepriority.c:166:  the_node->next          = next_node;
+threadqenqueuepriority.c:167:  the_node->previous      = search_node;
+threadqenqueuepriority.c:168:  search_node->next       = the_node;
+threadqenqueuepriority.c:169:  next_node->previous    = the_node;
+threadqenqueuepriority.c:170:  the_thread->Wait.queue = the_thread_queue;
+threadqenqueuepriority.c:175:  search_node   = _Chain_Tail( &search_thread->Wait.Block2n );
+threadqenqueuepriority.c:176:  previous_node = search_node->previous;
+threadqenqueuepriority.c:179:  the_node->next         = search_node;
+threadqenqueuepriority.c:180:  the_node->previous     = previous_node;
+threadqenqueuepriority.c:181:  previous_node->next    = the_node;
+threadqenqueuepriority.c:182:  search_node->previous  = the_node;
+threadqenqueuepriority.c:183:  the_thread->Wait.queue = the_thread_queue;
+threadqenqueuepriority.c:196:  return the_thread_queue->sync_state;
+ts64toticks.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64toticks.c:7: *  On-Line Applications Research Corporation (OAR).
+threadqextract.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqextract.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqextract.c:36: *    the_thread_queue - pointer to a threadq header
+threadqextract.c:37: *    the_thread       - pointer to a thread control block
+threadqextract.c:53:  if  ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+watchdoginsert.c:5: *  COPYRIGHT (c) 1989-1999.
+watchdoginsert.c:6: *  On-Line Applications Research Corporation (OAR).
+watchdoginsert.c:51:  if ( the_watchdog->state != WATCHDOG_INACTIVE ) {
+watchdoginsert.c:56:  the_watchdog->state = WATCHDOG_BEING_INSERTED;
+watchdoginsert.c:60:  delta_interval = the_watchdog->initial;
+watchdoginsert.c:66:   * INLINE routine (but not the macro - note the subtle difference)
+watchdoginsert.c:73:   *  Till Straumann, 7/2003 (gcc-3.2.2 -O4 on powerpc)
+watchdoginsert.c:76:  for ( after = (Watchdog_Control *) ((volatile Chain_Control *)header)->first ;
+watchdoginsert.c:83:     if ( delta_interval < after->delta_interval ) {
+watchdoginsert.c:84:       after->delta_interval -= delta_interval;
+watchdoginsert.c:88:     delta_interval -= after->delta_interval;
+watchdoginsert.c:101:     if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
+watchdoginsert.c:113:  the_watchdog->delta_interval = delta_interval;
+watchdoginsert.c:115:  _Chain_Insert_unprotected( after->Node.previous, &the_watchdog->Node );
+watchdoginsert.c:117:  the_watchdog->start_time = _Watchdog_Ticks_since_boot;
+watchdoginsert.c:121:  _Watchdog_Sync_count--;
+objectinitializeinformation.c:4: *  COPYRIGHT (c) 1989-2010.
+objectinitializeinformation.c:5: *  On-Line Applications Research Corporation (OAR).
+objectinitializeinformation.c:37: *    information         - object information table
+objectinitializeinformation.c:38: *    maximum             - maximum objects of this class
+objectinitializeinformation.c:39: *    size                - size of this object's control block
+objectinitializeinformation.c:40: *    is_string           - true if names for this object are strings
+objectinitializeinformation.c:41: *    maximum_name_length - maximum length of each object's name
+objectinitializeinformation.c:43: *      supports_global     - true if this is a global object class
+objectinitializeinformation.c:44: *      extract_callout     - pointer to threadq extract callout
+objectinitializeinformation.c:72:  information->the_api            = the_api;
+objectinitializeinformation.c:73:  information->the_class          = the_class;
+objectinitializeinformation.c:74:  information->size               = size;
+objectinitializeinformation.c:75:  information->local_table        = 0;
+objectinitializeinformation.c:76:  information->inactive_per_block = 0;
+objectinitializeinformation.c:77:  information->object_blocks      = 0;
+objectinitializeinformation.c:78:  information->inactive           = 0;
+objectinitializeinformation.c:80:    information->is_string        = is_string;
+objectinitializeinformation.c:87:  information->maximum = 0;
+objectinitializeinformation.c:95:   *  Are we operating in limited or unlimited (e.g. auto-extend) mode.
+objectinitializeinformation.c:97:  information->auto_extend =
+objectinitializeinformation.c:104:  if ( information->auto_extend && maximum_per_allocation == 0) {
+objectinitializeinformation.c:115:  information->allocation_size = maximum_per_allocation;
+objectinitializeinformation.c:120:  information->local_table = &null_local_table;
+objectinitializeinformation.c:126:  information->minimum_id =
+objectinitializeinformation.c:134:  if ( name_length & (OBJECTS_NAME_ALIGNMENT-1) )
+objectinitializeinformation.c:136:                  ~(OBJECTS_NAME_ALIGNMENT-1);
+objectinitializeinformation.c:138:  information->name_length = name_length;
+objectinitializeinformation.c:140:  _Chain_Initialize_empty( &information->Inactive );
+objectinitializeinformation.c:158:    information->extract = extract;
+objectinitializeinformation.c:162:      information->global_table =
+objectinitializeinformation.c:168:	_Chain_Initialize_empty( &information->global_table[ index ] );
+objectinitializeinformation.c:171:       information->global_table = NULL;
+threadqflush.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqflush.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqflush.c:35: *    the_thread_queue       - pointer to threadq to be flushed
+threadqflush.c:36: *    remote_extract_callout - pointer to routine which extracts a remote thread
+threadqflush.c:37: *    status                 - status to return to the thread
+threadqflush.c:56:    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+threadqflush.c:60:      the_thread->Wait.return_code = status;
+objectallocatebyindex.c:5: *  COPYRIGHT (c) 1989-1999.
+objectallocatebyindex.c:6: *  On-Line Applications Research Corporation (OAR).
+objectallocatebyindex.c:50:  if ( the_index > 0 && information->maximum >= the_index ) {
+objectallocatebyindex.c:51:    the_object = information->local_table[ the_index ];
+objectallocatebyindex.c:64:      information->object_blocks[ 0 ],
+objectallocatebyindex.c:65:      (sizeof_control * (the_index - 1))
+objectallocatebyindex.c:67:    _Chain_Extract( &the_object->Node );
+timespecdivide.c:6: *  COPYRIGHT (c) 1989-2007.
+timespecdivide.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecdivide.c:36:   *  in a 64-bit integer.
+timespecdivide.c:38:  left   = lhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
+timespecdivide.c:39:  left  += lhs->tv_nsec;
+timespecdivide.c:40:  right  = rhs->tv_sec * (uint64_t)TOD_NANOSECONDS_PER_SECOND;
+timespecdivide.c:41:  right += rhs->tv_nsec;
+threadsettransient.c:5: *  COPYRIGHT (c) 1989-1999.
+threadsettransient.c:6: *  On-Line Applications Research Corporation (OAR).
+threadsettransient.c:44: *    the_thread - pointer to thread control block
+threadsettransient.c:60:  ready = the_thread->ready;
+threadsettransient.c:63:  old_state = the_thread->current_state;
+threadsettransient.c:64:  the_thread->current_state = _States_Set( STATES_TRANSIENT, old_state );
+coremutex.c:9: *  COPYRIGHT (c) 1989-1999.
+coremutex.c:10: *  On-Line Applications Research Corporation (OAR).
+coremutex.c:38: *    the_mutex             - the mutex control block to initialize
+coremutex.c:39: *    the_mutex_attributes  - the mutex attributes specified at create time
+coremutex.c:40: *    initial_lock          - mutex initial lock or unlocked status
+coremutex.c:57:  the_mutex->Attributes    = *the_mutex_attributes;
+coremutex.c:58:  the_mutex->lock          = initial_lock;
+coremutex.c:59:  the_mutex->blocked_count = 0;
+coremutex.c:62:    the_mutex->nest_count = 1;
+coremutex.c:63:    the_mutex->holder     = _Thread_Executing;
+coremutex.c:64:    the_mutex->holder_id  = _Thread_Executing->Object.id;
+coremutex.c:65:    if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+coremutex.c:66:         _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+coremutex.c:68:      if ( _Priority_Get_value(_Thread_Executing->current_priority) <
+coremutex.c:69:             _Priority_Get_value(the_mutex->Attributes.priority_ceiling) )
+coremutex.c:72:       _Chain_Prepend_unprotected( &_Thread_Executing->lock_mutex,
+coremutex.c:73:                                   &the_mutex->queue.lock_queue );
+coremutex.c:74:       _Priority_Set(&the_mutex->queue.priority_before, 
+coremutex.c:75:           &_Thread_Executing->current_priority);
+coremutex.c:78:      _Thread_Executing->resource_count++;
+coremutex.c:81:    the_mutex->nest_count = 0;
+coremutex.c:82:    the_mutex->holder     = NULL;
+coremutex.c:83:    the_mutex->holder_id  = 0;
+coremutex.c:87:    &the_mutex->Wait_queue,
+threadq.c:5: *  COPYRIGHT (c) 1989-2008.
+threadq.c:6: *  On-Line Applications Research Corporation (OAR).
+threadq.c:35: *    the_thread_queue      - pointer to a threadq header
+threadq.c:36: *    discipline            - queueing discipline
+threadq.c:37: *    state                 - state of waiting threads
+threadq.c:38: *    timeout_status        - return on a timeout
+threadq.c:50:  the_thread_queue->state          = state;
+threadq.c:51:  the_thread_queue->discipline     = the_discipline;
+threadq.c:52:  the_thread_queue->timeout_status = timeout_status;
+threadq.c:53:  the_thread_queue->sync_state     = THREAD_BLOCKING_OPERATION_SYNCHRONIZED;
+threadq.c:61:      _Chain_Initialize_empty( &the_thread_queue->Queues.Priority[index] );
+threadq.c:63:    _Chain_Initialize_empty( &the_thread_queue->Queues.Fifo );
+threadyieldprocessor.c:5: *  COPYRIGHT (c) 1989-1999.
+threadyieldprocessor.c:6: *  On-Line Applications Research Corporation (OAR).
+threadyieldprocessor.c:61:  ready     = executing->ready;
+threadyieldprocessor.c:69:        _Thread_Heir = (Thread_Control *) ready->first;
+corerwlock.c:8: *  COPYRIGHT (c) 1989-2006.
+corerwlock.c:9: *  On-Line Applications Research Corporation (OAR).
+corerwlock.c:36: *    the_rwlock            - the rwlock control block to initialize
+corerwlock.c:37: *    the_rwlock_attributes - the attributes specified at create time
+corerwlock.c:48:  the_rwlock->Attributes                = *the_rwlock_attributes;
+corerwlock.c:50:  the_rwlock->number_of_waiting_threads = 0;
+corerwlock.c:52:  the_rwlock->number_of_readers = 0;
+corerwlock.c:53:  the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
+corerwlock.c:56:    &the_rwlock->Wait_queue,
+threadqextractfifo.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqextractfifo.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqextractfifo.c:36: *    the_thread_queue - pointer to a threadq header
+threadqextractfifo.c:37: *    the_thread       - pointer to the thread to block
+threadqextractfifo.c:54:  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+threadqextractfifo.c:59:  _Chain_Extract_unprotected( &the_thread->Object.Node );
+threadqextractfifo.c:61:  the_thread->Wait.queue = NULL;
+threadqextractfifo.c:63:  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+threadqextractfifo.c:66:    _Watchdog_Deactivate( &the_thread->Timer );
+threadqextractfifo.c:68:    (void) _Watchdog_Remove( &the_thread->Timer );
+threadqextractfifo.c:74:  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+objectshrinkinformation.c:5: *  COPYRIGHT (c) 1989-1999.
+objectshrinkinformation.c:6: *  On-Line Applications Research Corporation (OAR).
+objectshrinkinformation.c:40: *    information     - object information table
+objectshrinkinformation.c:41: *    the_block       - the block to remove
+objectshrinkinformation.c:61:  index_base = _Objects_Get_index( information->minimum_id );
+objectshrinkinformation.c:62:  block_count = (information->maximum - index_base) /
+objectshrinkinformation.c:63:                 information->allocation_size;
+objectshrinkinformation.c:66:    if ( information->inactive_per_block[ block ] ==
+objectshrinkinformation.c:67:         information->allocation_size ) {
+objectshrinkinformation.c:72:      the_object = (Objects_Control *) information->Inactive.first;
+objectshrinkinformation.c:75:         index = _Objects_Get_index( the_object->id );
+objectshrinkinformation.c:80:         the_object = (Objects_Control *) the_object->Node.next;
+objectshrinkinformation.c:82:             (index < (index_base + information->allocation_size))) {
+objectshrinkinformation.c:83:           _Chain_Extract( &extract_me->Node );
+objectshrinkinformation.c:91:      _Workspace_Free( information->object_blocks[ block ] );
+objectshrinkinformation.c:92:      information->object_blocks[ block ] = NULL;
+objectshrinkinformation.c:93:      information->inactive_per_block[ block ] = 0;
+objectshrinkinformation.c:95:      information->inactive -= information->allocation_size;
+objectshrinkinformation.c:100:    index_base += information->allocation_size;
+scheduleryield.c:5: *  COPYRIGHT (c) 1989-1999.
+scheduleryield.c:6: *  On-Line Applications Research Corporation (OAR).
+scheduleryield.c:62:  ready     = executing->ready;
+scheduleryield.c:70:        _Thread_Heir = (Thread_Control *) ready->first;
+threadclearstate.c:5: *  COPYRIGHT (c) 1989-1999.
+threadclearstate.c:6: *  On-Line Applications Research Corporation (OAR).
+threadclearstate.c:44: *    the_thread - pointer to thread control block
+threadclearstate.c:45: *    state      - state set to clear
+threadclearstate.c:64:    current_state = the_thread->current_state;
+threadclearstate.c:68:      the_thread->current_state = _States_Clear( state, current_state );
+threadqenqueue.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqenqueue.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqenqueue.c:36: *    the_thread_queue - pointer to threadq
+threadqenqueue.c:37: *    timeout          - interval to wait
+threadqenqueue.c:63:  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
+threadqenqueue.c:64:    the_thread = _Thread_MP_Allocate_proxy( the_thread_queue->state );
+threadqenqueue.c:70:  _Thread_Set_state( the_thread, the_thread_queue->state );
+threadqenqueue.c:77:       &the_thread->Timer,
+threadqenqueue.c:79:       the_thread->Object.id,
+threadqenqueue.c:83:    _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
+threadqenqueue.c:89:  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+threadreset.c:5: *  COPYRIGHT (c) 1989-1999.
+threadreset.c:6: *  On-Line Applications Research Corporation (OAR).
+threadreset.c:49:  the_thread->resource_count   = 0;
+threadreset.c:50:  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+threadreset.c:51:  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+threadreset.c:52:  the_thread->budget_callout   = the_thread->Start.budget_callout;
+threadreset.c:54:  the_thread->Start.pointer_argument = pointer_argument;
+threadreset.c:55:  the_thread->Start.numeric_argument = numeric_argument;
+threadreset.c:59:    if ( _Watchdog_Is_active( &the_thread->Timer ) )
+threadreset.c:60:      (void) _Watchdog_Remove( &the_thread->Timer );
+threadreset.c:63:  if ( _Priority_Get_value(the_thread->current_priority) != 
+threadreset.c:64:       _Priority_Get_value(the_thread->Start.initial_priority) ) {
+threadreset.c:65:    _Priority_Set(&the_thread->real_priority, 
+threadreset.c:66:        &the_thread->Start.initial_priority);
+threadreset.c:67:    _Thread_Set_priority( the_thread, the_thread->Start.initial_priority );
+readyqfirst.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqfirst.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqfirst.c:36: *    the_ready_queue - pointer to thread queue
+readyqfirst.c:39: *    returns - first thread or NULL
+readyqfirst.c:48:  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
+userextthreadswitch.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreadswitch.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreadswitch.c:37:        the_node = the_node->next ) {
+userextthreadswitch.c:41:    (*the_extension_switch->thread_switch)( executing, heir );
+threadinitialize.c:5: *  COPYRIGHT (c) 1989-2009.
+threadinitialize.c:6: *  On-Line Applications Research Corporation (OAR).
+threadinitialize.c:71:    the_thread->rtems_ada_self = NULL;
+threadinitialize.c:78:    the_thread->API_Extensions[i] = NULL;
+threadinitialize.c:81:  the_thread->libc_reent = NULL;
+threadinitialize.c:95:    stack = the_thread->Start.stack;
+threadinitialize.c:102:      stack = the_thread->Start.stack;
+threadinitialize.c:103:      the_thread->Start.core_allocated_stack = true;
+threadinitialize.c:107:      the_thread->Start.core_allocated_stack = false;
+threadinitialize.c:112:     &the_thread->Start.Initial_stack,
+threadinitialize.c:127:    the_thread->fp_context       = fp_area;
+threadinitialize.c:128:    the_thread->Start.fp_context = fp_area;
+threadinitialize.c:134:  _Watchdog_Initialize( &the_thread->Timer, NULL, 0, NULL );
+threadinitialize.c:138:    _Chain_Initialize_empty(&the_thread->lock_mutex);
+threadinitialize.c:151:  the_thread->extensions = (void **) extensions_area;
+threadinitialize.c:160:  if ( the_thread->extensions ) {
+threadinitialize.c:162:      the_thread->extensions[i] = NULL;
+threadinitialize.c:169:  the_thread->Start.is_preemptible   = is_preemptible;
+threadinitialize.c:170:  the_thread->Start.budget_algorithm = budget_algorithm;
+threadinitialize.c:171:  the_thread->Start.budget_callout   = budget_callout;
+threadinitialize.c:179:        the_thread->cpu_time_budget = _Thread_Ticks_per_timeslice;
+threadinitialize.c:188:  the_thread->Start.isr_level         = isr_level;
+threadinitialize.c:190:  the_thread->current_state           = STATES_DORMANT;
+threadinitialize.c:191:  the_thread->Wait.queue              = NULL;
+threadinitialize.c:192:  the_thread->resource_count          = 0;
+threadinitialize.c:193:  _Priority_Set(&the_thread->real_priority, &priority);
+threadinitialize.c:194:  _Priority_Set(&the_thread->Start.initial_priority, &priority);
+threadinitialize.c:201:    _Timestamp_Set_to_zero( &the_thread->cpu_time_used );
+threadinitialize.c:203:    the_thread->cpu_time_used = 0;
+threadinitialize.c:209:  _Objects_Open( information, &the_thread->Object, name );
+threadinitialize.c:223:  if ( the_thread->libc_reent )
+threadinitialize.c:224:    _Workspace_Free( the_thread->libc_reent );
+threadinitialize.c:227:    if ( the_thread->API_Extensions[i] )
+threadinitialize.c:228:      _Workspace_Free( the_thread->API_Extensions[i] );
+threadqdequeuepriority.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqdequeuepriority.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqdequeuepriority.c:36: *    the_thread_queue - pointer to thread queue
+threadqdequeuepriority.c:39: *    returns - thread dequeued or NULL
+threadqdequeuepriority.c:63:    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) ) {
+threadqdequeuepriority.c:65:                    the_thread_queue->Queues.Priority[ index ].first;
+threadqdequeuepriority.c:77:  the_thread->Wait.queue = NULL;
+threadqdequeuepriority.c:78:  new_first_node   = the_thread->Wait.Block2n.first;
+threadqdequeuepriority.c:80:  next_node        = the_thread->Object.Node.next;
+threadqdequeuepriority.c:81:  previous_node    = the_thread->Object.Node.previous;
+threadqdequeuepriority.c:83:  if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
+threadqdequeuepriority.c:84:    last_node       = the_thread->Wait.Block2n.last;
+threadqdequeuepriority.c:85:    new_second_node = new_first_node->next;
+threadqdequeuepriority.c:87:    previous_node->next      = new_first_node;
+threadqdequeuepriority.c:88:    next_node->previous      = new_first_node;
+threadqdequeuepriority.c:89:    new_first_node->next     = next_node;
+threadqdequeuepriority.c:90:    new_first_node->previous = previous_node;
+threadqdequeuepriority.c:92:    if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
+threadqdequeuepriority.c:93:                                                /* > two threads on 2-n */
+threadqdequeuepriority.c:94:      new_second_node->previous =
+threadqdequeuepriority.c:95:                _Chain_Head( &new_first_thread->Wait.Block2n );
+threadqdequeuepriority.c:97:      new_first_thread->Wait.Block2n.first = new_second_node;
+threadqdequeuepriority.c:98:      new_first_thread->Wait.Block2n.last  = last_node;
+threadqdequeuepriority.c:100:      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+threadqdequeuepriority.c:103:    previous_node->next = next_node;
+threadqdequeuepriority.c:104:    next_node->previous = previous_node;
+threadqdequeuepriority.c:107:  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+threadqdequeuepriority.c:111:    _Watchdog_Deactivate( &the_thread->Timer );
+threadqdequeuepriority.c:113:    (void) _Watchdog_Remove( &the_thread->Timer );
+threadqdequeuepriority.c:118:  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+heapsizeofuserarea.c:10: *  COPYRIGHT (c) 1989-1999.
+heapsizeofuserarea.c:11: *  On-Line Applications Research Corporation (OAR).
+heapsizeofuserarea.c:34:  uintptr_t const page_size = heap->page_size;
+heapsizeofuserarea.c:54:  *alloc_size = (uintptr_t) next_block + HEAP_BLOCK_SIZE_OFFSET - alloc_begin;
+threadresettimeslice.c:5: *  COPYRIGHT (c) 1989-1999.
+threadresettimeslice.c:6: *  On-Line Applications Research Corporation (OAR).
+threadresettimeslice.c:59:  ready     = executing->ready;
+threadresettimeslice.c:70:      _Thread_Heir = (Thread_Control *) ready->first;
+mpci.c:5: *  COPYRIGHT (c) 1989-2008.
+mpci.c:6: *  On-Line Applications Research Corporation (OAR).
+mpci.c:56:  users_mpci_table = _Configuration_MP_table->User_mpci_table;
+mpci.c:127:      _Configuration_MP_table->extra_mpci_receive_server_stack,
+mpci.c:156:  (*_MPCI_table->initialization)();
+mpci.c:188:  (*_MPCI_table->get_packet)( &the_packet );
+mpci.c:202:  the_packet->timeout = MPCI_DEFAULT_TIMEOUT;
+mpci.c:219:  (*_MPCI_table->return_packet)( the_packet );
+mpci.c:235:  the_packet->source_tid = _Thread_Executing->Object.id;
+mpci.c:236:  the_packet->to_convert =
+mpci.c:237:     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
+mpci.c:239:  (*_MPCI_table->send_packet)( destination, the_packet );
+mpci.c:256:  the_packet->source_tid      = _Thread_Executing->Object.id;
+mpci.c:257:  _Priority_Set(&the_packet->source_priority, 
+mpci.c:258:      &_Thread_Executing->current_priority);
+mpci.c:259:  the_packet->to_convert =
+mpci.c:260:     ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
+mpci.c:262:  _Thread_Executing->Wait.id = the_packet->id;
+mpci.c:264:  _Thread_Executing->Wait.queue = &_MPCI_Remote_blocked_threads;
+mpci.c:268:    (*_MPCI_table->send_packet)( destination, the_packet );
+mpci.c:276:    if (the_packet->timeout == MPCI_DEFAULT_TIMEOUT)
+mpci.c:277:        the_packet->timeout = _MPCI_table->default_timeout;
+mpci.c:279:    _Thread_queue_Enqueue( &_MPCI_Remote_blocked_threads, the_packet->timeout );
+mpci.c:281:    _Thread_Executing->current_state =
+mpci.c:282:      _States_Set( extra_state, _Thread_Executing->current_state );
+mpci.c:286:  return _Thread_Executing->Wait.return_code;
+mpci.c:302:  the_packet->source_tid = _Thread_Executing->Object.id;
+mpci.c:304:  (*_MPCI_table->send_packet)( destination, the_packet );
+mpci.c:319:  (*_MPCI_table->receive_packet)( &the_packet );
+mpci.c:339:  the_thread = _Thread_Get( the_packet->id, &location );
+mpci.c:349:      the_thread->Wait.return_code = the_packet->return_code;
+mpci.c:376:    executing->receive_packet = NULL;
+mpci.c:388:      executing->receive_packet = the_packet;
+mpci.c:390:      if ( !_Mp_packet_Is_valid_packet_class ( the_packet->the_class ) )
+mpci.c:393:      the_function = _MPCI_Packet_processors[ the_packet->the_class ];
+mpci.c:406:  return 0;   /* unreached - only to remove warnings */
+mpci.c:439:      the_packet->Prefix.the_class  = MP_PACKET_MPCI_INTERNAL;
+mpci.c:440:      the_packet->Prefix.length     = sizeof ( MPCI_Internal_packet );
+mpci.c:441:      the_packet->Prefix.to_convert = sizeof ( MPCI_Internal_packet );
+mpci.c:442:      the_packet->operation         = operation;
+mpci.c:444:      the_packet->maximum_nodes = _Objects_Maximum_nodes;
+mpci.c:446:      the_packet->maximum_global_objects = _Objects_MP_Maximum_global_objects;
+mpci.c:448:      _MPCI_Send_process_packet( MPCI_ALL_NODES, &the_packet->Prefix );
+mpci.c:488:  switch ( the_packet->operation ) {
+mpci.c:492:      maximum_nodes          = the_packet->maximum_nodes;
+mpci.c:493:      maximum_global_objects = the_packet->maximum_global_objects;
+userextthreadrestart.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreadrestart.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreadrestart.c:36:        the_node = the_node->next ) {
+userextthreadrestart.c:40:    if ( the_extension->Callouts.thread_restart != NULL )
+userextthreadrestart.c:41:      (*the_extension->Callouts.thread_restart)(
+userextthreadbegin.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreadbegin.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreadbegin.c:36:        the_node = the_node->next ) {
+userextthreadbegin.c:40:    if ( the_extension->Callouts.thread_begin != NULL )
+userextthreadbegin.c:41:      (*the_extension->Callouts.thread_begin)( executing );
+userextthreadbegin.c:54:        the_node = the_node->previous ) {
+userextthreadbegin.c:58:    if ( the_extension->Callouts.thread_exitted != NULL )
+userextthreadbegin.c:59:      (*the_extension->Callouts.thread_exitted)( executing );
+userextthreadbegin.c:74:        the_node = the_node->previous ) {
+userextthreadbegin.c:78:    if ( the_extension->Callouts.fatal != NULL )
+userextthreadbegin.c:79:      (*the_extension->Callouts.fatal)( the_source, is_internal, the_error );
+ts64settozero.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64settozero.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecisvalid.c:6: *  COPYRIGHT (c) 1989-2007.
+timespecisvalid.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecisvalid.c:33:  if ( time->tv_sec < 0 )
+timespecisvalid.c:36:  if ( time->tv_nsec < 0 )
+timespecisvalid.c:39:  if ( time->tv_nsec >= TOD_NANOSECONDS_PER_SECOND )
+pheapinit.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapinit.c:11: *  On-Line Applications Research Corporation (OAR).
+threadclose.c:5: *  COPYRIGHT (c) 1989-2008.
+threadclose.c:6: *  On-Line Applications Research Corporation (OAR).
+threadclose.c:55:  _Objects_Invalidate_Id( information, &the_thread->Object );
+threadclose.c:75:  _Objects_Close( information, &the_thread->Object );
+threadclose.c:84:    if ( _Watchdog_Is_active( &the_thread->Timer ) )
+threadclose.c:85:      (void) _Watchdog_Remove( &the_thread->Timer );
+threadclose.c:96:  the_thread->fp_context = NULL;
+threadclose.c:98:  if ( the_thread->Start.fp_context )
+threadclose.c:99:    (void) _Workspace_Free( the_thread->Start.fp_context );
+threadclose.c:107:  the_thread->Start.stack = NULL;
+threadclose.c:109:  if ( the_thread->extensions )
+threadclose.c:110:    (void) _Workspace_Free( the_thread->extensions );
+threadclose.c:111:  the_thread->extensions = NULL;
+ts64totimespec.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64totimespec.c:7: *  On-Line Applications Research Corporation (OAR).
+ts64totimespec.c:32:  _timespec->tv_sec = *_timestamp / 1000000000;
+ts64totimespec.c:33:  _timespec->tv_nsec = *_timestamp % 1000000000;
+coremutexsurrender.c:9: *  COPYRIGHT (c) 1989-2006.
+coremutexsurrender.c:10: *  On-Line Applications Research Corporation (OAR).
+coremutexsurrender.c:40: *    the_mutex            - the mutex to be flushed
+coremutexsurrender.c:41: *    id                   - id of parent mutex
+coremutexsurrender.c:42: *    api_mutex_mp_support - api dependent MP support actions
+coremutexsurrender.c:45: *    CORE_MUTEX_STATUS_SUCCESSFUL - if successful
+coremutexsurrender.c:46: *    core error code              - if unsuccessful
+coremutexsurrender.c:65:  holder    = the_mutex->holder;
+coremutexsurrender.c:75:  if ( the_mutex->Attributes.only_owner_release ) {
+coremutexsurrender.c:80:  /* XXX already unlocked -- not right status */
+coremutexsurrender.c:82:  if ( !the_mutex->nest_count )
+coremutexsurrender.c:85:  the_mutex->nest_count--;
+coremutexsurrender.c:87:  if ( the_mutex->nest_count != 0 ) {
+coremutexsurrender.c:94:      switch ( the_mutex->Attributes.lock_nesting_behavior ) {
+coremutexsurrender.c:114:  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+coremutexsurrender.c:115:       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ){
+coremutexsurrender.c:119:    if(holder->lock_mutex.first != &the_mutex->queue.lock_queue){
+coremutexsurrender.c:120:      the_mutex->nest_count++;
+coremutexsurrender.c:123:    first_node = _Chain_Get_first_unprotected(&holder->lock_mutex);
+coremutexsurrender.c:125:    holder->resource_count--;
+coremutexsurrender.c:127:  the_mutex->holder    = NULL;
+coremutexsurrender.c:128:  the_mutex->holder_id = 0;
+coremutexsurrender.c:135:  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ||
+coremutexsurrender.c:136:       _CORE_mutex_Is_priority_ceiling( &the_mutex->Attributes ) ) {
+coremutexsurrender.c:138:    if(_Priority_Get_value(the_mutex->queue.priority_before) != 
+coremutexsurrender.c:139:        _Priority_Get_value(holder->current_priority))
+coremutexsurrender.c:140:      _Thread_Change_priority(holder,the_mutex->queue.priority_before,true);
+coremutexsurrender.c:142:    if ( holder->resource_count == 0 &&
+coremutexsurrender.c:143:         _Priority_Get_value(holder->real_priority) != 
+coremutexsurrender.c:144:          _Priority_Get_value(holder->current_priority) ) {
+coremutexsurrender.c:145:      _Thread_Change_priority( holder, holder->real_priority, true );
+coremutexsurrender.c:153:  if ( ( the_thread = _Thread_queue_Dequeue( &the_mutex->Wait_queue ) ) ) {
+coremutexsurrender.c:156:    if ( !_Objects_Is_local_id( the_thread->Object.id ) ) {
+coremutexsurrender.c:158:      the_mutex->holder     = NULL;
+coremutexsurrender.c:159:      the_mutex->holder_id  = the_thread->Object.id;
+coremutexsurrender.c:160:      the_mutex->nest_count = 1;
+coremutexsurrender.c:168:      the_mutex->holder     = the_thread;
+coremutexsurrender.c:169:      the_mutex->holder_id  = the_thread->Object.id;
+coremutexsurrender.c:170:      the_mutex->nest_count = 1;
+coremutexsurrender.c:172:      switch ( the_mutex->Attributes.discipline ) {
+coremutexsurrender.c:178:	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
+coremutexsurrender.c:179:	  _Priority_Set(&the_mutex->queue.priority_before, 
+coremutexsurrender.c:180:        &the_thread->current_priority);
+coremutexsurrender.c:182:          the_thread->resource_count++;
+coremutexsurrender.c:186:	  _Chain_Prepend_unprotected(&the_thread->lock_mutex,&the_mutex->queue.lock_queue);
+coremutexsurrender.c:187:	  _Priority_Set(&the_mutex->queue.priority_before,
+coremutexsurrender.c:188:        &the_thread->current_priority);
+coremutexsurrender.c:190:          the_thread->resource_count++;
+coremutexsurrender.c:191:          if (_Priority_Get_value(the_mutex->Attributes.priority_ceiling) <
+coremutexsurrender.c:192:              _Priority_Get_value(the_thread->current_priority)){
+coremutexsurrender.c:195:                the_mutex->Attributes.priority_ceiling,
+coremutexsurrender.c:203:    the_mutex->lock = CORE_MUTEX_UNLOCKED;
+heapgetfreeinfo.c:10: *  COPYRIGHT (c) 1989-2004.
+heapgetfreeinfo.c:11: *  On-Line Applications Research Corporation (OAR).
+heapgetfreeinfo.c:36:  info->number = 0;
+heapgetfreeinfo.c:37:  info->largest = 0;
+heapgetfreeinfo.c:38:  info->total = 0;
+heapgetfreeinfo.c:42:      the_block = the_block->next)
+heapgetfreeinfo.c:49:    info->number++;
+heapgetfreeinfo.c:50:    info->total += the_size;
+heapgetfreeinfo.c:51:    if ( info->largest < the_size )
+heapgetfreeinfo.c:52:        info->largest = the_size;
+ts64dividebyinteger.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64dividebyinteger.c:7: *  On-Line Applications Research Corporation (OAR).
+ts64equalto.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64equalto.c:7: *  On-Line Applications Research Corporation (OAR).
+ts64lessthan.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64lessthan.c:7: *  On-Line Applications Research Corporation (OAR).
+coretod.c:5:/*  COPYRIGHT (c) 1989-2008.
+coretod.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqextractpriority.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqextractpriority.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqextractpriority.c:36: *    the_thread_queue - pointer to a threadq header
+threadqextractpriority.c:37: *    the_thread       - pointer to a thread control block
+threadqextractpriority.c:38: *    requeuing        - true if requeuing and should not alter timeout or state
+threadqextractpriority.c:63:  if ( !_States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+threadqextractpriority.c:72:  next_node     = the_node->next;
+threadqextractpriority.c:73:  previous_node = the_node->previous;
+threadqextractpriority.c:75:  if ( !_Chain_Is_empty( &the_thread->Wait.Block2n ) ) {
+threadqextractpriority.c:76:    new_first_node   = the_thread->Wait.Block2n.first;
+threadqextractpriority.c:78:    last_node        = the_thread->Wait.Block2n.last;
+threadqextractpriority.c:79:    new_second_node  = new_first_node->next;
+threadqextractpriority.c:81:    previous_node->next      = new_first_node;
+threadqextractpriority.c:82:    next_node->previous      = new_first_node;
+threadqextractpriority.c:83:    new_first_node->next     = next_node;
+threadqextractpriority.c:84:    new_first_node->previous = previous_node;
+threadqextractpriority.c:86:    if ( !_Chain_Has_only_one_node( &the_thread->Wait.Block2n ) ) {
+threadqextractpriority.c:87:                                        /* > two threads on 2-n */
+threadqextractpriority.c:88:      new_second_node->previous =
+threadqextractpriority.c:89:                _Chain_Head( &new_first_thread->Wait.Block2n );
+threadqextractpriority.c:90:      new_first_thread->Wait.Block2n.first = new_second_node;
+threadqextractpriority.c:92:      new_first_thread->Wait.Block2n.last = last_node;
+threadqextractpriority.c:93:      last_node->next = _Chain_Tail( &new_first_thread->Wait.Block2n );
+threadqextractpriority.c:96:    previous_node->next = next_node;
+threadqextractpriority.c:97:    next_node->previous = previous_node;
+threadqextractpriority.c:109:  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+threadqextractpriority.c:112:    _Watchdog_Deactivate( &the_thread->Timer );
+threadqextractpriority.c:114:    (void) _Watchdog_Remove( &the_thread->Timer );
+threadqextractpriority.c:119:  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+readyqflush.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqflush.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqflush.c:37: *    the_ready_queue       - pointer to readyq to be flushed
+readyqflush.c:38: *    remote_extract_callout - pointer to routine which extracts a remote thread
+readyqflush.c:39: *    status                 - status to return to the thread
+readyqflush.c:58:    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+readyqflush.c:62:      the_thread->Wait.return_code = status;
+readyqenqueuefirst.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqenqueuefirst.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqenqueuefirst.c:37: *    the_ready_queue - pointer to readyq
+readyqenqueuefirst.c:52:  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
+readyqenqueuefirst.c:53:    the_thread = _Thread_MP_Allocate_proxy( the_ready_queue->state );
+readyqenqueuefirst.c:60:  _Thread_Set_state( the_thread, the_ready_queue->state );
+readyqenqueuefirst.c:70:       &the_thread->Timer,
+readyqenqueuefirst.c:72:       the_thread->Object.id,
+readyqenqueuefirst.c:76:    _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
+readyqenqueuefirst.c:83:  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
+threadqfirstpriority.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqfirstpriority.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqfirstpriority.c:36: *    the_thread_queue - pointer to thread queue
+threadqfirstpriority.c:39: *    returns - first thread or NULL
+threadqfirstpriority.c:51:    if ( !_Chain_Is_empty( &the_thread_queue->Queues.Priority[ index ] ) )
+threadqfirstpriority.c:53:        the_thread_queue->Queues.Priority[ index ].first;
+objectclose.c:2: *  COPYRIGHT (c) 1989-2008.
+objectclose.c:3: *  On-Line Applications Research Corporation (OAR).
+threadevaluatemode.c:5: *  COPYRIGHT (c) 1989-1999.
+threadevaluatemode.c:6: *  On-Line Applications Research Corporation (OAR).
+threadevaluatemode.c:46:  if ( !_States_Is_ready( executing->current_state ) ||
+threadevaluatemode.c:47:       ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) ) {
+coresem.c:10: *  COPYRIGHT (c) 1989-1999.
+coresem.c:11: *  On-Line Applications Research Corporation (OAR).
+coresem.c:39: *    the_semaphore            - the semaphore control block to initialize
+coresem.c:40: *    the_semaphore_attributes - the attributes specified at create time
+coresem.c:41: *    initial_value            - semaphore's initial value
+coresem.c:53:  the_semaphore->Attributes = *the_semaphore_attributes;
+coresem.c:54:  the_semaphore->count      = initial_value;
+coresem.c:57:    &the_semaphore->Wait_queue,
+coremutexseizeintr.c:2: *  Mutex Handler -- Seize interrupt disable version
+coremutexseizeintr.c:4: *  COPYRIGHT (c) 1989-2007.
+coremutexseizeintr.c:5: *  On-Line Applications Research Corporation (OAR).
+threadloadenv.c:5: *  COPYRIGHT (c) 1989-1999.
+threadloadenv.c:6: *  On-Line Applications Research Corporation (OAR).
+threadloadenv.c:41: *    the_thread - thread control block pointer
+threadloadenv.c:53:  if ( the_thread->Start.fp_context ) {
+threadloadenv.c:54:    the_thread->fp_context = the_thread->Start.fp_context;
+threadloadenv.c:55:    _Context_Initialize_fp( &the_thread->fp_context );
+threadloadenv.c:62:  the_thread->do_post_task_switch_extension = false;
+threadloadenv.c:63:  the_thread->is_preemptible   = the_thread->Start.is_preemptible;
+threadloadenv.c:64:  the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
+threadloadenv.c:65:  the_thread->budget_callout   = the_thread->Start.budget_callout;
+threadloadenv.c:68:    &the_thread->Registers,
+threadloadenv.c:69:    the_thread->Start.Initial_stack.area,
+threadloadenv.c:70:    the_thread->Start.Initial_stack.size,
+threadloadenv.c:71:    the_thread->Start.isr_level,
+objectnamespaceremove.c:2: *  COPYRIGHT (c) 1989-2008.
+objectnamespaceremove.c:3: *  On-Line Applications Research Corporation (OAR).
+objectnamespaceremove.c:29:    if ( information->is_string && the_object->name.name_p )
+objectnamespaceremove.c:30:       _Workspace_Free( (void *)the_object->name.name_p );
+objectnamespaceremove.c:37:    the_object->name.name_p   = NULL;
+objectnamespaceremove.c:39:  the_object->name.name_u32 = 0;
+objectgetinfoid.c:2: *  COPYRIGHT (c) 1989-2008.
+objectgetinfoid.c:3: *  On-Line Applications Research Corporation (OAR).
+corebarrierwait.c:8: *  COPYRIGHT (c) 1989-2006.
+corebarrierwait.c:9: *  On-Line Applications Research Corporation (OAR).
+corebarrierwait.c:34: *    the_barrier - pointer to barrier control block
+corebarrierwait.c:35: *    id          - id of object to wait on
+corebarrierwait.c:36: *    wait        - true if wait is allowed, false otherwise
+corebarrierwait.c:37: *    timeout     - number of ticks to wait (0 means forever)
+corebarrierwait.c:38: *    api_barrier_mp_support - api dependent MP support actions
+corebarrierwait.c:59:  executing->Wait.return_code = CORE_BARRIER_STATUS_SUCCESSFUL;
+corebarrierwait.c:61:  the_barrier->number_of_waiting_threads++;
+corebarrierwait.c:62:  if ( _CORE_barrier_Is_automatic( &the_barrier->Attributes ) ) {
+corebarrierwait.c:63:    if ( the_barrier->number_of_waiting_threads ==
+corebarrierwait.c:64:	 the_barrier->Attributes.maximum_count) {
+corebarrierwait.c:65:      executing->Wait.return_code = CORE_BARRIER_STATUS_AUTOMATICALLY_RELEASED;
+corebarrierwait.c:72:  _Thread_queue_Enter_critical_section( &the_barrier->Wait_queue );
+corebarrierwait.c:73:  executing->Wait.queue          = &the_barrier->Wait_queue;
+corebarrierwait.c:74:  executing->Wait.id             = id;
+corebarrierwait.c:77:  _Thread_queue_Enqueue( &the_barrier->Wait_queue, timeout );
+threadqdequeuefifo.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqdequeuefifo.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqdequeuefifo.c:35: *    the_thread_queue - pointer to threadq
+threadqdequeuefifo.c:38: *    returns - thread dequeued or NULL
+threadqdequeuefifo.c:53:  if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) ) {
+threadqdequeuefifo.c:56:       _Chain_Get_first_unprotected( &the_thread_queue->Queues.Fifo );
+threadqdequeuefifo.c:58:    the_thread->Wait.queue = NULL;
+threadqdequeuefifo.c:59:    if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
+threadqdequeuefifo.c:63:      _Watchdog_Deactivate( &the_thread->Timer );
+threadqdequeuefifo.c:65:      (void) _Watchdog_Remove( &the_thread->Timer );
+threadqdequeuefifo.c:70:    if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+objectfree.c:5: *  COPYRIGHT (c) 1989-1999.
+objectfree.c:6: *  On-Line Applications Research Corporation (OAR).
+objectfree.c:46:  uint32_t    allocation_size = information->allocation_size;
+objectfree.c:48:  _Chain_Append( &information->Inactive, &the_object->Node );
+objectfree.c:50:  if ( information->auto_extend ) {
+objectfree.c:53:    block = (uint32_t) (_Objects_Get_index( the_object->id ) -
+objectfree.c:54:                        _Objects_Get_index( information->minimum_id ));
+objectfree.c:55:    block /= information->allocation_size;
+objectfree.c:57:    information->inactive_per_block[ block ]++;
+objectfree.c:58:    information->inactive++;
+objectfree.c:65:    if ( information->inactive > ( allocation_size + ( allocation_size >> 1 ) ) ) {
+readyqenqueue.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqenqueue.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqenqueue.c:35: *    the_ready_queue - pointer to readyq
+readyqenqueue.c:50:  if ( _Thread_MP_Is_receive( the_thread ) && the_thread->receive_packet )
+readyqenqueue.c:51:    the_thread = _Thread_MP_Allocate_proxy( the_ready_queue->state );
+readyqenqueue.c:58:  _Thread_Set_state( the_thread, the_ready_queue->state );
+readyqenqueue.c:68:       &the_thread->Timer,
+readyqenqueue.c:70:       the_thread->Object.id,
+readyqenqueue.c:74:    _Watchdog_Insert_ticks( &the_thread->Timer, timeout );
+readyqenqueue.c:81:  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
+ts64subtract.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64subtract.c:7: *  On-Line Applications Research Corporation (OAR).
+ts64subtract.c:33:  *_result = *_end - *_start;
+timespectoticks.c:6: *  COPYRIGHT (c) 1989-2007.
+timespectoticks.c:7: *  On-Line Applications Research Corporation (OAR).
+timespectoticks.c:39:  if ( (time->tv_sec == 0) && (time->tv_nsec == 0) )
+timespectoticks.c:42:  ticks  = time->tv_sec * TOD_TICKS_PER_SECOND;
+timespectoticks.c:44:  ticks += time->tv_nsec / rtems_configuration_get_nanoseconds_per_tick();
+coresemseize.c:10: *  COPYRIGHT (c) 1989-2008.
+coresemseize.c:11: *  On-Line Applications Research Corporation (OAR).
+coresemseize.c:36: *    the_semaphore - pointer to semaphore control block
+coresemseize.c:37: *    id            - id of object to wait on
+coresemseize.c:38: *    wait          - true if wait is allowed, false otherwise
+coresemseize.c:39: *    timeout       - number of ticks to wait (0 means forever)
+coresemseize.c:59:  executing->Wait.return_code = CORE_SEMAPHORE_STATUS_SUCCESSFUL;
+coresemseize.c:61:  if ( the_semaphore->count != 0 ) {
+coresemseize.c:62:    the_semaphore->count -= 1;
+coresemseize.c:74:    executing->Wait.return_code = CORE_SEMAPHORE_STATUS_UNSATISFIED_NOWAIT;
+coresemseize.c:82:  _Thread_queue_Enter_critical_section( &the_semaphore->Wait_queue );
+coresemseize.c:83:  executing->Wait.queue = &the_semaphore->Wait_queue;
+coresemseize.c:84:  executing->Wait.id    = id;
+coresemseize.c:86:  _Thread_queue_Enqueue( &the_semaphore->Wait_queue, timeout );
+timespecgreaterthan.c:6: *  COPYRIGHT (c) 1989-2007.
+timespecgreaterthan.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecgreaterthan.c:31:  if ( lhs->tv_sec > rhs->tv_sec )
+timespecgreaterthan.c:34:  if ( lhs->tv_sec < rhs->tv_sec )
+timespecgreaterthan.c:37:  /* ASSERT: lhs->tv_sec == rhs->tv_sec */
+timespecgreaterthan.c:38:  if ( lhs->tv_nsec > rhs->tv_nsec )
+coretodusectoticks.c:1:/*  COPYRIGHT (c) 1989-2008.
+coretodusectoticks.c:2: *  On-Line Applications Research Corporation (OAR).
+corebarrier.c:8: *  COPYRIGHT (c) 1989-2006.
+corebarrier.c:9: *  On-Line Applications Research Corporation (OAR).
+corebarrier.c:36: *    the_barrier            - the barrier control block to initialize
+corebarrier.c:37: *    the_barrier_attributes - the attributes specified at create time
+corebarrier.c:48:  the_barrier->Attributes                = *the_barrier_attributes;
+corebarrier.c:49:  the_barrier->number_of_waiting_threads = 0;
+corebarrier.c:52:    &the_barrier->Wait_queue,
+heapextend.c:10: *  COPYRIGHT (c) 1989-1999.
+heapextend.c:11: *  On-Line Applications Research Corporation (OAR).
+heapextend.c:32:  Heap_Statistics *const stats = &heap->stats;
+heapextend.c:35:  ++stats->used_blocks;
+heapextend.c:36:  --stats->frees;
+heapextend.c:47:  uintptr_t const page_size = heap->page_size;
+heapextend.c:51:    new_first_block_alloc_begin - HEAP_BLOCK_HEADER_SIZE;
+heapextend.c:54:    first_block_begin - new_first_block_begin;
+heapextend.c:57:  new_first_block->prev_size = first_block->prev_size;
+heapextend.c:58:  new_first_block->size_and_flag = new_first_block_size | HEAP_PREV_BLOCK_USED;
+heapextend.c:69:  uintptr_t const page_size = heap->page_size;
+heapextend.c:72:    extend_area_end - last_block_begin - HEAP_BLOCK_HEADER_SIZE,
+heapextend.c:78:  new_last_block->size_and_flag =
+heapextend.c:79:    (last_block->size_and_flag - last_block_new_size)
+heapextend.c:95:  last_block->size_and_flag =
+heapextend.c:96:    (link_begin - last_block_begin) | HEAP_PREV_BLOCK_USED;
+heapextend.c:108:  _Heap_Block_set_size( link, first_block_begin - link_begin );
+heapextend.c:110:  last_block->size_and_flag |= HEAP_PREV_BLOCK_USED;
+heapextend.c:120:  Heap_Statistics *const stats = &heap->stats;
+heapextend.c:121:  Heap_Block *const first_block = heap->first_block;
+heapextend.c:129:  uintptr_t const page_size = heap->page_size;
+heapextend.c:130:  uintptr_t const min_block_size = heap->min_block_size;
+heapextend.c:133:  uintptr_t const free_size = stats->free_size;
+heapextend.c:157:      (uintptr_t) start_block : heap->area_begin;
+heapextend.c:158:    uintptr_t const sub_area_end = start_block->prev_size;
+heapextend.c:175:      start_block->prev_size = extend_area_end;
+heapextend.c:185:  if ( extend_area_begin < heap->area_begin ) {
+heapextend.c:186:    heap->area_begin = extend_area_begin;
+heapextend.c:187:  } else if ( heap->area_end < extend_area_end ) {
+heapextend.c:188:    heap->area_end = extend_area_end;
+heapextend.c:192:    (uintptr_t) extend_last_block - (uintptr_t) extend_first_block;
+heapextend.c:194:  extend_first_block->prev_size = extend_area_end;
+heapextend.c:195:  extend_first_block->size_and_flag =
+heapextend.c:198:  extend_last_block->prev_size = extend_first_block_size;
+heapextend.c:199:  extend_last_block->size_and_flag = 0;
+heapextend.c:201:  if ( (uintptr_t) extend_first_block < (uintptr_t) heap->first_block ) {
+heapextend.c:202:    heap->first_block = extend_first_block;
+heapextend.c:203:  } else if ( (uintptr_t) extend_last_block > (uintptr_t) heap->last_block ) {
+heapextend.c:204:    heap->last_block = extend_last_block;
+heapextend.c:232:  extended_size = stats->free_size - free_size;
+heapextend.c:235:  stats->size += extended_size;
+objectget.c:5: *  COPYRIGHT (c) 1989-1999.
+objectget.c:6: *  On-Line Applications Research Corporation (OAR).
+objectget.c:39: *   information - pointer to entry in table for this class
+objectget.c:40: *   id          - object id to search for
+objectget.c:41: *   location    - address of where to store the location
+objectget.c:44: *   returns  - address of object if local
+objectget.c:45: *   location - one of the following:
+objectget.c:46: *                  OBJECTS_ERROR  - invalid object ID
+objectget.c:47: *                  OBJECTS_REMOTE - remote object
+objectget.c:48: *                  OBJECTS_LOCAL  - local object
+objectget.c:73:  index = id - information->minimum_id + 1;
+objectget.c:79:  if ( index <= information->maximum ) {
+objectget.c:81:    if ( (the_object = information->local_table[ index ]) != NULL ) {
+threadqfirstfifo.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqfirstfifo.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqfirstfifo.c:36: *    the_thread_queue - pointer to threadq
+threadqfirstfifo.c:39: *    returns - first thread or NULL
+threadqfirstfifo.c:46:  if ( !_Chain_Is_empty( &the_thread_queue->Queues.Fifo ) )
+threadqfirstfifo.c:47:    return (Thread_Control *) the_thread_queue->Queues.Fifo.first;
+chaininsert.c:2: *  COPYRIGHT (c) 1989-2007.
+chaininsert.c:3: *  On-Line Applications Research Corporation (OAR).
+chaininsert.c:28: *    after_node - pointer to node in chain to be inserted after
+chaininsert.c:29: *    node       - pointer to node to be inserted
+apimutexallocate.c:2: *  COPYRIGHT (c) 1989-2007.
+apimutexallocate.c:3: *  On-Line Applications Research Corporation (OAR).
+apimutexallocate.c:34:  _CORE_mutex_Initialize( &mutex->Mutex, &attr, CORE_MUTEX_UNLOCKED );
+apimutexallocate.c:36:  _Objects_Open_u32( &_API_Mutex_Information, &mutex->Object, 1 );
+scheduler.c:5: *  COPYRIGHT (c) 1989-2008.
+scheduler.c:6: *  On-Line Applications Research Corporation (OAR).
+threadstackfree.c:5: *  COPYRIGHT (c) 1989-2008.
+threadstackfree.c:6: *  On-Line Applications Research Corporation (OAR).
+threadstackfree.c:48:    if ( !the_thread->Start.core_allocated_stack )
+threadstackfree.c:59:    (*Configuration.stack_free_hook)( the_thread->Start.Initial_stack.area );
+threadstackfree.c:61:    _Workspace_Free( the_thread->Start.Initial_stack.area );
+threadstartmultitasking.c:5: *  COPYRIGHT (c) 1989-2006.
+threadstartmultitasking.c:6: *  On-Line Applications Research Corporation (OAR).
+threadstartmultitasking.c:41: *    system_thread - pointer to system initialization thread control block
+threadstartmultitasking.c:42: *    idle_thread   - pointer to idle thread control block
+threadstartmultitasking.c:86:   if ( _Thread_Heir->fp_context != NULL )
+threadstartmultitasking.c:87:     _Context_Restore_fp( &_Thread_Heir->fp_context );
+threadstartmultitasking.c:90:  _Context_Switch( &_Thread_BSP_context, &_Thread_Heir->Registers );
+heapresizeblock.c:10: *  COPYRIGHT (c) 1989-1999.
+heapresizeblock.c:11: *  On-Line Applications Research Corporation (OAR).
+heapresizeblock.c:39:  Heap_Statistics *const stats = &heap->stats;
+heapresizeblock.c:45:  uintptr_t alloc_size = block_end - alloc_begin + HEAP_BLOCK_SIZE_OFFSET;
+heapresizeblock.c:71:    next_block->size_and_flag |= HEAP_PREV_BLOCK_USED;
+heapresizeblock.c:74:    --stats->free_blocks;
+heapresizeblock.c:75:    stats->free_size -= next_block_size;
+heapresizeblock.c:82:  *new_size = (uintptr_t) next_block - alloc_begin + HEAP_BLOCK_SIZE_OFFSET;
+heapresizeblock.c:85:  ++stats->resizes;
+heapresizeblock.c:98:  uintptr_t const page_size = heap->page_size;
+threadrotatequeue.c:5: *  COPYRIGHT (c) 1989-1999.
+threadrotatequeue.c:6: *  On-Line Applications Research Corporation (OAR).
+threadrotatequeue.c:68:  if ( ready == executing->ready ) {
+threadrotatequeue.c:86:  if ( _Thread_Heir->ready == ready )
+threadrotatequeue.c:87:    _Thread_Heir = (Thread_Control *) ready->first;
+watchdogreport.c:7:/*  COPYRIGHT (c) 1989-2008.
+watchdogreport.c:8: *  On-Line Applications Research Corporation (OAR).
+watchdogreport.c:34:    watch->delta_interval,
+watchdogreport.c:35:    watch->initial,
+watchdogreport.c:37:    watch->routine,
+watchdogreport.c:38:    watch->id,
+watchdogreport.c:39:    watch->user_data
+wkspace.c:4: *  COPYRIGHT (c) 1989-2009.
+wkspace.c:5: *  On-Line Applications Research Corporation (OAR).
+wkspace.c:69:      "Workspace_Allocate(%d) from %p/%p -> %p\n",
+wkspace.c:109:      "Workspace_Allocate_or_fatal_error(%d) from %p/%p -> %p\n",
+threadrestart.c:5: *  COPYRIGHT (c) 1989-1999.
+threadrestart.c:6: *  On-Line Applications Research Corporation (OAR).
+threadrestart.c:49:  if ( !_States_Is_dormant( the_thread->current_state ) ) {
+userextthreadstart.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreadstart.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreadstart.c:36:        the_node = the_node->next ) {
+userextthreadstart.c:40:    if ( the_extension->Callouts.thread_start != NULL )
+userextthreadstart.c:41:      (*the_extension->Callouts.thread_start)(
+objectgetisr.c:5: *  COPYRIGHT (c) 1989-1999.
+objectgetisr.c:6: *  On-Line Applications Research Corporation (OAR).
+objectgetisr.c:39: *   information - pointer to entry in table for this class
+objectgetisr.c:40: *   id          - object id to search for
+objectgetisr.c:41: *   location    - address of where to store the location
+objectgetisr.c:42: *   level       - pointer to previous interrupt level
+objectgetisr.c:45: *   returns  - address of object if local
+objectgetisr.c:46: *   location - one of the following:
+objectgetisr.c:47: *                  OBJECTS_ERROR  - invalid object ID
+objectgetisr.c:48: *                  OBJECTS_REMOTE - remote object
+objectgetisr.c:49: *                  OBJECTS_LOCAL  - local object
+objectgetisr.c:50: *  *level    - previous interrupt level
+objectgetisr.c:64:  index = id - information->minimum_id + 1;
+objectgetisr.c:67:  if ( information->maximum >= index ) {
+objectgetisr.c:68:    if ( (the_object = information->local_table[ index ]) != NULL ) {
+apimutex.c:2: *  COPYRIGHT (c) 1989-2007.
+apimutex.c:3: *  On-Line Applications Research Corporation (OAR).
+coremsgflushwait.c:10: *  COPYRIGHT (c) 1989-1999.
+coremsgflushwait.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgflushwait.c:42:   *    the_message_queue - the message_queue to be flushed
+coremsgflushwait.c:45:   *    returns - the number of messages flushed from the queue
+coremsgflushwait.c:67:      &the_message_queue->Wait_queue,
+threadmp.c:5: *  COPYRIGHT (c) 1989-2006.
+threadmp.c:6: *  On-Line Applications Research Corporation (OAR).
+threadmp.c:75:    _Thread_Executing->Wait.return_code = THREAD_STATUS_PROXY_BLOCKING;
+threadmp.c:77:    the_proxy->receive_packet = _MPCI_Receive_server_tcb->receive_packet;
+threadmp.c:79:    the_proxy->Object.id = _MPCI_Receive_server_tcb->receive_packet->source_tid;
+threadmp.c:81:    _Priority_Set(&the_proxy->current_priority, 
+threadmp.c:82:        &_MPCI_Receive_server_tcb->receive_packet->source_priority);
+threadmp.c:84:    the_proxy->current_state = _States_Set( STATES_DORMANT, the_state );
+threadmp.c:86:    the_proxy->Wait = _Thread_Executing->Wait;
+threadmp.c:88:    _Chain_Append( &_Thread_MP_Active_proxies, &the_proxy->Active );
+threadmp.c:120:     ((uint32_t)&(((Thread_Proxy_control *)0))->Active)
+threadmp.c:144:      if ( _Objects_Are_ids_equal( the_thread->Object.id, the_id ) ) {
+threadmp.c:151:      proxy_node = proxy_node->next;
+threadmp.c:160:      if ( _States_Is_only_dormant( the_thread->current_state ) ) {
+ts64greaterthan.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64greaterthan.c:7: *  On-Line Applications Research Corporation (OAR).
+threaddelayended.c:5: *  COPYRIGHT (c) 1989-2007.
+threaddelayended.c:6: *  On-Line Applications Research Corporation (OAR).
+threaddelayended.c:41: *    id - thread id
+coretodset.c:2: *  Time of Day (TOD) Handler -- Set Time
+coretodset.c:5:/*  COPYRIGHT (c) 1989-2007.
+coretodset.c:6: *  On-Line Applications Research Corporation (OAR).
+coretodset.c:34: *    time                - pointer to the time and date structure
+coretodset.c:50:  if ( time->tv_sec < seconds )
+coretodset.c:51:    _Watchdog_Adjust_seconds( WATCHDOG_BACKWARD, seconds - time->tv_sec );
+coretodset.c:53:    _Watchdog_Adjust_seconds( WATCHDOG_FORWARD, time->tv_sec - seconds );
+coretodset.c:56:  _Timestamp_Set( &_TOD_Now, time->tv_sec, time->tv_nsec );
+readyq.c:5: *  COPYRIGHT (c) 1989-2008.
+readyq.c:6: *  On-Line Applications Research Corporation (OAR).
+readyq.c:35: *    the_ready_queue      - pointer to a readyq header
+readyq.c:36: *    discipline            - queueing discipline
+readyq.c:46:  the_ready_queue->discipline     = the_discipline;
+readyq.c:53:        _Chain_Initialize_empty( &the_ready_queue->Queues.Priority[index] );
+readyq.c:57:      _Chain_Initialize_empty( &the_ready_queue->Queues.Fifo );
+objectidtoname.c:5: *  COPYRIGHT (c) 1989-2003.
+objectidtoname.c:6: *  On-Line Applications Research Corporation (OAR).
+objectidtoname.c:32: *  id   - id of object to lookup name
+objectidtoname.c:33: *  name - pointer to location in which to store name
+objectidtoname.c:52:  tmpId = (id == OBJECTS_ID_OF_SELF) ? _Thread_Executing->Object.id : id;
+objectidtoname.c:68:    if ( information->is_string )
+objectidtoname.c:76:  *name = the_object->name;
+coretodtickspersec.c:1:/*  COPYRIGHT (c) 1989-2008.
+coretodtickspersec.c:2: *  On-Line Applications Research Corporation (OAR).
+heap.c:10: *  COPYRIGHT (c) 1989-2009.
+heap.c:11: *  On-Line Applications Research Corporation (OAR).
+heap.c:42: *    heap         - pointer to heap header
+heap.c:43: *    area_begin - starting address of heap
+heap.c:44: *    size             - size of heap
+heap.c:45: *    page_size        - allocatable unit of memory
+heap.c:48: *    returns - maximum memory available if RTEMS_SUCCESSFUL
+heap.c:49: *    0       - otherwise
+heap.c:54: *            +--------------------------------+ <- begin = area_begin
+heap.c:57: *         0  +--------------------------------+ <- first block
+heap.c:59: *         4  +--------------------------------+
+heap.c:61: *         8  +---------------------+----------+ <- aligned on page_size
+heap.c:63: *        12  +---------------------+          |
+heap.c:65: *            +---------------------+          |
+heap.c:70: *     size0  +--------------------------------+ <- last dummy block
+heap.c:72: *        +4  +--------------------------------+
+heap.c:73: *            |  size = page_size          | 0 | <- prev block is free
+heap.c:74: *        +8  +--------------------------------+ <- aligned on page_size
+heap.c:77: *            +--------------------------------+ <- end = begin + size
+heap.c:87: *            +--------------------------------+ <- begin = area_begin
+heap.c:90: *         0  +--------------------------------+ <- used block
+heap.c:92: *         4  +--------------------------------+
+heap.c:93: *            |  size = BSIZE              | 1 | <- prev block is used
+heap.c:94: *         8  +--------------------------------+ <- aligned on page_size
+heap.c:98: * 8 +        |         user-accessible        | [8,8+page_size) for
+heap.c:99: *  page_size +- - -                      - - -+ _Heap_Allocate_aligned()
+heap.c:102: *     BSIZE  +- - - - -     .        - - - - -+ <- free block
+heap.c:104: * BSIZE  +4  +--------------------------------+
+heap.c:105: *            |  size = S = size0 - BSIZE  | 1 | <- prev block is used
+heap.c:106: * BSIZE  +8  +-------------------+------------+ <- aligned on page_size
+heap.c:108: * BSIZE +12  +-------------------+            |
+heap.c:110: *            +-------------------+            |
+heap.c:115: * BSIZE +S+0 +-------------------+ allocation + <- last dummy block
+heap.c:117: *       +S+4 +-------------------+------------+
+heap.c:118: *            |  size = page_size          | 0 | <- prev block is free
+heap.c:119: *       +S+8 +--------------------------------+ <- aligned on page_size
+heap.c:122: *            +--------------------------------+ <- end = begin + size
+heap.c:139:    alloc_area_begin - HEAP_BLOCK_HEADER_SIZE;
+heap.c:141:    HEAP_BLOCK_HEADER_SIZE + (first_block_begin - heap_area_begin);
+heap.c:143:    _Heap_Align_down( heap_area_size - overhead, page_size );
+heap.c:170:  Heap_Statistics *const stats = &heap->stats;
+heap.c:207:  first_block_size = last_block_begin - first_block_begin;
+heap.c:210:  first_block->prev_size = heap_area_end;
+heap.c:211:  first_block->size_and_flag = first_block_size | HEAP_PREV_BLOCK_USED;
+heap.c:212:  first_block->next = _Heap_Free_list_tail( heap );
+heap.c:213:  first_block->prev = _Heap_Free_list_head( heap );
+heap.c:216:  heap->page_size = page_size;
+heap.c:217:  heap->min_block_size = min_block_size;
+heap.c:218:  heap->area_begin = heap_area_begin;
+heap.c:219:  heap->area_end = heap_area_end;
+heap.c:220:  heap->first_block = first_block;
+heap.c:221:  heap->last_block = last_block;
+heap.c:222:  _Heap_Free_list_head( heap )->next = first_block;
+heap.c:223:  _Heap_Free_list_tail( heap )->prev = first_block;
+heap.c:226:  last_block->prev_size = first_block_size;
+heap.c:227:  last_block->size_and_flag = 0;
+heap.c:231:  stats->size = first_block_size;
+heap.c:232:  stats->free_size = first_block_size;
+heap.c:233:  stats->min_free_size = first_block_size;
+heap.c:234:  stats->free_blocks = 1;
+heap.c:235:  stats->max_free_blocks = 1;
+heap.c:236:  stats->used_blocks = 0;
+heap.c:237:  stats->max_search = 0;
+heap.c:238:  stats->allocs = 0;
+heap.c:239:  stats->searches = 0;
+heap.c:240:  stats->frees = 0;
+heap.c:241:  stats->resizes = 0;
+heap.c:242:  stats->instance = instance++;
+heap.c:244:  _HAssert( _Heap_Is_aligned( heap->page_size, CPU_ALIGNMENT ) );
+heap.c:245:  _HAssert( _Heap_Is_aligned( heap->min_block_size, page_size ) );
+heap.c:263:  Heap_Statistics *const stats = &heap->stats;
+heap.c:265:  uintptr_t const page_size = heap->page_size;
+heap.c:266:  uintptr_t const min_block_size = heap->min_block_size;
+heap.c:267:  uintptr_t const min_alloc_size = min_block_size - HEAP_BLOCK_HEADER_SIZE;
+heap.c:275:  uintptr_t const free_size = block_size + HEAP_BLOCK_SIZE_OFFSET - used_size;
+heap.c:285:    uintptr_t free_block_size = block_size - used_block_size;
+heap.c:292:    stats->free_size += free_block_size;
+heap.c:298:      ++stats->free_blocks;
+heap.c:309:    free_block->size_and_flag = free_block_size | HEAP_PREV_BLOCK_USED;
+heap.c:311:    next_block->prev_size = free_block_size;
+heap.c:312:    next_block->size_and_flag &= ~HEAP_PREV_BLOCK_USED;
+heap.c:314:    next_block->size_and_flag |= HEAP_PREV_BLOCK_USED;
+heap.c:338:  Heap_Statistics *const stats = &heap->stats;
+heap.c:345:    _Heap_Block_of_alloc_area( alloc_begin, heap->page_size );
+heap.c:347:  uintptr_t const new_block_size = block_end - new_block_begin;
+heap.c:350:  block_size = block_end - block_begin;
+heap.c:352:  _HAssert( block_size >= heap->min_block_size );
+heap.c:353:  _HAssert( new_block_size >= heap->min_block_size );
+heap.c:356:  stats->free_size += block_size;
+heap.c:364:    ++stats->free_blocks;
+heap.c:374:  block->size_and_flag = block_size | HEAP_PREV_BLOCK_USED;
+heap.c:376:  new_block->prev_size = block_size;
+heap.c:377:  new_block->size_and_flag = new_block_size;
+heap.c:391:  Heap_Statistics *const stats = &heap->stats;
+heap.c:394:  uintptr_t const alloc_area_offset = alloc_begin - alloc_area_begin;
+heap.c:401:    free_list_anchor = block->prev;
+heap.c:406:    --stats->free_blocks;
+heap.c:407:    ++stats->used_blocks;
+heap.c:408:    stats->free_size -= _Heap_Block_size( block );
+heap.c:413:  if ( alloc_area_offset < heap->page_size ) {
+heap.c:433:  if ( stats->min_free_size > stats->free_size ) {
+heap.c:434:    stats->min_free_size = stats->free_size;
+iterateoverthreads.c:8: *  COPYRIGHT (c) 1989-2003.
+iterateoverthreads.c:9: *  On-Line Applications Research Corporation (OAR).
+iterateoverthreads.c:43:    for ( i=1 ; i <= information->maximum ; i++ ) {
+iterateoverthreads.c:44:      the_thread = (Thread_Control *)information->local_table[ i ];
+watchdogadjusttochain.c:7:/*  COPYRIGHT (c) 1989-2009.
+watchdogadjusttochain.c:8: *  On-Line Applications Research Corporation (OAR).
+watchdogadjusttochain.c:55:    if ( units < first->delta_interval ) {
+watchdogadjusttochain.c:56:      first->delta_interval -= units;
+watchdogadjusttochain.c:64:    units -= first->delta_interval;
+watchdogadjusttochain.c:65:    first->delta_interval = 0;
+watchdogadjusttochain.c:68:      _Chain_Extract_unprotected( &first->Node );
+watchdogadjusttochain.c:69:      _Chain_Append_unprotected( to_fire, &first->Node );
+watchdogadjusttochain.c:76:      if ( first->delta_interval != 0 )
+coremsgflush.c:10: *  COPYRIGHT (c) 1989-1999.
+coremsgflush.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgflush.c:41: *    the_message_queue - the message_queue to be flushed
+coremsgflush.c:44: *    returns - the number of messages flushed from the queue
+coremsgflush.c:51:  if ( the_message_queue->number_of_pending_messages != 0 )
+threadqfirst.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqfirst.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqfirst.c:36: *    the_thread_queue - pointer to thread queue
+threadqfirst.c:39: *    returns - first thread or NULL
+threadqfirst.c:48:  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY )
+objectgetbyindex.c:5: *  COPYRIGHT (c) 1989-1999.
+objectgetbyindex.c:6: *  On-Line Applications Research Corporation (OAR).
+objectgetbyindex.c:39: *   information - pointer to entry in table for this class
+objectgetbyindex.c:40: *   index       - object index to check for
+objectgetbyindex.c:41: *   location    - address of where to store the location
+objectgetbyindex.c:44: *   returns  - address of object if local
+objectgetbyindex.c:45: *   location - one of the following:
+objectgetbyindex.c:46: *                  OBJECTS_ERROR  - invalid object ID
+objectgetbyindex.c:47: *                  OBJECTS_REMOTE - remote object
+objectgetbyindex.c:48: *                  OBJECTS_LOCAL  - local object
+objectgetbyindex.c:62:  if ( information->maximum >= index ) {
+objectgetbyindex.c:64:    the_object = information->local_table[ index ];
+corespinlockwait.c:2: *  SuperCore Spinlock Handler -- Wait for Spinlock
+corespinlockwait.c:4: *  COPYRIGHT (c) 1989-2009.
+corespinlockwait.c:5: *  On-Line Applications Research Corporation (OAR).
+corespinlockwait.c:32: *    the_spinlock - the spinlock control block to initialize
+corespinlockwait.c:33: *    wait         - true if willing to wait
+corespinlockwait.c:34: *    timeout      - the maximum number of ticks to spin (0 is forever)
+corespinlockwait.c:51:    if ( (the_spinlock->lock == CORE_SPINLOCK_LOCKED) &&
+corespinlockwait.c:52:         (the_spinlock->holder == _Thread_Executing->Object.id) ) {
+corespinlockwait.c:56:    the_spinlock->users += 1;
+corespinlockwait.c:58:      if ( the_spinlock->lock == CORE_SPINLOCK_UNLOCKED ) {
+corespinlockwait.c:59:        the_spinlock->lock = CORE_SPINLOCK_LOCKED;
+corespinlockwait.c:60:        the_spinlock->holder = _Thread_Executing->Object.id;
+corespinlockwait.c:69:        the_spinlock->users -= 1;
+corespinlockwait.c:79:          the_spinlock->users -= 1;
+corespinlockwait.c:92:       *  and possibly time-sliced.
+coresemflush.c:10: *  COPYRIGHT (c) 1989-1999.
+coresemflush.c:11: *  On-Line Applications Research Corporation (OAR).
+coresemflush.c:38: *    the_semaphore          - the semaphore to be flushed
+coresemflush.c:39: *    remote_extract_callout - function to invoke remotely
+coresemflush.c:40: *    status                 - status to pass to thread
+coresemflush.c:53:    &the_semaphore->Wait_queue,
+threadtickletimeslice.c:5: *  COPYRIGHT (c) 1989-2009.
+threadtickletimeslice.c:6: *  On-Line Applications Research Corporation (OAR).
+threadtickletimeslice.c:56:    executing->cpu_time_used++;
+threadtickletimeslice.c:64:  if ( !executing->is_preemptible )
+threadtickletimeslice.c:67:  if ( !_States_Is_ready( executing->current_state ) )
+threadtickletimeslice.c:74:  switch ( executing->budget_algorithm ) {
+threadtickletimeslice.c:82:      if ( (int)(--executing->cpu_time_budget) <= 0 ) {
+threadtickletimeslice.c:84:        executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
+threadtickletimeslice.c:90:	if ( --executing->cpu_time_budget == 0 )
+threadtickletimeslice.c:91:	  (*executing->budget_callout)( executing );
+ts64getnanoseconds.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64getnanoseconds.c:7: *  On-Line Applications Research Corporation (OAR).
+heapwalk.c:10: *  COPYRIGHT ( c ) 1989-2007.
+heapwalk.c:11: *  On-Line Applications Research Corporation ( OAR ).
+heapwalk.c:64:  uintptr_t const page_size = heap->page_size;
+heapwalk.c:106:    if ( free_block->prev != prev_block ) {
+heapwalk.c:112:        free_block->prev
+heapwalk.c:119:    free_block = free_block->next;
+heapwalk.c:137:    free_block = free_block->next;
+heapwalk.c:149:  uintptr_t const page_size = heap->page_size;
+heapwalk.c:150:  uintptr_t const min_block_size = heap->min_block_size;
+heapwalk.c:153:  Heap_Block *const first_block = heap->first_block;
+heapwalk.c:154:  Heap_Block *const last_block = heap->last_block;
+heapwalk.c:164:    heap->area_begin, heap->area_end,
+heapwalk.c:266:    block->prev,
+heapwalk.c:267:    block->prev == first_free_block ?
+heapwalk.c:269:        : (block->prev == free_list_head ? " (= head)" : ""),
+heapwalk.c:270:    block->next,
+heapwalk.c:271:    block->next == last_free_block ?
+heapwalk.c:273:        : (block->next == free_list_tail ? " (= tail)" : "")
+heapwalk.c:276:  if ( block_size != next_block->prev_size ) {
+heapwalk.c:283:      next_block->prev_size,
+heapwalk.c:321:  uintptr_t const page_size = heap->page_size;
+heapwalk.c:322:  uintptr_t const min_block_size = heap->min_block_size;
+heapwalk.c:323:  Heap_Block *const first_block = heap->first_block;
+heapwalk.c:324:  Heap_Block *const last_block = heap->last_block;
+heapwalk.c:413:        block->prev_size
+apimutexunlock.c:2: *  COPYRIGHT (c) 1989-2007.
+apimutexunlock.c:3: *  On-Line Applications Research Corporation (OAR).
+apimutexunlock.c:25:      &the_mutex->Mutex,
+apimutexunlock.c:26:      the_mutex->Object.id,
+timespecdividebyinteger.c:6: *  COPYRIGHT (c) 1989-2007.
+timespecdividebyinteger.c:7: *  On-Line Applications Research Corporation (OAR).
+timespecdividebyinteger.c:35:   *  in a 64-bit integer.
+timespecdividebyinteger.c:37:  t  = time->tv_sec;
+timespecdividebyinteger.c:39:  t += time->tv_nsec;
+timespecdividebyinteger.c:51:  result->tv_sec  = t / TOD_NANOSECONDS_PER_SECOND;
+timespecdividebyinteger.c:52:  result->tv_nsec = t % TOD_NANOSECONDS_PER_SECOND;
+objectextendinformation.c:5: *  COPYRIGHT (c) 1989-1999.
+objectextendinformation.c:6: *  On-Line Applications Research Corporation (OAR).
+objectextendinformation.c:40: *    information     - object information table
+objectextendinformation.c:66:  minimum_index = _Objects_Get_index( information->minimum_id );
+objectextendinformation.c:70:  /* if ( information->maximum < minimum_index ) */
+objectextendinformation.c:71:  if ( information->object_blocks == NULL )
+objectextendinformation.c:74:    block_count = information->maximum / information->allocation_size;
+objectextendinformation.c:77:      if ( information->object_blocks[ block ] == NULL ) {
+objectextendinformation.c:81:        index_base += information->allocation_size;
+objectextendinformation.c:85:  maximum = (uint32_t) information->maximum + information->allocation_size;
+objectextendinformation.c:90:   *  case of 16-bit Ids, this is only 256 object instances.
+objectextendinformation.c:98:   * generate a fatal error depending on auto-extending being active.
+objectextendinformation.c:100:  block_size = information->allocation_size * information->size;
+objectextendinformation.c:101:  if ( information->auto_extend ) {
+objectextendinformation.c:164:     *  Take the block count down. Saves all the (block_count - 1)
+objectextendinformation.c:167:    block_count--;
+objectextendinformation.c:169:    if ( information->maximum > minimum_index ) {
+objectextendinformation.c:177:              information->object_blocks,
+objectextendinformation.c:180:              information->inactive_per_block,
+objectextendinformation.c:183:              information->local_table,
+objectextendinformation.c:184:              (information->maximum + minimum_index) * sizeof(Objects_Control *) );
+objectextendinformation.c:202:          index < ( information->allocation_size + index_base );
+objectextendinformation.c:209:    old_tables = information->object_blocks;
+objectextendinformation.c:211:    information->object_blocks = object_blocks;
+objectextendinformation.c:212:    information->inactive_per_block = inactive_per_block;
+objectextendinformation.c:213:    information->local_table = local_table;
+objectextendinformation.c:214:    information->maximum = (Objects_Maximum) maximum;
+objectextendinformation.c:215:    information->maximum_id = _Objects_Build_id(
+objectextendinformation.c:216:        information->the_api,
+objectextendinformation.c:217:        information->the_class,
+objectextendinformation.c:219:        information->maximum
+objectextendinformation.c:233:  information->object_blocks[ block ] = new_object_block;
+objectextendinformation.c:240:    information->object_blocks[ block ],
+objectextendinformation.c:241:    information->allocation_size,
+objectextendinformation.c:242:    information->size
+objectextendinformation.c:252:    the_object->id = _Objects_Build_id(
+objectextendinformation.c:253:        information->the_api,
+objectextendinformation.c:254:        information->the_class,
+objectextendinformation.c:259:    _Chain_Append( &information->Inactive, &the_object->Node );
+objectextendinformation.c:264:  information->inactive_per_block[ block ] = information->allocation_size;
+objectextendinformation.c:265:  information->inactive =
+objectextendinformation.c:266:    (Objects_Maximum)(information->inactive + information->allocation_size);
+coremsg.c:10: *  COPYRIGHT (c) 1989-2009.
+coremsg.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsg.c:40: *    the_message_queue            - the message queue to initialize
+coremsg.c:41: *    the_class                    - the API specific object class
+coremsg.c:42: *    the_message_queue_attributes - the message queue's attributes
+coremsg.c:43: *    maximum_pending_messages     - maximum message and reserved buffer count
+coremsg.c:44: *    maximum_message_size         - maximum size of each message
+coremsg.c:47: *    true   - if the message queue is initialized
+coremsg.c:48: *    false  - if the message queue is NOT initialized
+coremsg.c:61:  the_message_queue->maximum_pending_messages   = maximum_pending_messages;
+coremsg.c:62:  the_message_queue->number_of_pending_messages = 0;
+coremsg.c:63:  the_message_queue->maximum_message_size       = maximum_message_size;
+coremsg.c:71:  if (allocated_message_size & (sizeof(uint32_t) - 1)) {
+coremsg.c:73:    allocated_message_size &= ~(sizeof(uint32_t) - 1);
+coremsg.c:92:  the_message_queue->message_buffers = (CORE_message_queue_Buffer *)
+coremsg.c:95:  if (the_message_queue->message_buffers == 0)
+coremsg.c:103:    &the_message_queue->Inactive_messages,
+coremsg.c:104:    the_message_queue->message_buffers,
+coremsg.c:109:  _Chain_Initialize_empty( &the_message_queue->Pending_messages );
+coremsg.c:112:    &the_message_queue->Wait_queue,
+userextthreaddelete.c:10: *  COPYRIGHT (c) 1989-2007.
+userextthreaddelete.c:11: *  On-Line Applications Research Corporation (OAR).
+userextthreaddelete.c:36:        the_node = the_node->previous ) {
+userextthreaddelete.c:40:    if ( the_extension->Callouts.thread_delete != NULL )
+userextthreaddelete.c:41:      (*the_extension->Callouts.thread_delete)(
+objectmp.c:5: *  COPYRIGHT (c) 1989-1999.
+objectmp.c:6: *  On-Line Applications Research Corporation (OAR).
+objectmp.c:36:  node                   = _Configuration_MP_table->node;
+objectmp.c:37:  maximum_nodes          = _Configuration_MP_table->maximum_nodes;
+objectmp.c:61:  maximum_global_objects = _Configuration_MP_table->maximum_global_objects;
+objectmp.c:90:  uint32_t             the_name,      /* XXX -- wrong for variable */
+objectmp.c:94:  the_global_object->Object.id = the_id;
+objectmp.c:95:  the_global_object->name      = the_name;
+objectmp.c:98:    &information->global_table[ _Objects_Get_node( the_id ) ],
+objectmp.c:99:    &the_global_object->Object.Node
+objectmp.c:112:  uint32_t             the_name,      /* XXX -- wrong for variable */
+objectmp.c:153:  the_chain = &information->global_table[ _Objects_Get_node( the_id ) ];
+objectmp.c:155:  for ( the_node = the_chain->first ;
+objectmp.c:157:        the_node = the_node->next ) {
+objectmp.c:161:    if ( _Objects_Are_ids_equal( the_object->Object.id, the_id ) ) {
+objectmp.c:203:  if ( information->global_table == NULL )
+objectmp.c:225:      the_chain = &information->global_table[ node_index ];
+objectmp.c:227:      for ( the_node = the_chain->first ;
+objectmp.c:229:            the_node = the_node->next ) {
+objectmp.c:233:        if ( the_object->name == name_to_use ) {
+objectmp.c:234:          *the_id = the_object->Object.id;
+objectmp.c:277:       information->global_table == NULL ) {
+objectmp.c:286:  the_chain = &information->global_table[ node ];
+objectmp.c:288:  for ( the_node = the_chain->first ;
+objectmp.c:290:        the_node = the_node->next ) {
+objectmp.c:294:    if ( _Objects_Are_ids_equal( the_global_object->Object.id, the_id ) ) {
+ts64getseconds.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64getseconds.c:7: *  On-Line Applications Research Corporation (OAR).
+threadhandler.c:5: *  COPYRIGHT (c) 1989-2009.
+threadhandler.c:6: *  On-Line Applications Research Corporation (OAR).
+threadhandler.c:102:  level = executing->Start.isr_level;
+threadhandler.c:112:      if ( (executing->fp_context != NULL) &&
+threadhandler.c:115:          _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+threadhandler.c:137:     *  RTEMS target configuration.  --joel (12 May 2007)
+threadhandler.c:144:  if ( executing->Start.prototype == THREAD_START_NUMERIC ) {
+threadhandler.c:145:    executing->Wait.return_argument =
+threadhandler.c:146:      (*(Thread_Entry_numeric) executing->Start.entry_point)(
+threadhandler.c:147:        executing->Start.numeric_argument
+threadhandler.c:151:    else if ( executing->Start.prototype == THREAD_START_POINTER ) {
+threadhandler.c:152:      executing->Wait.return_argument =
+threadhandler.c:153:        (*(Thread_Entry_pointer) executing->Start.entry_point)(
+threadhandler.c:154:          executing->Start.pointer_argument
+threadhandler.c:159:    else if ( executing->Start.prototype == THREAD_START_BOTH_POINTER_FIRST ) {
+threadhandler.c:160:      executing->Wait.return_argument =
+threadhandler.c:161:         (*(Thread_Entry_both_pointer_first) executing->Start.entry_point)(
+threadhandler.c:162:           executing->Start.pointer_argument,
+threadhandler.c:163:           executing->Start.numeric_argument
+threadhandler.c:166:    else if ( executing->Start.prototype == THREAD_START_BOTH_NUMERIC_FIRST ) {
+threadhandler.c:167:      executing->Wait.return_argument =
+threadhandler.c:168:       (*(Thread_Entry_both_numeric_first) executing->Start.entry_point)(
+threadhandler.c:169:         executing->Start.numeric_argument,
+threadhandler.c:170:         executing->Start.pointer_argument
+coremutexseize.c:9: *  COPYRIGHT (c) 1989-2006.
+coremutexseize.c:10: *  On-Line Applications Research Corporation (OAR).
+coremutexseize.c:51: *    the_mutex - pointer to mutex control block
+coremutexseize.c:52: *    timeout   - number of ticks to wait (0 means forever)
+coremutexseize.c:63:  if ( _CORE_mutex_Is_inherit_priority( &the_mutex->Attributes ) ) {
+coremutexseize.c:64:    if ( _Priority_Get_value(the_mutex->holder->current_priority) > 
+coremutexseize.c:65:         _Priority_Get_value(executing->current_priority) ) {
+coremutexseize.c:67:        the_mutex->holder,
+coremutexseize.c:68:        executing->current_priority,
+coremutexseize.c:74:  the_mutex->blocked_count++;
+coremutexseize.c:75:  _Thread_queue_Enqueue( &the_mutex->Wait_queue, timeout );
+readyqrequeue.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqrequeue.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqrequeue.c:36: *    the_ready_queue - pointer to a readyq header
+readyqrequeue.c:37: *    the_thread       - pointer to a thread control block
+readyqrequeue.c:54:  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY ) {
+userext.c:10: *  COPYRIGHT (c) 1989-2008.
+userext.c:11: *  On-Line Applications Research Corporation (OAR).
+threadblockingoperationcancel.c:5: *  COPYRIGHT (c) 1989-2007.
+threadblockingoperationcancel.c:6: *  On-Line Applications Research Corporation (OAR).
+threadblockingoperationcancel.c:63:  the_thread->Wait.queue = NULL;
+threadblockingoperationcancel.c:69:  if ( _Watchdog_Is_active( &the_thread->Timer ) ) {
+threadblockingoperationcancel.c:70:    _Watchdog_Deactivate( &the_thread->Timer );
+threadblockingoperationcancel.c:72:    (void) _Watchdog_Remove( &the_thread->Timer );
+threadblockingoperationcancel.c:85:  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
+interr.c:4: *  COPYRIGHT (c) 1989-1999.
+interr.c:5: *  On-Line Applications Research Corporation (OAR).
+interr.c:35: *    the_source  - what subsystem the error originated in
+interr.c:36: *    is_internal - if the error was internally generated
+interr.c:37: *    the_error   - fatal error status code
+threadqrequeue.c:5: *  COPYRIGHT (c) 1989-2008.
+threadqrequeue.c:6: *  On-Line Applications Research Corporation (OAR).
+threadqrequeue.c:36: *    the_thread_queue - pointer to a threadq header
+threadqrequeue.c:37: *    the_thread       - pointer to a thread control block
+threadqrequeue.c:60:  if ( the_thread_queue->discipline == THREAD_QUEUE_DISCIPLINE_PRIORITY ) {
+threadqrequeue.c:66:    if ( _States_Is_waiting_on_thread_queue( the_thread->current_state ) ) {
+objectsetname.c:2: *  COPYRIGHT (c) 1989-2009.
+objectsetname.c:3: *  On-Line Applications Research Corporation (OAR).
+objectsetname.c:40:  length = strnlen( name, information->name_length );
+objectsetname.c:43:  if ( information->is_string ) {
+objectsetname.c:50:    if ( the_object->name.name_p ) {
+objectsetname.c:51:      _Workspace_Free( (void *)the_object->name.name_p );
+objectsetname.c:52:      the_object->name.name_p = NULL;
+objectsetname.c:57:    the_object->name.name_p = d;
+objectsetname.c:61:    the_object->name.name_u32 =  _Objects_Build_name(
+threaddispatch.c:5: *  COPYRIGHT (c) 1989-2009.
+threaddispatch.c:6: *  On-Line Applications Research Corporation (OAR).
+threaddispatch.c:58:  if ( --_Thread_Dispatch_disable_level )
+threaddispatch.c:98:    executing->rtems_ada_self = rtems_ada_self;
+threaddispatch.c:99:    rtems_ada_self = heir->rtems_ada_self;
+threaddispatch.c:101:    if ( heir->budget_algorithm == THREAD_CPU_BUDGET_ALGORITHM_RESET_TIMESLICE )
+threaddispatch.c:102:      heir->cpu_time_budget = _Thread_Ticks_per_timeslice;
+threaddispatch.c:114:        _Timestamp_Add_to( &executing->cpu_time_used, &ran );
+threaddispatch.c:118:      heir->cpu_time_used++;
+threaddispatch.c:125:      executing->libc_reent = *_Thread_libc_reent;
+threaddispatch.c:126:      *_Thread_libc_reent = heir->libc_reent;
+threaddispatch.c:146:    if ( executing->fp_context != NULL )
+threaddispatch.c:147:      _Context_Save_fp( &executing->fp_context );
+threaddispatch.c:151:    _Context_Switch( &executing->Registers, &heir->Registers );
+threaddispatch.c:155:    if ( (executing->fp_context != NULL) &&
+threaddispatch.c:158:        _Context_Save_fp( &_Thread_Allocated_fp->fp_context );
+threaddispatch.c:159:      _Context_Restore_fp( &executing->fp_context );
+threaddispatch.c:163:    if ( executing->fp_context != NULL )
+threaddispatch.c:164:      _Context_Restore_fp( &executing->fp_context );
+threaddispatch.c:178:       executing->do_post_task_switch_extension ) {
+threaddispatch.c:179:    executing->do_post_task_switch_extension = false;
+isrthreaddispatch.c:12: * D-82178 Puchheim
+isrthreaddispatch.c:14: * <rtems@embedded-brains.de>
+isrthreaddispatch.c:40:        || _Thread_Executing->do_post_task_switch_extension
+isrthreaddispatch.c:42:      _Thread_Executing->do_post_task_switch_extension = false;
+thread.c:5: *  COPYRIGHT (c) 1989-2008.
+thread.c:6: *  On-Line Applications Research Corporation (OAR).
+thread.c:59:    maximum_proxies   =  _Configuration_MP_table->maximum_proxies;
+watchdogremove.c:5: *  COPYRIGHT (c) 1989-1999.
+watchdogremove.c:6: *  On-Line Applications Research Corporation (OAR).
+watchdogremove.c:40:  previous_state = the_watchdog->state;
+watchdogremove.c:51:      the_watchdog->state = WATCHDOG_INACTIVE;
+watchdogremove.c:57:      the_watchdog->state = WATCHDOG_INACTIVE;
+watchdogremove.c:61:        next_watchdog->delta_interval += the_watchdog->delta_interval;
+watchdogremove.c:66:      _Chain_Extract_unprotected( &the_watchdog->Node );
+watchdogremove.c:69:  the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
+coremsgseize.c:10: *  COPYRIGHT (c) 1989-2007.
+coremsgseize.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgseize.c:43: *    the_message_queue - pointer to message queue
+coremsgseize.c:44: *    id                - id of object we are waitig on
+coremsgseize.c:45: *    buffer            - pointer to message buffer to be filled
+coremsgseize.c:46: *    size_p            - pointer to the size of buffer to be filled
+coremsgseize.c:47: *    wait              - true if wait is allowed, false otherwise
+coremsgseize.c:48: *    timeout           - time to wait for a message
+coremsgseize.c:73:  executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_SUCCESSFUL;
+coremsgseize.c:77:    the_message_queue->number_of_pending_messages -= 1;
+coremsgseize.c:80:    *size_p = the_message->Contents.size;
+coremsgseize.c:81:    _Thread_Executing->Wait.count =
+coremsgseize.c:84:      the_message->Contents.buffer,
+coremsgseize.c:107:      the_thread = _Thread_queue_Dequeue( &the_message_queue->Wait_queue );
+coremsgseize.c:123:        the_thread->Wait.count
+coremsgseize.c:125:      the_message->Contents.size = (size_t) the_thread->Wait.option;
+coremsgseize.c:127:        the_thread->Wait.return_argument_second.immutable_object,
+coremsgseize.c:128:        the_message->Contents.buffer,
+coremsgseize.c:129:        the_message->Contents.size
+coremsgseize.c:144:    executing->Wait.return_code = CORE_MESSAGE_QUEUE_STATUS_UNSATISFIED_NOWAIT;
+coremsgseize.c:148:  _Thread_queue_Enter_critical_section( &the_message_queue->Wait_queue );
+coremsgseize.c:149:  executing->Wait.queue = &the_message_queue->Wait_queue;
+coremsgseize.c:150:  executing->Wait.id = id;
+coremsgseize.c:151:  executing->Wait.return_argument_second.mutable_object = buffer;
+coremsgseize.c:152:  executing->Wait.return_argument = size_p;
+coremsgseize.c:156:  _Thread_queue_Enqueue( &the_message_queue->Wait_queue, timeout );
+threadready.c:5: *  COPYRIGHT (c) 1989-2006.
+threadready.c:6: *  On-Line Applications Research Corporation (OAR).
+threadready.c:43: *    the_thread - pointer to thread control block
+threadready.c:63:  the_thread->current_state = STATES_READY;
+ts64set.c:6: *  COPYRIGHT (c) 1989-2008.
+ts64set.c:7: *  On-Line Applications Research Corporation (OAR).
+threadsetpriority.c:5: *  COPYRIGHT (c) 1989-1999.
+threadsetpriority.c:6: *  On-Line Applications Research Corporation (OAR).
+threadsetpriority.c:41: *    the_thread   - pointer to thread priority
+threadsetpriority.c:42: *    new_priority - new priority
+threadsetpriority.c:52:  _Priority_Set(&the_thread->current_priority, &new_priority);
+threadsetpriority.c:54:  the_thread->ready = &_Thread_Ready_queue.Queues.Priority[ 
+threadsetpriority.c:58:  _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
+objectnametoid.c:5: *  COPYRIGHT (c) 1989-2008.
+objectnametoid.c:6: *  On-Line Applications Research Corporation (OAR).
+objectnametoid.c:39: *    information - object information
+objectnametoid.c:40: *    name        - user defined object name
+objectnametoid.c:41: *    node        - node indentifier (0 indicates any node)
+objectnametoid.c:42: *    id          - address of return ID
+objectnametoid.c:45: *    id                                   - object id
+objectnametoid.c:46: *    OBJECTS_NAME_OR_ID_LOOKUP_SUCCESSFUL - if successful
+objectnametoid.c:47: *    error code                           - if unsuccessful
+objectnametoid.c:65:  /* ASSERT: information->is_string == false */
+objectnametoid.c:75:  if ( information->maximum != 0 &&
+objectnametoid.c:83:    name_length = information->name_length;
+objectnametoid.c:85:    for ( index = 1; index <= information->maximum; index++ ) {
+objectnametoid.c:86:      the_object = information->local_table[ index ];
+objectnametoid.c:90:      if ( name == the_object->name.name_u32 ) {
+objectnametoid.c:91:        *id = the_object->id;
+coretodgetuptime.c:2: *  Time of Day (TOD) Handler - get uptime
+coretodgetuptime.c:5:/*  COPYRIGHT (c) 1989-2008.
+coretodgetuptime.c:6: *  On-Line Applications Research Corporation (OAR).
+coretodgetuptime.c:31: *    time  - pointer to the timestamp structure
+corerwlockrelease.c:2: *  SuperCore RWLock Handler -- Release a RWLock
+corerwlockrelease.c:4: *  COPYRIGHT (c) 1989-2006.
+corerwlockrelease.c:5: *  On-Line Applications Research Corporation (OAR).
+corerwlockrelease.c:31: *    the_rwlock    - the rwlock control block to initialize
+corerwlockrelease.c:52:    if ( the_rwlock->current_state == CORE_RWLOCK_UNLOCKED){
+corerwlockrelease.c:54:      executing->Wait.return_code = CORE_RWLOCK_UNAVAILABLE;
+corerwlockrelease.c:57:    if ( the_rwlock->current_state == CORE_RWLOCK_LOCKED_FOR_READING ) {
+corerwlockrelease.c:58:	the_rwlock->number_of_readers -= 1;
+corerwlockrelease.c:59:	if ( the_rwlock->number_of_readers != 0 ) {
+corerwlockrelease.c:67:    executing->Wait.return_code = CORE_RWLOCK_SUCCESSFUL;
+corerwlockrelease.c:73:    the_rwlock->current_state = CORE_RWLOCK_UNLOCKED;
+corerwlockrelease.c:76:  next = _Thread_queue_Dequeue( &the_rwlock->Wait_queue );
+corerwlockrelease.c:79:    if ( next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE ) {
+corerwlockrelease.c:80:      the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_WRITING;
+corerwlockrelease.c:87:    the_rwlock->number_of_readers += 1;
+corerwlockrelease.c:88:    the_rwlock->current_state = CORE_RWLOCK_LOCKED_FOR_READING;
+corerwlockrelease.c:94:      next = _Thread_queue_First( &the_rwlock->Wait_queue );
+corerwlockrelease.c:96:           next->Wait.option == CORE_RWLOCK_THREAD_WAITING_FOR_WRITE )
+corerwlockrelease.c:98:      the_rwlock->number_of_readers += 1;
+corerwlockrelease.c:99:      _Thread_queue_Extract( &the_rwlock->Wait_queue, next );
+apiext.c:5: *  COPYRIGHT (c) 1989-1999.
+apiext.c:6: *  On-Line Applications Research Corporation (OAR).
+apiext.c:41:  _Chain_Append( &_API_extensions_List, &the_extension->Node );
+apiext.c:57:	  the_node = the_node->next ) {
+apiext.c:61:      if ( the_extension->predriver_hook )
+apiext.c:62:	(*the_extension->predriver_hook)();
+apiext.c:79:        the_node = the_node->next ) {
+apiext.c:84:     *  Currently all APIs configure this hook so it is always non-NULL.
+apiext.c:87:    if ( the_extension->postdriver_hook )
+apiext.c:89:      (*the_extension->postdriver_hook)();
+apiext.c:105:        the_node = the_node->next ) {
+apiext.c:109:    (*the_extension->postswitch_hook)( _Thread_Executing );
+timespecfromticks.c:2: *  COPYRIGHT (c) 1989-2007.
+timespecfromticks.c:3: *  On-Line Applications Research Corporation (OAR).
+timespecfromticks.c:32:  time->tv_sec  = usecs / TOD_MICROSECONDS_PER_SECOND;
+timespecfromticks.c:33:  time->tv_nsec = (usecs % TOD_MICROSECONDS_PER_SECOND) *
+coretodmsecstoticks.c:1:/*  COPYRIGHT (c) 1989-2008.
+coretodmsecstoticks.c:2: *  On-Line Applications Research Corporation (OAR).
+threadcreateidle.c:5: *  COPYRIGHT (c) 1989-2008.
+threadcreateidle.c:6: *  On-Line Applications Research Corporation (OAR).
+objectallocate.c:5: *  COPYRIGHT (c) 1989-1999.
+objectallocate.c:6: *  On-Line Applications Research Corporation (OAR).
+objectallocate.c:59:  if ( information->size == 0 )
+objectallocate.c:66:  the_object = (Objects_Control *) _Chain_Get( &information->Inactive );
+objectallocate.c:68:  if ( information->auto_extend ) {
+objectallocate.c:76:      the_object =  (Objects_Control *) _Chain_Get( &information->Inactive );
+objectallocate.c:82:      block = (uint32_t) _Objects_Get_index( the_object->id ) -
+objectallocate.c:83:              _Objects_Get_index( information->minimum_id );
+objectallocate.c:84:      block /= information->allocation_size;
+objectallocate.c:86:      information->inactive_per_block[ block ]--;
+objectallocate.c:87:      information->inactive--;
+objectallocate.c:95:      information->the_api,
+objectallocate.c:96:      information->the_class
+watchdogadjust.c:5: *  COPYRIGHT (c) 1989-1999.
+watchdogadjust.c:6: *  On-Line Applications Research Corporation (OAR).
+watchdogadjust.c:31: *    header    - pointer to the delta chain to be adjusted
+watchdogadjust.c:32: *    direction - forward or backward adjustment to delta chain
+watchdogadjust.c:33: *    units     - units to adjust
+watchdogadjust.c:60:        _Watchdog_First( header )->delta_interval += units;
+watchdogadjust.c:64:          if ( units < _Watchdog_First( header )->delta_interval ) {
+watchdogadjust.c:65:            _Watchdog_First( header )->delta_interval -= units;
+watchdogadjust.c:68:            units -= _Watchdog_First( header )->delta_interval;
+watchdogadjust.c:69:            _Watchdog_First( header )->delta_interval = 1;
+corespinlockrelease.c:2: *  SuperCore Spinlock Handler -- Release a Spinlock
+corespinlockrelease.c:4: *  COPYRIGHT (c) 1989-2006.
+corespinlockrelease.c:5: *  On-Line Applications Research Corporation (OAR).
+corespinlockrelease.c:31: *    the_spinlock    - the spinlock control block to initialize
+corespinlockrelease.c:34: *    CORE_SPINLOCK_SUCCESSFUL - if successful
+corespinlockrelease.c:35: *    error code               - if unsuccessful
+corespinlockrelease.c:50:    if ( the_spinlock->lock == CORE_SPINLOCK_UNLOCKED ) {
+corespinlockrelease.c:58:    if ( the_spinlock->holder != _Thread_Executing->Object.id ) {
+corespinlockrelease.c:66:    the_spinlock->users -= 1;
+corespinlockrelease.c:67:    the_spinlock->lock   = CORE_SPINLOCK_UNLOCKED;
+corespinlockrelease.c:68:    the_spinlock->holder = 0;
+readyqdequeue.c:5: *  COPYRIGHT (c) 1989-2008.
+readyqdequeue.c:6: *  On-Line Applications Research Corporation (OAR).
+readyqdequeue.c:35: *    the_ready_queue - pointer to readyq
+readyqdequeue.c:38: *    returns - thread dequeued or NULL
+readyqdequeue.c:50:  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
+pheapgetblocksize.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapgetblocksize.c:11: *  On-Line Applications Research Corporation (OAR).
+timespeclessthan.c:6: *  COPYRIGHT (c) 1989-2007.
+timespeclessthan.c:7: *  On-Line Applications Research Corporation (OAR).
+timespeclessthan.c:31:  if ( lhs->tv_sec < rhs->tv_sec )
+timespeclessthan.c:34:  if ( lhs->tv_sec > rhs->tv_sec )
+timespeclessthan.c:37:  /* ASSERT: lhs->tv_sec == rhs->tv_sec */
+timespeclessthan.c:38:  if ( lhs->tv_nsec < rhs->tv_nsec )
+threadchangepriority.c:5: *  COPYRIGHT (c) 1989-2006.
+threadchangepriority.c:6: *  On-Line Applications Research Corporation (OAR).
+threadchangepriority.c:43: *    the_thread   - pointer to thread control block
+threadchangepriority.c:44: *    new_priority - ultimate priority
+threadchangepriority.c:45: *    prepend_it   - true if the thread should be prepended to the chain
+threadchangepriority.c:74:       new_priority >= the_thread->current_priority )
+threadchangepriority.c:81:  original_state = the_thread->current_state;
+threadchangepriority.c:94: if ( _Priority_Get_value(the_thread->current_priority) != 
+threadchangepriority.c:104:  state = the_thread->current_state;
+threadchangepriority.c:108:      the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+threadchangepriority.c:111:      _Thread_queue_Requeue( the_thread->Wait.queue, the_thread );
+threadchangepriority.c:124:    the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+watchdogtickle.c:5: *  COPYRIGHT (c) 1989-1999.
+watchdogtickle.c:6: *  On-Line Applications Research Corporation (OAR).
+watchdogtickle.c:31: *    header - pointer to the delta chain to be tickled
+watchdogtickle.c:47:   * volatile data - till, 2003/7
+watchdogtickle.c:58:   * For some reason, on rare occasions the_watchdog->delta_interval
+watchdogtickle.c:63:   * "the_watchdog->delta_interval--;" operation.
+watchdogtickle.c:67:   * The test "if (the_watchdog->delta_interval != 0)"
+watchdogtickle.c:80:   * Steven Johnson - 12/2005 (gcc-3.2.3 -O3 on powerpc)
+watchdogtickle.c:82:  if (the_watchdog->delta_interval != 0) {
+watchdogtickle.c:83:    the_watchdog->delta_interval--;
+watchdogtickle.c:84:    if ( the_watchdog->delta_interval != 0 )
+watchdogtickle.c:95:         (*the_watchdog->routine)(
+watchdogtickle.c:96:           the_watchdog->id,
+watchdogtickle.c:97:           the_watchdog->user_data
+watchdogtickle.c:125:             (the_watchdog->delta_interval == 0) );
+objectapimaximumclass.c:2: *  COPYRIGHT (c) 1989-2008.
+objectapimaximumclass.c:3: *  On-Line Applications Research Corporation (OAR).
+coremutexflush.c:9: *  COPYRIGHT (c) 1989-1999.
+coremutexflush.c:10: *  On-Line Applications Research Corporation (OAR).
+coremutexflush.c:37: *    the_mutex              - the mutex to be flushed
+coremutexflush.c:38: *    remote_extract_callout - function to invoke remotely
+coremutexflush.c:39: *    status                 - status to pass to thread
+coremutexflush.c:51:    &the_mutex->Wait_queue,
+chainappend.c:2: *  COPYRIGHT (c) 1989-2007.
+chainappend.c:3: *  On-Line Applications Research Corporation (OAR).
+chainappend.c:27: *    the_chain - pointer to chain header
+chainappend.c:28: *    node      - address of node to put at rear of chain
+schedulerunblock.c:5: *  COPYRIGHT (c) 1989-2006.
+schedulerunblock.c:6: *  On-Line Applications Research Corporation (OAR).
+schedulerunblock.c:43: *    the_thread - pointer to thread control block
+schedulerunblock.c:75:   *  Pseudo-ISR case:
+schedulerunblock.c:77:   *    a pseudo-ISR system task, we need to do a context switch.
+schedulerunblock.c:81:    if ( _Thread_Executing->is_preemptible || 
+schedulerunblock.c:82:         _Priority_Get_value(the_thread->current_priority) == 0 )
+pheapfree.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapfree.c:11: *  On-Line Applications Research Corporation (OAR).
+pheapallocate.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapallocate.c:11: *  On-Line Applications Research Corporation (OAR).
+pheapgetinfo.c:10: *  COPYRIGHT (c) 1989-2007.
+pheapgetinfo.c:11: *  On-Line Applications Research Corporation (OAR).
+threadresume.c:5: *  COPYRIGHT (c) 1989-1999.
+threadresume.c:6: *  On-Line Applications Research Corporation (OAR).
+threadresume.c:45: *    the_thread - pointer to thread control block
+threadresume.c:46: *    force      - force the suspend count back to 0
+threadresume.c:67:  current_state = the_thread->current_state;
+threadresume.c:70:    the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
+coremsgbroadcast.c:10: *  COPYRIGHT (c) 1989-2008.
+coremsgbroadcast.c:11: *  On-Line Applications Research Corporation (OAR).
+coremsgbroadcast.c:41: *    the_message_queue            - message is submitted to this message queue
+coremsgbroadcast.c:42: *    buffer                       - pointer to message buffer
+coremsgbroadcast.c:43: *    size                         - size in bytes of message to send
+coremsgbroadcast.c:44: *    id                           - id of message queue
+coremsgbroadcast.c:45: *    api_message_queue_mp_support - api specific mp support callout
+coremsgbroadcast.c:46: *    count                        - area to store number of threads made ready
+coremsgbroadcast.c:49: *    count                         - number of threads made ready
+coremsgbroadcast.c:50: *    CORE_MESSAGE_QUEUE_SUCCESSFUL - if successful
+coremsgbroadcast.c:51: *    error code                    - if unsuccessful
+coremsgbroadcast.c:72:  if ( size > the_message_queue->maximum_message_size ) {
+coremsgbroadcast.c:82:   *        the message to threads waiting to receive -- not to send.
+coremsgbroadcast.c:85:  if ( the_message_queue->number_of_pending_messages != 0 ) {
+coremsgbroadcast.c:96:          _Thread_queue_Dequeue(&the_message_queue->Wait_queue))) {
+coremsgbroadcast.c:97:    waitp = &the_thread->Wait;
+coremsgbroadcast.c:102:      waitp->return_argument_second.mutable_object,
+coremsgbroadcast.c:106:    *(size_t *) the_thread->Wait.return_argument = size;
+coremsgbroadcast.c:109:      if ( !_Objects_Is_local_id( the_thread->Object.id ) )

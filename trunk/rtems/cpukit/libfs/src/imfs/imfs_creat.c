@@ -10,14 +10,16 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_creat.c,v 1.15 2010/06/08 15:15:31 sh Exp $
+ *  $Id: imfs_creat.c,v 1.17 2010/06/24 21:37:08 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <assert.h>
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <stdlib.h>
 #include <string.h>
 #include "imfs.h"
@@ -99,7 +101,9 @@ IMFS_jnode_t *IMFS_create_node(
       break;
 
     default:
-      assert(0);
+      #if defined(RTEMS_DEBUG)
+        assert(0);
+      #endif
       break;
   }
 

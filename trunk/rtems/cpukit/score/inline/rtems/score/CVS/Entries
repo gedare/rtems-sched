@@ -14,7 +14,6 @@
 /stack.inl/1.22/Mon Dec 22 09:22:17 2008//
 /states.inl/1.18/Wed Jul 22 21:26:30 2009//
 /sysstate.inl/1.20/Fri Sep  4 13:09:48 2009//
-/thread.inl/1.39/Mon Nov 23 20:07:04 2009//
 /threadmp.inl/1.19/Fri Sep  5 14:50:10 2008//
 /threadq.inl/1.4/Tue Aug 19 08:32:59 2008//
 /tod.inl/1.25/Tue May  5 19:37:28 2009//
@@ -22,4 +21,5 @@
 /watchdog.inl/1.18/Mon Dec 22 09:22:17 2008//
 /wkspace.inl/1.21/Tue Aug 19 08:32:59 2008//
 /heap.inl/1.36/Wed Jun  9 22:19:08 2010//
+/thread.inl/1.40/Result of merge//
 D

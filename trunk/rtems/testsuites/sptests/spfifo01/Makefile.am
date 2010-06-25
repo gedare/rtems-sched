@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.2 2010/06/08 13:59:17 jennifer Exp $
+## $Id: Makefile.am,v 1.3 2010/06/24 19:46:40 joel Exp $
 ##
 
 MANAGERS = all
@@ -13,7 +13,6 @@ dist_rtems_tests_DATA += spfifo01.doc
 include $(RTEMS_ROOT)/make/custom/@RTEMS_BSP@.cfg
 include $(top_srcdir)/../automake/compile.am
 include $(top_srcdir)/../automake/leaf.am
-
 
 AM_CPPFLAGS += -I$(top_srcdir)/../support/include
 

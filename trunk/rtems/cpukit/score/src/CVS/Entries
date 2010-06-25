@@ -46,7 +46,6 @@
 /threadcreateidle.c/1.15/Fri Sep 11 14:54:29 2009//
 /threaddelayended.c/1.7/Mon Nov 30 19:44:57 2009//
 /threaddispatch.c/1.20/Wed Dec  2 18:22:18 2009//
-/threadevaluatemode.c/1.6/Mon Dec 22 05:52:32 2008//
 /threadget.c/1.14/Sun Nov 29 13:51:52 2009//
 /threadhandler.c/1.29/Sun Nov 29 13:51:52 2009//
 /threadloadenv.c/1.7/Thu Sep  4 17:39:55 2008//
@@ -80,7 +79,6 @@
 /threadstackfree.c/1.7/Sun Sep 13 21:00:11 2009//
 /threadstart.c/1.9/Thu Sep  4 17:39:56 2008//
 /threadstartmultitasking.c/1.10/Fri Aug 28 18:26:05 2009//
-/threadtickletimeslice.c/1.11/Wed Dec  2 18:22:19 2009//
 /threadyieldprocessor.c/1.5/Mon Dec 22 05:52:32 2008//
 /timespecaddto.c/1.3/Sun Nov 29 13:51:52 2009//
 /timespecdivide.c/1.6/Sun Nov 29 13:51:52 2009//
@@ -179,4 +177,5 @@
 /threadreset.c/1.10/Result of merge//
 /threadresume.c/1.10/Result of merge//
 /threadsuspend.c/1.7/Result of merge//
+/threadtickletimeslice.c/1.12/Fri Jun 25 16:24:13 2010//
 D

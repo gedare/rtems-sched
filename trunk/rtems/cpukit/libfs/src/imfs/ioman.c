@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ioman.c,v 1.18 2009/10/14 16:09:11 ralf Exp $
+ *  $Id: ioman.c,v 1.19 2010/06/24 21:31:22 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,8 +21,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-
-#include <assert.h>
 
 #include <rtems.h>
 #include <rtems/libio_.h>

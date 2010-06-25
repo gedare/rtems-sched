@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: read.c,v 1.15 2009/09/30 08:20:31 ralf Exp $
+ *  $Id: read.c,v 1.16 2010/06/24 21:48:52 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -34,10 +34,12 @@ ssize_t read(
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_READ );
 
+  if ( count == 0 )
+    return 0;
+
   /*
    *  Now process the read().
    */
-
   if ( !iop->handlers->read_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 

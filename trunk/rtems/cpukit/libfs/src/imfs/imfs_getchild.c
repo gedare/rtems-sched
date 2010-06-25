@@ -10,15 +10,17 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_getchild.c,v 1.10 2008/07/03 01:37:38 ccj Exp $
+ *  $Id: imfs_getchild.c,v 1.11 2010/06/24 21:31:22 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 #include <errno.h>
-#include <assert.h>
 #include <string.h>
 #include "imfs.h"
 
@@ -39,11 +41,13 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
    *  the IMFS code.
    */
 
-  assert( directory );
+  #if defined(RTEMS_DEBUG)
+    assert( directory );
+    assert( name );
+  #endif
   if ( !name )
     return 0;
 
-  assert( name );
   if ( !directory )
     return 0;
 

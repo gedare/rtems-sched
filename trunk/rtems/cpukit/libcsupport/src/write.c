@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: write.c,v 1.16 2007/09/20 22:25:14 joel Exp $
+ *  $Id: write.c,v 1.17 2010/06/24 21:48:52 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -41,10 +41,12 @@ ssize_t write(
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
 
+  if ( count == 0 )
+    return 0;
+
   /*
    *  Now process the write() request.
    */
-
   if ( !iop->handlers->write_h )
     rtems_set_errno_and_return_minus_one( ENOTSUP );
 

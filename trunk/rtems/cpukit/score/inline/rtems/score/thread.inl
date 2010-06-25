@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.inl,v 1.39 2009/11/23 20:07:04 joel Exp $
+ *  $Id: thread.inl,v 1.40 2010/06/24 22:40:32 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_THREAD_H
@@ -320,6 +320,27 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
 )
 {
   _Thread_libc_reent = libc_reent;
+}
+
+/**
+ *  This routine evaluates the current scheduling information for the
+ *  system and determines if a context switch is required.  This
+ *  is usually called after changing an execution mode such as preemptability
+ *  for a thread.
+ */
+RTEMS_INLINE_ROUTINE bool _Thread_Evaluate_mode( void )
+{
+  Thread_Control     *executing;
+
+  executing = _Thread_Executing;
+
+  if ( !_States_Is_ready( executing->current_state ) ||
+       ( !_Thread_Is_heir( executing ) && executing->is_preemptible ) ) {
+    _Context_Switch_necessary = true;
+    return true;
+  }
+
+  return false;
 }
 
 /**@}*/

@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.h,v 1.93 2010/06/18 04:20:06 ralf Exp $
+ *  $Id: thread.h,v 1.95 2010/06/24 22:40:32 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_THREAD_H
@@ -468,12 +468,6 @@ SCORE_EXTERN uint32_t   _Thread_Maximum_extensions;
 SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
 
 /**
- *  The following points to the array of FIFOs used to manage the
- *  set of ready threads.
- */
-SCORE_EXTERN Ready_queue_Control  _Thread_Ready_queue;
-
-/**
  *  The following points to the thread which is currently executing.
  *  This thread is implicitly manipulated by numerous directives.
  */
@@ -673,16 +667,6 @@ void _Thread_Set_transient(
 );
 
 /**
- *  This routine is invoked upon expiration of the currently
- *  executing thread's timeslice.  If no other thread's are ready
- *  at the priority of the currently executing thread, then the
- *  executing thread's timeslice is reset.  Otherwise, the
- *  currently executing thread is placed at the rear of the
- *  FIFO for this priority and a new heir is selected.
- */
-void _Thread_Reset_timeslice( void );
-
-/**
  *  This routine is invoked as part of processing each clock tick.
  *  It is responsible for determining if the current thread allows
  *  timeslicing and, if so, when its timeslice expires.
@@ -759,14 +743,6 @@ void _Thread_Resume(
   Thread_Control   *the_thread,
   bool              force
 );
-
-/**
- *  This routine evaluates the current scheduling information for the
- *  system and determines if a context switch is required.  This
- *  is usually called after changing an execution mode such as preemptability
- *  for a thread.
- */
-bool _Thread_Evaluate_mode( void );
 
 #if (CPU_PROVIDES_IDLE_THREAD_BODY == FALSE)
 /**
