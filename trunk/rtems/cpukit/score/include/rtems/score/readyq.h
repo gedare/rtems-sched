@@ -130,6 +130,17 @@ Thread_Control *_Ready_queue_First(
 #define _Ready_queue_Extract_priority( _the_ready_queue, _the_thread ) \
   _Ready_queue_Extract_priority_helper( _the_ready_queue, _the_thread, false )
 
+/** 
+ * @brief Ready queue Set ready
+ *
+ * This function sets the ready pointer of @a the_thread based on the 
+ * queuing discipline of @a the_ready_queue.
+ */
+void _Ready_queue_Set_ready(
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control *the_thread
+);
+
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/readyq.inl>
 #endif

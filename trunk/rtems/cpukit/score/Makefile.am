@@ -144,10 +144,9 @@ libscore_a_SOURCES += src/pheapallocate.c \
 
 ## READYQ_C_FILES
 libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
-    src/readyqenqueue.c src/readyqenqueuefirst.c \
-    src/readyqextract.c \
-		src/readyqfirst.c src/readyqflush.c \
-		src/readyqrequeue.c
+    src/readyqenqueue.c src/readyqenqueuefirst.c src/readyqextract.c \
+		src/readyqfirst.c src/readyqflush.c src/readyqrequeue.c \
+		src/readyqsetready.c \
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c src/schedulerblock.c \
@@ -163,7 +162,7 @@ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadsuspend.c \
-    src/threadtickletimeslice.c src/threadyieldprocessor.c \
+    src/threadtickletimeslice.c \
     src/iterateoverthreads.c src/threadblockingoperationcancel.c
 
 ## THREADQ_C_FILES

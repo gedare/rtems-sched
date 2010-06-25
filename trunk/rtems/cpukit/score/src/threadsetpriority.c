@@ -23,6 +23,8 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -51,9 +53,7 @@ void _Thread_Set_priority(
 {
   _Priority_Set(&the_thread->current_priority, &new_priority);
 
-  the_thread->ready = &_Thread_Ready_queue.Queues.Priority[ 
-    _Priority_Get_value(new_priority) 
-  ];
+  _Ready_queue_Set_ready(_Thread_Ready_queue, the_thread);
 
   _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
 }

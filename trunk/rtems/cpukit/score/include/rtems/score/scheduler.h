@@ -32,6 +32,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/object.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/thread.h>
 
 /**
