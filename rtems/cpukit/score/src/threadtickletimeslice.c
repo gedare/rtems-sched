@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadtickletimeslice.c,v 1.11 2009/12/02 18:22:19 humph Exp $
+ *  $Id: threadtickletimeslice.c,v 1.12 2010/06/24 21:27:30 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -80,7 +80,16 @@ void _Thread_Tickle_timeslice( void )
       case THREAD_CPU_BUDGET_ALGORITHM_EXHAUST_TIMESLICE:
     #endif
       if ( (int)(--executing->cpu_time_budget) <= 0 ) {
-        _Thread_Reset_timeslice();
+
+        /*
+         *  A yield performs the ready chain mechanics needed when
+         *  resetting a timeslice.  If no other thread's are ready
+         *  at the priority of the currently executing thread, then the
+         *  executing thread's timeslice is reset.  Otherwise, the
+         *  currently executing thread is placed at the rear of the
+         *  FIFO for this priority and a new heir is selected.
+         */
+        _Thread_Yield_processor();
         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
       }
       break;

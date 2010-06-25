@@ -120,9 +120,6 @@ D/spfifo04////
 D/spmkdir////
 D/sp70////
 D/spfifo08////
-/ChangeLog/1.383/Thu Jun 24 15:27:00 2010//
-/Makefile.am/1.91/Thu Jun 24 15:27:00 2010//
-/configure.ac/1.96/Thu Jun 24 15:27:00 2010//
 D/sp71////
 D/spfatal14////
 D/spfatal15////
@@ -130,3 +127,6 @@ D/spfatal16////
 D/spfatal17////
 D/spfatal18////
 D/spfatal19////
+/ChangeLog/1.384/Fri Jun 25 16:24:23 2010//
+/Makefile.am/1.92/Fri Jun 25 16:24:23 2010//
+/configure.ac/1.97/Fri Jun 25 16:24:23 2010//

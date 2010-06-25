@@ -55,9 +55,7 @@ void _Thread_Set_transient(
 {
   ISR_Level             level;
   uint32_t              old_state;
-  Chain_Control *ready;
-
-  ready = the_thread->ready;
+  
   _ISR_Disable( level );
 
   old_state = the_thread->current_state;

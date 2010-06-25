@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_eval.c,v 1.27 2010/06/08 10:25:44 sh Exp $
+ *  $Id: imfs_eval.c,v 1.28 2010/06/24 21:31:22 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include "imfs.h"
 #include <rtems/libio_.h>
@@ -83,7 +82,6 @@ int IMFS_evaluate_permission(
   int           flags_to_test;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
-    assert( 0 );
     rtems_set_errno_and_return_minus_one( EIO );
   }
 
@@ -501,7 +499,6 @@ int IMFS_eval_path(
   int                                 result;
 
   if ( !rtems_libio_is_valid_perms( flags ) ) {
-    assert( 0 );
     rtems_set_errno_and_return_minus_one( EIO );
   }
 

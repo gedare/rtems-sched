@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: fifo.c,v 1.8 2010/06/23 05:01:46 ccj Exp $
+ * $Id: fifo.c,v 1.9 2010/06/24 19:57:58 joel Exp $
  */
 
 
@@ -103,6 +103,8 @@ static int pipe_alloc(
   pipe->Buffer = malloc(pipe->Size);
   if (! pipe->Buffer)
     goto err_buf;
+
+  err = -ENOMEM;
 
   if (rtems_barrier_create(
         rtems_build_name ('P', 'I', 'r', c),
@@ -342,14 +344,16 @@ int fifo_open(
       break;
 
     case LIBIO_FLAGS_WRITE:
+      pipe->writerCounter ++;
+
+      if (pipe->Writers ++ == 0)
+        PIPE_WAKEUPREADERS(pipe);
+
       if (pipe->Readers == 0 && LIBIO_NODELAY(iop)) {
+	PIPE_UNLOCK(pipe);
         err = -ENXIO;
         goto out_error;
       }
-
-      pipe->writerCounter ++;
-      if (pipe->Writers ++ == 0)
-        PIPE_WAKEUPREADERS(pipe);
 
       if (pipe->Readers == 0) {
         prevCounter = pipe->readerCounter;

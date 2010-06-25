@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_initsupp.c,v 1.22 2010/06/08 10:25:45 sh Exp $
+ *  $Id: imfs_initsupp.c,v 1.23 2010/06/24 21:31:22 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -19,8 +19,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
-
-#include <assert.h>
 
 #include "imfs.h"
 #include <rtems/libio_.h>

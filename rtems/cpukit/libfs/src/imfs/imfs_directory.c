@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_directory.c,v 1.25 2010/06/08 08:50:56 sh Exp $
+ *  $Id: imfs_directory.c,v 1.26 2010/06/24 21:31:21 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include <dirent.h>
 
 #include "imfs.h"
@@ -179,7 +178,7 @@ int imfs_dir_close(
  *                directory
  *     SEEK_CUR - offset is used as the relative byte offset from the current
  *                directory position index held in the iop structure
- *     SEEK_END - N/A --> This will cause an assert.
+ *     SEEK_END - N/A --> This will cause an EINVAL to be returned.
  */
 
 rtems_off64_t imfs_dir_lseek(

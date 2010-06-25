@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.81 2010/06/17 15:29:44 ralf Exp $
+## $Id: Makefile.am,v 1.83 2010/06/24 22:40:32 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -156,11 +156,11 @@ libscore_a_SOURCES += src/scheduler.c src/schedulerblock.c \
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
-    src/threaddelayended.c src/threaddispatch.c src/threadevaluatemode.c \
+    src/threaddelayended.c src/threaddispatch.c \
     src/threadget.c src/threadhandler.c src/threadinitialize.c \
-    src/threadloadenv.c src/threadready.c src/threadresettimeslice.c \
-    src/threadreset.c src/threadrestart.c src/threadresume.c \
-    src/threadsetpriority.c src/threadsetstate.c src/threadsettransient.c \
+    src/threadloadenv.c src/threadready.c src/threadreset.c \
+    src/threadrestart.c src/threadresume.c src/threadsetpriority.c \
+    src/threadsetstate.c src/threadsettransient.c \
     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
     src/threadstartmultitasking.c src/threadsuspend.c \
     src/threadtickletimeslice.c src/threadyieldprocessor.c \
