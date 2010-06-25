@@ -55,6 +55,7 @@ Create abstractions for the ready queue and priority map structures within the T
 
 Extend the `SuperCore` Scheduler Manager with an interface that captures the scheduling points.  Replace all code and direct scheduling variable uses with calls to Scheduler Manager functions.  Update the `SuperCore` Thread Handler (and any other code points that directly access the scheduling structures) to use the new interface. Document where these changes are located. Add configuration options to the scheduler configuration table in confdefs.h so that the existing scheduler is used by default; add configuration points to the Scheduler Manager functions so that replacing code with an alternate implementation is both straightforward and efficient.  Add doxygen comments for the new interfaces to the Scheduler Manager.  Prepare a patch with the new scheduler infrastructure and merge.
 
+*Update: see the NewScheduler page.*
 
 == July 13 - August 9 2010 (Implement EDF) ==
  

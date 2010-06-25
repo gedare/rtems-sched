@@ -28,7 +28,9 @@ The interface to the scheduling subsystem should be simply and concisely capture
 
 _Note: The Scheduler Handler does not care why a thread is blocked or unblocked, thread state management is not the responsibility of the scheduler._
 
-=== Description ===
+In addition to interface routines, the scheduler maintains the internal data structures necessary for making scheduling decisions. This includes primarily the ready queue structure(s).  In the original RTEMS scheduling mechanism, this was the `Chain_Control _Thread_Ready_chain`, which has been updated to the `Ready_queue_Control _Thread_Ready_queue` object.  Other variables that might be subsumed by the Scheduler Object include `_Thread_Executing` and `_Thread_Heir`, however these are transitioning to the per-cpu code base, so I will leave them alone for the time being.
+
+=== Function Description ===
 
 The functionality of these functions already exist in various RTEMS functions:
   * `_Scheduler_Schedule`: Scheduling decision logic, determines the next thread to run. In RTEMS, this is currently done by the `_Thread_Calculate_heir` function in thread.inl.
