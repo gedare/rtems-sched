@@ -46,8 +46,8 @@ typedef enum {
 }   Ready_queue_Disciplines;
 
 /**
- *  This is the structure used to manage sets of tasks which are blocked
- *  waiting to acquire a resource.
+ *  This is the structure used to manage sets of tasks which are ready to 
+ *  use the CPU.
  */
 typedef struct {
   /** This union contains the data structures used to manage the ready

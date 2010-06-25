@@ -30,7 +30,6 @@
  * @{
  */
 
-
 /*
  *  _Ready_queue_Dequeue_priority
  *
@@ -47,7 +46,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_Dequeue_priority(
   Thread_Control *the_thread;
 
   index = _Priority_Get_value(_Priority_Get_highest());
-  rq = &_Thread_Ready_queue.Queues.Priority[index];
+  rq = &the_ready_queue->Queues.Priority[index];
   the_thread = (Thread_Control*) _Chain_First(rq);
   
   if ( _Chain_Has_only_one_node( rq ) ) {
@@ -99,7 +98,6 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_fifo (
         &the_ready_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
-  the_thread->ready = &the_ready_queue->Queues.Fifo;
 }
 
 /*
@@ -290,6 +288,39 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First_priority (
 
   return NULL;
 }
+
+/*
+ *  _Ready_queue_Set_ready_fifo
+ *
+ *  This routine sets the ready pointer of @a the_thread.
+ *
+ */
+
+RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_fifo (
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control *the_thread
+)
+{
+  the_thread->ready = &_Thread_Ready_queue.Queues.Fifo;
+}
+
+/*
+ *  _Ready_queue_Set_ready_priority
+ *
+ *  This routine sets the ready pointer of @a the_thread.
+ *
+ */
+
+RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_priority (
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control *the_thread
+)
+{
+  the_thread->ready = &_Thread_Ready_queue.Queues.Priority[ 
+    _Priority_Get_value(the_thread->current_priority) 
+  ];
+}
+
 
 
 

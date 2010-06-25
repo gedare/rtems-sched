@@ -322,6 +322,17 @@ RTEMS_INLINE_ROUTINE void _Thread_Set_libc_reent (
   _Thread_libc_reent = libc_reent;
 }
 
+/*
+ *  This routine is invoked when a thread wishes to voluntarily
+ *  transfer control of the processor to another thread of equal
+ *  or greater priority.
+ */
+
+RTEMS_INLINE_ROUTINE void _Thread_Yield_processor( void )
+{
+  _Scheduler_Yield( );
+}
+
 /**
  *  This routine evaluates the current scheduling information for the
  *  system and determines if a context switch is required.  This

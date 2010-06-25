@@ -674,13 +674,6 @@ void _Thread_Set_transient(
 void _Thread_Tickle_timeslice( void );
 
 /**
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread of equal
- *  or greater priority.
- */
-void _Thread_Yield_processor( void );
-
-/**
  *  This routine initializes the context of the_thread to its
  *  appropriate starting state.
  */

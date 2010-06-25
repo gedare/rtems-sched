@@ -61,6 +61,7 @@ void _Scheduler_Yield( void )
   executing = _Thread_Executing;
   ready     = executing->ready;
   _ISR_Disable( level );
+    /* TODO: we shouldn't assume ready is a chain? */
     if ( !_Chain_Has_only_one_node( ready ) ) {
       _Ready_queue_Requeue(&_Thread_Ready_queue, executing);
 
