@@ -146,7 +146,7 @@ libscore_a_SOURCES += src/pheapallocate.c \
 libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
     src/readyqenqueue.c src/readyqenqueuefirst.c src/readyqextract.c \
 		src/readyqfirst.c src/readyqflush.c src/readyqrequeue.c \
-		src/readyqsetready.c \
+		src/readyqsetready.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c src/schedulerblock.c \
