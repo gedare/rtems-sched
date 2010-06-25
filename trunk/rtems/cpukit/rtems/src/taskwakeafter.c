@@ -52,7 +52,7 @@ rtems_status_code rtems_task_wake_after(
 {
   _Thread_Disable_dispatch();
     if ( ticks == 0 ) {
-      _Thread_Yield_processor();
+      _Scheduler_Yield();
     } else {
       _Thread_Set_state( _Thread_Executing, STATES_DELAYING );
       _Watchdog_Initialize(

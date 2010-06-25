@@ -23,7 +23,7 @@
 #ifndef _RTEMS_SCORE_READYQ_INL
 #define _RTEMS_SCORE_READYQ_INL
 
-#include <rtems/score/thread.h>
+#include <rtems/score/scheduler.h>
 
 /**
  *  @addtogroup ScoreReadyQ

@@ -31,9 +31,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/rqdata.h>
-
 #include <rtems/score/object.h>
+#include <rtems/score/rqdata.h>
 #include <rtems/score/thread.h>
 
 
