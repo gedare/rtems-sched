@@ -21,6 +21,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/rtems/modes.h>
 #include <rtems/score/object.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/rtems/tasks.h>
