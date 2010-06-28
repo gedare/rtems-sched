@@ -1,0 +1,19 @@
+#summary How RTEMS is configured 
+#labels Phase-Design
+
+= Introduction =
+
+This page describes how RTEMS is configured to provide flexible support for various applicatons' needs.
+
+= Configuring RTEMS =
+
+There are two main ways to provide configuration in RTEMS:
+  * static configuration using configure (autoconf) options
+  * dynamic configuration using confdefs.h options
+These two choices provide different plusses and minuses.  
+
+configure is most useful for coarse-grained configuration options that can provide conditional compilation.  Its main advantage is that it can drastically reduce the size of the compiled binary image by removing large subsystems that a user does not want included, for example support for POSIX. Further, static configuration can reduce runtime overheads because configuration options are not checked during the runtime. However, configure options are less maintainable, lead to pollution of source code with RTEMS-specific `#ifdef` blocks, and cannot be changed without rebuilding the application to produce a new binary image.
+
+confdefs.h is the main way in which users are able to configure certain aspects of RTEMS at runtime, by way of changing values in configuration tables.  The confdefs.h approach has the main advantage of flexibility, because a user can change the configuration tables and reset the application (board) in order to change a system's configuration without having to upload a new binary image. The main disadvantages of confdefs are that it cannot provide conditional compilation and there is additional overhead at runtime to check the configuration options.  The added overhead mostly can be relegated to the application's initialization phase.
+
+

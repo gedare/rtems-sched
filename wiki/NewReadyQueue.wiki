@@ -9,7 +9,7 @@ This page provides the design of how the ready queue will be refactored as part 
 
 At a high-level, the RTEMS' ready queue should be modular and configurable so that the existing ready queue structure can be used for uniproccessors and a new ready queue implementation can be used for multiprocessors. The ready queue should have an opaque interface to the rest of the system, including the scheduler manager. 
 
-== Supporting the Current Scheduler ==
+= Supporting the Current Scheduler =
 
 This section describes how the existing scheduler can be improved by more generic supporting interface in the ready queue.
 
@@ -63,5 +63,8 @@ void _RQ_dequeue_tcb( readyq* rq, Thread_Control *tcb ) {
 These functions assume the current priority management scheme.  However, we should instead add an interface for priority-based scheduling, so that priority can take on different meaning in different contexts.  For example, deadline-based scheduling can be implemented instead, in which case priority is derived from relative deadlines.  This means we need to re-think this simple interface.
 
 Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
+
+= Supporting New Schedulers =
+The primary motivation to refactor the RTEMS ready queue is to simplify using alternate ready queues for new scheduler implementations.  A main concern with using alternate ready queues is how to provide an efficient, maintainable mechanism to select the appropriate ready queue for a given system.  See ConfiguringRTEMS for background on RTEMS' configuration.
 
 
