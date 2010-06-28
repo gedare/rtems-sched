@@ -26,7 +26,7 @@ Other benefits of this project include: facilitating new scheduling mechanisms f
 = Configuration =
 In order to support new scheduling mechanisms, the Scheduler Manager needs to be configurable so that a user can decide which scheduler implementation to use.  There are two approaches to consider.  First, the scheduler could be statically configured by the autoconf tools. Second, the scheduler could be dynamically configurable using confdefs.h.  The advantages to static configuration include reduced code size and lower execution overhead.  The advantages of dynamic configuration comes from all of the schedulers being included in the build process, allowing user applications to select the scheduler of choice, and also allowing a user to swap scheduler implementations without re-building the application with a new configuration.  A hybrid approach to configuration might be best, allowing for coarse grained static configuration options that address the concerns of many, but also providing dynamic configuration so that users can choose to build all schedulers and select from among them at runtime. My plan is to add a Scheduler configuration table as a support table for the existing Configuration table, and to place dynamic configuration options in the Scheduler table.  I do not foresee adding static command line configure options during this project, but I do expect that the SMP implementation will add a configure option to enable SMP.
 
-*Update: see the ConfiguringRTEMS page*
+*Update: see the [ConfiguringRTEMS] page*
 
 = Development Environment =
 Code will be developed using the pc386 BSP in QEMU with coverage tests to ensure that new and modified code is reached by either existing test cases or by new test cases.
@@ -51,7 +51,7 @@ Identify pieces of `SuperCore` Thread Handler that provide scheduling policy and
 
 Create abstractions for the ready queue and priority map structures within the TCB and provide a well-defined interface for manipulating those structures as part of a new `SuperCore` Scheduler Manager. Replace all direct use of the structures in the `SuperCore` Thread Handler with calls to the interface.  Create a scheduler configuration table with configuration options in confdefs.h so that the existing ready queue is used by default; add conditional compilation points to the ready queue and priority map abstractions, so that replacing the structures and code with alternate implementations is both straightforward and efficient.  Create doxygen comments for the new Scheduler Manager.  Prepare a patch for the new ready queue infrastructure.
 
-*Update: see the NewReadyQueue, NewPriorityHandler, and ConfiguringRTEMS pages* 
+*Update: see the NewReadyQueue, NewPriorityHandler, and [ConfiguringRTEMS] pages* 
 
 == June 16 - July 12 2010 (Refactor Scheduling Code) ==
 
