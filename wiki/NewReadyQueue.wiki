@@ -60,11 +60,59 @@ void _RQ_dequeue_tcb( readyq* rq, Thread_Control *tcb ) {
 }
 }}}
 
-These functions assume the current priority management scheme.  However, we should instead add an interface for priority-based scheduling, so that priority can take on different meaning in different contexts.  For example, deadline-based scheduling can be implemented instead, in which case priority is derived from relative deadlines.  This means we need to re-think this simple interface.
+These functions assume the current priority management scheme.  However, we should instead add an interface for priority-based scheduling, so that priority can take on different meaning in different contexts.  For example, deadline-based scheduling can be implemented instead, in which case priority is derived from relative deadlines.  This means we need to re-think this interface.
 
 Additional concerns here would be for supporting alternate ready queue implementations.  For example, this interface does not allow for specifying per-CPU ready queues, which would be useful for an SMP scheduler, especially one that uses affinity as a scheduling metric.
 
-= Supporting New Schedulers =
-The primary motivation to refactor the RTEMS ready queue is to simplify using alternate ready queues for new scheduler implementations.  A main concern with using alternate ready queues is how to provide an efficient, maintainable mechanism to select the appropriate ready queue for a given system.  See ConfiguringRTEMS for background on RTEMS' configuration.
+By raising the abstraction layer by one level, we can effectively solve these problems.  The new Ready Queue interface consists of the following functions:
+{{{
+Thread_Control *_Ready_queue_Dequeue( Ready_queue_Control *the_ready_queue );
 
+void _Ready_queue_Enqueue( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+
+void _Ready_queue_Enqueue_first( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+
+void _Ready_queue_Requeue( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+
+void _Ready_queue_Extract( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+
+Thread_Control *_Ready_queue_First( Ready_queue_Control *the_ready_queue );
+
+void _Ready_queue_Set_ready( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+}}}
+
+*Note: ready queue accesses are assumed to be protected by the caller.*
+
+The `Ready_queue_Control` structure maintains the metadata needed to determine what ready queue implementation to use.  The `Thread_Control` structure maintains some thread-specific variables, which is primarily the `ready` pointer which provides a short-cut to find the ready chain of `the_thread`.  The current implementation leaves `ready` as type `Chain_Control`, although in the future it may be replaced with an opaque type that is known only to the Ready Queue handler.
+
+= Supporting New Schedulers =
+The primary motivation to refactor the RTEMS ready queue is to simplify using alternate ready queues for new scheduler implementations.  A main concern with using alternate ready queues is how to provide an efficient, maintainable mechanism to select the appropriate ready queue for a given system.  See [ConfiguringRTEMS] for background on RTEMS' configuration.
+
+To provide maximum flexibility but minimum overhead, the new Ready Queue Handler must be dynamically configurable yet avoid making runtime checks.  Because the Ready Queue interface is already independent of the ready queue implementation, the complexity of configuration will reside inside of the Ready Queue Handler.
+
+The best solution that I have thought to address configuration is to use a function jump table that holds pointers to the functions that implement the ready queue structure-specific code. This jump table is implemented as a structure that is linked in to the `Ready_queue_Control`, for example:
+{{{
+  typedef struct {
+    Thread_Control * ( *dequeue )( Ready_queue_Control * );
+    void ( *enqueue )( Ready_queue_Control *, Thread_Control * );
+    void ( *enqueue_first )( Ready_queue_Control *, Thread_Control * );
+    void ( *requeue )( Ready_queue_Control *, Thread_Control * );
+    void ( *extract )( Ready_queue_Control *, Thread_Control * );
+    Thread_Control * ( *first )( Ready_queue_Control *the_ready_queue );
+    void ( *set_ready )(  Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+  } Ready_queue_Operations;
+}}}
+
+Then, for example, the body of `_Ready_queue_Enqueue` looks something like the following:
+{{{
+void _Ready_queue_Enqueue( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread )
+{
+  the_ready_queue->rq_ops->enqueue(the_ready_queue, the_thread);
+}
+}}}
+Where `enqueue` is a function pointer in the `Ready_queue_Operations *rq_ops` field of the `Ready_queue_Control` structure. The `Ready_queue_Operations` table allows for any ready queue implementation to register its functions as the `Ready_queue_Control->rq_ops` field.  
+
+Each ready queue implementor then adds a new `CONFIGURE_READY_QUEUE` value in the readyq.h header that will be used by confdefs.h and adds jump table initialization code to `_Ready_queue_Initialize` based on the value of the confdefs.h option.
+
+This solution allows for efficient and flexible support for multiple ready queue implementations in RTEMS.
 
