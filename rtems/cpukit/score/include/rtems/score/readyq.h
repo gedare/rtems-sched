@@ -32,8 +32,41 @@ extern "C" {
 #endif
 
 #include <rtems/score/object.h>
-#include <rtems/score/rqdata.h>
+//#include <rtems/score/rqdata.h>
 #include <rtems/score/thread.h>
+
+#include <rtems/score/chain.h>
+#include <rtems/score/priority.h>
+
+/**
+ *  The following enumerated type details all of the disciplines
+ *  supported by the Ready Queue Handler.
+ */
+typedef enum {
+  READY_QUEUE_DISCIPLINE_FIFO,     /* FIFO queue discipline */
+  READY_QUEUE_DISCIPLINE_PRIORITY  /* PRIORITY queue discipline */
+}   Ready_queue_Disciplines;
+
+/**
+ *  This is the structure used to manage sets of tasks which are ready to 
+ *  use the CPU.
+ */
+typedef struct {
+  /** This union contains the data structures used to manage the ready
+   *  set of tasks which varies based upon the discipline.
+   */
+  union {
+    /** This is the FIFO discipline list. */
+    Chain_Control Fifo;
+
+    /** This is the set of lists for priority discipline scheduling. */
+    Chain_Control *Priority;
+  } Queues;
+
+  /** This field indicates the ready queue's discipline. */
+  Ready_queue_Disciplines discipline;
+}   Ready_queue_Control;
+
 
 
 /**

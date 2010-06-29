@@ -23,7 +23,7 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-#include <rtems/score/rqdata.h>
+//#include <rtems/score/rqdata.h>
 
 /*PAGE
  *

@@ -26,8 +26,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/readyq.h \
-		include/rtems/score/rqdata.h include/rtems/score/scheduler.h \
-		include/rtems/score/stack.h \
+		include/rtems/score/scheduler.h include/rtems/score/stack.h \
     include/rtems/score/states.h include/rtems/score/sysstate.h \
     include/rtems/score/thread.h include/rtems/score/threadq.h \
     include/rtems/score/threadsync.h include/rtems/score/timespec.h \
