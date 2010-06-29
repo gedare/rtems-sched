@@ -317,6 +317,9 @@
 /* revision version portion of an RTEMS release */
 #undef __RTEMS_REVISION__
 
+/* Size of a void * pointer */
+#undef __RTEMS_SIZEOF_VOID_P__
+
 /* disable strict order mutex */
 #undef __RTEMS_STRICT_ORDER_MUTEX__
 
