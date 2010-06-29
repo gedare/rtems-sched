@@ -6,8 +6,8 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2008.
- *  On-Line Applications Research Corporation (OAR).
+ *  COPYRIGHT (c) 2010.
+ *  Gedare Bloom
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
@@ -107,12 +107,13 @@ typedef struct {
 
 /** @brief  Ready queue Initialize
  *
- *  This routine initializes the_ready_queue based on the
- *  discipline indicated in attribute_set.  
+ *  This routine initializes the_ready_queue with the functions in 
+ *  @a the_rq_ops jump table.  These are normally supplied by the 
+ *  Scheduler Initialization.
  */
 void _Ready_queue_Initialize(
   Ready_queue_Control         *the_ready_queue,
-  Ready_queue_Disciplines      the_discipline
+  Ready_queue_Operations      *the_rq_ops
 );
 
 /** @brief  Ready queue Dequeue
@@ -179,15 +180,6 @@ void _Ready_queue_Extract(
 Thread_Control *_Ready_queue_First(
   Ready_queue_Control *the_ready_queue
 );
-
-/**
- * @brief Ready queue Extract priority
- *
- * This macro wraps the underlying call and hides the requeuing argument.
- */
-
-#define _Ready_queue_Extract_priority( _the_ready_queue, _the_thread ) \
-  _Ready_queue_Extract_priority_helper( _the_ready_queue, _the_thread, false )
 
 /** 
  * @brief Ready queue Set ready
