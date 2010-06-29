@@ -186,6 +186,15 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_Extract_fifo(
 #endif
 }
 
+/**
+ * @brief Ready queue Extract priority
+ *
+ * This macro wraps the underlying call and hides the requeuing argument.
+ */
+
+#define _Ready_queue_Extract_priority( _the_ready_queue, _the_thread ) \
+  _Ready_queue_Extract_priority_helper( _the_ready_queue, _the_thread, false )
+
 /*
  *  _Ready_queue_Extract_priority_helper
  *
