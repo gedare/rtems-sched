@@ -78,12 +78,12 @@ void _Ready_queue_Extract( Ready_queue_Control *the_ready_queue, Thread_Control 
 
 Thread_Control *_Ready_queue_First( Ready_queue_Control *the_ready_queue );
 
-void _Ready_queue_Set_ready( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+void _Ready_queue_Set_per_thread_data( Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
 }}}
 
 *Note: ready queue accesses are assumed to be protected by the caller.*
 
-The `Ready_queue_Control` structure maintains the metadata needed to determine what ready queue implementation to use.  The `Thread_Control` structure maintains some thread-specific variables, which is primarily the `ready` pointer which provides a short-cut to find the ready chain of `the_thread`.  The current implementation leaves `ready` as type `Chain_Control`, although in the future it may be replaced with an opaque type that is known only to the Ready Queue handler.
+The `Ready_queue_Control` structure maintains the metadata needed to determine what ready queue implementation to use.  The `Thread_Control` structure maintains some thread-specific variables, which is primarily the `ready` pointer which provides a short-cut to find the ready chain of `the_thread`.  The current implementation leaves `ready` as type `Chain_Control`, although it will be replaced with an opaque type that is manipulated only by the Ready Queue Handler.  The function `_Ready_queue_Set_per_thread_data` populates the thread-specific variables necessary for the ready queue implementation.
 
 = Supporting New Schedulers =
 The primary motivation to refactor the RTEMS ready queue is to simplify using alternate ready queues for new scheduler implementations.  A main concern with using alternate ready queues is how to provide an efficient, maintainable mechanism to select the appropriate ready queue for a given system.  See [ConfiguringRTEMS] for background on RTEMS' configuration.
@@ -99,7 +99,7 @@ The best solution that I have thought to address configuration is to use a funct
     void ( *requeue )( Ready_queue_Control *, Thread_Control * );
     void ( *extract )( Ready_queue_Control *, Thread_Control * );
     Thread_Control * ( *first )( Ready_queue_Control *the_ready_queue );
-    void ( *set_ready )(  Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
+    void ( *set_per_thread_data )(  Ready_queue_Control *the_ready_queue, Thread_Control *the_thread );
   } Ready_queue_Operations;
 }}}
 
@@ -115,4 +115,3 @@ Where `enqueue` is a function pointer in the `Ready_queue_Operations *rq_ops` fi
 Each ready queue implementor then adds a new `CONFIGURE_READY_QUEUE` value in the readyq.h header that will be used by confdefs.h and adds jump table initialization code to `_Ready_queue_Initialize` based on the value of the confdefs.h option.
 
 This solution allows for efficient and flexible support for multiple ready queue implementations in RTEMS.
-
