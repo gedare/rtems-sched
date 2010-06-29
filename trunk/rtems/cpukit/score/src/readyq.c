@@ -23,7 +23,9 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-#include <rtems/score/rqdata.h>
+//#include <rtems/score/rqdata.h>
+#include <rtems/score/wkspace.h>
+#include <rtems/config.h>
 
 /*PAGE
  *
@@ -48,6 +50,10 @@ void _Ready_queue_Initialize(
 
   switch (the_discipline) {
     case READY_QUEUE_DISCIPLINE_PRIORITY:
+      the_ready_queue->Queues.Priority = (Chain_Control *) 
+        _Workspace_Allocate_or_fatal_error(
+          (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+        );
 
       for( index=0; index <= PRIORITY_MAXIMUM; index++)
         _Chain_Initialize_empty( &the_ready_queue->Queues.Priority[index] );
