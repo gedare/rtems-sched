@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadloadenv.c,v 1.7 2008/09/04 17:39:55 ralf Exp $
+ *  $Id: threadloadenv.c,v 1.8 2010/06/29 00:34:12 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -58,8 +58,6 @@ void _Thread_Load_environment(
 #endif
     is_fp = false;
 
-
-  the_thread->do_post_task_switch_extension = false;
   the_thread->is_preemptible   = the_thread->Start.is_preemptible;
   the_thread->budget_algorithm = the_thread->Start.budget_algorithm;
   the_thread->budget_callout   = the_thread->Start.budget_callout;

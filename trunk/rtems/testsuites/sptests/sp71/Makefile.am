@@ -1,11 +1,11 @@
 ##
-## $Id: Makefile.am,v 1.1 2010/06/22 16:14:43 joel Exp $
+## $Id: Makefile.am,v 1.2 2010/06/28 13:51:04 joel Exp $
 ##
 
 MANAGERS = all
 
 rtems_tests_PROGRAMS = sp71
-sp71_SOURCES = init.c ../../support/src/spin.c
+sp71_SOURCES = init.c
 
 dist_rtems_tests_DATA = sp71.scn
 dist_rtems_tests_DATA += sp71.doc

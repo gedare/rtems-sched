@@ -30,7 +30,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.38 2009/12/04 05:24:33 ralf Exp $
+ *  $Id: cpu.h,v 1.39 2010/06/29 00:33:15 joel Exp $
  */
 
 #ifndef _RTEMS_NEW_EXCEPTIONS_CPU_H
@@ -162,22 +162,6 @@ extern "C" {
  */
 
 /* EXTERN Context_Control_fp  _CPU_Null_fp_context; */
-
-/*
- *  On some CPUs, RTEMS supports a software managed interrupt stack.
- *  This stack is allocated by the Interrupt Manager and the switch
- *  is performed in _ISR_Handler.  These variables contain pointers
- *  to the lowest and highest addresses in the chunk of memory allocated
- *  for the interrupt stack.  Since it is unknown whether the stack
- *  grows up or down (in general), this give the CPU dependent
- *  code the option of picking the version it wants to use.
- *
- *  NOTE: These two variables are required if the macro
- *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
- */
-
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 #endif /* ndef ASM */
 

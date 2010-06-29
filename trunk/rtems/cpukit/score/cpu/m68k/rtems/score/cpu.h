@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.42 2010/04/08 16:37:34 joel Exp $
+ *  $Id: cpu.h,v 1.43 2010/06/29 00:31:18 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -307,9 +307,6 @@ typedef struct {
 } CPU_Exception_frame;
 
 /* variables */
-
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 extern void*                     _VBR;
 

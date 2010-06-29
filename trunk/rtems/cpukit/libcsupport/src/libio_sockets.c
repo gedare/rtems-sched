@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_sockets.c,v 1.12 2009/03/27 13:45:31 joel Exp $
+ *  $Id: libio_sockets.c,v 1.14 2010/06/28 23:12:10 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -20,6 +20,7 @@
 #include <rtems.h>
 
 #include <errno.h>
+#include <rtems/seterr.h>
 
 /*
  * Convert an RTEMS file descriptor to a BSD socket pointer.
@@ -62,10 +63,9 @@ int rtems_bsdnet_makeFdForSocket(
   int fd;
 
   iop = rtems_libio_allocate();
-  if (iop == 0) {
-      errno = ENFILE;
-      return -1;
-  }
+  if (iop == 0)
+      rtems_set_errno_and_return_minus_one( ENFILE );
+
   fd = iop - rtems_libio_iops;
   iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data0 = fd;

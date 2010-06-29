@@ -7,7 +7,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ppc_exc_hdl.c,v 1.8 2009/10/23 07:32:46 thomas Exp $
+ *  $Id: ppc_exc_hdl.c,v 1.9 2010/06/29 00:39:39 joel Exp $
  */
 
 #include <rtems.h>
@@ -86,18 +86,5 @@ void ppc_exc_wrapup(BSP_Exception_frame *frame)
      *        interrupts around the execution of _Thread_Dispatch();
      */
     _Thread_Dispatch();
-  } else if ( _ISR_Signals_to_thread_executing ) {
-    _ISR_Signals_to_thread_executing = 0;
-    /*
-     * Process pending signals that have not already been
-     * processed by _Thread_Dispatch. This happens quite
-     * unfrequently : the ISR must have posted an action
-     * to the current running thread.
-     */
-    if ( _Thread_Do_post_task_switch_extension ||
-        _Thread_Executing->do_post_task_switch_extension ) {
-      _Thread_Executing->do_post_task_switch_extension = false;
-      _API_extensions_Run_postswitch();
-    }
   }
 }

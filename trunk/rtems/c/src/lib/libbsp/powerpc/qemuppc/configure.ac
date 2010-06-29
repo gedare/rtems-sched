@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.3 2009/11/28 06:28:40 ralf Exp $
+## $Id: configure.ac,v 1.4 2010/06/29 13:47:59 jennifer Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-h8300-h8sim],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -14,6 +14,10 @@ RTEMS_BSP_CONFIGURE
 RTEMS_PROG_CC_FOR_TARGET
 RTEMS_CANONICALIZE_TOOLS
 RTEMS_PROG_CCAS
+
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 RTEMS_BSP_CLEANUP_OPTIONS(0, 0)
 

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.c,v 1.3 2010/03/27 15:02:02 joel Exp $
+ *  $Id: cpu_asm.c,v 1.4 2010/06/29 00:31:16 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -77,11 +77,9 @@ void _ISR_Handler(void)
    *    goto the label "exit interrupt (simple case)"
    *
    *  if ( _Thread_Dispatch_disable_level )
-   *    _ISR_Signals_to_thread_executing = FALSE;
    *    goto the label "exit interrupt (simple case)"
    *
-   *  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
-   *    _ISR_Signals_to_thread_executing = FALSE;
+   *  if ( _Context_Switch_necessary ) {
    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    *    prepare to get out of interrupt
    *    return from interrupt  (maybe to _ISR_Dispatch)

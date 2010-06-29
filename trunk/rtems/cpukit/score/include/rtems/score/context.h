@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: context.h,v 1.21 2009/11/28 05:58:53 ralf Exp $
+ *  $Id: context.h,v 1.22 2010/06/29 00:34:11 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CONTEXT_H
@@ -23,6 +23,9 @@
  *
  *  This handler encapsulates functionality which abstracts thread context
  *  management in a portable manner.
+ *
+ *  The context switch needed variable is contained in the per cpu
+ *  data structure.
  */
 /**@{*/
 
@@ -39,16 +42,6 @@ extern "C" {
  *  to store a full floating point context.
  */
 #define CONTEXT_FP_SIZE CPU_CONTEXT_FP_SIZE
-
-/**
- *  @brief Is Context Switch Needed?
- *
- *  This variable is set to true when a reschedule operation
- *  has determined that the processor should be taken away from the
- *  currently executing thread and given to the heir thread.
- */
-
-SCORE_EXTERN volatile bool _Context_Switch_necessary;
 
 /**
  *  @brief Initialize Context Area

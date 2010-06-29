@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: __gettod.c,v 1.23 2009/09/30 06:45:38 ralf Exp $
+ *  $Id: __gettod.c,v 1.24 2010/06/28 22:14:35 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,6 +21,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <rtems.h>
+#include <rtems/seterr.h>
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_GETTIMEOFDAY)
 /*
@@ -32,16 +33,13 @@ int gettimeofday(
 )
 {
   /* struct timezone* tzp = (struct timezone*) __tz; */
-  if ( !tp ) {
-    errno = EFAULT;
-    return -1;
-  }
+  if ( !tp )
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  POSIX does not seem to allow for not having a TOD so we just
    *  grab the time of day.
    */
-
   _TOD_Get_timeval( tp );
 
   /*

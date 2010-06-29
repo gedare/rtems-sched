@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: killinfo.c,v 1.24 2010/06/21 22:54:54 joel Exp $
+ *  $Id: killinfo.c,v 1.25 2010/06/29 00:34:10 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -313,8 +313,6 @@ int killinfo(
    *  evaluate the signals pending.
    */
 process_it:
-
-  the_thread->do_post_task_switch_extension = true;
 
   /*
    *  Returns true if the signal was synchronously given to a thread

@@ -1,11 +1,11 @@
 ##
-## $Id: Makefile.am,v 1.1 2010/06/22 19:27:12 jennifer Exp $
+## $Id: Makefile.am,v 1.2 2010/06/28 13:23:27 joel Exp $
 ##
 
 MANAGERS = all
 
 rtems_tests_PROGRAMS = malloc03
-malloc03_SOURCES = init.c ../../support/src/spin.c
+malloc03_SOURCES = init.c
 
 dist_rtems_tests_DATA = malloc03.scn
 dist_rtems_tests_DATA += malloc03.doc

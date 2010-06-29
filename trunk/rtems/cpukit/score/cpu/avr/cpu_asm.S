@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.S,v 1.9 2010/05/10 16:31:19 joel Exp $
+ *  $Id: cpu_asm.S,v 1.10 2010/06/29 00:31:05 joel Exp $
  */
 
 /*
@@ -28,6 +28,7 @@
 
 #include <rtems/asm.h>
 #include <avr/sfr_defs.h>
+#include <rtems/score/percpu.h>
 
 
 #define jmpb_hi 	r25
@@ -438,11 +439,9 @@ void _ISR_Handler(void)
    *    goto the label "exit interrupt (simple case)"
    *
    *  if ( _Thread_Dispatch_disable_level )
-   *    _ISR_Signals_to_thread_executing = FALSE;
    *    goto the label "exit interrupt (simple case)"
    *
-   *  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
-   *    _ISR_Signals_to_thread_executing = FALSE;
+   *  if ( _Context_Switch_necessary ) {
    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
    *    prepare to get out of interrupt
    *    return from interrupt  (maybe to _ISR_Dispatch)

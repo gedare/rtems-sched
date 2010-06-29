@@ -27,7 +27,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: asm.h,v 1.8 2009/12/04 05:22:48 ralf Exp $
+ *  $Id: asm.h,v 1.9 2010/06/29 00:31:09 joel Exp $
  */
 
 #ifndef _RTEMS_ASM_H
@@ -37,7 +37,6 @@
  *  Indicate we are in an assembly file and get the basic CPU definitions.
  */
 
-#define ASM
 #include <rtems/score/h8300.h>
 
 /*
@@ -116,5 +115,3 @@
 #define EXTERN(sym) .globl SYM (sym)
 
 #endif
-
-	asm( \".h8300h\" );

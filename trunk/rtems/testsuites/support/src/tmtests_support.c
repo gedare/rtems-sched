@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: tmtests_support.c,v 1.1 2010/06/21 16:54:17 joel Exp $
+ *  $Id: tmtests_support.c,v 1.2 2010/06/25 16:59:06 joel Exp $
  */
 
 #include <bsp.h>
@@ -27,9 +27,9 @@ void rtems_time_test_measure_operation(
   int                       overhead
 )
 {
-  int i;
-  int loop_overhead;
-  int end_time;
+  int  i;
+  long loop_overhead;
+  int  end_time;
 
   benchmark_timer_initialize();
     for (i=0 ; i<iterations ; i++ ) {

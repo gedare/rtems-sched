@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: __times.c,v 1.24 2009/12/02 18:22:18 humph Exp $
+ *  $Id: __times.c,v 1.25 2010/06/28 22:14:35 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -22,6 +22,7 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <assert.h>
+#include <rtems/seterr.h>
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
 #endif
@@ -32,10 +33,8 @@ clock_t _times(
 {
   rtems_interval ticks;
 
-  if ( !ptms ) {
-    errno = EFAULT;
-    return -1;
-  }
+  if ( !ptms )
+    rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  This call does not depend on TOD being initialized and can't fail.

@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl
-dnl $Id: configure.ac,v 1.7 2009/10/20 05:00:58 ralf Exp $
+dnl $Id: configure.ac,v 1.8 2010/06/29 13:49:06 jennifer Exp $
 
 AC_PREREQ(2.59)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-virtex],[_RTEMS_VERSION],[rtems-bugs@rtems.com])
@@ -18,6 +18,10 @@ RTEMS_PROG_CCAS
 RTEMS_CHECK_NETWORKING
 
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 RTEMS_BSPOPTS_SET([PPC_USE_SPRG],[*],[1])
 RTEMS_BSPOPTS_HELP([PPC_USE_SPRG],

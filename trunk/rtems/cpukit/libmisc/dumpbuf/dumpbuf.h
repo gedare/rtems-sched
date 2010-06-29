@@ -6,7 +6,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: dumpbuf.h,v 1.5 2009/11/29 11:57:23 ralf Exp $
+ *  $Id: dumpbuf.h,v 1.6 2010/06/28 14:33:34 joel Exp $
  */
 
 #ifndef __DUMP_BUFFER_h
@@ -27,8 +27,8 @@ extern "C" {
  *  @param[in] length is the length of the buffer
  */
 void rtems_print_buffer(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 );
 
 #ifdef __cplusplus
