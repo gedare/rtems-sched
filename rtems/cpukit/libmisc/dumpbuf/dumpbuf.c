@@ -6,7 +6,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: dumpbuf.c,v 1.7 2007/09/17 14:28:41 joel Exp $
+ *  $Id: dumpbuf.c,v 1.8 2010/06/28 14:33:34 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -24,13 +24,13 @@
  */
 
 static inline void Dump_Line(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 );
 
 void rtems_print_buffer(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 )
 {
 
@@ -50,8 +50,8 @@ void rtems_print_buffer(
 }
 
 static inline void Dump_Line(
-  unsigned char *buffer,
-  int            length
+  const unsigned char *buffer,
+  int                  length
 )
 {
 

@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: system.h,v 1.64 2010/06/18 04:00:54 ralf Exp $
+ *  $Id: system.h,v 1.65 2010/06/29 00:34:11 joel Exp $
  */
 
 #ifndef _RTEMS_SYSTEM_H
@@ -169,6 +169,7 @@ typedef void * proc_ptr;
 #include <stdint.h>
 #endif
 #include <rtems/score/cpu.h>        /* processor specific information */
+#include <rtems/score/percpu.h>
 
 #ifndef ASM
 /**

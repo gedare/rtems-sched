@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: pthreadsigmask.c,v 1.8 2008/09/04 15:23:12 ralf Exp $
+ *  $Id: pthreadsigmask.c,v 1.9 2010/06/29 00:34:11 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -65,7 +65,6 @@ int pthread_sigmask(
 
   if ( ~api->signals_blocked &
        (api->signals_pending | _POSIX_signals_Pending) ) {
-    _Thread_Executing->do_post_task_switch_extension = true;
     _Thread_Dispatch();
   }
 

@@ -114,7 +114,6 @@
 /signal.c/1.16/Tue Jan 18 09:03:44 2005//
 /signalcatch.c/1.5/Tue Jan 18 09:03:44 2005//
 /signalmp.c/1.13/Tue Dec 15 18:26:41 2009//
-/signalsend.c/1.10/Tue Dec 15 18:26:41 2009//
 /taskcreate.c/1.17/Tue Dec 15 18:26:41 2009//
 /taskdata.c/1.1/Mon May 21 23:19:20 2007//
 /taskdelete.c/1.11/Tue Dec 15 18:26:41 2009//
@@ -122,7 +121,6 @@
 /taskident.c/1.11/Tue Dec 15 18:26:41 2009//
 /taskinitusers.c/1.10/Sat Jul  4 19:45:18 2009//
 /taskissuspended.c/1.8/Tue Dec 15 18:26:41 2009//
-/taskmode.c/1.11/Fri Sep  4 13:09:48 2009//
 /taskmp.c/1.18/Tue Jan  6 04:58:46 2009//
 /taskrestart.c/1.9/Tue Dec 15 18:26:41 2009//
 /taskresume.c/1.10/Tue Dec 15 18:26:41 2009//
@@ -154,4 +152,6 @@
 /rtemsobjectgetapiname.c/1.5/Mon Jun 21 16:59:45 2010//
 /rtemsobjectidapimaximum.c/1.3/Mon Jun 21 16:59:45 2010//
 /tasksetpriority.c/1.12/Mon Jun 21 16:59:45 2010//
+/signalsend.c/1.11/Tue Jun 29 17:00:14 2010//
+/taskmode.c/1.12/Tue Jun 29 17:00:14 2010//
 D

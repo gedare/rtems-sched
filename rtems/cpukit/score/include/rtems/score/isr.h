@@ -15,17 +15,22 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: isr.h,v 1.31 2009/11/28 05:58:54 ralf Exp $
+ *  $Id: isr.h,v 1.32 2010/06/29 00:34:11 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_ISR_H
 #define _RTEMS_SCORE_ISR_H
+
+#include <rtems/score/percpu.h>
 
 /**
  *  @defgroup ScoreISR ISR Handler
  *
  *  This handler encapsulates functionality which provides the foundation
  *  ISR services used in all of the APIs supported by RTEMS.
+ *
+ *  The ISR Nest level counter variable is maintained as part of the
+ *  per cpu data structure.
  */
 /**@{*/
 
@@ -74,18 +79,6 @@ typedef ISR_Handler ( *ISR_Handler_entry )(
  *  This constant promotes out the highest valid interrupt vector number.
  */
 #define ISR_INTERRUPT_MAXIMUM_VECTOR_NUMBER  CPU_INTERRUPT_MAXIMUM_VECTOR_NUMBER
-
-/**
- *  The following is true if signals have been sent to the currently
- *  executing thread by an ISR handler.
- */
-SCORE_EXTERN bool       _ISR_Signals_to_thread_executing;
-
-/**
- *  The following contains the interrupt service routine nest level.
- *  When this variable is zero, a thread is executing.
- */
-SCORE_EXTERN volatile uint32_t   _ISR_Nest_level;
 
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
 /**

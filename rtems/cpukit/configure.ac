@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.187 2010/06/17 15:29:22 ralf Exp $
+## $Id: configure.ac,v 1.188 2010/06/29 00:34:10 joel Exp $
 
 AC_PREREQ(2.61)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -251,6 +251,9 @@ AC_CHECK_DECLS([sbrk],,,[#include <unistd.h>])
 ## Check if libc provides BSD's strlcpy/strlcat
 AC_CHECK_FUNCS(strlcpy strlcat)
 
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 # ... far too many conditionals ...
 AM_CONDITIONAL(LIBRPC,[test x"$rtems_cv_HAS_NETWORKING" = x"yes"])

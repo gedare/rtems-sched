@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: psignalsetprocesssignals.c,v 1.6 2007/12/17 16:19:14 joel Exp $
+ *  $Id: psignalsetprocesssignals.c,v 1.7 2010/06/29 00:34:11 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -41,8 +41,6 @@ void _POSIX_signals_Set_process_signals(
   ISR_Level  level;
 
   _ISR_Disable( level );
-    if ( !_POSIX_signals_Pending )
-      _Thread_Do_post_task_switch_extension++;
     _POSIX_signals_Pending |= mask;
   _ISR_Enable( level );
 }

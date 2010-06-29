@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.c,v 1.2 2010/05/21 16:33:00 joel Exp $
+ *  $Id: cpu_asm.c,v 1.3 2010/06/29 00:39:41 joel Exp $
  */
 
 #include <rtems/system.h>
@@ -72,12 +72,10 @@ void __ISR_Handler( uint32_t   vector)
     return;
 
   if ( _Thread_Dispatch_disable_level ) {
-    _ISR_Signals_to_thread_executing = FALSE;
     return;
   }
 
-  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
-    _ISR_Signals_to_thread_executing = FALSE;
+  if ( _Context_Switch_necessary ) {
     _Thread_Dispatch();
   }
 }

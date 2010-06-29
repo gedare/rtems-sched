@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.c,v 1.62 2009/09/11 14:54:29 joel Exp $
+ *  $Id: thread.c,v 1.63 2010/06/29 00:34:12 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -76,8 +76,6 @@ void _Thread_Handler_initialization(void)
 #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
   _Thread_Allocated_fp      = NULL;
 #endif
-
-  _Thread_Do_post_task_switch_extension = 0;
 
   _Thread_Maximum_extensions = maximum_extensions;
 

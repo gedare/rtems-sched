@@ -14,7 +14,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: irq.c,v 1.8 2009/12/17 08:42:16 thomas Exp $
+ *  $Id: irq.c,v 1.9 2010/06/29 00:39:39 joel Exp $
  */
 
 #include <rtems.h>
@@ -481,23 +481,4 @@ void C_dispatch_irq_handler (CPU_Interrupt_frame *frame, unsigned int excNum)
     ppc_cached_irq_mask = oldMask;
     usiu.simask = ppc_cached_irq_mask;
   }
-}
-
-void _ThreadProcessSignalsFromIrq (CPU_Exception_frame* ctx)
-{
-  /*
-   * Process pending signals that have not already been
-   * processed by _Thread_Displatch. This happens quite
-   * unfrequently : the ISR must have posted an action
-   * to the current running thread.
-   */
-  if ( _Thread_Do_post_task_switch_extension ||
-       _Thread_Executing->do_post_task_switch_extension ) {
-    _Thread_Executing->do_post_task_switch_extension = false;
-    _API_extensions_Run_postswitch();
-  }
-  /*
-   * I plan to process other thread related events here.
-   * This will include DEBUG session requested from keyboard...
-   */
 }

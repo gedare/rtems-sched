@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.11 2009/11/28 06:28:40 ralf Exp $
+## $Id: configure.ac,v 1.12 2010/06/29 13:44:54 jennifer Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-gen83xx],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -46,6 +46,10 @@ RTEMS_BSPOPTS_HELP([MPC8349],
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile])

@@ -1,5 +1,5 @@
 /*
- *  $Id: tftp.h,v 1.7 2010/05/31 13:56:37 ccj Exp $
+ *  $Id: tftp.h,v 1.8 2010/06/29 13:03:31 sh Exp $
  */
 
 /*
@@ -37,18 +37,6 @@ extern "C" {
  * Filesystem Mount table entry.
  */
 int rtems_tftpfs_initialize(rtems_filesystem_mount_table_entry_t *temp_mt_entry);
-
-/*
- * Filesystem initialization routine
- */
-
-int rtems_bsdnet_initialize_tftp_filesystem( void );
-
-/*
- * TFTP file system operations table.
- */
-
-extern rtems_filesystem_operations_table  rtems_tftp_ops;
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,32 @@
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* spsize/size.c: Add a per cpu data structure which contains the
+	information required by RTEMS for each CPU core. This encapsulates
+	information such as thread executing, heir, idle and dispatch needed.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp69/Makefile.am: Really needs spin.c
+
+2010-06-26	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1592/testing
+	* Makefile.am, configure.ac: Changes to incorporate sperror01,
+	sperror02, sperror03
+	* sperror01/init.c, sperror02/init.c: New tests to exercise
+	rtems_error routine
+	* sperror03/init.c: New test to exercise rtems_panic routine
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp69/Makefile.am, sp71/Makefile.am, spfifo02/Makefile.am: Tests do
+	not need spin.c
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sp70/Makefile.am: Tests do not need spin.c
+
 2010-06-24	Bharath Suri <bharath.s.jois@gmail.com>
 
 	* Makefile.am, configure.ac: Removed some fifo tests.

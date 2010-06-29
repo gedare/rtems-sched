@@ -1,3 +1,83 @@
+2010-06-29	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libnetworking/lib/tftpDriver.c: rtems_tftp_ops and
+	rtems_tftp_handlers are now const and static.
+	* libnetworking/rtems/tftp.h: Removed
+	rtems_bsdnet_initialize_tftp_filesystem and rtems_tftp_ops.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/defaults/default_chown.c,
+	libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_fchmod.c,
+	libfs/src/defaults/default_fcntl.c,
+	libfs/src/defaults/default_fdatasync.c,
+	libfs/src/defaults/default_freenode.c,
+	libfs/src/defaults/default_fsmount.c,
+	libfs/src/defaults/default_fstat.c,
+	libfs/src/defaults/default_fsync.c,
+	libfs/src/defaults/default_ftruncate.c,
+	libfs/src/defaults/default_ioctl.c,
+	libfs/src/defaults/default_link.c,
+	libfs/src/defaults/default_lseek.c,
+	libfs/src/defaults/default_mount.c,
+	libfs/src/defaults/default_read.c,
+	libfs/src/defaults/default_readlink.c,
+	libfs/src/defaults/default_rename.c,
+	libfs/src/defaults/default_rmnod.c,
+	libfs/src/defaults/default_statvfs.c,
+	libfs/src/defaults/default_symlink.c,
+	libfs/src/defaults/default_unlink.c,
+	libfs/src/defaults/default_utime.c,
+	libfs/src/defaults/default_write.c: Add include of rtems/seterr.h
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1573/cpukit
+	* configure.ac, posix/src/killinfo.c,
+	posix/src/psignalclearprocesssignals.c,
+	posix/src/psignalsetprocesssignals.c,
+	posix/src/psignalunblockthread.c, posix/src/pthreadcreate.c,
+	posix/src/pthreadkill.c, posix/src/pthreadsigmask.c,
+	rtems/src/signalsend.c, rtems/src/taskmode.c, score/Makefile.am,
+	score/preinstall.am, score/include/rtems/system.h,
+	score/include/rtems/score/context.h, score/include/rtems/score/isr.h,
+	score/include/rtems/score/thread.h, score/src/isr.c,
+	score/src/isrthreaddispatch.c, score/src/thread.c,
+	score/src/threaddispatch.c, score/src/threadloadenv.c: Add a per cpu
+	data structure which contains the information required by RTEMS for
+	each CPU core. This encapsulates information such as thread
+	executing, heir, idle and dispatch needed.
+	* score/include/rtems/score/percpu.h, score/src/percpu.c: New files.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/libio_sockets.c: Use
+	rtems_set_errno_and_return_minus_one() where it was missed before.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/__brk.c, libcsupport/src/__gettod.c,
+	libcsupport/src/__times.c, libcsupport/src/fchdir.c,
+	libcsupport/src/ftrylockfile.c, libcsupport/src/getpwent.c,
+	libcsupport/src/gxx_wrappers.c, libcsupport/src/libio_sockets.c,
+	libcsupport/src/pipe.c: Use rtems_set_errno_and_return_minus_one()
+	where it was missed before.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/include/rtems/error.h, libcsupport/src/error.c: Clean up
+	so rtems_panic() can be a noreturn method. This eliminates some
+	unreachable and thus untestable code.
+
+2010-06-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/src/termios.c: Formatting.
+
+2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/dumpbuf/dumpbuf.c, libmisc/dumpbuf/dumpbuf.h: Add const.
+
 2010-06-25	Jennifer Averett <Jennifer.Averett@OARcorp.com
 
 	* libcsupport/include/rtems/libio.h, libfs/Makefile.am: Added default

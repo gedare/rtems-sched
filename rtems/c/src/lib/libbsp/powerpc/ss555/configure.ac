@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.15 2009/11/28 06:28:41 ralf Exp $
+## $Id: configure.ac,v 1.16 2010/06/29 13:48:32 jennifer Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-powerpc-mbx5xx],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -17,6 +17,10 @@ RTEMS_PROG_CCAS
 
 RTEMS_CHECK_NETWORKING
 AM_CONDITIONAL(HAS_NETWORKING,test "$HAS_NETWORKING" = "yes")
+
+## This is needed to generate the field offsets of the per CPU 
+## data structure so they can be accessed from assembly code.
+AC_CHECK_SIZEOF([void *])
 
 RTEMS_BSPOPTS_SET([WATCHDOG_TIMEOUT],[*],[0xFFFF])
 RTEMS_BSPOPTS_HELP([WATCHDOG_TIMEOUT],

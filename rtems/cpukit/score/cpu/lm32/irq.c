@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: irq.c,v 1.4 2010/05/29 05:19:13 ralf Exp $
+ *  $Id: irq.c,v 1.5 2010/06/29 00:31:12 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -19,8 +19,9 @@
 
 #include <rtems/system.h>
 #include <rtems/score/cpu.h>
-#include <rtems/score/isr.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/isr.h>
+#include <rtems/score/percpu.h>
 
 /*
  *  This routine provides the RTEMS interrupt management.
@@ -77,13 +78,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
   if ( _ISR_Nest_level )
     return;
 
-  if ( _Thread_Dispatch_disable_level ) {
-    _ISR_Signals_to_thread_executing = FALSE;
-    return;
-  }
-
-  if ( _Context_Switch_necessary || _ISR_Signals_to_thread_executing ) {
-    _ISR_Signals_to_thread_executing = FALSE;
+  if ( _Context_Switch_necessary ) {
 
     /* save off our stack frame so the context switcher can get to it */
     _exception_stack_frame = ifr;

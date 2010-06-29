@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.25 2010/05/10 16:31:24 joel Exp $
+ *  $Id: cpu.h,v 1.26 2010/06/29 00:31:05 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -454,26 +454,6 @@ typedef struct {
  */
 
 SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
-
-/*
- *  On some CPUs, RTEMS supports a software managed interrupt stack.
- *  This stack is allocated by the Interrupt Manager and the switch
- *  is performed in _ISR_Handler.  These variables contain pointers
- *  to the lowest and highest addresses in the chunk of memory allocated
- *  for the interrupt stack.  Since it is unknown whether the stack
- *  grows up or down (in general), this give the CPU dependent
- *  code the option of picking the version it wants to use.
- *
- *  NOTE: These two variables are required if the macro
- *        CPU_HAS_SOFTWARE_INTERRUPT_STACK is defined as TRUE.
- *
- *  AVR Specific Information:
- *
- *  XXX document implementation including references if appropriate
- */
-
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.

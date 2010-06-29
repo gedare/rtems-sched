@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: pthreadcreate.c,v 1.20 2010/04/03 05:55:59 ralf Exp $
+ *  $Id: pthreadcreate.c,v 1.21 2010/06/29 00:34:11 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -189,14 +189,6 @@ int pthread_create(
   api->detachstate = the_attr->detachstate;
   api->schedpolicy = schedpolicy;
   api->schedparam  = schedparam;
-
-  /*
-   *  This insures we evaluate the process-wide signals pending when we
-   *  first run.
-   *
-   *  NOTE:  Since the thread starts with all unblocked, this is necessary.
-   */
-  the_thread->do_post_task_switch_extension = true;
 
   /*
    *  POSIX threads are allocated and started in one operation.

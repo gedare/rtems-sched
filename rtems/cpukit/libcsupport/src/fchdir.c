@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fchdir.c,v 1.9 2009/06/12 01:53:32 ccj Exp $
+ *  $Id: fchdir.c,v 1.10 2010/06/28 22:14:35 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -79,7 +79,7 @@ int fchdir(
   if (rtems_filesystem_evaluate_path(".", 1, 0, &loc, 0)) {
     /* cloning failed; restore original and bail out */
     rtems_filesystem_current = saved;
-	return -1;
+    return -1;
   }
   /* release the old one */
   rtems_filesystem_freenode( &saved );

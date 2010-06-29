@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: size.c,v 1.64 2009/10/27 07:27:43 ralf Exp $
+ *  $Id: size.c,v 1.65 2010/06/29 00:40:29 joel Exp $
  */
 
 #include <rtems/system.h>
@@ -263,7 +263,6 @@ uninitialized =
 #if (CPU_SIMPLE_VECTORED_INTERRUPTS == TRUE)
                 (sizeof _ISR_Vector_table)                +
 #endif
-                (sizeof _ISR_Signals_to_thread_executing) +
 
 /*message.h*/   (sizeof _Message_queue_Information)       +
 
@@ -310,6 +309,8 @@ uninitialized =
 /*partmp.h*/    0                                         +
 #endif
 
+/*percpu.h*/    (sizeof _Per_CPU_Information)             +
+
 /*priority.h*/  (sizeof _Priority_Major_bit_map)          +
                 (sizeof _Priority_Bit_map)                +
 
@@ -352,7 +353,6 @@ uninitialized =
 
 /*thread.h*/    (sizeof _Thread_BSP_context)              +
                 (sizeof _Thread_Dispatch_disable_level)   +
-                (sizeof _Thread_Do_post_task_switch_extension) +
                 (sizeof _Thread_Maximum_extensions)       +
                 (sizeof _Thread_Ticks_per_timeslice)      +
                 (sizeof _Thread_Ready_chain)              +
@@ -362,7 +362,6 @@ uninitialized =
                 (sizeof _Thread_Allocated_fp)             +
 #endif
                 (sizeof _Thread_Internal_information)     +
-                (sizeof _Thread_Idle)                     +
 
 #if defined(RTEMS_MULTIPROCESSING)
 /*threadmp.h*/  (sizeof _Thread_MP_Active_proxies)        +

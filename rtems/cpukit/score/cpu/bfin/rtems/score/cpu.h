@@ -15,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.19 2010/04/17 19:24:16 joel Exp $
+ *  $Id: cpu.h,v 1.20 2010/06/29 00:31:07 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -543,20 +543,6 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context;
  *
  *  XXX document implementation including references if appropriate
  */
-
-/**
- *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt
- *  stack.
- */
-SCORE_EXTERN void               *_CPU_Interrupt_stack_low;
-
-/**
- *  @ingroup CPUInterrupt
- *  This variable points to the lowest physical address of the interrupt
- *  stack.
- */
-SCORE_EXTERN void               *_CPU_Interrupt_stack_high;
 
 /*
  *  Nothing prevents the porter from declaring more CPU specific variables.

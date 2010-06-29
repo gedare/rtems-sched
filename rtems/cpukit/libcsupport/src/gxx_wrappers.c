@@ -13,7 +13,7 @@
  * Eric sent some e-mail in the rtems-list as a start point for this
  * module implementation.
  *
- * $Id: gxx_wrappers.c,v 1.18 2009/01/29 14:32:43 joel Exp $
+ * $Id: gxx_wrappers.c,v 1.19 2010/06/28 22:14:35 joel Exp $
  */
 
 /*
@@ -105,7 +105,7 @@ int rtems_gxx_key_create (__gthread_key_t *key, void (*dtor) (void *))
 #endif
   /* register with RTEMS the buffer that will hold the key values */
   if( rtems_task_variable_add( RTEMS_SELF, (void **)new_key, dtor ) == RTEMS_SUCCESSFUL )
-       return 0;
+    return 0;
   return -1;
 }
 
