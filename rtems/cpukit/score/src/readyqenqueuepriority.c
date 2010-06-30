@@ -1,5 +1,5 @@
 /*
- *  Scheduler Handler
+ *  Ready Queue Handler
  *
  *
  *  COPYRIGHT (c) 1989-2008.
@@ -17,32 +17,34 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/config.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
 //#include <rtems/score/rqdata.h>
 
-/*PAGE
+/* 
+ *  _Ready_queue_Enqueue_priority
  *
- *  _Scheduler_Initialize
- *
- *  This routine initializes the scheduler
- *
+ *  This routine puts @a the_thread on to the priority-based ready queue.
+ *  
  *  Input parameters:
+ *    the_ready_queue - pointer to readyq
+ *    the_thread  - pointer to thread
  *
  *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Initialize( )
+void _Ready_queue_Enqueue_priority(
+  Ready_queue_Control         *the_ready_queue,
+  Thread_Control                   *the_thread
+)
 {
-
-  _Ready_queue_Initialize(
-    &_Thread_Ready_queue 
-  );
-
+  _Priority_Add( &the_thread->ready.priority.Priority_map );
+  _Chain_Append_unprotected( the_thread->ready.priority.ready_chain, 
+      &the_thread->Object.Node );
 }

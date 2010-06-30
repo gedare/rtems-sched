@@ -30,308 +30,107 @@
  * @{
  */
 
-/*
- *  _Ready_queue_Dequeue_priority
- *
- *  This routine returns a thread from the PRIORITY based @a the_ready_queue.
- *
- */
 
-RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_Dequeue_priority(
+/** @brief  Ready queue Dequeue
+ *
+ * This function removes the next ready thread from the ready queue.
+ */
+RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_Dequeue(
   Ready_queue_Control *the_ready_queue
 )
 {
-  uint32_t        index;
-  Chain_Control *rq;
-  Thread_Control *the_thread;
+  return ( the_ready_queue->rq_ops.dequeue( the_ready_queue ) );
+}
 
-  index = _Priority_Get_value(_Priority_Get_highest());
-  rq = &the_ready_queue->Queues.Priority[index];
-  the_thread = (Thread_Control*) _Chain_First(rq);
-  
-  if ( _Chain_Has_only_one_node( rq ) ) {
-    _Chain_Initialize_empty( rq );
-    _Priority_Remove( &the_thread->Priority_map );
-  } else
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
- 
-  return 0;
+/** @brief  Ready queue Enqueue
+ *
+ *  This routine enqueues the given thread on
+ *  the_ready_queue.
+ */
+RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue(
+  Ready_queue_Control        *the_ready_queue,
+  Thread_Control             *the_thread
+)
+{
+  the_ready_queue->rq_ops.enqueue( the_ready_queue, the_thread );
 }
 
 /*
- *  _Ready_queue_Dequeue_fifo
+ *  @brief  _Ready_queue_Enqueue_first
  *
- *  This routine returns a thread from @a the_ready_queue
- *
+ *  This routine puts @a the_thread to the head of the ready queue. If the 
+ *  queueing discipling is priority, then the thread will be the first thread
+ *  at its priority level.
+ *  
  */
 
-RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_Dequeue_fifo(
-  Ready_queue_Control *the_ready_queue
+RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_first(
+  Ready_queue_Control         *the_ready_queue,
+  Thread_Control                   *the_thread
 )
 {
-  Thread_Control *the_thread;
-
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Fifo ) ) {
-
-    the_thread = (Thread_Control *)
-       _Chain_Get_first_unprotected( &the_ready_queue->Queues.Fifo );
-
-    return the_thread;
-  }
-
-  return NULL;
+  the_ready_queue->rq_ops.enqueue_first( the_ready_queue, the_thread );
 }
 
-/*
- *  _Ready_queue_Enqueue_fifo
- *
- *  This routine places @a the_thread on a FIFO @a the_ready_queue.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_fifo (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-)
-{
-  _Chain_Append_unprotected(
-        &the_ready_queue->Queues.Fifo,
-        &the_thread->Object.Node
-      );
-}
-
-/*
- *  _Ready_queue_Enqueue_priority
- *
- *  @brief This routine places a @a the_thread on @a the_ready_queue.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_priority (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-)
-{
-  _Priority_Add( &the_thread->Priority_map );
-  _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
-}
-
-/*
- *  _Ready_queue_Enqueue_first_fifo
- *
- *  This routine places the ready @a the_thread to the head of the 
- *  FIFO @a the_ready_queue.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_first_fifo (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-)
-{
-  _Chain_Prepend_unprotected(
-        &the_ready_queue->Queues.Fifo,
-        &the_thread->Object.Node
-      );
-}
-
-/*
- *  _Ready_queue_Enqueue_first_priority
- *
- *  This routine places the ready @a the_thread to the head of the
- *  priority @a the_ready_queue.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_first_priority (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-)
-{
-  _Priority_Add( &the_thread->Priority_map );
-  _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
-}
-
-/*
- *  _Ready_queue_Extract_fifo
- *
- *  This routine removes @a the_thread from @a the_ready_queue
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Extract_fifo(
-  Ready_queue_Control *the_ready_queue __attribute__((unused)),
-  Thread_Control       *the_thread
-)
-{
-  _Chain_Extract_unprotected( &the_thread->Object.Node );
-
-  /* 
-   * this is leftover from the threadq code, but might be useful for 
-   * implementing periodic timers.
-   */
-#if 0
-  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-    _ISR_Enable( level );
-  } else {
-    _Watchdog_Deactivate( &the_thread->Timer );
-    _ISR_Enable( level );
-    (void) _Watchdog_Remove( &the_thread->Timer );
-  }
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-    _Thread_MP_Free_proxy( the_thread );
-#endif
-#endif
-}
 
 /**
- * @brief Ready queue Extract priority
+ *  @brief Ready queue Requeue
  *
- * This macro wraps the underlying call and hides the requeuing argument.
+ *  This routine is invoked when a thread changes priority and remains
+ *  ready.  If the queue is priority ordered,
+ *  the_thread is removed from the_ready_queue and reinserted using
+ *  its new priority.  This method has no impact on the state of the_thread
+ *  or of any timeouts associated with this blocking.
  */
-
-#define _Ready_queue_Extract_priority( _the_ready_queue, _the_thread ) \
-  _Ready_queue_Extract_priority_helper( _the_ready_queue, _the_thread, false )
-
-/*
- *  _Ready_queue_Extract_priority_helper
- *
- *  This routine removes @a the_thread from @a the_ready_queue
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Extract_priority_helper(
-  Ready_queue_Control *the_ready_queue __attribute__((unused)),
-  Thread_Control       *the_thread,
-  bool                  requeuing
-)
-{
-
-  Chain_Control *ready = the_thread->ready;
-
-  if ( _Chain_Has_only_one_node( ready ) ) {
-
-    _Chain_Initialize_empty( ready );
-    _Priority_Remove( &the_thread->Priority_map );
-
-  } else
-    _Chain_Extract_unprotected( &the_thread->Object.Node );
-  
-  /*
-   *  If we are not supposed to touch timers or the thread's state, return.
-   */
-
-  if ( requeuing ) {
-    return;
-  }
-
-#if 0
-  if ( !_Watchdog_Is_active( &the_thread->Timer ) ) {
-    _ISR_Enable( level );
-  } else {
-    _Watchdog_Deactivate( &the_thread->Timer );
-    _ISR_Enable( level );
-    (void) _Watchdog_Remove( &the_thread->Timer );
-  }
-
-#if defined(RTEMS_MULTIPROCESSING)
-  if ( !_Objects_Is_local_id( the_thread->Object.id ) )
-    _Thread_MP_Free_proxy( the_thread );
-#endif
-#endif
-}
-
-/*
- *  _Ready_queue_Extract_with_proxy
- *
- *  This routine extracts the_thread from the_ready_queue
- *  and ensures that if there is a proxy for this task on
- *  another node, it is also dealt with.
- *
- *  XXX
- */
-
-RTEMS_INLINE_ROUTINE bool _Ready_queue_Extract_with_proxy(
+RTEMS_INLINE_ROUTINE void _Ready_queue_Requeue(
+  Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 )
 {
-  return false;
+  the_ready_queue->rq_ops.requeue( the_ready_queue, the_thread );
 }
 
-/*
- *  _Ready_queue_First_fifo
- *
- *  This routines returns a pointer to the first thread on 
- *  @a the_ready_queue.
- *
- */
 
-RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First_fifo(
+/** @brief  Ready queue Extract
+ *
+ *  This routine removes the_thread from the_ready_queue
+ */
+RTEMS_INLINE_ROUTINE void _Ready_queue_Extract(
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control       *the_thread
+)
+{
+  the_ready_queue->rq_ops.extract( the_ready_queue, the_thread );
+}
+
+
+/** @brief  Ready queue First
+ *
+ *  This function returns a pointer to the "first" thread
+ *  on the_ready_queue.  The "first" thread is selected
+ *  based on the discipline of the_ready_queue.
+ */
+RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First(
   Ready_queue_Control *the_ready_queue
 )
 {
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Fifo ) )
-    return (Thread_Control *) the_ready_queue->Queues.Fifo.first;
-
-  return NULL;
+ return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
 }
 
-/*
- *  _Ready_queue_First_priority
+
+/** 
+ * @brief Ready queue Set ready
  *
- *  This routines returns a pointer to the first thread on 
- *  @a the_ready_queue.
- *
+ * This function sets the ready pointer of @a the_thread based on the 
+ * queuing discipline of @a the_ready_queue.
  */
-
-RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First_priority (
-  Ready_queue_Control *the_ready_queue
-)
-{
-  uint32_t   index = _Priority_Get_highest();
-
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Priority[ index ] ) )
-    return (Thread_Control *) the_ready_queue->Queues.Priority[ index ].first;
-
-  return NULL;
-}
-
-/*
- *  _Ready_queue_Set_ready_fifo
- *
- *  This routine sets the ready pointer of @a the_thread.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_fifo (
+RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready(
   Ready_queue_Control *the_ready_queue,
   Thread_Control *the_thread
 )
 {
-  the_thread->ready = &the_ready_queue->Queues.Fifo;
+  the_ready_queue->rq_ops.set_ready( the_ready_queue, the_thread );
 }
-
-/*
- *  _Ready_queue_Set_ready_priority
- *
- *  This routine sets the ready pointer of @a the_thread.
- *
- */
-
-RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready_priority (
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control *the_thread
-)
-{
-  the_thread->ready = &the_ready_queue->Queues.Priority[ 
-    _Priority_Get_value(the_thread->current_priority) 
-  ];
-}
-
-
-
 
 /**@}*/
 

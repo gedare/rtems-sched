@@ -23,13 +23,13 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
-/*PAGE
+/*
  *
- *  _Ready_queue_Extract
+ *  _Ready_queue_Requeue_priority
  *
- *  This routine removes a specific thread from the specified readyq,
+ *  This routine is invoked when a thread changes priority and should be
+ *  moved to a different position on the ready queue.
  *
  *  Input parameters:
  *    the_ready_queue - pointer to a readyq header
@@ -40,18 +40,16 @@
  *  INTERRUPT LATENCY: NONE
  */
 
-void _Ready_queue_Extract(
+void _Ready_queue_Requeue_priority(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 )
 {
-  /*
-   * Can not use indirect function pointer here since Extract priority
-   * is a macro and the underlying methods do not have the same signature.
-   */
-  if  ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
-    _Ready_queue_Extract_priority( the_ready_queue, the_thread );
-  else /* must be READY_QUEUE_DISCIPLINE_FIFO */
-    _Ready_queue_Extract_fifo( the_ready_queue, the_thread );
+  if ( !_Chain_Has_only_one_node( the_thread->ready.priority.ready_chain ) ) {
+    _Chain_Extract_unprotected( &the_thread->Object.Node );
 
+    _Chain_Append_unprotected( the_thread->ready.priority.ready_chain, 
+      &the_thread->Object.Node );
+  }
 }
+

@@ -25,30 +25,28 @@
 #include <rtems/score/readyq.h>
 //#include <rtems/score/rqdata.h>
 
-/*PAGE
+/*
  *
- *  _Ready_queue_First
+ *  _Ready_queue_Enqueue_first_priority
  *
- *  This routines returns a pointer to the first thread on the
- *  specified readyq.
- *
+ *  This routine puts @a the_thread to the head of the ready queue. 
+ *  For priority-based ready queues, the thread will be the first thread
+ *  at its priority level.
+ *  
  *  Input parameters:
- *    the_ready_queue - pointer to thread queue
+ *    the_ready_queue - pointer to readyq
  *
- *  Output parameters:
- *    returns - first thread or NULL
+ *  Output parameters: NONE
+ *
+ *  INTERRUPT LATENCY:
  */
 
-Thread_Control *_Ready_queue_First(
-  Ready_queue_Control *the_ready_queue
+void _Ready_queue_Enqueue_first_priority(
+  Ready_queue_Control         *the_ready_queue,
+  Thread_Control                   *the_thread
 )
 {
-  Thread_Control *the_thread;
-
-  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
-      the_thread = _Ready_queue_First_priority(the_ready_queue);
-  else /* must be READY_QUEUE_DISCIPLINE_FIFO */
-      the_thread = _Ready_queue_First_fifo(the_ready_queue);
-
-  return the_thread;
+  _Priority_Add( &the_thread->ready.priority.Priority_map );
+  _Chain_Prepend_unprotected( the_thread->ready.priority.ready_chain, 
+      &the_thread->Object.Node );
 }

@@ -25,7 +25,6 @@
 
 #include <rtems/score/sysstate.h>
 #include <rtems/score/context.h>
-#include <rtems/score/readyq.h>
 
 /**
  *  @addtogroup ScoreThread 
