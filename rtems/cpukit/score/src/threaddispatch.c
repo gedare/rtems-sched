@@ -89,10 +89,10 @@ void _Thread_Dispatch( void )
 
   executing   = _Thread_Executing;
   _ISR_Disable( level );
-  while ( _Context_Switch_necessary == true ) {
+  while ( _Dispatch_needed == true ) {
     heir = _Thread_Heir;
     _Thread_Dispatch_disable_level = 1;
-    _Context_Switch_necessary = false;
+    _Dispatch_needed = false;
     _Thread_Executing = heir;
 
     /*

@@ -67,7 +67,7 @@ void _Scheduler_Yield( void )
       _Scheduler_Schedule();
     
     if ( !_Thread_Is_heir( executing ) )
-      _Context_Switch_necessary = true;
+      _Dispatch_needed = true;
 
   _ISR_Enable( level );
 }

@@ -53,9 +53,9 @@ void _Scheduler_Block(
   if ( _Thread_Is_heir( the_thread ) )
      _Scheduler_Schedule();
 
-  /* TODO: rewrite _Context_Switch_necessary to dispatch_needed */
+  /* TODO: rewrite _Dispatch_needed to dispatch_needed */
   if ( _Thread_Is_executing( the_thread ) )
-    _Context_Switch_necessary = true;
+    _Dispatch_needed = true;
 
   return;
 }

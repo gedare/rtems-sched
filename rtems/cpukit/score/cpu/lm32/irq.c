@@ -78,7 +78,7 @@ void __ISR_Handler(uint32_t vector, CPU_Interrupt_frame *ifr)
   if ( _ISR_Nest_level )
     return;
 
-  if ( _Context_Switch_necessary ) {
+  if ( _Dispatch_needed ) {
 
     /* save off our stack frame so the context switcher can get to it */
     _exception_stack_frame = ifr;
