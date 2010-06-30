@@ -32,7 +32,6 @@ extern "C" {
 #endif
 
 #include <rtems/score/object.h>
-#include <rtems/score/readyq.h>
 #include <rtems/score/thread.h>
 
 /**
@@ -47,12 +46,6 @@ extern "C" {
  * scheduler via confdefs.
  */
 #define SCHEDULER_DEFAULT_POLICY _SCHED_PRI
-
-/**
- *  The following points to the array of FIFOs used to manage the
- *  set of ready threads.
- */
-SCORE_EXTERN Ready_queue_Control  _Thread_Ready_queue;
 
 /**
  *  This routine initializes the scheduler.  

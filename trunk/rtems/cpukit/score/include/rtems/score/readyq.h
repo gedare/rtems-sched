@@ -31,11 +31,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
-
+#include <rtems/score/percpu.h>
 #include <rtems/score/chain.h>
-#include <rtems/score/priority.h>
 
 typedef struct Ready_queue_Control_struct Ready_queue_Control;
 
@@ -107,6 +104,13 @@ struct Ready_queue_Control_struct {
   Ready_queue_Operations rq_ops;
 };
 
+/* TODO: make this per-cpu? */
+/**
+ *  The following points to the structures used to manage the
+ *  set of ready threads.
+ */
+SCORE_EXTERN Ready_queue_Control  _Thread_Ready_queue;
+
 /** @brief  Ready queue Initialize
  *
  *  This routine initializes @a the_ready_queue.
@@ -115,7 +119,13 @@ void _Ready_queue_Initialize(
   Ready_queue_Control         *the_ready_queue
 );
 
+
+
 #ifndef __RTEMS_APPLICATION__
+
+/*RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First(
+      Ready_queue_Control *the_ready_queue
+    );*/
 #include <rtems/score/readyq.inl>
 #endif
 
