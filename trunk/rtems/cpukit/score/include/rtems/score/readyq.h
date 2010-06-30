@@ -37,6 +37,8 @@ extern "C" {
 #include <rtems/score/chain.h>
 #include <rtems/score/priority.h>
 
+typedef struct Ready_queue_Control_struct Ready_queue_Control;
+
 /**
  * function jump table that holds pointers to the functions that 
  * implement the ready queue structure-specific code
@@ -87,7 +89,7 @@ typedef struct {
  *  This is the structure used to manage sets of tasks which are ready to 
  *  use the CPU.
  */
-typedef struct {
+struct Ready_queue_Control_struct {
   /** 
    *  This union contains the data structures used to manage the ready
    *  set of tasks which varies based upon the type of ready queue required
@@ -103,93 +105,14 @@ typedef struct {
 
   /** The jump table for ready queue structure-specific functions */
   Ready_queue_Operations rq_ops;
-}   Ready_queue_Control;
+};
 
 /** @brief  Ready queue Initialize
  *
- *  This routine initializes the_ready_queue with the functions in 
- *  @a the_rq_ops jump table.  These are normally supplied by the 
- *  Scheduler Initialization.
+ *  This routine initializes @a the_ready_queue.
  */
 void _Ready_queue_Initialize(
-  Ready_queue_Control         *the_ready_queue,
-  Ready_queue_Operations      *the_rq_ops
-);
-
-/** @brief  Ready queue Dequeue
- *
- * This function removes the next ready thread from the ready queue.
- */
-Thread_Control *_Ready_queue_Dequeue(
-  Ready_queue_Control *the_ready_queue
-);
-
-/** @brief  Ready queue Enqueue
- *
- *  This routine enqueues the given thread on
- *  the_ready_queue.
- */
-void _Ready_queue_Enqueue(
-  Ready_queue_Control        *the_ready_queue,
-  Thread_Control             *the_thread
-);
-
-/*
- *  @brief  _Ready_queue_Enqueue_first
- *
- *  This routine puts @a the_thread to the head of the ready queue. If the 
- *  queueing discipling is priority, then the thread will be the first thread
- *  at it's priority level.
- *  
- */
-
-void _Ready_queue_Enqueue_first(
-  Ready_queue_Control         *the_ready_queue,
-  Thread_Control                   *the_thread
-);
-
-/**
- *  @brief Ready queue Requeue
- *
- *  This routine is invoked when a thread changes priority and remains
- *  ready.  If the queue is priority ordered,
- *  the_thread is removed from the_ready_queue and reinserted using
- *  its new priority.  This method has no impact on the state of the_thread
- *  or of any timeouts associated with this blocking.
- */
-void _Ready_queue_Requeue(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
-/** @brief  Ready queue Extract
- *
- *  This routine removes the_thread from the_ready_queue
- */
-void _Ready_queue_Extract(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
-/** @brief  Ready queue First
- *
- *  This function returns a pointer to the "first" thread
- *  on the_ready_queue.  The "first" thread is selected
- *  based on the discipline of the_ready_queue.
- */
-Thread_Control *_Ready_queue_First(
-  Ready_queue_Control *the_ready_queue
-);
-
-/** 
- * @brief Ready queue Set ready
- *
- * This function sets the ready pointer of @a the_thread based on the 
- * queuing discipline of @a the_ready_queue.
- */
-void _Ready_queue_Set_ready(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control *the_thread
+  Ready_queue_Control         *the_ready_queue
 );
 
 #ifndef __RTEMS_APPLICATION__

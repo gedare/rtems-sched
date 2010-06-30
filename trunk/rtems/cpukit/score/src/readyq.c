@@ -20,10 +20,12 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
+#include <rtems/score/readyqfifo.h>
+#include <rtems/score/readyqpriority.h>
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
@@ -35,32 +37,21 @@
  *
  *  Input parameters:
  *    the_ready_queue      - pointer to a readyq header
- *    discipline            - queueing discipline
  *
  *  Output parameters: NONE
  */
 
 void _Ready_queue_Initialize(
-  Ready_queue_Control         *the_ready_queue,
-  Ready_queue_Disciplines      the_discipline
+  Ready_queue_Control         *the_ready_queue
 )
 {
-  the_ready_queue->discipline     = the_discipline;
-      uint32_t   index;
-
-  switch (the_discipline) {
-    case READY_QUEUE_DISCIPLINE_PRIORITY:
-      the_ready_queue->Queues.Priority = (Chain_Control *) 
-        _Workspace_Allocate_or_fatal_error(
-          (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
-        );
-
-      for( index=0; index <= PRIORITY_MAXIMUM; index++)
-        _Chain_Initialize_empty( &the_ready_queue->Queues.Priority[index] );
+  switch (Configuration.scheduler_policy) {
+    case _SCHED_PRI:
+      _Ready_queue_Initialize_priority( the_ready_queue );
     break;
 
-    case READY_QUEUE_DISCIPLINE_FIFO:
-      _Chain_Initialize_empty( &the_ready_queue->Queues.Fifo );
+    case _SCHED_FIFO:
+      _Ready_queue_Initialize_fifo( the_ready_queue );
     break;
 
     default:

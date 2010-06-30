@@ -20,16 +20,16 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/priority.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
-/*PAGE
+/*
  *
- *  _Ready_queue_Set_ready
+ *  _Ready_queue_Set_ready_priority
  *
- *  This routine sets @a the_thread->ready based on the queuing discipline.
+ *  This routine sets @a the_thread->ready for priority-based ready queue
  *  
  *  Input parameters:
  *    the_ready_queue - pointer to readyq
@@ -40,18 +40,15 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Ready_queue_Set_ready(
+void _Ready_queue_Set_ready_priority(
   Ready_queue_Control         *the_ready_queue,
   Thread_Control                   *the_thread
 )
 {
+  the_thread->ready.priority.ready_chain = &the_ready_queue->Queues.Priority[ 
+    _Priority_Get_value(the_thread->current_priority) 
+  ];
 
-  /*
-   *  Set thread->ready per the discipline for this readyq.
-   */
-  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
-    _Ready_queue_Set_ready_priority(the_ready_queue, the_thread);
-  else /* must be READY_QUEUE_DISCIPLINE_FIFO */
-    _Ready_queue_Set_ready_fifo(the_ready_queue, the_thread);
-
+  _Priority_Initialize_information( &the_thread->ready.priority.Priority_map, 
+      the_thread->current_priority );
 }

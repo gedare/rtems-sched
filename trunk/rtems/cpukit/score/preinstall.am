@@ -111,6 +111,14 @@ $(PROJECT_INCLUDE)/rtems/score/readyq.h: include/rtems/score/readyq.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.h
 
+$(PROJECT_INCLUDE)/rtems/score/readyqfifo.h: include/rtems/score/readyqfifo.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqfifo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqfifo.h
+
+$(PROJECT_INCLUDE)/rtems/score/readyqpriority.h: include/rtems/score/readyqpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqpriority.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.h
+
 $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
@@ -249,9 +257,13 @@ $(PROJECT_INCLUDE)/rtems/score/readyq.inl: inline/rtems/score/readyq.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.inl
 
-$(PROJECT_INCLUDE)/rtems/score/rqdata.inl: inline/rtems/score/rqdata.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rqdata.inl
+$(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl: inline/rtems/score/readyqfifo.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl
+
+$(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl: inline/rtems/score/readyqpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl
 
 $(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl

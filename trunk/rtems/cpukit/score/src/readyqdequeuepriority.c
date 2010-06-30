@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: readyqdequeue.c,v 1.7 2008/01/22 21:19:18 joel Exp $
+ *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -25,9 +25,9 @@
 #include <rtems/score/readyq.h>
 //#include <rtems/score/rqdata.h>
 
-/*PAGE
+/*
  *
- *  _Ready_queue_Dequeue
+ *  _Ready_queue_Dequeue_priority
  *
  *  This routine removes the running thread from the specified readyq.  
  *
@@ -40,19 +40,24 @@
  *  INTERRUPT LATENCY:
  */
 
-Thread_Control *_Ready_queue_Dequeue(
+Thread_Control *_Ready_queue_Dequeue_priority(
   Ready_queue_Control *the_ready_queue
 )
 {
-  Thread_Control *(*dequeue_p)( Ready_queue_Control * );
+  uint32_t        index;
+  Chain_Control *rq;
   Thread_Control *the_thread;
 
-  if ( the_ready_queue->discipline == READY_QUEUE_DISCIPLINE_PRIORITY )
-    dequeue_p = _Ready_queue_Dequeue_priority;
-  else /* must be READY_QUEUE_DISCIPLINE_FIFO */
-    dequeue_p = _Ready_queue_Dequeue_fifo;
+  index = _Priority_Get_value(_Priority_Get_highest());
+  rq = &the_ready_queue->Queues.Priority[index];
+  the_thread = (Thread_Control*) _Chain_First(rq);
+  
+  if ( _Chain_Has_only_one_node( rq ) ) {
+    _Chain_Initialize_empty( rq );
+    _Priority_Remove( &the_thread->ready.priority.Priority_map );
+  } else
+    _Chain_Extract_unprotected( &the_thread->Object.Node );
+ 
+  return 0;
 
-  the_thread = (*dequeue_p)( the_ready_queue );
-
-  return the_thread;
 }

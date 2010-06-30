@@ -56,22 +56,17 @@ void _Scheduler_Yield( void )
 {
   ISR_Level       level;
   Thread_Control *executing;
-  Chain_Control  *ready;
 
   executing = _Thread_Executing;
-  ready     = executing->ready;
   _ISR_Disable( level );
-    /* TODO: we shouldn't assume ready is a chain? */
-    if ( !_Chain_Has_only_one_node( ready ) ) {
+      
       _Ready_queue_Requeue(&_Thread_Ready_queue, executing);
 
       _ISR_Flash( level );
 
-      if ( _Thread_Is_heir( executing ) )
-        _Thread_Heir = (Thread_Control *) ready->first;
-      _Context_Switch_necessary = true;
-    }
-    else if ( !_Thread_Is_heir( executing ) )
+      _Scheduler_Schedule();
+    
+    if ( !_Thread_Is_heir( executing ) )
       _Context_Switch_necessary = true;
 
   _ISR_Enable( level );

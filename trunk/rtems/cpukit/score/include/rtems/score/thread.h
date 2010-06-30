@@ -70,12 +70,36 @@ extern "C" {
 #endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-//#include <rtems/score/rqdata.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
+
+
+  /* TODO: find a place for these definitions to live */
+
+  /**
+ * This structure is used in the Thread_Control struct to hold per-thread 
+ * data related to the priority-based ready queue.
+ */
+typedef struct {
+  /** This field points to the Ready FIFO for this thread's priority. */
+  Chain_Control *ready_chain;
+
+  /** This field contains precalculated priority map indices. */
+  Priority_Information Priority_map;
+} Ready_queue_Per_thread_priority;
+
+/**
+ * This structure is used in the Thread_Control struct to hold per-thread 
+ * data related to the FIFO ready queue.
+ */
+typedef struct {
+  /** This field points to the Ready FIFO. */
+  Chain_Control *ready_chain;
+
+} Ready_queue_Per_thread_fifo;
 
 /**
  *  The following defines the "return type" of a thread.
@@ -390,10 +414,12 @@ struct Thread_Control_struct {
    *  since it was created.
    */
   Thread_CPU_usage_t                    cpu_time_used;
-  /** This field points to the Ready FIFO for this priority. */
-  Chain_Control                        *ready;
-  /** This field contains precalculated priority map indices. */
-  Priority_Information                  Priority_map;
+  /** This union has per-thread data for specific ready queue structures. */
+  /* TODO: the union may be somewhat wasteful. maybe there is a better way? */
+  union {
+    Ready_queue_Per_thread_priority     priority;
+    Ready_queue_Per_thread_fifo         fifo;
+  } ready;
   /** This field contains information about the starting state of
    *  this thread.
    */

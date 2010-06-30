@@ -26,6 +26,7 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/readyq.h \
+		include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
 		include/rtems/score/scheduler.h include/rtems/score/stack.h \
     include/rtems/score/states.h include/rtems/score/sysstate.h \
     include/rtems/score/thread.h include/rtems/score/threadq.h \
@@ -54,7 +55,8 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
     inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
-    inline/rtems/score/readyq.inl	inline/rtems/score/scheduler.inl \
+    inline/rtems/score/readyq.inl	inline/rtems/score/readyqfifo.inl \
+		inline/rtems/score/readyqpriority.inl inline/rtems/score/scheduler.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
     inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
     inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
@@ -71,7 +73,7 @@ include_rtems_score_HEADERS += inline/rtems/score/mppkt.inl \
     inline/rtems/score/objectmp.inl inline/rtems/score/threadmp.inl
 endif
 
-## src
+## src/
 
 AM_CPPFLAGS += -D__RTEMS_INSIDE__
 
@@ -144,9 +146,19 @@ libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
 
 ## READYQ_C_FILES
-libscore_a_SOURCES += src/readyq.c src/readyqdequeue.c \
-    src/readyqenqueue.c src/readyqenqueuefirst.c src/readyqextract.c \
-		src/readyqrequeue.c src/readyqsetready.c
+libscore_a_SOURCES += src/readyq.c
+
+## READYQFIFO_C_FILES
+libscore_a_SOURCES += src/readyqfifo.c src/readyqdequeuefifo.c \
+    src/readyqenqueuefifo.c src/readyqenqueuefirstfifo.c \
+		src/readyqextractfifo.c src/readyqfirstfifo.c \
+		src/readyqrequeuefifo.c src/readyqsetreadyfifo.c
+
+## READYQPRIORITY_C_FILES
+libscore_a_SOURCES += src/readyqpriority.c src/readyqdequeuepriority.c \
+    src/readyqenqueuepriority.c src/readyqenqueuefirstpriority.c \
+		src/readyqextractpriority.c src/readyqfirstpriority.c \
+		src/readyqrequeuepriority.c src/readyqsetreadypriority.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c src/schedulerblock.c \
