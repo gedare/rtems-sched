@@ -76,11 +76,10 @@ void _Scheduler_Unblock(
    *    Even if the thread isn't preemptible, if the new heir is
    *    a pseudo-ISR system task, we need to do a context switch.
    */
-  /* TODO: rewrite _Context_Switch_necessary to dispatch_needed */
   if ( !_Thread_Is_executing( heir ) ) {
     if ( _Thread_Executing->is_preemptible || 
          _Priority_Get_value(the_thread->current_priority) == 0 )
-      _Context_Switch_necessary = true;
+      _Dispatch_needed = true;
   }
 
   return;

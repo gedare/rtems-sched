@@ -228,7 +228,7 @@ uninitialized =
                 (sizeof _Configuration_MP_table)          +
         #endif
 
-/*context.h*/   (sizeof _Context_Switch_necessary)        +
+/*context.h*/   (sizeof _Dispatch_needed)        +
 
 /*copyrt.h*/    0                                         +
 
