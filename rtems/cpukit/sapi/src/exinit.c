@@ -42,6 +42,7 @@
 #include <rtems/score/mpci.h>
 #endif
 #include <rtems/score/priority.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userext.h>
