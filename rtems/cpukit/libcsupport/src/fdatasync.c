@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fdatasync.c,v 1.10 2003/09/04 18:54:13 joel Exp $
+ *  $Id: fdatasync.c,v 1.11 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -34,9 +34,6 @@ int fdatasync(
   /*
    *  Now process the fdatasync().
    */
-
-  if ( !iop->handlers->fdatasync_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->handlers->fdatasync_h)( iop );
 }

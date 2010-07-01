@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: chmod.c,v 1.13 2009/06/12 01:53:32 ccj Exp $
+ *  $Id: chmod.c,v 1.14 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -37,16 +37,6 @@ int chmod(
   status = rtems_filesystem_evaluate_path( path, strlen( path ), 0, &loc, true );
   if ( status != 0 )
     return -1;
-
-  if ( !loc.handlers ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( EBADF );
-  }
-
-  if ( !loc.handlers->fchmod_h ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result = (*loc.handlers->fchmod_h)( &loc, mode );
 

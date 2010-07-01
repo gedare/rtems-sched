@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ioctl.c,v 1.15 2006/08/31 01:10:00 joel Exp $
+ *  $Id: ioctl.c,v 1.16 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -47,13 +47,6 @@ int ioctl(
   /*
    *  Now process the ioctl().
    */
-
-  if ( !iop->handlers )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->ioctl_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   rc = (*iop->handlers->ioctl_h)( iop, command, buffer );
 
   return rc;

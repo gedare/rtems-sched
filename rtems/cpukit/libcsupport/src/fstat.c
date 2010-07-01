@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fstat.c,v 1.11 2009/09/30 08:20:21 ralf Exp $
+ *  $Id: fstat.c,v 1.12 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -43,12 +43,6 @@ int fstat(
   iop = rtems_libio_iop( fd );
   rtems_libio_check_fd( fd );
   rtems_libio_check_is_open(iop);
-
-  if ( !iop->handlers )
-    rtems_set_errno_and_return_minus_one( EBADF );
-
-  if ( !iop->handlers->fstat_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   /*
    *  Zero out the stat structure so the various support

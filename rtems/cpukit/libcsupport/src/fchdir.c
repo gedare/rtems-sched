@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fchdir.c,v 1.10 2010/06/28 22:14:35 joel Exp $
+ *  $Id: fchdir.c,v 1.11 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -44,14 +44,6 @@ int fchdir(
   /*
    * Verify you can change directory into this node.
    */
-
-  if ( !iop->pathinfo.ops ) {
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
-  if ( !iop->pathinfo.ops->node_type_h ) {
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   if (  (*iop->pathinfo.ops->node_type_h)( &iop->pathinfo ) !=
                                           RTEMS_FILESYSTEM_DIRECTORY ) {

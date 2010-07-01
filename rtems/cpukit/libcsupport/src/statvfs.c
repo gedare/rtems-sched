@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: statvfs.c,v 1.3 2010/07/01 13:05:18 sh Exp $
+ *  $Id: statvfs.c,v 1.4 2010/07/01 15:12:38 jennifer Exp $
  */
 /*
  * The statvfs as defined by the SUS:
@@ -41,9 +41,6 @@ statvfs (const char *path, struct statvfs *sb)
 
   mt_entry      = loc.mt_entry;
   fs_mount_root = &mt_entry->mt_fs_root;
-
-  if ( !fs_mount_root->ops->statvfs_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   memset (sb, 0, sizeof (struct statvfs));
 

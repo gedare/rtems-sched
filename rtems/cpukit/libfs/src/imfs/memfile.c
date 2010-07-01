@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: memfile.c,v 1.35 2010/06/24 22:01:49 joel Exp $
+ *  $Id: memfile.c,v 1.36 2010/07/01 15:39:23 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -30,6 +30,10 @@
 #include "imfs.h"
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
+
+#if defined(RTEMS_DEBUG)
+  #include <assert.h>
+#endif
 
 #define MEMFILE_STATIC
 

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: chown.c,v 1.12 2009/06/12 01:53:32 ccj Exp $
+ *  $Id: chown.c,v 1.13 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -35,11 +35,6 @@ int chown(
 
   if ( rtems_filesystem_evaluate_path( path, strlen( path ), 0x00, &loc, true ) )
     return -1;
-
-  if ( !loc.ops->chown_h ) {
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result = (*loc.ops->chown_h)( &loc, owner, group );
 

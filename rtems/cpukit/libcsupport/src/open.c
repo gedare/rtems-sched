@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: open.c,v 1.24 2010/02/16 01:47:45 ccj Exp $
+ *  $Id: open.c,v 1.25 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -157,11 +157,6 @@ int open(
   iop->file_info  = loc.node_access;
   iop->flags     |= rtems_libio_fcntl_flags( flags );
   iop->pathinfo   = loc;
-
-  if ( !iop->handlers || !iop->handlers->open_h ) {
-    rc = ENOTSUP;
-    goto done;
-  }
 
   rc = (*iop->handlers->open_h)( iop, pathname, flags, mode );
   if ( rc ) {

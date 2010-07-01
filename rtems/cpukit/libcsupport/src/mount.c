@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount.c,v 1.38 2010/07/01 13:05:17 sh Exp $
+ *  $Id: mount.c,v 1.39 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -176,15 +176,6 @@ int mount(
     loc_to_free = &loc;
 
     /*
-     * Test for node_type_h
-     */
-
-    if (!loc.ops->node_type_h) {
-      errno =  ENOTSUP;
-      goto cleanup_and_bail;
-    }
-
-    /*
      *  Test to see if it is a directory
      */
 
@@ -220,11 +211,6 @@ int mount(
      *  below the base file system
      */
 
-    if ( !loc.ops->mount_h ){
-      errno = ENOTSUP;
-      goto cleanup_and_bail;
-    }
-
     if ( loc.ops->mount_h( mt_entry ) ) {
       goto cleanup_and_bail;
     }
@@ -248,9 +234,7 @@ int mount(
     /*
      * Try to undo the mount operation
      */
-    if ( loc.ops->unmount_h ) {
-      loc.ops->unmount_h( mt_entry );
-    }
+    loc.ops->unmount_h( mt_entry );
     goto cleanup_and_bail;
   }
 

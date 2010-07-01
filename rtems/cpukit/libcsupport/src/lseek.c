@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: lseek.c,v 1.16 2009/09/30 08:20:29 ralf Exp $
+ *  $Id: lseek.c,v 1.17 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -33,13 +33,6 @@ off_t lseek(
   rtems_libio_check_fd( fd );
   iop = rtems_libio_iop( fd );
   rtems_libio_check_is_open(iop);
-
-  /*
-   *  Check as many errors as possible before touching iop->offset.
-   */
-
-  if ( !iop->handlers->lseek_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   /*
    *  Now process the lseek().

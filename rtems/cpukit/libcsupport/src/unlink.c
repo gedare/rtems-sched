@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: unlink.c,v 1.19 2010/02/16 01:47:46 ccj Exp $
+ *  $Id: unlink.c,v 1.20 2010/07/01 15:12:38 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -65,13 +65,6 @@ int unlink(
     if ( free_parentloc )
       rtems_filesystem_freenode( &parentloc );
     return -1;
-  }
-
-  if ( !loc.ops->node_type_h ) {
-    rtems_filesystem_freenode( &loc );
-    if ( free_parentloc )
-      rtems_filesystem_freenode( &parentloc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   if (  (*loc.ops->node_type_h)( &loc ) == RTEMS_FILESYSTEM_DIRECTORY ) {

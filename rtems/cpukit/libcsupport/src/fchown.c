@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fchown.c,v 1.1 2008/04/11 22:57:54 ccj Exp $
+ *  $Id: fchown.c,v 1.2 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -37,9 +37,6 @@ int fchown(
   rtems_libio_check_is_open(iop);
 
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
-  if ( !iop->pathinfo.ops->chown_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   return (*iop->pathinfo.ops->chown_h)( &iop->pathinfo, owner, group );
 }

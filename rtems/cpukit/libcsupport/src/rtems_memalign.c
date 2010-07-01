@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems_memalign.c,v 1.4 2010/06/30 15:36:48 joel Exp $
+ *  $Id: rtems_memalign.c,v 1.5 2010/07/01 15:39:59 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -65,14 +65,6 @@ int rtems_memalign(
    */
   if ( rtems_malloc_statistics_helpers )
     (*rtems_malloc_statistics_helpers->at_malloc)(pointer);
-
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     * If configured, set the boundary area
-     */
-    if (rtems_malloc_boundary_helpers)
-      (*rtems_malloc_boundary_helpers->at_malloc)(return_this, size);
-  #endif
 
   *pointer = return_this;
   return 0;

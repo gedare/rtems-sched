@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: unmount.c,v 1.27 2010/07/01 13:05:18 sh Exp $
+ *  $Id: unmount.c,v 1.28 2010/07/01 15:12:38 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -86,17 +86,6 @@ int unmount(
    */
 
   rtems_filesystem_freenode( &loc );
-
-  /*
-   * Verify Unmount is supported by both filesystems.
-   */
-
-  if ( !fs_mount_loc->ops->unmount_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
-  if ( !fs_root_loc->ops->fsunmount_me_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
 
   /*
    *  Verify the current node is not in this filesystem.
