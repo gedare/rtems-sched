@@ -23,34 +23,35 @@
 #include <rtems/score/object.h>
 #include <rtems/score/readyq.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/schedulerqueue.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 
 /*
  *
- *  _Scheduler_Initialize_queue
+ *  _Scheduler_Sched_allocate_priority
  *
- *  This routine initializes the scheduler for queue-based scheduling, 
- *  which embeds the complexity of decision making in the implementation of 
- *  the queue.
+ * Allocates the sched field of @a the_thread.
  *
  *  Input parameters:
  *    the_scheduler - pointer to scheduler control
+ *    the_thread    - pointer to thread control block
  *
  *  Output parameters: NONE
  */
 
-void _Scheduler_Initialize_queue(
-    Scheduler_Control *the_scheduler
+void* _Scheduler_Sched_allocate_priority (
+    Scheduler_Control *the_scheduler,
+    Thread_Control    *the_thread
 )
 {
-  the_scheduler->s_ops.schedule           = &_Scheduler_Schedule_queue;
-  the_scheduler->s_ops.yield              = &_Scheduler_Yield_queue;
-  the_scheduler->s_ops.block              = &_Scheduler_Block_queue;
-  the_scheduler->s_ops.unblock            = &_Scheduler_Unblock_queue;
-  the_scheduler->s_ops.sched_allocate     = &_Scheduler_Sched_allocate_nothing;
-  the_scheduler->s_ops.sched_update       = &_Scheduler_Sched_Update_nothing;
- 
-  _Ready_queue_Initialize(&the_scheduler->ready_queue);
+  void *sched;
+
+  sched = _Workspace_Allocate( sizeof(Scheduler_Per_thread_priority) );
+
+  the_thread->sched->priority = (Scheduler_Per_thread_priority*) sched;
+
+  return sched;
 }

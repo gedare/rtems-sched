@@ -63,5 +63,4 @@ void _Ready_queue_Initialize_priority(
   the_ready_queue->rq_ops.requeue = &_Ready_queue_Requeue_priority;
   the_ready_queue->rq_ops.extract = &_Ready_queue_Extract_priority;
   the_ready_queue->rq_ops.first = &_Ready_queue_First_priority;
-  the_ready_queue->rq_ops.set_ready = &_Ready_queue_Set_ready_priority;
 }

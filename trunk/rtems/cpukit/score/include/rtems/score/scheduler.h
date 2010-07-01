@@ -61,6 +61,35 @@ extern "C" {
 #define SCHEDULER_DEFAULT_POLICY _SCHED_PRI
 
 
+
+/**
+ * The following Scheduler_Per_thread_xxx structures are used to 
+ * hold per-thread data used by the scheduler.  Thread_Control->sched is a 
+ * union of pointers, one for each of the following structures.  The
+ * sched->xxx field points to an instantion of one of these structures, 
+ * which is allocated from the workspace during _Thread_Start.
+ */
+
+/**
+ * Per-thread data related to the _SCHED_PRI scheduling policy.
+ */
+typedef struct {
+  /** This field points to the Ready FIFO for this thread's priority. */
+  Chain_Control *ready_chain;
+
+  /** This field contains precalculated priority map indices. */
+  Priority_Information Priority_map;
+} Scheduler_Per_thread_priority;
+
+/**
+ * Per-thread data related to the _SCHED_FIFO scheduling policy.
+ */
+typedef struct {
+  char nothing; /* it doesn't matter, this is never instantiated. */
+} Scheduler_Per_thread_fifo;
+
+
+
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
 /**
@@ -69,16 +98,22 @@ typedef struct Scheduler_Control_struct Scheduler_Control;
  */
 typedef struct {
   /** Implements the scheduling decision logic (policy). */
-  void ( *schedule ) ( Scheduler_Control* );
+  void ( *schedule ) ( Scheduler_Control * );
 
   /** Voluntarily yields the processor per the scheduling policy. */
-  void ( *yield ) ( Scheduler_Control* );
+  void ( *yield ) ( Scheduler_Control * );
 
   /** Removes the given thread from scheduling decisions. */
-  void ( *block ) ( Scheduler_Control*, Thread_Control * );
+  void ( *block ) ( Scheduler_Control *, Thread_Control * );
 
   /** Adds the given thread to scheduling decisions. */
-  void ( *unblock ) ( Scheduler_Control*, Thread_Control * );
+  void ( *unblock ) ( Scheduler_Control *, Thread_Control * );
+
+  /** allocates the sched field of the given thread */
+  void * ( *sched_allocate ) ( Scheduler_Control *, Thread_Control * );
+
+  /** updates the sched field of the given thread */
+  void ( *sched_update ) ( Scheduler_Control *, Thread_Control * );
 } Scheduler_Operations;
 
 /**
@@ -107,6 +142,38 @@ SCORE_EXTERN Scheduler_Control _Scheduler;
  *  default.
  */
 void _Scheduler_Initialize( void );
+
+
+/**
+ * This routine does nothing, and is used as a stub for Sched_allocate_xxx.
+ *
+ * Note: returns a non-zero value, or else thread initialize thinks the 
+ * allocation failed.
+ *
+ * The overhead of a function call will still be imposed. :(
+ */
+void * _Scheduler_Sched_allocate_nothing( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+  )
+{
+  return (void*)-1; /* maybe pick an appropriate poison value */
+}
+
+/**
+ * This routine does nothing, and is used as a stub for Sched_update_xxx
+ *
+ * The overhead of a function call will still be imposed. :(
+ */
+void _Scheduler_Sched_update_nothing( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+  )
+{
+}
+
+
+
 
 
 #ifndef __RTEMS_APPLICATION__

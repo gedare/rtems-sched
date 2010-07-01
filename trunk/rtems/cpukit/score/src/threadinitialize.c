@@ -23,6 +23,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/states.h>
 #include <rtems/score/sysstate.h>
 #include <rtems/score/thread.h>
@@ -60,6 +61,7 @@ bool _Thread_Initialize(
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     void              *fp_area;
   #endif
+  void                *sched;
   void                *extensions_area;
   bool                 extension_status;
   int                  i;
@@ -190,8 +192,12 @@ bool _Thread_Initialize(
   the_thread->current_state           = STATES_DORMANT;
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;
+
   _Priority_Set(&the_thread->real_priority, &priority);
   _Priority_Set(&the_thread->Start.initial_priority, &priority);
+  sched =_Scheduler_Sched_allocate( &_Scheduler, the_thread );
+  if (!sched)
+    goto failed;
   _Thread_Set_priority( the_thread, priority );
 
   /*
@@ -234,6 +240,9 @@ failed:
     if ( fp_area )
       (void) _Workspace_Free( fp_area );
   #endif
+
+  if ( sched )
+    (void) _Workspace_Free( sched );
 
    _Thread_Stack_Free( the_thread );
   return false;

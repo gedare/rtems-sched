@@ -70,38 +70,12 @@ extern "C" {
 #endif
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/tqdata.h>
 #include <rtems/score/watchdog.h>
-
-
-  /* TODO: find a place for these definitions to live. Perhaps change the 
-   * thread.h entry into a union of pointers to instances of these structures.
-   */
-
-  /**
- * This structure is used in the Thread_Control struct to hold per-thread 
- * data related to the priority-based ready queue.
- */
-typedef struct {
-  /** This field points to the Ready FIFO for this thread's priority. */
-  Chain_Control *ready_chain;
-
-  /** This field contains precalculated priority map indices. */
-  Priority_Information Priority_map;
-} Ready_queue_Per_thread_priority;
-
-/**
- * This structure is used in the Thread_Control struct to hold per-thread 
- * data related to the FIFO ready queue.
- */
-typedef struct {
-  /** This field points to the Ready FIFO. */
-  Chain_Control *ready_chain;
-
-} Ready_queue_Per_thread_fifo;
 
 /**
  *  The following defines the "return type" of a thread.
@@ -416,12 +390,11 @@ struct Thread_Control_struct {
    *  since it was created.
    */
   Thread_CPU_usage_t                    cpu_time_used;
-  /** This union has per-thread data for specific ready queue structures. */
-  /* TODO: the union may be somewhat wasteful. maybe there is a better way? */
+  /** This union holds per-thread data for the scheduler and ready queue. */
   union {
-    Ready_queue_Per_thread_priority     priority;
-    Ready_queue_Per_thread_fifo         fifo;
-  } ready;
+    Scheduler_Per_thread_priority      *priority;
+    Scheduler_Per_thread_fifo          *fifo;
+  } sched;
   /** This field contains information about the starting state of
    *  this thread.
    */

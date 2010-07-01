@@ -53,7 +53,5 @@ void _Thread_Set_priority(
 {
   _Priority_Set(&the_thread->current_priority, &new_priority);
 
-  _Ready_queue_Set_ready(&_Scheduler.ready_queue, the_thread);
-  /* The Ready queue maintains priority information by using the 
-   * current_priority field for each thread. */
+  _Scheduler_Sched_update(&_Scheduler, the_thread);
 }

@@ -120,21 +120,6 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First(
  return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
 }
 
-
-/** 
- * @brief Ready queue Set ready
- *
- * This function sets the ready pointer of @a the_thread based on the 
- * queuing discipline of @a the_ready_queue.
- */
-RTEMS_INLINE_ROUTINE void _Ready_queue_Set_ready(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control *the_thread
-)
-{
-  the_ready_queue->rq_ops.set_ready( the_ready_queue, the_thread );
-}
-
 /**@}*/
 
 #endif
