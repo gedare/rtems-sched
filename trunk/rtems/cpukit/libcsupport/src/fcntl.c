@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fcntl.c,v 1.25 2009/09/30 08:20:22 ralf Exp $
+ *  $Id: fcntl.c,v 1.26 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -140,12 +140,10 @@ static int vfcntl(
    */
 
   if (ret >= 0) {
-    if (iop->handlers->fcntl_h) {
-      int err = (*iop->handlers->fcntl_h)( cmd, iop );
-      if (err) {
-        errno = err;
-        ret = -1;
-      }
+    int err = (*iop->handlers->fcntl_h)( cmd, iop );
+    if (err) {
+      errno = err;
+      ret = -1;
     }
   }
   return ret;

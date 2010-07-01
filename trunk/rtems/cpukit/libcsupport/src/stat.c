@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: stat.c,v 1.16 2009/10/14 16:19:47 ralf Exp $
+ *  $Id: stat.c,v 1.17 2010/07/01 15:12:38 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -61,11 +61,6 @@ int _STAT_NAME(
                                            0, &loc, _STAT_FOLLOW_LINKS );
   if ( status != 0 )
     return -1;
-
-  if ( !loc.handlers->fstat_h ){
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   /*
    *  Zero out the stat structure so the various support

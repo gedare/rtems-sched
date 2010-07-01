@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: chdir.c,v 1.14 2010/04/28 15:01:31 joel Exp $
+ *  $Id: chdir.c,v 1.15 2010/07/01 15:12:35 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -44,11 +44,6 @@ int chdir(
   /*
    * Verify you can change directory into this node.
    */
-  if ( !loc.ops->node_type_h ) {
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
     rtems_set_errno_and_return_minus_one( ENOTDIR );

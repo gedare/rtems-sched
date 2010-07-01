@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: heap.h,v 1.42 2010/06/07 09:35:01 sh Exp $
+ *  $Id: heap.h,v 1.43 2010/07/01 15:39:59 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_HEAP_H
@@ -539,7 +539,6 @@ Heap_Block *_Heap_Block_allocate(
 
 #ifdef RTEMS_DEBUG
   #define RTEMS_HEAP_DEBUG
-  #define RTEMS_MALLOC_BOUNDARY_HELPERS
 #endif
 
 #ifdef RTEMS_HEAP_DEBUG

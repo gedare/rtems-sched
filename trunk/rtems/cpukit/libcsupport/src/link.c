@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: link.c,v 1.17 2009/09/15 09:29:55 ralf Exp $
+ *  $Id: link.c,v 1.18 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -48,11 +48,6 @@ int link(
 
   rtems_filesystem_get_start_loc( new, &i, &parent_loc );
 
-  if ( !parent_loc.ops->evalformake_h ) {
-    rtems_filesystem_freenode( &existing_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*parent_loc.ops->evalformake_h)( &new[i], &parent_loc, &name_start );
   if ( result != 0 ) {
     rtems_filesystem_freenode( &existing_loc );
@@ -68,12 +63,6 @@ int link(
     rtems_filesystem_freenode( &existing_loc );
     rtems_filesystem_freenode( &parent_loc );
     rtems_set_errno_and_return_minus_one( EXDEV );
-  }
-
-  if ( !parent_loc.ops->link_h ) {
-    rtems_filesystem_freenode( &existing_loc );
-    rtems_filesystem_freenode( &parent_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
   }
 
   result = (*parent_loc.ops->link_h)( &existing_loc, &parent_loc, name_start );

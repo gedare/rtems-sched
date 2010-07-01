@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: eval.c,v 1.16 2010/05/27 16:29:37 ralf Exp $
+ *  $Id: eval.c,v 1.17 2010/07/01 15:12:36 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -42,9 +42,6 @@ int rtems_filesystem_evaluate_relative_path(
   if ( !pathloc )
     rtems_set_errno_and_return_minus_one( EIO );       /* should never happen */
 
-  if ( !pathloc->ops->evalpath_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   result = (*pathloc->ops->evalpath_h)( pathname, pathnamelen, flags, pathloc );
 
   /*
@@ -54,20 +51,10 @@ int rtems_filesystem_evaluate_relative_path(
 
   if ( (result == 0) && follow_link ) {
 
-    if ( !pathloc->ops->node_type_h ){
-      rtems_filesystem_freenode( pathloc );
-      rtems_set_errno_and_return_minus_one( ENOTSUP );
-    }
-
     type = (*pathloc->ops->node_type_h)( pathloc );
 
     if ( ( type == RTEMS_FILESYSTEM_HARD_LINK ) ||
          ( type == RTEMS_FILESYSTEM_SYM_LINK ) ) {
-
-        if ( !pathloc->ops->eval_link_h ){
-          rtems_filesystem_freenode( pathloc );
-          rtems_set_errno_and_return_minus_one( ENOTSUP );
-        }
 
         /* what to do with the valid node pathloc points to
          * if eval_link_h fails?

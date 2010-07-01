@@ -1,7 +1,7 @@
 /*
- * Dummy version of BSD routine
+ *  Dummy version of BSD routine
  *
- *  $Id: issetugid.c,v 1.2 2009/09/30 08:20:27 ralf Exp $
+ *  $Id: issetugid.c,v 1.3 2010/07/01 15:37:48 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -9,9 +9,8 @@
 #endif
 
 #if defined(RTEMS_NEWLIB) && !defined(HAVE_ISSETUGID)
-int
-issetugid (void)
+int issetugid (void)
 {
-	return 0;
+  return 0;
 }
 #endif

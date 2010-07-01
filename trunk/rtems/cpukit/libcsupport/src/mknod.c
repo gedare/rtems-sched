@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mknod.c,v 1.14 2008/10/14 15:06:25 joel Exp $
+ *  $Id: mknod.c,v 1.15 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -45,10 +45,6 @@ int mknod(
 
   rtems_filesystem_get_start_loc( pathname, &i, &temp_loc );
 
-  if ( !temp_loc.ops->evalformake_h ) {
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
-
   result = (*temp_loc.ops->evalformake_h)(
     &pathname[i],
     &temp_loc,
@@ -56,11 +52,6 @@ int mknod(
   );
   if ( result != 0 )
     return -1;
-
-  if ( !temp_loc.ops->mknod_h ) {
-    rtems_filesystem_freenode( &temp_loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   result =  (*temp_loc.ops->mknod_h)( name_start, mode, dev, &temp_loc );
 

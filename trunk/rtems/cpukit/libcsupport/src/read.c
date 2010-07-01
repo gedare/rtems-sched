@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: read.c,v 1.16 2010/06/24 21:48:52 joel Exp $
+ *  $Id: read.c,v 1.17 2010/07/01 15:12:37 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -40,9 +40,6 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  if ( !iop->handlers->read_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   rc = (*iop->handlers->read_h)( iop, buffer, count );
 
   if ( rc > 0 )

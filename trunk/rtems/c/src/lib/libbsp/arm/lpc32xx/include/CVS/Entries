@@ -1,6 +1,5 @@
 /boot.h/1.1/Wed Jun 30 17:40:33 2010//
 /bsp.h/1.5/Wed Jun 30 17:40:33 2010//
-/bspopts.h.in/1.6/Thu Jul  1 14:44:00 2010//
 /emc.h/1.1/Wed Jun 30 17:40:33 2010//
 /i2c.h/1.1/Wed Jun 30 17:40:33 2010//
 /irq.h/1.2/Wed Jun 30 17:40:33 2010//
@@ -9,4 +8,5 @@
 /lpc32xx.h/1.8/Wed Jun 30 17:40:33 2010//
 /mmu.h/1.2/Wed Jun 30 17:40:33 2010//
 /nand-mlc.h/1.1/Wed Jun 30 17:40:33 2010//
+/bspopts.h.in/1.6/Thu Jul  1 15:54:34 2010//
 D
