@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: main_mount.c,v 1.9 2010/06/07 15:35:24 sh Exp $
+ *  $Id: main_mount.c,v 1.10 2010/07/01 13:05:18 sh Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -31,7 +31,7 @@ static bool print_filesystem(const rtems_filesystem_table_t *entry, void *arg)
 {
   printf("%s ", entry->type);
 
-  return true;
+  return false;
 }
 
 int rtems_shell_main_mount(

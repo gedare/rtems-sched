@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_init.c,v 1.18 2010/06/08 10:25:44 sh Exp $
+ *  $Id: imfs_init.c,v 1.19 2010/06/29 19:37:28 jennifer Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -43,7 +43,7 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .symlink_h = IMFS_symlink,
   .readlink_h = IMFS_readlink,
   .rename_h = IMFS_rename,
-  .statvfs_h = NULL
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 int IMFS_initialize(

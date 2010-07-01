@@ -1,6 +1,6 @@
 #ifndef LIB_RTEMS_NFS_CLIENT_H
 #define LIB_RTEMS_NFS_CLIENT_H
-/* $Id: librtemsNfs.h,v 1.5 2010/05/31 13:56:36 ccj Exp $ */
+/* $Id: librtemsNfs.h,v 1.6 2010/07/01 09:51:43 sh Exp $ */
 
 /* public interface to the NFS client library for RTEMS */
 
@@ -143,8 +143,8 @@ nfsMountsShow(FILE *f);
  * Filesystem mount table mount handler. Do not call, use the mount call.
  */
 int 
-rtems_nfsfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
-                       const void                           *data);
+rtems_nfs_initialize(rtems_filesystem_mount_table_entry_t *mt_entry,
+                     const void                           *data);
 
 /* A utility routine to find the path leading to a
  * rtems_filesystem_location_info_t node.

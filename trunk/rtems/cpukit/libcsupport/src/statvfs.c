@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: statvfs.c,v 1.2 2009/11/29 13:35:32 ralf Exp $
+ *  $Id: statvfs.c,v 1.3 2010/07/01 13:05:18 sh Exp $
  */
 /*
  * The statvfs as defined by the SUS:
@@ -20,11 +20,6 @@
 #include <rtems/seterr.h>
 
 #include <sys/statvfs.h>
-
-/*
- *  Data structures and routines private to mount/unmount pair.
- */
-extern rtems_chain_control rtems_filesystem_mount_table_control;
 
 int
 statvfs (const char *path, struct statvfs *sb)

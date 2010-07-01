@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.62 2010/06/28 18:48:19 joel Exp $
+## $Id: Makefile.am,v 1.63 2010/07/01 14:40:09 joel Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../aclocal
@@ -19,8 +19,8 @@ SUBDIRS += psxhdrs psx01 psx02 psx03 psx04 psx05 psx06 psx07 psx08 psx09 \
 endif
 
 ## File IO tests
-SUBDIRS += psxfile01 psxfile02 psximfs01 psxreaddir psxstat psxmount psx13 \
-  psxchroot01 psxpasswd01
+SUBDIRS += psxfile01 psxfile02 psxfilelock01 psxid01 psximfs01 psxreaddir \
+    psxstat psxmount psx13 psxchroot01 psxpasswd01
 
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to support readv and writev.  Hopefully this is a temporary

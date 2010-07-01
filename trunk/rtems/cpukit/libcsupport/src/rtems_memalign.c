@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems_memalign.c,v 1.3 2009/11/29 13:35:32 ralf Exp $
+ *  $Id: rtems_memalign.c,v 1.4 2010/06/30 15:36:48 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -45,24 +45,13 @@ int rtems_memalign(
     return EINVAL;
 
   /*
-   *
    *  If some free's have been deferred, then do them now.
    */
   malloc_deferred_frees_process();
 
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If the support for a boundary area at the end of the heap
-     *  block allocated is turned on, then adjust the size.
-     */
-    if (rtems_malloc_boundary_helpers)
-      size += (*rtems_malloc_boundary_helpers->overhead)();
-  #endif
-
   /*
    *  Perform the aligned allocation requested
    */
-
   return_this = _Protected_heap_Allocate_aligned(
     RTEMS_Malloc_Heap,
     size,

@@ -15,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: tfsDriver.c,v 1.5 2010/05/31 14:01:31 ccj Exp $
+ *  $Id: tfsDriver.c,v 1.8 2010/06/30 14:32:36 joel Exp $
  */
 
 #include <stdio.h>
@@ -700,37 +700,39 @@ rtems_filesystem_location_info_t *pathloc)
 
 
 rtems_filesystem_operations_table  rtems_tfs_ops = {
-  rtems_tfs_eval_path,         /* eval_path */
-  rtems_tfs_evaluate_for_make, /* evaluate_for_make */
-  NULL,                        /* link */
-  NULL,                        /* unlink */
-  rtems_tfs_node_type,         /* node_type */
-  NULL,                        /* mknod */
-  NULL,                        /* chown */
-  rtems_tfs_free_node_info,    /* freenodinfo */
-  NULL,                        /* mount */
-  rtems_tfs_mount_me,          /* initialize */
-  NULL,                        /* unmount */
-  NULL,                        /* fsunmount */
-  NULL,                        /* utime */
-  NULL,                        /* evaluate_link */
-  NULL,                        /* symlink */
-  NULL,                        /* readlin */
+  rtems_tfs_eval_path,                    /* eval_path */
+  rtems_tfs_evaluate_for_make,            /* evaluate_for_make */
+  rtems_filesystem_default_link,          /* link */
+  rtems_filesystem_default_unlink,        /* unlink */
+  rtems_tfs_node_type,                    /* node_type */
+  rtems_filesystem_default_mknod,         /* mknod */
+  rtems_filesystem_default_chown,         /* chown */
+  rtems_tfs_free_node_info,               /* freenodinfo */
+  rtems_filesystem_default_mount,         /* mount */
+  rtems_tfs_mount_me,                     /* initialize */
+  rtems_filesystem_default_unmount,       /* unmount */
+  rtems_filesystem_default_fsunmount,     /* fsunmount */
+  rtems_filesystem_default_utime,         /* utime */
+  rtems_filesystem_default_evaluate_link, /* evaluate_link */
+  rtems_filesystem_default_symlink,       /* symlink */
+  rtems_filesystem_default_readlink,      /* readlin */
+  rtems_filesystem_default_rename,        /* rename */
+  rtems_filesystem_default_statvfs        /* statvfs */
 };
 
 rtems_filesystem_file_handlers_r rtems_tfs_handlers = {
-  rtems_tfs_open,      /* open */
-  rtems_tfs_close,     /* close */
-  rtems_tfs_read,      /* read */
-  rtems_tfs_write,     /* write */
-  rtems_tfs_ioctl,     /* ioctl */
-  rtems_tfs_lseek,     /* lseek */
-  NULL,                /* fstat */
-  NULL,                /* fchmod */
-  rtems_tfs_ftruncate, /* ftruncate */
-  NULL,                /* fpathconf */
-  NULL,                /* fsync */
-  NULL,                /* fdatasync */
-  NULL,                /* fcntl */
-  NULL                 /* rmnod */
+  rtems_tfs_open,                     /* open */
+  rtems_tfs_close,                    /* close */
+  rtems_tfs_read,                     /* read */
+  rtems_tfs_write,                    /* write */
+  rtems_tfs_ioctl,                    /* ioctl */
+  rtems_tfs_lseek,                    /* lseek */
+  rtems_filesystem_default_fstat,     /* fstat */
+  rtems_filesystem_default_fchmod,    /* fchmod */
+  rtems_tfs_ftruncate,                /* ftruncate */
+  rtems_filesystem_default_fpathconf, /* fpathconf */
+  rtems_filesystem_default_fsync,     /* fsync */
+  rtems_filesystem_default_fdatasync, /* fdatasync */
+  rtems_filesystem_default_fcntl,     /* fcntl */
+  rtems_filesystem_default_rmnod      /* rmnod */
 };
