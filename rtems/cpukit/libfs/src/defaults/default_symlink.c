@@ -6,14 +6,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_symlink.c,v 1.2 2010/06/29 01:53:18 joel Exp $
+ *  $Id: default_symlink.c,v 1.3 2010/06/29 19:37:28 jennifer Exp $
  */
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_symlink_t(
+int rtems_filesystem_default_symlink(
  rtems_filesystem_location_info_t  *loc,         /* IN */
  const char                        *link_name,   /* IN */
  const char                        *node_name

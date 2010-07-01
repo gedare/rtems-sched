@@ -6,14 +6,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_fsmount.c,v 1.2 2010/06/29 01:53:18 joel Exp $
+ *  $Id: default_fsmount.c,v 1.3 2010/06/29 19:37:28 jennifer Exp $
  */
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_fsmount_t(
+int rtems_filesystem_default_fsmount(
   rtems_filesystem_mount_table_entry_t *mt_entry,     /* IN */
   const void                           *data          /* IN */
 )

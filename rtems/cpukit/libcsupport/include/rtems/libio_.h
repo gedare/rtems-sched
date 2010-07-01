@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_.h,v 1.38 2010/06/22 20:03:41 jennifer Exp $
+ *  $Id: libio_.h,v 1.39 2010/07/01 13:05:18 sh Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H
@@ -38,11 +38,6 @@ extern "C" {
 
 extern rtems_id                          rtems_libio_semaphore;
 extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
-
-/*
- * Mount table list.
- */
-extern rtems_chain_control rtems_filesystem_mount_table_control;
 
 /*
  *  File descriptor Table Information

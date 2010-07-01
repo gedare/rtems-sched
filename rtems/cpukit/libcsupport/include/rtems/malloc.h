@@ -12,7 +12,7 @@
  *  the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id: malloc.h,v 1.10 2010/06/21 21:13:42 joel Exp $
+ * $Id: malloc.h,v 1.11 2010/06/30 15:36:48 joel Exp $
  */
 
 #ifndef _RTEMS_MALLOC_H
@@ -54,20 +54,6 @@ typedef struct {
 extern rtems_malloc_statistics_functions_t
   rtems_malloc_statistics_helpers_table;
 extern rtems_malloc_statistics_functions_t *rtems_malloc_statistics_helpers;
-
-/*
- *  Malloc boundary support plugin
- */
-typedef struct {
-  void     (*initialize)(void);
-  uint32_t (*overhead)(void);
-  void     (*at_malloc)(void *, size_t);
-  void     (*at_free)(void *);
-  void     (*at_realloc)(void *, size_t);
-} rtems_malloc_boundary_functions_t;
-
-extern rtems_malloc_boundary_functions_t rtems_malloc_boundary_helpers_table;
-extern rtems_malloc_boundary_functions_t *rtems_malloc_boundary_helpers;
 
 /*
  *  Malloc Heap Extension (sbrk) plugin

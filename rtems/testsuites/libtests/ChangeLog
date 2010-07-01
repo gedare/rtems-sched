@@ -1,3 +1,21 @@
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for GCC C++ library helpers.
+	* gxx01/.cvsignore, gxx01/Makefile.am, gxx01/gxx01.doc,
+	gxx01/gxx01.scn, gxx01/gxx_wrappers.h, gxx01/init.c: New files.
+
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* termios04/termios_testdriver_intr.c: Task driven IO now works.
+
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for task driven drivers.
+	* termios05/.cvsignore, termios05/Makefile.am, termios05/init.c,
+	termios05/termios05.doc, termios05/termios05.scn,
+	termios05/termios_testdriver_taskdriven.c,
+	termios05/termios_testdriver_taskdriven.h: New files.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Revert changes related to uncommitted test

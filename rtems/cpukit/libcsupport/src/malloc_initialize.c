@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: malloc_initialize.c,v 1.11 2009/11/29 13:35:32 ralf Exp $
+ *  $Id: malloc_initialize.c,v 1.12 2010/06/30 15:36:48 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -43,15 +43,6 @@ void RTEMS_Malloc_Initialize(
   size_t sbrk_amount
 )
 {
-  #if defined(RTEMS_MALLOC_BOUNDARY_HELPERS)
-    /*
-     *  If configured, initialize the boundary support
-     */
-    if ( rtems_malloc_boundary_helpers != NULL ) {
-      (*rtems_malloc_boundary_helpers->initialize)();
-    }
-  #endif
-
   /*
    *  If configured, initialize the statistics support
    */

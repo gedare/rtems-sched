@@ -2,7 +2,6 @@
 /README/1.1/Mon Jul 26 19:59:00 1999//
 /i386_ports.adb/1.1/Fri Apr 23 16:35:11 1999//
 /i386_ports.ads/1.2/Wed Apr 21 10:42:45 2004//
-/init.c/1.6/Wed Apr 21 10:42:45 2004//
 /ts1325-button.adb/1.1/Fri Apr 23 16:35:11 1999//
 /ts1325-button.ads/1.1/Fri Apr 23 16:35:11 1999//
 /ts1325-led.adb/1.1/Fri Apr 23 16:35:11 1999//
@@ -11,4 +10,5 @@
 /ts1325-parallel.ads/1.1/Fri Apr 23 16:35:11 1999//
 /ts1325.ads/1.1/Fri Apr 23 16:35:11 1999//
 /ts1325_test.adb/1.1/Fri Apr 23 16:35:11 1999//
+/init.c/1.6/Wed Jun 30 17:40:48 2010//
 D
