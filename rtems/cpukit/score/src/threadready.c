@@ -62,7 +62,7 @@ void _Thread_Ready(
 
   the_thread->current_state = STATES_READY;
 
-  _Scheduler_Unblock(the_thread);
+  _Scheduler_Unblock( &_Scheduler, the_thread );
 
   _ISR_Enable( level );
 }

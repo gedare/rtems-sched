@@ -77,7 +77,9 @@ extern "C" {
 #include <rtems/score/watchdog.h>
 
 
-  /* TODO: find a place for these definitions to live */
+  /* TODO: find a place for these definitions to live. Perhaps change the 
+   * thread.h entry into a union of pointers to instances of these structures.
+   */
 
   /**
  * This structure is used in the Thread_Control struct to hold per-thread 

@@ -63,7 +63,7 @@ void _Thread_Set_transient(
   the_thread->current_state = _States_Set( STATES_TRANSIENT, old_state );
 
   if ( _States_Is_ready( old_state ) ) {
-    _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
+    _Ready_queue_Extract(&_Scheduler.ready_queue, the_thread);
   }
 
   _ISR_Enable( level );

@@ -124,9 +124,9 @@ void _Thread_Change_priority(
     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
 
     if ( prepend_it )
-      _Ready_queue_Enqueue_first( &_Thread_Ready_queue, the_thread );
+      _Ready_queue_Enqueue_first( &_Scheduler.ready_queue, the_thread );
     else
-      _Ready_queue_Enqueue( &_Thread_Ready_queue, the_thread );
+      _Ready_queue_Enqueue( &_Scheduler.ready_queue, the_thread );
   }
 
   _ISR_Flash( level );
@@ -135,7 +135,7 @@ void _Thread_Change_priority(
    *  We altered the set of thread priorities.  So let's figure out
    *  who is the heir and if we need to switch to them.
    */
-  _Scheduler_Schedule();
+  _Scheduler_Schedule(&_Scheduler);
 
   _ISR_Enable( level );
 }
