@@ -65,7 +65,7 @@ void _Thread_Suspend(
 
   the_thread->current_state = STATES_SUSPENDED;
 
-  _Scheduler_Block(the_thread);
+  _Scheduler_Block(&_Scheduler, the_thread);
 
   _ISR_Enable( level );
 }

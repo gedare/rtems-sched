@@ -34,16 +34,17 @@
 
 /*PAGE
  *
- *  _Scheduler_Yield
+ *  _Scheduler_Yield_queue
  *
- *  This kernel routine will remove the running THREAD from the ready chain
+ *  This kernel routine will remove the running THREAD from the ready queue
  *  and place it immediatly at the rear of this chain.  Reset timeslice
  *  and yield the processor functions both use this routine, therefore if
- *  reset is true and this is the only thread on the chain then the
+ *  reset is true and this is the only thread on the queue then the
  *  timeslice counter is reset.  The heir THREAD will be updated if the
  *  running is also the currently the heir.
  *
- *  Input parameters:   NONE
+ *  Input parameters:
+ *    the_scheduler - pointer to scheduler control
  *
  *  Output parameters:  NONE
  *
@@ -52,7 +53,7 @@
  *    select heir
  */
 
-void _Scheduler_Yield( void )
+void _Scheduler_Yield_queue( Scheduler_Control *the_scheduler )
 {
   ISR_Level       level;
   Thread_Control *executing;
@@ -60,11 +61,11 @@ void _Scheduler_Yield( void )
   executing = _Thread_Executing;
   _ISR_Disable( level );
       
-      _Ready_queue_Requeue(&_Thread_Ready_queue, executing);
+      _Ready_queue_Requeue(&the_scheduler->ready_queue, executing);
 
       _ISR_Flash( level );
 
-      _Scheduler_Schedule();
+      _Scheduler_Schedule(the_scheduler);
     
     if ( !_Thread_Is_heir( executing ) )
       _Dispatch_needed = true;

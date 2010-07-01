@@ -28,6 +28,12 @@
  * @{
  */
 
+/**
+ * The preferred method to add a new ready queue implementation is to define 
+ * the jump table entries and add a case to the _Ready_queue_Initialize 
+ * routine.  See cpukit/score/src/readyq.c file.
+ */
+
 /** @brief  Ready queue Dequeue
  *
  * This function removes the next ready thread from the ready queue.

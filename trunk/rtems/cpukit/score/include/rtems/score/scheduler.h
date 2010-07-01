@@ -31,53 +31,82 @@
 extern "C" {
 #endif
 
-#include <rtems/score/object.h>
-#include <rtems/score/thread.h>
+#include <rtems/score/percpu.h>
+#include <rtems/score/readyq.h>
 
-/**
+
+/** 
  * @brief The following defines provide configuration control over the 
  * scheduler implementation.
+ *
+ * When adding a new scheduler implementation, give it a unique definition 
+ * here so that users can select an arbitrary scheduler for their application.
+ * Also add a brief description of the option here.
+ *
+ * _SCHED_PRI:  
+ *  Queue-based scheduling with a priority-map ready queue.
+ * 
+ * _SCHED_FIFO: 
+ *  Queue-based scheduling with a FIFO ready queue.
+ *
  */
 #define _SCHED_PRI (1)
 #define _SCHED_FIFO (2)
 
 /**
  * @brief SCHEDULER_DEFAULT_POLICY defines the default behavior of the 
- * scheduler via confdefs.
+ * scheduler via confdefs.  The default behavior is the original RTEMS 
+ * priority-based scheduling using the priority map ready queue.
  */
 #define SCHEDULER_DEFAULT_POLICY _SCHED_PRI
 
+
+typedef struct Scheduler_Control_struct Scheduler_Control;
+
 /**
- *  This routine initializes the scheduler.  
+ * function jump table that holds pointers to the functions that 
+ * implement specific schedulers.
+ */
+typedef struct {
+  /** Implements the scheduling decision logic (policy). */
+  void ( *schedule ) ( Scheduler_Control* );
+
+  /** Voluntarily yields the processor per the scheduling policy. */
+  void ( *yield ) ( Scheduler_Control* );
+
+  /** Removes the given thread from scheduling decisions. */
+  void ( *block ) ( Scheduler_Control*, Thread_Control * );
+
+  /** Adds the given thread to scheduling decisions. */
+  void ( *unblock ) ( Scheduler_Control*, Thread_Control * );
+} Scheduler_Operations;
+
+/**
+ * This is the structure used to manage the scheduler.
+ */
+struct Scheduler_Control_struct {
+
+  /* A scheduler defines its own ready queue. */
+  Ready_queue_Control ready_queue;
+
+  /** The jump table for scheduler-specific functions */
+  Scheduler_Operations s_ops;
+};
+
+/* TODO: make this per-cpu? then _Scheduler will be a macro. */
+/**
+ *  The following points to the structures used to manage the
+ *  scheduler.
+ */
+SCORE_EXTERN Scheduler_Control _Scheduler;
+
+
+/**
+ *  This routine initializes the scheduler to the policy chosen by the user 
+ *  through confdefs, or to the priority scheduler with ready chains by
+ *  default.
  */
 void _Scheduler_Initialize( void );
-
-/**
- *  This routine is invoked when a thread wishes to voluntarily
- *  transfer control of the processor to another thread of equal
- *  or greater priority.
- */
-void _Scheduler_Yield( void );
-
-/**
- *  This routine removes @a the_thread from the scheduling decision, 
- *  that is, removes it from the ready queue.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- */
-void _Scheduler_Block(
-  Thread_Control *the_thread
-);
-
-/**
- *  This routine adds @a the_thread to the scheduling decision, 
- *  that is, adds it to the ready queue.  It performs
- *  any necessary scheduling operations including the selection of
- *  a new heir thread.
- */
-void _Scheduler_Unblock(
-  Thread_Control *the_thread
-);
 
 
 #ifndef __RTEMS_APPLICATION__

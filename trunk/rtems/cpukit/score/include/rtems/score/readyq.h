@@ -71,14 +71,13 @@ typedef struct {
   /*
    * Returns a pointer to the first (head) thread on the ready queue.
    */
-  Thread_Control * ( *first )( Ready_queue_Control *the_ready_queue );
+  Thread_Control * ( *first )( Ready_queue_Control * );
 
   /*
    * Sets the ready pointer of the thread, using information available from 
    * the Thread_Control and Ready_queue_Control structures.
    */
-  void ( *set_ready )(  Ready_queue_Control *the_ready_queue, 
-      Thread_Control *the_thread );
+  void ( *set_ready )(  Ready_queue_Control *, Thread_Control * );
 
 } Ready_queue_Operations;
 
@@ -103,13 +102,6 @@ struct Ready_queue_Control_struct {
   /** The jump table for ready queue structure-specific functions */
   Ready_queue_Operations rq_ops;
 };
-
-/* TODO: make this per-cpu? */
-/**
- *  The following points to the structures used to manage the
- *  set of ready threads.
- */
-SCORE_EXTERN Ready_queue_Control  _Thread_Ready_queue;
 
 /** @brief  Ready queue Initialize
  *

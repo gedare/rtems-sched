@@ -23,22 +23,73 @@
 #ifndef _RTEMS_SCORE_SCHEDULER_INL
 #define _RTEMS_SCORE_SCHEDULER_INL
 
-#include <rtems/score/readyq.h>
-
 /**
  *  @addtogroup ScoreScheduler
  * @{
  */
 
 /**
- *  This kernel routine sets the heir thread to be the highest priority
- *  ready thread.  This implements the scheduling decision logic. It does 
- *  NOT dispatch.
+ * The preferred method to add a new scheduler is to define the jump table 
+ * entries and add a case to the _Scheduler_Initialize routine. 
+ *
+ * Generic scheduling implementations that rely on the ready queue only can 
+ * be found in the _Scheduler_XXX_queue functions.
+ *
  */
 
-RTEMS_INLINE_ROUTINE void _Scheduler_Schedule( void )
+/* Passing the Scheduler_Control* to these functions allows for multiple 
+ * scheduler's to exist simultaneously, which could be useful on an SMP 
+ * system.  Then remote Schedulers may be accessible.  How to protect such 
+ * accesses remains an open problem.
+ */
+
+/**
+ *  This kernel routine implements the scheduling decision logic. It does 
+ *  NOT dispatch.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
+    Scheduler_Control *sched 
+)
 {
-  _Thread_Heir = _Ready_queue_First(&_Thread_Ready_queue);
+  sched->s_ops.schedule( sched );
+}
+
+/**
+ *  This routine is invoked when a thread wishes to voluntarily
+ *  transfer control of the processor to another thread. This routine
+ *  always operates on the scheduler that 'owns' the currently executing
+ *  thread.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Yield( void )
+{
+  _Scheduler.s_ops.yield( &_Scheduler );
+}
+
+/**
+ *  This routine removes @a the_thread from the scheduling decision, 
+ *  that is, removes it from the ready queue.  It performs
+ *  any necessary scheduling operations including the selection of
+ *  a new heir thread.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Block( 
+    Scheduler_Control *sched,
+    Thread_Control *the_thread 
+)
+{
+  sched->s_ops.block( sched, the_thread );
+}
+
+/**
+ *  This routine adds @a the_thread to the scheduling decision, 
+ *  that is, adds it to the ready queue per the scheduling policy and 
+ *  updates any appropriate scheduling variables, for example the heir thread.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
+    Scheduler_Control *sched,
+    Thread_Control *the_thread 
+)
+{
+  sched->s_ops.unblock( sched, the_thread );
 }
 
 

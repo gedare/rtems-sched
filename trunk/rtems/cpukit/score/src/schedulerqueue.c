@@ -21,40 +21,34 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/readyq.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerqueue.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
+/*
  *
- *  _Scheduler_Initialize
+ *  _Scheduler_Initialize_queue
  *
- *  This routine initializes the scheduler
+ *  This routine initializes the scheduler for queue-based scheduling, 
+ *  which embeds the complexity of decision making in the implementation of 
+ *  the queue.
  *
  *  Input parameters:
+ *    the_scheduler - pointer to scheduler control
  *
  *  Output parameters: NONE
  */
 
-void _Scheduler_Initialize( )
+void _Scheduler_Initialize_queue(
+    Scheduler_Control *the_scheduler
+)
 {
-  Scheduler_Control *the_scheduler = &_Scheduler;
-
-  switch (Configuration.scheduler_policy) {
-    /* 
-     * The remaining scheduling policies rely on the ready queue implementation
-     * to provide most of the complexity of scheduling decisions, and otherwise
-     * share the same scheduling policy.
-     */
-    case _SCHED_PRI:
-    case _SCHED_FIFO:
-      _Scheduler_Initialize_queue( the_scheduler );
-      
-      break;
-
-    default:
-      while ( 1 ); /* should be easy to find */
-  }
-
+  the_scheduler->s_ops.schedule = &_Scheduler_Schedule_queue;
+  the_scheduler->s_ops.yield    = &_Scheduler_Yield_queue;
+  the_scheduler->s_ops.block    = &_Scheduler_Block_queue;
+  the_scheduler->s_ops.unblock  = &_Scheduler_Unblock_queue;
+ 
+  _Ready_queue_Initialize(&the_scheduler->ready_queue);
 }

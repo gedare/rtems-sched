@@ -67,7 +67,7 @@ void _Thread_Set_state(
 
   the_thread->current_state = state;
 
-  _Scheduler_Block(the_thread);
+  _Scheduler_Block( &_Scheduler, the_thread);
 
   _ISR_Enable( level );
 }

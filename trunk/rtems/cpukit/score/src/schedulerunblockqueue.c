@@ -32,14 +32,15 @@
 #include <rtems/score/userext.h>
 #include <rtems/score/wkspace.h>
 
-/*PAGE
+/*
  *
- *  _Scheduler_Unblock
+ *  _Scheduler_Unblock_queue
  *
- *  This kernel routine readies the requested thread, the thread chain
- *  is adjusted.  A new heir thread may be selected.
+ *  This kernel routine readies the requested thread according to the queuing 
+ *  discipline. A new heir thread may be selected.
  *
  *  Input parameters:
+ *    the_scheduler - pointer to scheduler control
  *    the_thread - pointer to thread control block
  *
  *  Output parameters:  NONE
@@ -50,18 +51,19 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Unblock(
+void _Scheduler_Unblock_queue(
+  Scheduler_Control *the_scheduler,
   Thread_Control *the_thread
 )
 {
   Thread_Control *heir;
 
-  _Ready_queue_Enqueue(&_Thread_Ready_queue, the_thread);
+  _Ready_queue_Enqueue(&the_scheduler->ready_queue, the_thread);
 
   /* TODO: flash critical section */
   /* XXX */
 
-  _Scheduler_Schedule();
+  _Scheduler_Schedule(the_scheduler);
 
   heir = _Thread_Heir;
 

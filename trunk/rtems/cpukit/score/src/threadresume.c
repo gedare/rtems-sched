@@ -70,7 +70,7 @@ void _Thread_Resume(
     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
 
     if ( _States_Is_ready( current_state ) ) {
-      _Scheduler_Unblock(the_thread);
+      _Scheduler_Unblock( &_Scheduler, the_thread );
     }
   }
 

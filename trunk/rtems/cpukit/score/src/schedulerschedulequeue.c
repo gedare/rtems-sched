@@ -21,17 +21,21 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/percpu.h>
 #include <rtems/score/readyq.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>
 
-/*PAGE
+/*
  *
- * _Scheduler_Block
+ * _Scheduler_Schedule_queue
  *
- * This kernel routine removes the_thread from scheduling decisions.
+ * This kernel routine implements scheduling decision logic for queue-based
+ * scheduling.  Any scheduler that selects the next ready task based on the
+ * head of the ready queue can use this function for its schedule routine.
  *
  * Input parameters:
+ *   the_scheduler - pointer to scheduler control
  *   the_thread   - pointer to thread control block
  *
  * Output parameters:  NONE
@@ -39,23 +43,10 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Block(
-  Thread_Control   *the_thread
+void _Scheduler_Schedule_queue(
+  Scheduler_Control *the_scheduler,
+  Thread_Control    *the_thread
 )
 {
-
-  _Ready_queue_Extract(&_Thread_Ready_queue, the_thread);
-
-  /* TODO: flash critical section */
-  /* XXX */
-
-  /* TODO: Is this robust? */
-  if ( _Thread_Is_heir( the_thread ) )
-     _Scheduler_Schedule();
-
-  /* TODO: rewrite _Dispatch_needed to dispatch_needed */
-  if ( _Thread_Is_executing( the_thread ) )
-    _Dispatch_needed = true;
-
-  return;
+  _Thread_Heir = _Ready_queue_First(&the_scheduler->ready_queue);
 }

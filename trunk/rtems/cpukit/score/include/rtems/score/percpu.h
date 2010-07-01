@@ -158,7 +158,7 @@ extern Per_CPU_Control _Per_CPU_Information;
 #define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
 #define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
 #define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
-#define _Dispatch_needed _Per_CPU_Information.dispatch_needed
+#define _Dispatch_needed          _Per_CPU_Information.dispatch_needed
 
 #endif  /* ASM */
 
