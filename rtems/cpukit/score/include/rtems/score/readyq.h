@@ -72,13 +72,6 @@ typedef struct {
    * Returns a pointer to the first (head) thread on the ready queue.
    */
   Thread_Control * ( *first )( Ready_queue_Control * );
-
-  /*
-   * Sets the ready pointer of the thread, using information available from 
-   * the Thread_Control and Ready_queue_Control structures.
-   */
-  void ( *set_ready )(  Ready_queue_Control *, Thread_Control * );
-
 } Ready_queue_Operations;
 
 /**

@@ -48,10 +48,10 @@
  *  NOT dispatch.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
-    Scheduler_Control *sched 
+    Scheduler_Control *the_scheduler 
 )
 {
-  sched->s_ops.schedule( sched );
+  the_scheduler->s_ops.scheduler( the_scheduler );
 }
 
 /**
@@ -66,31 +66,55 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Yield( void )
 }
 
 /**
- *  This routine removes @a the_thread from the scheduling decision, 
+ *  This routine removes @a the_thread from the schedulering decision, 
  *  that is, removes it from the ready queue.  It performs
- *  any necessary scheduling operations including the selection of
+ *  any necessary schedulering operations including the selection of
  *  a new heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Block( 
-    Scheduler_Control *sched,
+    Scheduler_Control *the_scheduler,
     Thread_Control *the_thread 
 )
 {
-  sched->s_ops.block( sched, the_thread );
+  the_scheduler->s_ops.block( the_scheduler, the_thread );
 }
 
 /**
- *  This routine adds @a the_thread to the scheduling decision, 
- *  that is, adds it to the ready queue per the scheduling policy and 
- *  updates any appropriate scheduling variables, for example the heir thread.
+ *  This routine adds @a the_thread to the schedulering decision, 
+ *  that is, adds it to the ready queue per the schedulering policy and 
+ *  updates any appropriate schedulering variables, for example the heir thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Unblock(
-    Scheduler_Control *sched,
+    Scheduler_Control *the_scheduler,
     Thread_Control *the_thread 
 )
 {
-  sched->s_ops.unblock( sched, the_thread );
+  the_scheduler->s_ops.unblock( the_scheduler, the_thread );
 }
+
+/**
+ * This routine allocates the sched field of @a the_thread
+ */
+RTEMS_INLINE_ROUTINE void* _Scheduler_Sched_allocate( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+)
+{
+  return ( the_scheduler->s_ops.sched_allocate( the_scheduler, the_thread ) );
+}
+
+/**
+ * This routine updates the sched field of @a the_thread.
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Sched_update( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+)
+{
+  the_scheduler->s_ops.sched_update( the_scheduler, the_thread );
+}
+
+
 
 
 /**@}*/

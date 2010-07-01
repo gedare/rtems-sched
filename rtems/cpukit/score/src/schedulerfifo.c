@@ -1,5 +1,5 @@
 /*
- *  Ready Queue Handler
+ *  Scheduler Handler
  *
  *
  *  COPYRIGHT (c) 1989-2008.
@@ -17,33 +17,33 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/readyq.h>
+#include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerfifo.h>
+#include <rtems/score/schedulerqueue.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
-#include <rtems/score/readyq.h>
 
 /*
  *
- *  _Ready_queue_Set_ready_fifo
+ *  _Scheduler_Initialize_fifo
  *
- *  This routine sets @a the_thread->ready for fifo ready queue
- *  
+ * Initializes the scheduler for fifo scheduling.
+ *
  *  Input parameters:
- *    the_ready_queue - pointer to readyq
- *    the_thread      - pointer to thread being manipulated
+ *    the_scheduler - pointer to scheduler control
  *
  *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
  */
 
-void _Ready_queue_Set_ready_fifo(
-  Ready_queue_Control         *the_ready_queue,
-  Thread_Control                   *the_thread
+void _Scheduler_Initialize_fifo (
+    Scheduler_Control *the_scheduler
 )
 {
-  /* TODO: this probably is not needed */
-  the_thread->ready.fifo.ready_chain = &the_ready_queue->Queues.Fifo; 
+  _Scheduler_Initialize_queue(the_scheduler);
+  /* Don't need to override Sched_allocate or Sched_update for FIFO */
 }

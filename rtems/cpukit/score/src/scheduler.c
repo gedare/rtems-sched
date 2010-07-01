@@ -42,15 +42,13 @@ void _Scheduler_Initialize( )
   Scheduler_Control *the_scheduler = &_Scheduler;
 
   switch (Configuration.scheduler_policy) {
-    /* 
-     * The remaining scheduling policies rely on the ready queue implementation
-     * to provide most of the complexity of scheduling decisions, and otherwise
-     * share the same scheduling policy.
-     */
+
     case _SCHED_PRI:
+      _Scheduler_Initialize_priority( the_scheduler );
+      break;
+
     case _SCHED_FIFO:
-      _Scheduler_Initialize_queue( the_scheduler );
-      
+      _Scheduler_Initialize_fifo( the_scheduler );
       break;
 
     default:

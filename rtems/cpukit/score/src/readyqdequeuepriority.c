@@ -23,7 +23,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
 /*
  *
@@ -54,7 +53,7 @@ Thread_Control *_Ready_queue_Dequeue_priority(
   
   if ( _Chain_Has_only_one_node( rq ) ) {
     _Chain_Initialize_empty( rq );
-    _Priority_Remove( &the_thread->ready.priority.Priority_map );
+    _Priority_Remove( &the_thread->sched.priority->Priority_map );
   } else
     _Chain_Extract_unprotected( &the_thread->Object.Node );
  

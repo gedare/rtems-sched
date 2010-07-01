@@ -106,17 +106,6 @@ Thread_Control *_Ready_queue_First_priority(
   Ready_queue_Control *the_ready_queue
 );
 
-/** 
- * @brief Ready queue Set per ready priority
- *
- * This function sets the ready field of @a the_thread for the 
- * priority-based ready queue.
- */
-void _Ready_queue_Set_ready_priority(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control *the_thread
-);
-
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/readyqpriority.inl>
 #endif

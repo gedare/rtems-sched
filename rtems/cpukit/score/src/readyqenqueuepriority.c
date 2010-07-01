@@ -44,7 +44,7 @@ void _Ready_queue_Enqueue_priority(
   Thread_Control                   *the_thread
 )
 {
-  _Priority_Add( &the_thread->ready.priority.Priority_map );
-  _Chain_Append_unprotected( the_thread->ready.priority.ready_chain, 
+  _Priority_Add( &the_thread->sched->priority.Priority_map );
+  _Chain_Append_unprotected( the_thread->sched->priority.ready_chain, 
       &the_thread->Object.Node );
 }

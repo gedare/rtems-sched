@@ -56,5 +56,4 @@ void _Ready_queue_Initialize_fifo(
   the_ready_queue->rq_ops.requeue = &_Ready_queue_Requeue_fifo;
   the_ready_queue->rq_ops.extract = &_Ready_queue_Extract_fifo;
   the_ready_queue->rq_ops.first = &_Ready_queue_First_fifo;
-  the_ready_queue->rq_ops.set_ready = &_Ready_queue_Set_ready_fifo;
 }

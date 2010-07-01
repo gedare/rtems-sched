@@ -45,10 +45,10 @@ void _Ready_queue_Requeue_priority(
   Thread_Control       *the_thread
 )
 {
-  if ( !_Chain_Has_only_one_node( the_thread->ready.priority.ready_chain ) ) {
+  if ( !_Chain_Has_only_one_node( the_thread->sched->priority.ready_chain ) ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 
-    _Chain_Append_unprotected( the_thread->ready.priority.ready_chain, 
+    _Chain_Append_unprotected( the_thread->sched->priority.ready_chain, 
       &the_thread->Object.Node );
   }
 }
