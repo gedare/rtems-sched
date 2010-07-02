@@ -32,6 +32,7 @@ extern "C" {
 #endif
 
 #include <rtems/score/percpu.h>
+#include <rtems/score/priority.h>
 #include <rtems/score/readyq.h>
 
 
@@ -155,10 +156,7 @@ void _Scheduler_Initialize( void );
 void * _Scheduler_Sched_allocate_nothing( 
   Scheduler_Control *the_scheduler,
   Thread_Control *the_thread
-  )
-{
-  return (void*)-1; /* maybe pick an appropriate poison value */
-}
+  );
 
 /**
  * This routine does nothing, and is used as a stub for Sched_update_xxx
@@ -168,10 +166,7 @@ void * _Scheduler_Sched_allocate_nothing(
 void _Scheduler_Sched_update_nothing( 
   Scheduler_Control *the_scheduler,
   Thread_Control *the_thread
-  )
-{
-}
-
+  );
 
 
 

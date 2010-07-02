@@ -46,5 +46,5 @@ void _Scheduler_Initialize_priority (
 {
   _Scheduler_Initialize_queue(the_scheduler);
   the_scheduler->s_ops.sched_allocate    = &_Scheduler_Sched_allocate_priority;
-  the_scheduler->s_ops.sched_update      = &_Scheduler_Sched_Update_priority;
+  the_scheduler->s_ops.sched_update      = &_Scheduler_Sched_update_priority;
 }

@@ -51,7 +51,7 @@ void* _Scheduler_Sched_allocate_priority (
 
   sched = _Workspace_Allocate( sizeof(Scheduler_Per_thread_priority) );
 
-  the_thread->sched->priority = (Scheduler_Per_thread_priority*) sched;
+  the_thread->sched.priority = (Scheduler_Per_thread_priority*) sched;
 
   return sched;
 }

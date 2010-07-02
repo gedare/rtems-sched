@@ -51,7 +51,7 @@ RTEMS_INLINE_ROUTINE void _Scheduler_Schedule(
     Scheduler_Control *the_scheduler 
 )
 {
-  the_scheduler->s_ops.scheduler( the_scheduler );
+  the_scheduler->s_ops.schedule( the_scheduler );
 }
 
 /**

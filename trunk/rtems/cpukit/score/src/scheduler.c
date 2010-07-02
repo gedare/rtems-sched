@@ -22,9 +22,41 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/schedulerfifo.h>
+#include <rtems/score/schedulerpriority.h>
 #include <rtems/score/schedulerqueue.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+
+/**
+ * This routine does nothing, and is used as a stub for Sched_allocate_xxx.
+ *
+ * Note: returns a non-zero value, or else thread initialize thinks the 
+ * allocation failed.
+ *
+ * The overhead of a function call will still be imposed. :(
+ */
+void * _Scheduler_Sched_allocate_nothing( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+  )
+{
+  return (void*)-1; /* maybe pick an appropriate poison value */
+}
+
+
+/**
+ * This routine does nothing, and is used as a stub for Sched_update_xxx
+ *
+ * The overhead of a function call will still be imposed. :(
+ */
+void _Scheduler_Sched_update_nothing( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+  )
+{
+
+}
 
 /*PAGE
  *
