@@ -45,12 +45,12 @@ void _Ready_queue_Extract_priority(
   Thread_Control       *the_thread
 )
 {
-  Chain_Control *ready = the_thread->sched->priority.ready_chain;
+  Chain_Control *ready = the_thread->sched.priority->ready_chain;
 
   if ( _Chain_Has_only_one_node( ready ) ) {
 
     _Chain_Initialize_empty( ready );
-    _Priority_Remove( &the_thread->sched->priority.Priority_map );
+    _Priority_Remove( &the_thread->sched.priority->Priority_map );
 
   } else
     _Chain_Extract_unprotected( &the_thread->Object.Node );

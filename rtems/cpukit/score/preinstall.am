@@ -123,6 +123,10 @@ $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PR
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 
+$(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h: include/rtems/score/schedulerfifo.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h
+
 $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
@@ -276,6 +280,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl
 $(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+
+$(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl: inline/rtems/score/schedulerfifo.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl
 
 $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl: inline/rtems/score/schedulerpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl

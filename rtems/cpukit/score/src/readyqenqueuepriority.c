@@ -23,7 +23,6 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
 /* 
  *  _Ready_queue_Enqueue_priority
@@ -44,7 +43,7 @@ void _Ready_queue_Enqueue_priority(
   Thread_Control                   *the_thread
 )
 {
-  _Priority_Add( &the_thread->sched->priority.Priority_map );
-  _Chain_Append_unprotected( the_thread->sched->priority.ready_chain, 
+  _Priority_Add( &the_thread->sched.priority->Priority_map );
+  _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
       &the_thread->Object.Node );
 }

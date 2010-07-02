@@ -46,10 +46,11 @@ void _Scheduler_Sched_update_priority (
     Thread_Control    *the_thread
 )
 {
-  the_thread->sched->priority.ready_chain = &the_ready_queue->Queues.Priority[ 
-    _Priority_Get_value(the_thread->current_priority) 
-  ];
+  Ready_queue_Control *rq = &the_scheduler->ready_queue;
+  the_thread->sched.priority->ready_chain = &rq->Queues.Priority[ 
+      _Priority_Get_value(the_thread->current_priority) 
+    ];
 
-  _Priority_Initialize_information( &the_thread->sched->priority.Priority_map, 
+  _Priority_Initialize_information( &the_thread->sched.priority->Priority_map, 
       the_thread->current_priority );
 }

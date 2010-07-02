@@ -16,8 +16,8 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_SCORE_SCHEDULERQUEUE_H
-#define _RTEMS_SCORE_SCHEDULERQUEUE_H
+#ifndef _RTEMS_SCORE_SCHEDULERPRIORITY_H
+#define _RTEMS_SCORE_SCHEDULERPRIORITY_H
 
 /**
  *  @addtogroup ScoreScheduler

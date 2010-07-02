@@ -61,7 +61,7 @@ bool _Thread_Initialize(
   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
     void              *fp_area;
   #endif
-  void                *sched;
+  void                *sched = NULL;
   void                *extensions_area;
   bool                 extension_status;
   int                  i;

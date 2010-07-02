@@ -27,7 +27,8 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
     include/rtems/score/priority.h include/rtems/score/readyq.h \
 		include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
-		include/rtems/score/scheduler.h include/rtems/score/schedulerpriority.h \
+		include/rtems/score/scheduler.h include/rtems/score/schedulerfifo.h \
+		include/rtems/score/schedulerpriority.h \
 		include/rtems/score/schedulerqueue.h include/rtems/score/stack.h \
     include/rtems/score/states.h include/rtems/score/sysstate.h \
     include/rtems/score/thread.h include/rtems/score/threadq.h \
@@ -58,6 +59,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
     inline/rtems/score/readyq.inl	inline/rtems/score/readyqfifo.inl \
 		inline/rtems/score/readyqpriority.inl inline/rtems/score/scheduler.inl \
+		inline/rtems/score/schedulerfifo.inl \
 		inline/rtems/score/schedulerpriority.inl \
 		inline/rtems/score/schedulerqueue.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
