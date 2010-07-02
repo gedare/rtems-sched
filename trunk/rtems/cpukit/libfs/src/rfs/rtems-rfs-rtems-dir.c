@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems-dir.c,v 1.4 2010/06/17 03:48:31 ralf Exp $
+ *  $Id: rtems-rfs-rtems-dir.c,v 1.5 2010/07/01 20:18:41 joel Exp $
  */
 /**
  * @file
@@ -230,14 +230,14 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_dir_handlers = {
   .open_h      = rtems_rfs_rtems_dir_open,
   .close_h     = rtems_rfs_rtems_dir_close,
   .read_h      = rtems_rfs_rtems_dir_read,
-  .write_h     = NULL,
-  .ioctl_h     = NULL,
+  .write_h     = rtems_filesystem_default_write,
+  .ioctl_h     = rtems_filesystem_default_ioctl,
   .lseek_h     = rtems_rfs_rtems_dir_lseek,
   .fstat_h     = rtems_rfs_rtems_stat,
   .fchmod_h    = rtems_rfs_rtems_fchmod,
-  .ftruncate_h = NULL,
-  .fpathconf_h = NULL,
-  .fsync_h     = NULL,
+  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .fpathconf_h = rtems_filesystem_default_fpathconf,
+  .fsync_h     = rtems_filesystem_default_fsync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
   .fcntl_h     = rtems_rfs_rtems_fcntl,
   .rmnod_h     = rtems_rfs_rtems_dir_rmnod

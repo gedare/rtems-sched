@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_handlers_file.c,v 1.5 2009/04/29 08:31:26 ccj Exp $
+ *  @(#) $Id: msdos_handlers_file.c,v 1.6 2010/07/01 20:18:40 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -28,9 +28,9 @@ const rtems_filesystem_file_handlers_r msdos_file_handlers = {
     msdos_file_stat,
     msdos_file_chmod,
     msdos_file_ftruncate,
-    NULL,
+    rtems_filesystem_default_fpathconf,
     msdos_file_sync,
     msdos_file_datasync,
-    NULL,                 /* msdos_file_fcntl */
+    rtems_filesystem_default_fcntl,
     msdos_file_rmnod
 };

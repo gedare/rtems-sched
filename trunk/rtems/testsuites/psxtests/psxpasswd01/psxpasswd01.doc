@@ -18,11 +18,17 @@ directives:
   getpwuid
   getpwnam_r
   getpwuid_r
+  getpwent
+  setpwent
+  endpwent
 
   getgrnam
   getgrgid
   getgrnam_r
   getgrgid_r
+  getgrent
+  setgrent
+  endgrent
 
 concepts:
 

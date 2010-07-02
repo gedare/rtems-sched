@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_handlers_directory.c,v 1.9 2008/05/27 10:34:14 thomas Exp $
+ *  $Id: imfs_handlers_directory.c,v 1.10 2010/07/01 20:18:40 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -27,14 +27,14 @@ const rtems_filesystem_file_handlers_r IMFS_directory_handlers = {
   imfs_dir_open,
   imfs_dir_close,
   imfs_dir_read,
-  NULL,             /* write */
-  NULL,             /* ioctl */
+  rtems_filesystem_default_write,
+  rtems_filesystem_default_ioctl,
   imfs_dir_lseek,
   imfs_dir_fstat,
   IMFS_fchmod,
-  NULL,             /* ftruncate */
-  NULL,             /* fpathconf */
-  NULL,             /* fsync */
+  rtems_filesystem_default_ftruncate,
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
   IMFS_fdatasync,
   IMFS_fcntl,
   imfs_dir_rmnod

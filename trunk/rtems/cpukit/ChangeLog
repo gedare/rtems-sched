@@ -1,3 +1,38 @@
+2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/dosfs/msdos_handlers_dir.c,
+	libfs/src/dosfs/msdos_handlers_file.c, libfs/src/imfs/imfs_fifo.c,
+	libfs/src/imfs/imfs_handlers_device.c,
+	libfs/src/imfs/imfs_handlers_directory.c,
+	libfs/src/imfs/imfs_handlers_link.c,
+	libfs/src/imfs/imfs_handlers_memfile.c,
+	libfs/src/imfs/miniimfs_init.c, libfs/src/rfs/rtems-rfs-rtems-dev.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c: Turn NULLs into default
+	handlers.
+
+2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/_rename_r.c, libcsupport/src/getdents.c,
+	libcsupport/src/unlink.c, libcsupport/src/utime.c,
+	libcsupport/src/writev.c: Remove remaining checks for missing
+	handlers.
+
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1597/cpukit
+	* libcsupport/Makefile.am, libcsupport/src/chown.c: Add lchown() and
+	utimes().
+	* libcsupport/src/lchown.c, libcsupport/src/utimes.c: New files.
+
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1529/cpukit
+	* utime.c: Change file access time and modified time to
+	current time if pointer to struct utimbuf is NULL.
+	* imfs_utime.c: Upon successful completion, imfs_utime() marks
+	the time of the last file status change, st_ctime, to be updated.
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libcsupport/src/rtems_memalign.c, score/include/rtems/score/heap.h:

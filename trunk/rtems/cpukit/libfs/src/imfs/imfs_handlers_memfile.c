@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_handlers_memfile.c,v 1.12 2010/06/08 08:50:56 sh Exp $
+ *  $Id: imfs_handlers_memfile.c,v 1.13 2010/07/01 20:18:41 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -33,7 +33,7 @@ const rtems_filesystem_file_handlers_r IMFS_memfile_handlers = {
   IMFS_stat,
   IMFS_fchmod,
   memfile_ftruncate,
-  NULL,                /* fpathconf */
+  rtems_filesystem_default_fpathconf,
   IMFS_fdatasync,      /* fsync */
   IMFS_fdatasync,
   IMFS_fcntl,

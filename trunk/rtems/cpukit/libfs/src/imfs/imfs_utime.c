@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_utime.c,v 1.7 2004/04/17 08:34:41 ralf Exp $
+ *  $Id: imfs_utime.c,v 1.8 2010/07/01 16:29:17 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -36,6 +36,7 @@ int IMFS_utime(
 
   the_jnode->stat_atime = actime;
   the_jnode->stat_mtime = modtime;
+  the_jnode->stat_ctime = time( NULL );
 
   return 0;
 }
