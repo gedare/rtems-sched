@@ -33,7 +33,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.57 2010/06/29 00:31:44 joel Exp $
+ *  $Id: cpu.h,v 1.58 2010/07/01 19:43:29 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -387,7 +387,7 @@ extern "C" {
  *  a debugger such as gdb.  But that is another problem.
  */
 
-#ifndef ASSEMBLY_ONLY
+#ifndef ASM
 
 /* WARNING: If this structure is modified, the constants in cpu.h must be updated. */
 #if (__mips == 1) || (__mips == 32)

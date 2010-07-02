@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: getdents.c,v 1.9 2004/04/18 06:05:34 ralf Exp $
+ *  $Id: getdents.c,v 1.10 2010/07/01 17:47:46 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -38,16 +38,12 @@ int getdents(
   /*
    *  Get the file control block structure associated with the file descriptor
    */
-
   iop = rtems_libio_iop( dd_fd );
 
   /*
    *  Make sure we are working on a directory
    */
   loc = iop->pathinfo;
-  if ( !loc.ops->node_type_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   if ( (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY )
     rtems_set_errno_and_return_minus_one( ENOTDIR );
 
@@ -55,9 +51,5 @@ int getdents(
    *  Return the number of bytes that were actually transfered as a result
    *  of the read attempt.
    */
-
-  if ( !iop->handlers->read_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-
   return (*iop->handlers->read_h)( iop, dd_buf, dd_len  );
 }

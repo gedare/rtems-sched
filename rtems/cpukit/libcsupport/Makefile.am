@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.123 2010/06/30 15:36:47 joel Exp $
+##  $Id: Makefile.am,v 1.124 2010/07/01 17:22:02 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -62,7 +62,7 @@ SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/link.c src/unlink.c src/umask.c src/ftruncate.c src/utime.c src/fstat.c \
     src/fcntl.c src/fpathconf.c src/getdents.c src/fsync.c src/fdatasync.c \
     src/pipe.c src/dup.c src/dup2.c src/symlink.c src/readlink.c src/creat.c \
-    src/chroot.c src/sync.c src/_rename_r.c src/statvfs.c
+    src/chroot.c src/sync.c src/_rename_r.c src/statvfs.c src/utimes.c src/lchown.c
 
 ## Until sys/uio.h is moved to libcsupport, we have to have networking
 ## enabled to compile these.  Hopefully this is a temporary situation.

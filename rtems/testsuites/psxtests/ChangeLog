@@ -1,3 +1,24 @@
+2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* psxfile01/Makefile.am, psxfile01/psxfile01.scn, psxfile01/test.c:
+	Remove tests which put NULL entries in file handlers.
+
+2010-07-01	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1598/testing
+	* Makefile.am, configure.ac, psxpasswd01/init.c,
+	psxpasswd01/psxpasswd01.doc, psxpasswd01/psxpasswd01.scn: Add testing
+	for POSIX user database (e.g. /etc/group and /etc/passwd) access
+	routines which are implemented in libcsupport/src/getpwent.c.
+	* psxpasswd02/.cvsignore, psxpasswd02/Makefile.am, psxpasswd02/init.c,
+	psxpasswd02/psxpasswd02.doc, psxpasswd02/psxpasswd02.scn: New files.
+
+2010-07-01	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	PR 1597/cpukit
+	* psx13/psx13.scn, psx13/test.c, psxstat/psxstat.scn,
+	psxstat/test.c: Add lchown() and utimes().
+
 2010-07-01	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* Makefile.am, configure.ac: Add tests for file lock stubs as well as

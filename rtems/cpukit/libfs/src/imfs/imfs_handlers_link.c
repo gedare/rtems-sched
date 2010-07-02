@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_handlers_link.c,v 1.6 2008/05/27 10:34:14 thomas Exp $
+ *  $Id: imfs_handlers_link.c,v 1.7 2010/07/01 20:18:41 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -24,18 +24,18 @@
  */
 
 const rtems_filesystem_file_handlers_r IMFS_link_handlers = {
-  NULL,       /* open */
-  NULL,       /* close */
-  NULL,       /* read */
-  NULL,       /* write */
-  NULL,       /* ioctl */
-  NULL,       /* lseek */
+  rtems_filesystem_default_open,
+  rtems_filesystem_default_close,
+  rtems_filesystem_default_read,
+  rtems_filesystem_default_write,
+  rtems_filesystem_default_ioctl,
+  rtems_filesystem_default_lseek,
   IMFS_stat,  /* stat */
-  NULL,       /* fchmod */
-  NULL,       /* ftruncate */
-  NULL,       /* fpathconf */
-  NULL,       /* fsync */
-  NULL,       /* fdatasync */
-  NULL,       /* fcntl */
+  rtems_filesystem_default_fchmod,
+  rtems_filesystem_default_ftruncate,
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
+  rtems_filesystem_default_fdatasync,
+  rtems_filesystem_default_fcntl,
   IMFS_rmnod
 };

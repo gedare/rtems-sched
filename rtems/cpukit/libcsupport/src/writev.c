@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: writev.c,v 1.3 2009/11/29 13:35:32 ralf Exp $
+ *  $Id: writev.c,v 1.4 2010/07/01 17:47:48 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -54,9 +54,6 @@ ssize_t writev(
 
   if ( iovcnt > IOV_MAX )
     rtems_set_errno_and_return_minus_one( EINVAL );
-
-  if ( !iop->handlers->write_h )
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
 
   /*
    *  OpenGroup says that you are supposed to return EINVAL if the

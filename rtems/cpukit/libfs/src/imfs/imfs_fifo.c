@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: imfs_fifo.c,v 1.4 2010/06/08 08:50:56 sh Exp $
+ * $Id: imfs_fifo.c,v 1.5 2010/07/01 20:18:40 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -140,10 +140,10 @@ const rtems_filesystem_file_handlers_r IMFS_fifo_handlers = {
   IMFS_fifo_lseek,
   IMFS_stat,
   IMFS_fchmod,
-  NULL,    /* ftruncate */
-  NULL,    /* fpathconf */
-  NULL,    /* fsync */
-  NULL,    /* fdatasync */
+  rtems_filesystem_default_ftruncate,
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
+  rtems_filesystem_default_fdatasync,
   IMFS_fcntl,
   IMFS_rmnod,
 };

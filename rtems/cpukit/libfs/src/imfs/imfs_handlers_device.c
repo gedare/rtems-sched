@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_handlers_device.c,v 1.9 2008/07/10 06:03:51 thomas Exp $
+ *  $Id: imfs_handlers_device.c,v 1.10 2010/07/01 20:18:40 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -33,9 +33,9 @@ const rtems_filesystem_file_handlers_r IMFS_device_handlers = {
   IMFS_stat,
   IMFS_fchmod,
   device_ftruncate,
-  NULL,   /* fpathconf */
-  NULL,   /* fsync */
-  NULL,   /* fdatasync */
-  NULL,   /* fcntl */
+  rtems_filesystem_default_fpathconf,
+  rtems_filesystem_default_fsync,
+  rtems_filesystem_default_fdatasync,
+  rtems_filesystem_default_fcntl,
   IMFS_rmnod
 };

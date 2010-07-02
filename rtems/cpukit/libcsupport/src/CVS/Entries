@@ -12,7 +12,6 @@
 /_free_r.c/1.3/Wed Jun 30 17:40:46 2010//
 /_malloc_r.c/1.3/Wed Jun 30 17:40:46 2010//
 /_realloc_r.c/1.3/Wed Jun 30 17:40:46 2010//
-/_rename_r.c/1.6/Wed Jun 30 17:40:46 2010//
 /access.c/1.5/Wed Jun 30 17:40:46 2010//
 /assoclocalbyname.c/1.1/Wed Jun 30 17:40:46 2010//
 /assoclocalbyremote.c/1.1/Wed Jun 30 17:40:46 2010//
@@ -50,7 +49,6 @@
 /funlockfile.c/1.1/Wed Jun 30 17:40:46 2010//
 /getchark.c/1.1/Wed Jun 30 17:40:46 2010//
 /getcwd.c/1.6/Wed Jun 30 17:40:46 2010//
-/getdents.c/1.9/Wed Jun 30 17:40:46 2010//
 /geteuid.c/1.2/Wed Jun 30 17:40:46 2010//
 /getgid.c/1.2/Wed Jun 30 17:40:46 2010//
 /getgroups.c/1.4/Wed Jun 30 17:40:46 2010//
@@ -133,14 +131,11 @@
 /truncate.c/1.5/Wed Jun 30 17:40:46 2010//
 /ttyname.c/1.12/Wed Jun 30 17:40:46 2010//
 /umask.c/1.5/Wed Jun 30 17:40:46 2010//
-/utime.c/1.13/Wed Jun 30 17:40:46 2010//
 /utsname.c/1.17/Wed Jun 30 17:40:46 2010//
 /vprintk.c/1.4/Wed Jun 30 17:40:46 2010//
 /write_r.c/1.2/Wed Jun 30 17:40:46 2010//
-/writev.c/1.3/Wed Jun 30 17:40:46 2010//
 /chdir.c/1.15/Thu Jul  1 15:57:31 2010//
 /chmod.c/1.14/Thu Jul  1 15:57:31 2010//
-/chown.c/1.13/Thu Jul  1 15:57:31 2010//
 /close.c/1.13/Thu Jul  1 15:57:31 2010//
 /eval.c/1.17/Thu Jul  1 15:57:31 2010//
 /fchdir.c/1.11/Thu Jul  1 15:57:31 2010//
@@ -169,7 +164,14 @@
 /stat.c/1.17/Thu Jul  1 15:57:33 2010//
 /statvfs.c/1.4/Thu Jul  1 15:57:33 2010//
 /symlink.c/1.13/Thu Jul  1 15:57:33 2010//
-/unlink.c/1.20/Thu Jul  1 15:57:33 2010//
 /unmount.c/1.28/Thu Jul  1 15:57:33 2010//
 /write.c/1.18/Thu Jul  1 15:57:33 2010//
+/_rename_r.c/1.7/Fri Jul  2 15:47:01 2010//
+/chown.c/1.14/Fri Jul  2 15:47:01 2010//
+/getdents.c/1.10/Fri Jul  2 15:47:01 2010//
+/lchown.c/1.1/Thu Jul  1 17:22:03 2010//
+/unlink.c/1.21/Fri Jul  2 15:47:01 2010//
+/utime.c/1.15/Fri Jul  2 15:47:01 2010//
+/utimes.c/1.1/Thu Jul  1 17:22:03 2010//
+/writev.c/1.4/Fri Jul  2 15:47:01 2010//
 D

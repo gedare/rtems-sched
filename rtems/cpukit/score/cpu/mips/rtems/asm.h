@@ -22,7 +22,7 @@
  *  COPYRIGHT (c) 1994-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  $Id: asm.h,v 1.19 2005/10/27 07:28:36 ralf Exp $
+ *  $Id: asm.h,v 1.20 2010/07/01 19:43:29 joel Exp $
  */
 /* @(#)asm.h       03/15/96     1.1 */
 
@@ -36,6 +36,7 @@
 #ifndef ASM
 #define ASM
 #endif
+#include <rtems/system.h>
 #include <rtems/score/cpuopts.h>
 #include <rtems/score/mips.h>
 
