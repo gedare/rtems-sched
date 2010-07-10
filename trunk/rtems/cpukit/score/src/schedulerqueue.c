@@ -50,6 +50,7 @@ void _Scheduler_Initialize_queue(
   the_scheduler->s_ops.block              = &_Scheduler_Block_queue;
   the_scheduler->s_ops.unblock            = &_Scheduler_Unblock_queue;
   the_scheduler->s_ops.sched_allocate     = &_Scheduler_Sched_allocate_nothing;
+  the_scheduler->s_ops.sched_free         = &_Scheduler_Sched_update_nothing;
   the_scheduler->s_ops.sched_update       = &_Scheduler_Sched_update_nothing;
  
   _Ready_queue_Initialize(&the_scheduler->ready_queue);

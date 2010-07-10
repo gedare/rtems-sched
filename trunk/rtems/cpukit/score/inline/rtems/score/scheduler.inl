@@ -104,6 +104,17 @@ RTEMS_INLINE_ROUTINE void* _Scheduler_Sched_allocate(
 }
 
 /**
+ * This routine frees the sched field of @a the_thread
+ */
+RTEMS_INLINE_ROUTINE void _Scheduler_Sched_free( 
+  Scheduler_Control *the_scheduler,
+  Thread_Control *the_thread
+)
+{
+  return ( the_scheduler->s_ops.sched_free( the_scheduler, the_thread ) );
+}
+
+/**
  * This routine updates the sched field of @a the_thread.
  */
 RTEMS_INLINE_ROUTINE void _Scheduler_Sched_update( 

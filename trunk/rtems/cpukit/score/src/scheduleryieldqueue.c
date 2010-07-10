@@ -68,7 +68,7 @@ void _Scheduler_Yield_queue( Scheduler_Control *the_scheduler )
       _Scheduler_Schedule(the_scheduler);
     
     if ( !_Thread_Is_heir( executing ) )
-      _Dispatch_needed = true;
+      _Thread_Dispatch_necessary = true;
 
   _ISR_Enable( level );
 }

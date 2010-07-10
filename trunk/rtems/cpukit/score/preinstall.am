@@ -269,29 +269,9 @@ $(PROJECT_INCLUDE)/rtems/score/readyq.inl: inline/rtems/score/readyq.inl $(PROJE
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.inl
 
-$(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl: inline/rtems/score/readyqfifo.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqfifo.inl
-
-$(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl: inline/rtems/score/readyqpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.inl
-
 $(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
-
-$(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl: inline/rtems/score/schedulerfifo.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.inl
-
-$(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl: inline/rtems/score/schedulerpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
-
-$(PROJECT_INCLUDE)/rtems/score/schedulerqueue.inl: inline/rtems/score/schedulerqueue.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
-	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerqueue.inl
-PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerqueue.inl
 
 $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl

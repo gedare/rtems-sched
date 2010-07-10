@@ -116,10 +116,6 @@ void _Ready_queue_Set_ready_fifo(
   Thread_Control *the_thread
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/readyqfifo.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif

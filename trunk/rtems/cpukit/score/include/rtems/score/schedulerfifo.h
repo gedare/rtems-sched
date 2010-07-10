@@ -41,11 +41,6 @@ extern "C" {
  */
 void _Scheduler_Initialize_fifo( Scheduler_Control *sched );
 
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/schedulerfifo.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif

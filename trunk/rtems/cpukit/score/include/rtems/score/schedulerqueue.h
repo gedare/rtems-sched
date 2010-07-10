@@ -76,11 +76,6 @@ void _Scheduler_Unblock_queue(
 );
 
 
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/schedulerqueue.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif

@@ -31,7 +31,7 @@
 
 void _ISR_Thread_dispatch( void )
 {
-  if ( _Dispatch_needed ) {
+  if ( _Thread_Dispatch_necessary ) {
     _Thread_Dispatch();
   }
 }

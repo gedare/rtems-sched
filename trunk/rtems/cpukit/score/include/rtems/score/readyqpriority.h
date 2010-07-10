@@ -106,10 +106,6 @@ Thread_Control *_Ready_queue_First_priority(
   Ready_queue_Control *the_ready_queue
 );
 
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/readyqpriority.inl>
-#endif
-
 #ifdef __cplusplus
 }
 #endif

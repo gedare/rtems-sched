@@ -323,7 +323,7 @@ _ISR_Handler_cleanup:
    *    restore stack
    *  #endif
    *
-   *  if ( !_Dispatch_needed )
+   *  if ( !_Thread_Dispatch_necessary )
    *    goto the label "exit interrupt (simple case)"
    */
         lb	t0,DISPATCH_NEEDED

@@ -56,7 +56,7 @@ void _Scheduler_Block_queue(
      _Scheduler_Schedule(the_scheduler);
 
   if ( _Thread_Is_executing( the_thread ) )
-    _Dispatch_needed = true;
+    _Thread_Dispatch_necessary = true;
 
   return;
 }

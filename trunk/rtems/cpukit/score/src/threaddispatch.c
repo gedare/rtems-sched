@@ -89,10 +89,10 @@ void _Thread_Dispatch( void )
 
   executing   = _Thread_Executing;
   _ISR_Disable( level );
-  while ( _Dispatch_needed == true ) {
+  while ( _Thread_Dispatch_necessary == true ) {
     heir = _Thread_Heir;
     _Thread_Dispatch_disable_level = 1;
-    _Dispatch_needed = false;
+    _Thread_Dispatch_necessary = false;
     _Thread_Executing = heir;
 
     /*

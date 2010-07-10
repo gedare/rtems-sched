@@ -61,7 +61,7 @@ void _Thread_Start_multitasking( void )
 
   _System_state_Set( SYSTEM_STATE_UP );
 
-  _Dispatch_needed = false;
+  _Thread_Dispatch_necessary = false;
 
   _Thread_Executing = _Thread_Heir;
 
