@@ -67,10 +67,10 @@ void _Thread_Yield_processor( void )
 
       if ( _Thread_Is_heir( executing ) )
         _Thread_Heir = (Thread_Control *) ready->first;
-      _Dispatch_needed = true;
+      _Thread_Dispatch_necessary = true;
     }
     else if ( !_Thread_Is_heir( executing ) )
-      _Dispatch_needed = true;
+      _Thread_Dispatch_necessary = true;
 
   _ISR_Enable( level );
 }

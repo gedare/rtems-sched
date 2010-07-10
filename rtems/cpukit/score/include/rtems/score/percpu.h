@@ -83,7 +83,7 @@ typedef struct {
   Thread_Control *idle;
 
   /** This is set to true when this CPU needs to run the dispatcher. */
-  volatile bool dispatch_needed;
+  volatile bool dispatch_necessary;
 
 } Per_CPU_Control;
 #endif
@@ -152,13 +152,13 @@ extern Per_CPU_Control _Per_CPU_Information;
  * But on a non-SMP system, these macros are simple references.
  * Thus when built for non-SMP, there should be no performance penalty.
  */
-#define _Thread_Heir              _Per_CPU_Information.heir
-#define _Thread_Executing         _Per_CPU_Information.executing
-#define _Thread_Idle              _Per_CPU_Information.idle
-#define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
-#define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
-#define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
-#define _Dispatch_needed          _Per_CPU_Information.dispatch_needed
+#define _Thread_Heir                _Per_CPU_Information.heir
+#define _Thread_Executing           _Per_CPU_Information.executing
+#define _Thread_Idle                _Per_CPU_Information.idle
+#define _ISR_Nest_level             _Per_CPU_Information.isr_nest_level
+#define _CPU_Interrupt_stack_low    _Per_CPU_Information.interrupt_stack_low
+#define _CPU_Interrupt_stack_high   _Per_CPU_Information.interrupt_stack_high
+#define _Thread_Dispatch_necessary  _Per_CPU_Information.dispatch_necessary
 
 #endif  /* ASM */
 

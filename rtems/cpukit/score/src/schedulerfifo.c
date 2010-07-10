@@ -45,5 +45,5 @@ void _Scheduler_Initialize_fifo (
 )
 {
   _Scheduler_Initialize_queue(the_scheduler);
-  /* Don't need to override Sched_allocate or Sched_update for FIFO */
+  /* Don't override sched_allocate, sched_free, or sched_update for FIFO */
 }

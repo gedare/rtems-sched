@@ -86,7 +86,7 @@ void __ISR_Handler(uint32_t   vector, void *isr_sp)
     return;
   }
 
-  if ( _Dispatch_needed || _ISR_Signals_to_thread_executing ) {
+  if ( _Thread_Dispatch_necessary || _ISR_Signals_to_thread_executing ) {
     _ISR_Signals_to_thread_executing = FALSE;
     _Thread_Dispatch();
   }

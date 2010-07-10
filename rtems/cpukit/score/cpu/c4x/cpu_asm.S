@@ -196,7 +196,7 @@ SYM(_CPU_Context_restore):
    *    restore stack
    *  #endif
    *
-   *  if ( !_Dispatch_needed )
+   *  if ( !_Thread_Dispatch_necessary )
    *    goto the label "exit interrupt (simple case)"
    *
    *  if ( !_ISR_Signals_to_thread_executing )

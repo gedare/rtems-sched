@@ -75,7 +75,7 @@ void __ISR_Handler( uint32_t   vector)
     return;
   }
 
-  if ( _Dispatch_needed ) {
+  if ( _Thread_Dispatch_necessary ) {
     _Thread_Dispatch();
   }
 }

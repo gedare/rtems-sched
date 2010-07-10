@@ -50,6 +50,14 @@ void * _Scheduler_Sched_allocate_priority(
 );
 
 /**
+ * This routine frees the sched field 
+ */
+void _Scheduler_Sched_free_priority(
+    Scheduler_Control *the_scheduler,
+    Thread_Control *the_thread
+);
+
+/**
  * This routine udpates the sched field of a thread based on the scheduler 
  * structures and thread state
  */
@@ -57,12 +65,6 @@ void _Scheduler_Sched_update_priority(
     Scheduler_Control *the_scheduler,
     Thread_Control *the_thread
 );
-
-
-
-#ifndef __RTEMS_APPLICATION__
-#include <rtems/score/schedulerpriority.inl>
-#endif
 
 #ifdef __cplusplus
 }

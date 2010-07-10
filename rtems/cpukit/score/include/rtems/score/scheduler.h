@@ -113,6 +113,9 @@ typedef struct {
   /** allocates the sched field of the given thread */
   void * ( *sched_allocate ) ( Scheduler_Control *, Thread_Control * );
 
+  /** frees the sched field of the given thread */
+  void ( *sched_free ) ( Scheduler_Control *, Thread_Control * );
+  
   /** updates the sched field of the given thread */
   void ( *sched_update ) ( Scheduler_Control *, Thread_Control * );
 } Scheduler_Operations;
@@ -159,7 +162,9 @@ void * _Scheduler_Sched_allocate_nothing(
   );
 
 /**
- * This routine does nothing, and is used as a stub for Sched_update_xxx
+ * This routine does nothing, and is used as a stub for 
+ *  Sched_update_xxx
+ *  Sched_free_xxx
  *
  * The overhead of a function call will still be imposed. :(
  */

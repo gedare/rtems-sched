@@ -27,25 +27,25 @@
 #include <rtems/score/schedulerqueue.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/wkspace.h>
 
 /*
  *
- *  _Scheduler_Initialize_priority
+ *  _Scheduler_Sched_free_priority
  *
- * Initializes the scheduler for priority scheduling.
+ * Frees the sched field of @a the_thread.
  *
  *  Input parameters:
  *    the_scheduler - pointer to scheduler control
+ *    the_thread    - pointer to thread control block
  *
  *  Output parameters: NONE
  */
 
-void _Scheduler_Initialize_priority (
-    Scheduler_Control *the_scheduler
+void _Scheduler_Sched_free_priority (
+    Scheduler_Control *the_scheduler,
+    Thread_Control    *the_thread
 )
 {
-  _Scheduler_Initialize_queue(the_scheduler);
-  the_scheduler->s_ops.sched_allocate    = &_Scheduler_Sched_allocate_priority;
-  the_scheduler->s_ops.sched_free        = &_Scheduler_Sched_free_priority;
-  the_scheduler->s_ops.sched_update      = &_Scheduler_Sched_update_priority;
+  _Workspace_Free( the_thread->sched.priority );
 }
