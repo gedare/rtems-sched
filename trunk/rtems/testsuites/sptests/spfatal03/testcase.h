@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: testcase.h,v 1.5 2009/11/30 03:33:25 ralf Exp $
+ *  $Id: testcase.h,v 1.6 2010/07/07 09:03:15 sh Exp $
  */
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
@@ -36,15 +36,15 @@ void force_error(void)
     &mutex
   );
   directive_failed( status, "rtems_semaphore_create of S0");
-  puts("Create semaphore S0");
+  printk("Create semaphore S0\n");
 
-  puts("Obtain semaphore in dispatching critical section");
+  printk("Obtain semaphore in dispatching critical section\n");
   _Thread_Disable_dispatch();
   status = rtems_semaphore_obtain( mutex, RTEMS_DEFAULT_OPTIONS, 0 );
   /* !!! SHOULD NOT RETURN FROM THE ABOVE CALL */
 
   _Thread_Enable_dispatch();
-  puts("ERROR -- Obtain semaphore should not have returned");
+  printk("ERROR -- Obtain semaphore should not have returned\n");
 
   /* we will not run this far */
 }

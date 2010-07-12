@@ -2,10 +2,10 @@
 /Makefile.am/1.23/Fri Apr  3 12:48:12 2009//
 /sp02.doc/1.10/Fri Jun 12 14:01:50 2009//
 /sp02.scn/1.4/Thu Nov 14 17:36:11 2002//
-/init.c/1.12/Wed Jun 30 17:40:45 2010//
-/preempt.c/1.10/Wed Jun 30 17:40:45 2010//
-/system.h/1.16/Wed Jun 30 17:40:31 2010//
-/task1.c/1.17/Wed Jun 30 17:40:45 2010//
-/task2.c/1.11/Wed Jun 30 17:40:45 2010//
-/task3.c/1.11/Wed Jun 30 17:40:45 2010//
+/init.c/1.12/Thu Jul  8 17:33:00 2010//
+/preempt.c/1.10/Thu Jul  8 17:33:00 2010//
+/system.h/1.16/Thu Jul  8 17:33:08 2010//
+/task1.c/1.17/Thu Jul  8 17:33:00 2010//
+/task2.c/1.11/Thu Jul  8 17:33:00 2010//
+/task3.c/1.11/Thu Jul  8 17:33:00 2010//
 D

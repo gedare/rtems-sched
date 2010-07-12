@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: testcase.h,v 1.6 2009/11/30 03:33:25 ralf Exp $
+ *  $Id: testcase.h,v 1.7 2010/07/07 09:03:21 sh Exp $
  */
 
 /*
@@ -44,9 +44,9 @@ void force_error()
     Configuration.interrupt_stack_size = (STACK_MINIMUM_SIZE-1);
     rtems_initialize_data_structures();
   #else
-    puts(
+    printk(
       "WARNING - Test not applicable on this target architecture.\n"
-      "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE."
+      "WARNING - Only applicable when CPU_ALLOCATE_INTERRUPT_STACK == TRUE.\n"
     );
     rtems_test_exit(0);
   #endif
