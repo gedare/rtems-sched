@@ -148,7 +148,7 @@ rtems_task Init(
   rtems_task_argument argument
 )
 {
-  puts( "\n\n*** START OF TEST 42 ***" );
+  puts( "\n\n*** START OF SCHEDULER TEST 2 ***" );
 
   if (RTEMS_MAXIMUM_PRIORITY == 255)
     Priorities = Priorities_High;
@@ -183,7 +183,7 @@ rtems_task Init(
   puts( "Exercising blocking discipline w/unblock in priority order" );
   do_test( RTEMS_PRIORITY, FALSE );
 
-  puts( "*** END OF TEST 42 ***" );
+  puts( "*** END OF SCHEDULER TEST 2 ***" );
   rtems_test_exit(0);
 }
 
@@ -196,6 +196,8 @@ rtems_task Init(
 
 #define CONFIGURE_MAXIMUM_TASKS             MAX_TASKS+1
 #define CONFIGURE_MAXIMUM_SEMAPHORES        1
+
+#define CONFIGURE_SCHEDULER_POLICY _SCHED_FIFO
 
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
