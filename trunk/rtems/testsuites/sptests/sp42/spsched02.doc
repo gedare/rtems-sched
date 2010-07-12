@@ -11,7 +11,9 @@
 
 This file describes the directives and concepts tested by this test set.
 
-test set name:  sp42
+test set name:  spsched02
+
+This test is identical to sp42 but uses FIFO-based task scheduling.
 
 directives:
 
