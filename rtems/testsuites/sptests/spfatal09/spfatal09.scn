@@ -1,2 +1,4 @@
 *** TEST FATAL 9 ***
-Fatal error (Core invalid workspace address) hit
+Fatal error (Bad heap address to malloc) hit
+*** END OF TEST ***
+
