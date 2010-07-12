@@ -146,6 +146,7 @@ spmkdir/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
+spsched01/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile
