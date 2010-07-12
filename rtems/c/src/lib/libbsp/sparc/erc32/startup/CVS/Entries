@@ -1,7 +1,7 @@
 /linkcmds/1.23/Wed Jun  2 13:21:34 2010//
-/boardinit.S/1.4/Wed Jun 30 17:40:53 2010//
-/bspidle.c/1.1/Wed Jun 30 17:40:48 2010//
-/erc32mec.c/1.4/Wed Jun 30 17:40:48 2010//
-/setvec.c/1.12/Wed Jun 30 17:40:48 2010//
-/spurious.c/1.11/Wed Jun 30 17:40:48 2010//
+/boardinit.S/1.4/Thu Jul  8 17:32:48 2010//
+/bspidle.c/1.1/Thu Jul  8 17:33:04 2010//
+/erc32mec.c/1.4/Thu Jul  8 17:33:04 2010//
+/setvec.c/1.12/Thu Jul  8 17:33:04 2010//
+/spurious.c/1.11/Thu Jul  8 17:33:04 2010//
 D

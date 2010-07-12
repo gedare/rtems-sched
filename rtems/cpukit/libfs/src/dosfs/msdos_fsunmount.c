@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_fsunmount.c,v 1.5 2006/08/29 19:38:08 joel Exp $
+ *  @(#) $Id: msdos_fsunmount.c,v 1.6 2010/07/04 14:53:46 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <assert.h>
 #include <rtems.h>
 #include <rtems/libio_.h>
 

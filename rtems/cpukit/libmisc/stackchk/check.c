@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: check.c,v 1.68 2010/06/23 23:28:46 joel Exp $
+ *  $Id: check.c,v 1.69 2010/07/04 14:53:47 joel Exp $
  *
  */
 
@@ -33,7 +33,6 @@
  */
 #define DONT_USE_FATAL_EXTENSION
 
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 

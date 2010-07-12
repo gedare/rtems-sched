@@ -6,7 +6,7 @@
  *  Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  *  Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
- *  @(#) $Id: fat_fat_operations.c,v 1.9 2008/07/29 02:21:14 ccj Exp $
+ *  @(#) $Id: fat_fat_operations.c,v 1.10 2010/07/04 14:53:45 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -19,7 +19,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount-mgr.c,v 1.4 2010/07/01 13:05:17 sh Exp $
+ *  $Id: mount-mgr.c,v 1.5 2010/07/04 14:53:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -28,7 +28,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

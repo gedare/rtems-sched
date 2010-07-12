@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/07/01 14:40:14 joel Exp $
+ *  $Id: init.c,v 1.3 2010/07/05 22:01:06 joel Exp $
  */
 
 #include <tmacros.h>
@@ -90,6 +90,41 @@ void test_pid(void)
 
   sc = issetugid();
   rtems_test_assert( sc == 0 );
+
+  puts( "getpgrp - return local node - OK" );
+  pid = getpgrp();
+  printf( "getpgrp returned %d\n", pid ); 
+
+  puts( "getgroups - return 0 - OK" );
+  sc = getgroups( 0, NULL );
+  rtems_test_assert( sc == 0 );
+  
+}
+
+void test_getlogin(void)
+{
+  int sc;
+  char ch;
+
+  puts( "setuid(5)" );
+  sc = setuid(5);
+  rtems_test_assert( sc == 0 );
+  printf( "getlogin() -- (%s)\n", getlogin() );
+
+  puts( "setuid(0)" );
+  sc = setuid(0);
+  rtems_test_assert( sc == 0 );
+  printf( "getlogin() -- (%s)\n", getlogin() );
+
+  puts( "getlogin_r(NULL, LOGIN_NAME_MAX) -- EFAULT" );
+  sc = getlogin_r( NULL, LOGIN_NAME_MAX );
+  rtems_test_assert( sc == EFAULT );
+
+  puts( "getlogin_r(buffer, 0) -- ERANGE" );
+  sc = getlogin_r( &ch, 0 );
+  rtems_test_assert( sc == ERANGE );
+
+  
 }
 
 rtems_task Init(
@@ -107,6 +142,8 @@ rtems_task Init(
   test_pid();
   puts( "" );
 
+  test_getlogin();
+
   puts( "*** END OF TEST ID 01 ***" );
 
   rtems_test_exit(0);
@@ -117,7 +154,9 @@ rtems_task Init(
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 
-#define CONFIGURE_MAXIMUM_TASKS             1
+#define CONFIGURE_MAXIMUM_TASKS                  1
+/* so we can write /etc/passwd and /etc/group */
+#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 4
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
 #define CONFIGURE_INIT

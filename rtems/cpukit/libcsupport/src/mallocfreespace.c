@@ -2,14 +2,14 @@
  *  RTEMS Malloc Get Free Information
  *
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mallocfreespace.c,v 1.10 2008/09/17 18:37:55 joel Exp $
+ *  $Id: mallocfreespace.c,v 1.11 2010/07/04 14:53:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <assert.h>
 #include <errno.h>
 #include <string.h>
 

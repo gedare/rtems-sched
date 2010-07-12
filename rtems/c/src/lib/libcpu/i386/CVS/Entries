@@ -1,15 +1,15 @@
 /.cvsignore/1.5/Mon Jul 14 06:02:09 2008//
-/ChangeLog/1.64/Wed Jun  2 13:21:45 2010//
 /Makefile.am/1.30/Thu Jan 12 10:12:31 2006//
 /configure.ac/1.21/Sat Nov 28 06:28:41 2009//
 /preinstall.am/1.5/Fri Jun 25 17:46:21 2010//
-/byteorder.h/1.1/Wed Jun 30 17:40:33 2010//
-/cache.c/1.7/Wed Jun 30 17:40:47 2010//
-/cache_.h/1.4/Wed Jun 30 17:40:33 2010//
-/cpu.h/1.14/Wed Jun 30 17:40:33 2010//
-/cpuModel.S/1.10/Wed Jun 30 17:40:53 2010//
-/cpuModel.h/1.8/Wed Jun 30 17:40:33 2010//
-/displayCpu.c/1.13/Wed Jun 30 17:40:47 2010//
-/idtr.S/1.4/Wed Jun 30 17:40:53 2010//
-/page.c/1.17/Wed Jun 30 17:40:47 2010//
+/ChangeLog/1.65/Mon Jul 12 23:17:58 2010//
+/byteorder.h/1.2/Mon Jul 12 23:17:58 2010//
+/cache.c/1.7/Thu Jul  8 17:33:04 2010//
+/cache_.h/1.4/Thu Jul  8 17:33:10 2010//
+/cpu.h/1.14/Thu Jul  8 17:33:10 2010//
+/cpuModel.S/1.10/Thu Jul  8 17:32:48 2010//
+/cpuModel.h/1.8/Thu Jul  8 17:33:10 2010//
+/displayCpu.c/1.13/Thu Jul  8 17:33:04 2010//
+/idtr.S/1.4/Thu Jul  8 17:32:48 2010//
+/page.c/1.17/Thu Jul  8 17:33:04 2010//
 D

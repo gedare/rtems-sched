@@ -1,3 +1,63 @@
+2010-07-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1610/testing
+	* psx13/test.c, psx13/psx13.scn: Remove the test cases which
+	exercise pipe. These are new a new test under psxpipe01/
+	* psxpipe01/init.c, psxpipe01/Makefile.am,
+	psxpipe01/psxpipe01.scn, psxpipe01/psxpipe01.doc: Added new test.
+	* Makefile.am, configure.ac: Changes due to addition of new test:
+	psxpipe01.
+
+2010-07-08	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1608/testing
+	* psxfile01/init.c: Add a simple test case: Open file as read-only
+	and attemp to truncate. Improves coverage.
+
+2010-07-07	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1606/cpukit
+	* psxfatal_support/init.c: Remove
+	INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS since it is not generated.
+
+2010-07-07	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxfatal_support/init.c: Print end of test message in case of
+	success.  Stop multitasking in the fatal error extension.
+	* psxfatal01/psxfatal01.scn, psxfatal02/psxfatal02.scn: Update.
+
+2010-07-06	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxtimes01/init.c: Added missing declaration.
+
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add test for various forms of times() and
+	getrusage().
+	* psxgetrusage01/.cvsignore, psxgetrusage01/Makefile.am,
+	psxgetrusage01/init.c, psxgetrusage01/psxgetrusage01.doc,
+	psxgetrusage01/psxgetrusage01.scn, psxtimes01/.cvsignore,
+	psxtimes01/Makefile.am, psxtimes01/init.c, psxtimes01/psxtimes01.doc,
+	psxtimes01/psxtimes01.scn: New files.
+
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxid01/init.c, psxid01/psxid01.scn: Actually match an entry in
+	/etc/passwd and /etc/group.
+
+2010-07-05	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxid01/init.c, psxid01/psxid01.doc, psxid01/psxid01.scn: Add test
+	cases.
+
+2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psx13/test.c: Fix warning.
+
+2010-07-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* psxfile01/test_cat.c: Does not need posix specific macros.
+
 2010-07-01	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* psxfile01/Makefile.am, psxfile01/psxfile01.scn, psxfile01/test.c:

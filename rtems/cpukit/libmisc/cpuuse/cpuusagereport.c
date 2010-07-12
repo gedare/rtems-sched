@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpuusagereport.c,v 1.13 2009/12/02 18:22:18 humph Exp $
+ *  $Id: cpuusagereport.c,v 1.14 2010/07/04 14:53:47 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -17,7 +17,6 @@
 
 #include <rtems.h>
 
-#include <assert.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>

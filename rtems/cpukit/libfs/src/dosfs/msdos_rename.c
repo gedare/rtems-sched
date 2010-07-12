@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * @(#) $Id: msdos_rename.c,v 1.1 2010/03/04 06:36:51 ccj Exp $
+ * @(#) $Id: msdos_rename.c,v 1.2 2010/07/04 14:53:47 joel Exp $
  *
  */
 #if HAVE_CONFIG_H
@@ -15,7 +15,6 @@
 #endif
 
 #include <errno.h>
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

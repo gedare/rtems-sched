@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.124 2010/07/01 17:22:02 joel Exp $
+##  $Id: Makefile.am,v 1.126 2010/07/10 14:31:45 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -45,8 +45,12 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/mount-mktgt.c src/libio_init.c \
-    src/libio_sockets.c src/eval.c src/fs_null_handlers.c src/privateenv.c \
+    src/eval.c src/fs_null_handlers.c src/privateenv.c \
     src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
+
+if LIBNETWORKING
+BASE_FS_C_FILES += src/libio_sockets.c
+endif
 
 TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/cfsetospeed.c src/tcgetattr.c src/tcsetattr.c src/tcdrain.c \
@@ -86,7 +90,7 @@ ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
 MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/realloc.c src/_calloc_r.c src/_malloc_r.c \
     src/free.c src/freenode.c src/_free_r.c \
-    src/_realloc_r.c src/__brk.c src/__sbrk.c src/mallocfreespace.c \
+    src/_realloc_r.c src/mallocfreespace.c \
     src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
     src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
     src/malloc_statistics_helpers.c src/posix_memalign.c \

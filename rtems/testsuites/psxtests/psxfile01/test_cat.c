@@ -10,7 +10,7 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *
- *  $Id: test_cat.c,v 1.4 2009/12/08 17:52:53 joel Exp $
+ *  $Id: test_cat.c,v 1.5 2010/07/02 17:20:54 joel Exp $
  */
 
 #include <stdio.h>
@@ -23,7 +23,7 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <pmacros.h>
+#include <tmacros.h>
 
 /*
  *  test_cat routine

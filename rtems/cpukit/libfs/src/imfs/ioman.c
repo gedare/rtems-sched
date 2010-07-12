@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ioman.c,v 1.19 2010/06/24 21:31:22 joel Exp $
+ *  $Id: ioman.c,v 1.20 2010/07/06 22:32:23 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -71,13 +71,9 @@ rtems_status_code rtems_io_lookup_name(
   int                                result;
   rtems_filesystem_node_types_t      node_type;
 
-  result = rtems_filesystem_evaluate_path( name, strlen( name ), 0x00, &loc, true );
+  result = rtems_filesystem_evaluate_path(
+      name, strlen( name ), 0x00, &loc, true );
   the_jnode = loc.node_access;
-
-  if ( !loc.ops->node_type_h ) {
-    rtems_filesystem_freenode( &loc );
-    rtems_set_errno_and_return_minus_one( ENOTSUP );
-  }
 
   node_type = (*loc.ops->node_type_h)( &loc );
 

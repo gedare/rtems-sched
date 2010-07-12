@@ -7,7 +7,7 @@
  */
 
 /*
- * $Id: cpu.h,v 1.43 2010/04/08 10:13:46 thomas Exp $
+ * $Id: cpu.h,v 1.44 2010/07/06 07:52:36 sh Exp $
  *
  *  This include file contains information pertaining to the ARM
  *  processor.
@@ -210,8 +210,6 @@
 #define CPU_USE_GENERIC_BITFIELD_CODE TRUE
 
 #define CPU_USE_GENERIC_BITFIELD_DATA TRUE
-
-#define CPU_ENABLE_C_ISR_DISPATCH_IMPLEMENTATION TRUE
 
 /** @} */
 

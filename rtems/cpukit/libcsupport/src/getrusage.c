@@ -1,12 +1,12 @@
 /*
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: getrusage.c,v 1.1 2008/11/12 15:36:49 joel Exp $
+ *  $Id: getrusage.c,v 1.2 2010/07/06 01:15:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -43,9 +43,12 @@ int getrusage(int who, struct rusage *usage)
     usage->ru_stime = rtime;
 
     return 0;
-  } else if (who == RUSAGE_CHILDREN) {
+  }
+
+  if (who == RUSAGE_CHILDREN) {
     rtems_set_errno_and_return_minus_one( ENOSYS );
   }
+
   rtems_set_errno_and_return_minus_one( EINVAL );
 }
 

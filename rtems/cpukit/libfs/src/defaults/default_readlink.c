@@ -6,14 +6,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_readlink.c,v 1.2 2010/06/29 01:53:18 joel Exp $
+ *  $Id: default_readlink.c,v 1.3 2010/07/03 19:13:25 joel Exp $
  */
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-int rtems_filesystem_default_readlink(
+ssize_t rtems_filesystem_default_readlink(
  rtems_filesystem_location_info_t  *loc,     /* IN  */
  char                              *buf,     /* OUT */
  size_t                            bufsize

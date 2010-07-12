@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems.c,v 1.11 2010/06/29 19:37:28 jennifer Exp $
+ *  $Id: rtems-rfs-rtems.c,v 1.12 2010/07/03 19:13:25 joel Exp $
  */
 /**
  * @file
@@ -773,7 +773,7 @@ rtems_rfs_rtems_symlink (rtems_filesystem_location_info_t* parent_loc,
  * @return int
  */
 
-int
+ssize_t
 rtems_rfs_rtems_readlink (rtems_filesystem_location_info_t* pathloc,
                           char*                             buf,
                           size_t                            bufsize)

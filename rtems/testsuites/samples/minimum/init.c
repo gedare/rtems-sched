@@ -7,10 +7,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.19 2009/11/30 03:33:23 ralf Exp $
+ *  $Id: init.c,v 1.20 2010/07/07 09:26:05 sh Exp $
  */
 
+#define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
+
 #include <bsp.h>
+#include <rtems/score/thread.h>
 
 rtems_task Init(
   rtems_task_argument ignored
@@ -24,6 +27,21 @@ rtems_task Init(
 }
 
 /* configuration information */
+
+/*
+ * This fatal extension adds some bytes to the absolute minimum, but it
+ * prevents the _CPU_Fatal_halt().
+ */
+static void Fatal_extension(
+  uint32_t source,
+  bool is_internal,
+  uint32_t error
+)
+{
+  _Thread_Stop_multitasking();
+}
+
+#define CONFIGURE_INITIAL_EXTENSIONS { .fatal = Fatal_extension }
 
 /*
  * This application has no device drivers.

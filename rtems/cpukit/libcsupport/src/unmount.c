@@ -6,14 +6,14 @@
  *  routine is necessary to mount instantiations of a file system
  *  into the file system name space.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: unmount.c,v 1.28 2010/07/01 15:12:38 jennifer Exp $
+ *  $Id: unmount.c,v 1.29 2010/07/04 14:53:45 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -27,7 +27,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
