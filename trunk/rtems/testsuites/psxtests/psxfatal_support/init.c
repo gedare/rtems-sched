@@ -1,24 +1,12 @@
-/*  POSIX_Init
- *
- *  This routine is the initialization task for this test program.
- *  It is a user initialization task and has the responsibility for creating
- *  and starting the tasks that make up the test.  If the time of day
- *  clock is required for the test, it should also be set to a known
- *  value by this function.
- *
- *  Input parameters:
- *    argument - task argument
- *
- *  Output parameters:  NONE
- *
- *  COPYRIGHT (c) 1989-2009.
+/*
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.6 2010/06/19 20:55:30 joel Exp $
+ *  $Id: init.c,v 1.8 2010/07/07 14:07:26 joel Exp $
  */
 
 #define CONFIGURE_INIT
@@ -70,7 +58,6 @@ char *Errors_Rtems[] = {
 char *Errors_Core[] = {
   "INTERNAL_ERROR_NO_CONFIGURATION_TABLE",
   "INTERNAL_ERROR_NO_CPU_TABLE",
-  "INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS",
   "INTERNAL_ERROR_TOO_LITTLE_WORKSPACE",
   "INTERNAL_ERROR_WORKSPACE_ALLOCATION",
   "INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL",
@@ -150,6 +137,14 @@ void Fatal_extension(
     printk( ")\n" );
   }
 
-  /* return and let the CPU halt */
+  if (
+    source == FATAL_ERROR_EXPECTED_SOURCE
+      && is_internal == FATAL_ERROR_EXPECTED_IS_INTERNAL
+      && error == FATAL_ERROR_EXPECTED_ERROR
+  ) {
+    printk( "*** END OF TEST ***\n" );
+  }
+
+  _Thread_Stop_multitasking();
 }
 

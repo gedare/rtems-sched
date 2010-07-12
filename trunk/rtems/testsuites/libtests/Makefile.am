@@ -1,14 +1,15 @@
 ##
-## $Id: Makefile.am,v 1.34 2010/07/01 14:37:36 joel Exp $
+## $Id: Makefile.am,v 1.37 2010/07/08 20:11:48 joel Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
 SUBDIRS = POSIX
 
-SUBDIRS += bspcmdline01 cpuuse gxx01 malloctest malloc02 malloc03 heapwalk \
+SUBDIRS += bspcmdline01 cpuuse gxx01 \
+    malloctest malloc02 malloc03 malloc04 heapwalk \
     putenvtest monitor monitor02 rtmonuse stackchk stackchk01 \
-    termios termios01 termios02 termios03 termios04 termios05 \
+    termios termios01 termios02 termios03 termios04 termios05 termios06 \
     rtems++ tztest block01 block02 block03 block04 block05 block06 block07 \
     block08 block09 block10 stringto01
 

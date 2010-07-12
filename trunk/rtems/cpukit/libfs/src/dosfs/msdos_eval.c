@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_eval.c,v 1.12 2010/05/27 16:23:04 ralf Exp $
+ *  @(#) $Id: msdos_eval.c,v 1.13 2010/07/04 14:53:46 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

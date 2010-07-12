@@ -14,14 +14,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id: ide_part_table.h,v 1.13 2009/09/14 14:48:38 joel Exp $
+ * $Id: ide_part_table.h,v 1.14 2010/07/04 14:53:43 joel Exp $
  *
  *****************************************************************************/
 
 #ifndef _RTEMS_IDE_PART_TABLE_H
 #define _RTEMS_IDE_PART_TABLE_H
 
-#include <assert.h>
 #include <rtems/chain.h>
 #include <stdio.h>
 #include <stdlib.h>

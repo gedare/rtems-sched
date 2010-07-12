@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/06/22 19:27:12 jennifer Exp $
+ *  $Id: init.c,v 1.2 2010/07/05 21:14:39 joel Exp $
  */
 
 #include <tmacros.h>
@@ -17,11 +17,10 @@ rtems_task Init(
 )
 {
   void *p1;
-  unsigned int val = 999;
 
   puts( "\n\n*** TEST MALLOC03 ***" );
 
-  p1 = &val;
+  p1 = __builtin_frame_address(0);
   printf("Attempt to free stack memory\n");
   free( p1 );
 

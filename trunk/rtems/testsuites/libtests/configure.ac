@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.41 2010/07/01 14:37:37 joel Exp $
+## $Id: configure.ac,v 1.44 2010/07/08 20:11:48 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -50,6 +50,7 @@ heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile
 malloc03/Makefile
+malloc04/Makefile
 monitor/Makefile
 monitor02/Makefile
 putenvtest/Makefile
@@ -64,6 +65,7 @@ termios02/Makefile
 termios03/Makefile
 termios04/Makefile
 termios05/Makefile
+termios06/Makefile
 tztest/Makefile
 POSIX/Makefile
 ])

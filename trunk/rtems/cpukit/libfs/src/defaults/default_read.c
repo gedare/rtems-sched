@@ -6,14 +6,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_read.c,v 1.2 2010/06/29 01:53:18 joel Exp $
+ *  $Id: default_read.c,v 1.3 2010/07/03 19:13:25 joel Exp $
  */
 
 #include <rtems/libio.h>
 #include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
-size_t rtems_filesystem_default_read(
+ssize_t rtems_filesystem_default_read(
   rtems_libio_t *iop,
   void          *buffer,
   size_t         count

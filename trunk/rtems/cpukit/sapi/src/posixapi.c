@@ -3,21 +3,19 @@
  *
  *  NOTE:
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: posixapi.c,v 1.29 2009/01/05 20:26:01 joel Exp $
+ *  $Id: posixapi.c,v 1.30 2010/07/04 14:53:47 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
-
-#include <assert.h>
 
 /*
  *  POSIX_API_INIT is defined so all of the POSIX API

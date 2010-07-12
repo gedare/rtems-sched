@@ -35,7 +35,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: telnetd.c,v 1.18 2009/12/17 19:41:20 joel Exp $
+ * $Id: telnetd.c,v 1.19 2010/07/04 14:53:47 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -54,7 +54,6 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <assert.h>
 #include <string.h>
 #include <syslog.h>
 

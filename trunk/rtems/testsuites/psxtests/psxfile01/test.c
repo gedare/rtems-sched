@@ -17,7 +17,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.25 2010/07/01 21:15:07 joel Exp $
+ *  $Id: test.c,v 1.26 2010/07/08 19:37:01 joel Exp $
  */
 
 #include <stdio.h>
@@ -327,6 +327,18 @@ int main(
 
   puts("tcdrain /tmp/john" );
   status = tcdrain( fd );
+  rtems_test_assert( status == 0 );
+
+  /* 
+   * Open a file in read-only mode and try to truncate
+   */
+
+  puts( "Attempt to create a file, open in read-only mode and truncate it" );
+  fd = open( "/tmp/bha", O_CREAT | O_RDONLY | O_TRUNC, S_IRUSR );
+  rtems_test_assert( fd == -1 );
+  rtems_test_assert( errno == EINVAL );
+
+  status = unlink( "/tmp/bha" );
   rtems_test_assert( status == 0 );
 
   /*

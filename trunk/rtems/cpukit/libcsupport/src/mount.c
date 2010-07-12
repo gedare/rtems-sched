@@ -7,7 +7,7 @@
  *  XXX make sure no optional ops you are using are NULL
  *  XXX unmount should be required.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  Copyright (c) 2010 embedded brains GmbH.
@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount.c,v 1.39 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: mount.c,v 1.40 2010/07/04 14:53:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -32,7 +32,6 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 
 #include <rtems/libio_.h>
 

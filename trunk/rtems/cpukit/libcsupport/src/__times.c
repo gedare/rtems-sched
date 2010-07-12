@@ -1,14 +1,14 @@
 /*
  *  times() - POSIX 1003.1b 4.5.2 - Get Process Times
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: __times.c,v 1.25 2010/06/28 22:14:35 joel Exp $
+ *  $Id: __times.c,v 1.27 2010/07/10 13:48:47 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,7 +21,6 @@
 #include <time.h>
 #include <sys/time.h>
 #include <errno.h>
-#include <assert.h>
 #include <rtems/seterr.h>
 #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
   #include <rtems/score/timestamp.h>
@@ -80,7 +79,7 @@ clock_t _times(
   ptms->tms_cstime = 0;
 
   return ticks;
-}
+} 
 
 /*
  *  times()

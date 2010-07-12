@@ -11,7 +11,6 @@
  *     fsync        - test implemented
  *     pathconf     - test implemented
  *     fpathconf    - test implemented
- *     pipe         - test implemented
  *     umask        - test implemented
  *     utime        - test implemented
  *     utimes       - test implemented
@@ -23,7 +22,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.14 2010/07/01 17:23:47 joel Exp $
+ *  $Id: test.c,v 1.16 2010/07/09 22:07:11 joel Exp $
  */
 
 #include <rtems.h>
@@ -46,8 +45,6 @@ int FDataSyncTest(void);
 int UMaskTest(void);
 int UTimeTest(void);
 int UTimesTest(void);
-int PipeTest(void);
-int PipeTestNull(void);
 int PathConfTest(void);
 int FPathConfTest(void);
 int FSyncTest(void);
@@ -466,7 +463,7 @@ int UTimesTest (void)
     time[0].tv_sec = 12345;
     time[1].tv_sec = 54321;
 
-    error = utimes("testfile1.tst", &time);
+    error = utimes("testfile1.tst", (struct timeval *)&time);
 
     if (error == 0) {
 
@@ -486,52 +483,6 @@ int UTimesTest (void)
   /* assert (retval == TRUE);*/
 
   return (retval);
-}
-
-/* ---------------------------------------------------------------
- * PipeTest function
- *
- * Hits the pipe code.
- *
- * arguments: none
- * assumptions: pipe function available.
- * actions: call pipe.
- *
- * returns: TRUE if pipe returns ENOSYS,
- *          FALSE otherwise.
- *
- * ---------------------------------------------------------------
- */
-
-int PipeTest (void)
-{
-  int error = 0, retval = FALSE;
-  int fd[2];
-
-  error = pipe(fd);
-
-  if ((error == -1) && (errno == ENOSYS))
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  /* assert (retval == TRUE);*/
-
-  return(retval);
-}
-
-int PipeTestNull (void)
-{
-  int error = 0, retval = FALSE;
-
-  error = pipe(NULL);
-
-  if ((error == -1) && (errno == ENOSYS))
-    retval = TRUE;
-  else
-    retval = FALSE;
-
-  return(retval);
 }
 
 /* ---------------------------------------------------------------
@@ -727,18 +678,6 @@ int main(
 
    printf ("Testing utimes().......... ");
     if (UTimesTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing pipe()........... ");
-    if (PipeTest() == TRUE)
-      printf ("Success.\n");
-    else
-      printf ("Failed!!!\n");
-
-   printf ("Testing pipe() with NULL........... ");
-    if (PipeTestNull() == TRUE)
       printf ("Success.\n");
     else
       printf ("Failed!!!\n");

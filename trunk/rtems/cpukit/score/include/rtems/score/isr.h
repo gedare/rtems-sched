@@ -15,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: isr.h,v 1.32 2010/06/29 00:34:11 joel Exp $
+ *  $Id: isr.h,v 1.33 2010/07/06 07:56:15 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_ISR_H
@@ -187,17 +187,6 @@ void _ISR_Handler( void );
  *  @note  Implemented in assembly language.
  */
 void _ISR_Dispatch( void );
-
-/**
- *  Invokes the thread dispatcher or signal extension if necessary.
- *
- *  It should be called at the end of interrupt processing.  The interrupt nest
- *  level must be zero before calling this routine.
- *
- *  This is a high level replacement of _ISR_Dispatch().  It must be invoked
- *  within an environment such that a call to _Thread_Dispatch() is allowed.
- */
-void _ISR_Thread_dispatch( void );
 
 /**
  *  This function returns true if the processor is currently servicing

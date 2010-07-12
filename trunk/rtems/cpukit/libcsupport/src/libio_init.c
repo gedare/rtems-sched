@@ -3,14 +3,14 @@
  *  table of integer style file descriptors used by the low level
  *  POSIX system calls like open(), read, fstat(), etc.
  *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_init.c,v 1.5 2010/05/14 04:04:25 ccj Exp $
+ *  $Id: libio_init.c,v 1.6 2010/07/04 14:53:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -23,7 +23,6 @@
 
 #include <stdio.h>                      /* O_RDONLY, et.al. */
 #include <fcntl.h>                      /* O_RDONLY, et.al. */
-#include <assert.h>
 #include <errno.h>
 
 #include <errno.h>

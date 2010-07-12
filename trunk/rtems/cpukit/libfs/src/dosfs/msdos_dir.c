@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_dir.c,v 1.18 2010/03/12 16:26:14 joel Exp $
+ *  @(#) $Id: msdos_dir.c,v 1.19 2010/07/04 14:53:46 joel Exp $
  */
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -17,7 +17,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <assert.h>
 #include <errno.h>
 #include <rtems/libio_.h>
 #include <sys/types.h>

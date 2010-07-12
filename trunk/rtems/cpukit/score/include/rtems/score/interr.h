@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: interr.h,v 1.30 2010/06/18 04:08:47 ralf Exp $
+ *  $Id: interr.h,v 1.31 2010/07/07 14:06:52 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_INTERR_H
@@ -52,7 +52,6 @@ typedef enum {
 typedef enum {
   INTERNAL_ERROR_NO_CONFIGURATION_TABLE,
   INTERNAL_ERROR_NO_CPU_TABLE,
-  INTERNAL_ERROR_INVALID_WORKSPACE_ADDRESS,
   INTERNAL_ERROR_TOO_LITTLE_WORKSPACE,
   INTERNAL_ERROR_WORKSPACE_ALLOCATION,
   INTERNAL_ERROR_INTERRUPT_STACK_TOO_SMALL,

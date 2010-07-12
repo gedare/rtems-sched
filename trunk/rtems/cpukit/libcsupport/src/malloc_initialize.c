@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: malloc_initialize.c,v 1.12 2010/06/30 15:36:48 joel Exp $
+ *  $Id: malloc_initialize.c,v 1.13 2010/07/08 20:09:56 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -45,7 +45,7 @@ void RTEMS_Malloc_Initialize(
 {
   /*
    *  If configured, initialize the statistics support
-   */
+  */
   if ( rtems_malloc_statistics_helpers != NULL ) {
     (*rtems_malloc_statistics_helpers->initialize)();
   }
@@ -59,13 +59,11 @@ void RTEMS_Malloc_Initialize(
    *  Initialize the optional sbrk support for extending the heap
    */
   if ( rtems_malloc_sbrk_helpers != NULL ) {
-    void *new_heap_begin = (*rtems_malloc_sbrk_helpers->initialize)(
+    heap_begin = (*rtems_malloc_sbrk_helpers->initialize)(
       heap_begin,
       sbrk_amount
     );
-
-    heap_size -= (uintptr_t) new_heap_begin - (uintptr_t) heap_begin;
-    heap_begin = new_heap_begin;
+    heap_size  = (uintptr_t) sbrk_amount;
   }
 
   /*

@@ -30,7 +30,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: exception.S,v 1.3 2010/06/29 00:38:20 joel Exp $
+ *  $Id: exception.S,v 1.4 2010/07/06 07:41:28 sh Exp $
  */
 
 #include <bspopts.h>
@@ -90,7 +90,6 @@
 
 
 EXTERN(_Thread_Dispatch_disable_level,4)
-EXTERN(_ISR_Signals_to_thread_executing,1)
 .extern _Thread_Dispatch
 .extern _ISR_Vector_table
 

@@ -8,14 +8,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_file.c,v 1.13 2009/06/12 01:53:33 ccj Exp $
+ *  @(#) $Id: msdos_file.c,v 1.14 2010/07/04 14:53:46 joel Exp $
  */
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
 #include <stdlib.h>
-#include <assert.h>
 #include <errno.h>
 
 #include <rtems.h>
