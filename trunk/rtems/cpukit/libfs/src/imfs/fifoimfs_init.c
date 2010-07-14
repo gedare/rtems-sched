@@ -25,7 +25,7 @@
 
 #include "imfs.h"
 
-static const rtems_filesystem_operations_table fifoIMFS_ops = {
+const rtems_filesystem_operations_table fifoIMFS_ops = {
   .evalpath_h = IMFS_eval_path,
   .evalformake_h = IMFS_evaluate_for_make,
   .link_h = IMFS_link,
@@ -33,7 +33,7 @@ static const rtems_filesystem_operations_table fifoIMFS_ops = {
   .node_type_h = IMFS_node_type,
   .mknod_h = IMFS_mknod,
   .chown_h = IMFS_chown,
-  .freenod_h = IMFS_freenodinfo,
+  .freenod_h = rtems_filesystem_default_freenode,
   .mount_h = IMFS_mount,
   .fsmount_me_h = fifoIMFS_initialize,
   .unmount_h = IMFS_unmount,
@@ -43,7 +43,7 @@ static const rtems_filesystem_operations_table fifoIMFS_ops = {
   .symlink_h = IMFS_symlink,
   .readlink_h = IMFS_readlink,
   .rename_h = IMFS_rename,
-  .statvfs_h = NULL
+  .statvfs_h = rtems_filesystem_default_statvfs
 };
 
 int fifoIMFS_initialize(

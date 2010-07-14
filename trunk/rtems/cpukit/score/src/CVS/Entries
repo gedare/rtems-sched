@@ -17,7 +17,6 @@
 /threadsuspend.c/1.7/Result of merge//
 /threadtickletimeslice.c/1.12/Fri Jun 25 16:24:13 2010//
 /thread.c/1.63/Result of merge//
-/isrthreaddispatch.c/1.4/Tue Jun 29 17:23:44 2010//
 /threaddispatch.c/1.21/Tue Jun 29 17:23:44 2010//
 /threadstartmultitasking.c/1.10/Tue Jun 29 17:23:44 2010//
 /threadyieldprocessor.c/1.5/Tue Jun 29 17:23:44 2010//

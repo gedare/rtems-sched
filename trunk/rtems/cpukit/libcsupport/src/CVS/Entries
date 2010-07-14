@@ -84,7 +84,6 @@
 /lchown.c/1.1/Thu Jul  8 17:33:01 2010//
 /libio.c/1.49/Thu Jul  8 17:33:01 2010//
 /libio_init.c/1.6/Mon Jul 12 23:18:07 2010//
-/libio_sockets.c/1.14/Thu Jul  8 17:33:01 2010//
 /link.c/1.18/Thu Jul  8 17:33:01 2010//
 /lseek.c/1.17/Thu Jul  8 17:33:01 2010//
 /lstat.c/1.5/Thu Jul  8 17:33:01 2010//
@@ -172,4 +171,5 @@
 /write.c/1.18/Thu Jul  8 17:33:01 2010//
 /write_r.c/1.2/Thu Jul  8 17:33:01 2010//
 /writev.c/1.4/Thu Jul  8 17:33:01 2010//
+/libio_sockets.c/1.15/Wed Jul 14 20:58:59 2010//
 D

@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_sockets.c,v 1.14 2010/06/28 23:12:10 joel Exp $
+ *  $Id: libio_sockets.c,v 1.15 2010/07/14 15:01:00 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -71,5 +71,7 @@ int rtems_bsdnet_makeFdForSocket(
   iop->data0 = fd;
   iop->data1 = so;
   iop->handlers = h;
+  iop->pathinfo.handlers = rtems_filesystem_root.handlers;
+  iop->pathinfo.ops = rtems_filesystem_root.ops;
   return fd;
 }
