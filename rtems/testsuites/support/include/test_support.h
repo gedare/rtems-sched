@@ -1,12 +1,12 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test_support.h,v 1.4 2010/06/21 16:54:17 joel Exp $
+ *  $Id: test_support.h,v 1.5 2010/07/14 16:03:57 joel Exp $
  */
 
 #ifndef __TEST_SUPPORT_h
@@ -17,13 +17,22 @@ extern "C" {
 #endif
 
 /*
- *  Allocate a number of small blocks from the heap
+ *  Allocate a number of small blocks from the workspace
  *  until the largest free block of memory available is
  *  smaller than smallest.
  *
  *  NOTE: The memory CANNOT be freed.
  */
 void Allocate_majority_of_workspace( int smallest );
+
+/*
+ *  Allocate a number of small blocks from the heap
+ *  until the largest free block of memory available is
+ *  smaller than smallest.
+ *
+ *  NOTE: The memory CANNOT be freed.
+ */
+void Allocate_majority_of_heap( int smallest );
 
 /*
  *  Return a pointer to the POSIX name that is slightly

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.27 2010/07/01 17:23:47 joel Exp $
+ *  $Id: test.c,v 1.28 2010/07/13 21:13:13 joel Exp $
  */
 
 #include <tmacros.h>
@@ -774,6 +774,29 @@ void Show_Time(void)
   print_time( " - rtems_clock_get_tod - ", &time, "\n" );
 }
 
+void test_statvfs( void )
+{
+
+  int status = 0;
+  struct statvfs stat;
+
+  puts( "statvfs, with invalid path - expect EFAULT" );
+  status = statvfs( NULL , &stat );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  puts( "create /tmp -- OK" );
+  status = mkdir( "/tmp", 0777 );
+  rtems_test_assert( status == 0 );
+
+  puts( "statvfs, with valid path - expect ENOTSUP" );
+  status = statvfs( "/tmp", &stat );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+
+  puts( "statvfs tested!" );
+}
+
 /*
  *  main entry point to the test
  */
@@ -901,6 +924,8 @@ int main(
 
   status = rtems_task_wake_after( TIMEOUT_VALUE );
   lchown_multiple_files( SymLinks );
+
+  test_statvfs();
 
   puts( "\n\n*** END OF STAT TEST 01 ***" );
   rtems_test_exit(0);

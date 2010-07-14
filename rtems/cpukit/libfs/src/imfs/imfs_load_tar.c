@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id: imfs_load_tar.c,v 1.16 2010/06/13 03:36:34 ralf Exp $
+ * $Id: imfs_load_tar.c,v 1.17 2010/07/13 21:43:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -108,7 +108,8 @@ int rtems_tarfs_load(
    if (status != 0)
       return -1;
 
-   if (root_loc.ops != &IMFS_ops)
+   if (root_loc.ops != &IMFS_ops
+       && root_loc.ops != &fifoIMFS_ops)
       return -1;
 
    /*

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs.h,v 1.43 2010/06/08 10:25:44 sh Exp $
+ *  $Id: imfs.h,v 1.45 2010/07/14 15:44:43 joel Exp $
  */
 
 #ifndef _RTEMS_IMFS_H
@@ -248,6 +248,7 @@ extern const rtems_filesystem_file_handlers_r       IMFS_link_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_memfile_handlers;
 extern const rtems_filesystem_file_handlers_r       IMFS_fifo_handlers;
 extern const rtems_filesystem_operations_table      IMFS_ops;
+extern const rtems_filesystem_operations_table      fifoIMFS_ops;
 extern const rtems_filesystem_limits_and_options_t  IMFS_LIMITS_AND_OPTIONS;
 
 /*
@@ -354,10 +355,6 @@ extern int IMFS_chown(
   gid_t                              group         /* IN */
 );
 
-extern int IMFS_freenodinfo(
-  rtems_filesystem_location_info_t  *pathloc       /* IN */
-);
-
 extern int IMFS_mknod(
   const char                        *path,         /* IN */
   mode_t                             mode,         /* IN */
@@ -393,10 +390,6 @@ extern int IMFS_mount(
 
 extern int IMFS_unmount(
   rtems_filesystem_mount_table_entry_t *mt_entry  /* IN */
-);
-
-extern int IMFS_freenod(
-  rtems_filesystem_location_info_t  *node         /* IN/OUT */
 );
 
 extern int IMFS_memfile_remove(

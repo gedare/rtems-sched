@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_init.c,v 1.19 2010/06/29 19:37:28 jennifer Exp $
+ *  $Id: imfs_init.c,v 1.20 2010/07/14 15:44:43 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -33,7 +33,7 @@ const rtems_filesystem_operations_table IMFS_ops = {
   .node_type_h = IMFS_node_type,
   .mknod_h = IMFS_mknod,
   .chown_h = IMFS_chown,
-  .freenod_h = IMFS_freenodinfo,
+  .freenod_h = rtems_filesystem_default_freenode,
   .mount_h = IMFS_mount,
   .fsmount_me_h = IMFS_initialize,
   .unmount_h = IMFS_unmount,
