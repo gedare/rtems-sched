@@ -13,11 +13,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: seterr.h,v 1.8 2006/01/16 15:13:58 joel Exp $
+ *  $Id: seterr.h,v 1.9 2010/07/15 07:40:28 sh Exp $
  */
 
 #ifndef _RTEMS_SETERR_H
 #define _RTEMS_SETERR_H
+
+#include <errno.h>
 
 /**
  *  This is a helper macro which will set the variable errno and return

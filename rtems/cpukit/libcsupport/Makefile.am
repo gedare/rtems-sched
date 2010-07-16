@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.126 2010/07/10 14:31:45 joel Exp $
+##  $Id: Makefile.am,v 1.127 2010/07/15 08:46:06 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -45,7 +45,7 @@ ASSOCIATION_C_FILES = src/assoclocalbyname.c \
 
 BASE_FS_C_FILES = src/base_fs.c src/mount.c src/unmount.c src/libio.c \
     src/mount-mgr.c src/mount-mktgt.c src/libio_init.c \
-    src/eval.c src/fs_null_handlers.c src/privateenv.c \
+    src/eval.c src/privateenv.c \
     src/open_dev_console.c src/__usrenv.c src/rtems_mkdir.c
 
 if LIBNETWORKING

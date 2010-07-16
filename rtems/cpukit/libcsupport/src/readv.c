@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: readv.c,v 1.5 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: readv.c,v 1.6 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -97,7 +97,11 @@ ssize_t readv(
    *  Now process the readv().
    */
   for ( total=0, v=0 ; v < iovcnt ; v++ ) {
-    bytes = (*iop->handlers->read_h)( iop, iov[v].iov_base, iov[v].iov_len );
+    bytes = (*iop->pathinfo.handlers->read_h)(
+      iop,
+      iov[v].iov_base,
+      iov[v].iov_len
+    );
 
     if ( bytes < 0 )
       return -1;

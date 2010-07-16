@@ -13,16 +13,15 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: types.h,v 1.1 2010/06/15 22:43:56 joel Exp $
+ *  $Id: types.h,v 1.2 2010/07/16 08:46:29 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_TYPES_H
 #define _RTEMS_SCORE_TYPES_H
 
-#ifndef ASM
+#include <rtems/score/basedefs.h>
 
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {
@@ -35,12 +34,6 @@ extern "C" {
 typedef uint16_t         Priority_Bit_map_control;
 typedef void sparc_isr;
 typedef void ( *sparc_isr_entry )( void );
-
-#ifdef RTEMS_DEPRECATED_TYPES
-typedef bool	boolean;              /* Boolean value   */
-typedef float	single_precision;     /* single precision float */
-typedef double	double_precision;     /* double precision float */
-#endif
 
 #ifdef __cplusplus
 }

@@ -1,3 +1,97 @@
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/link.c: Do not overwrite errno with return status.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/score/basedefs.h: New file.
+	* score/Makefile.am, score/preinstall.am: Reflect change above.
+	* score/include/rtems/score/percpu.h: Include <rtems/score/cpu.h>.
+	* score/include/rtems/system.h: Moved definition of SCORE_EXTERN,
+	SAPI_EXTERN, RTEMS_EXTERN, POSIX_EXTERN, RTEMS_INLINE_ROUTINE,
+	RTEMS_COMPILER_MEMORY_BARRIER, RTEMS_COMPILER_NO_RETURN_ATTRIBUTE,
+	RTEMS_COMPILER_DEPRECATED_ATTRIBUTE, TRUE, and FALSE to
+	<rtems/score/basedefs.h>.
+	Removed include of <rtems/score/cpu.h>, <stdint.h> and <stddef.h>.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmd/md4.c: Removed definition of TRUE and FALSE.
+
+2010-07-15	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/privateenv.c: Fix bug.
+
+2010-07-15	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	PR 1607/cpukit
+	* score/src/coremutexsurrender.c: Clean up and split out helper
+	routines.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/imfs/imfs.h: Changed IMFS_jnode_types_t to an enum.
+	Removed IMFS_NUMBER_OF_TYPES define.
+	* libfs/src/imfs/imfs_debug.c: Removed IMFS_types.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio_.h: Removed rtems_filesystem_null_handlers.
+	* libcsupport/src/fs_null_handlers.c: Removed file.
+	* libcsupport/Makefile.am: Reflect change above.
+	* libfs/src/nfsclient/src/nfs.c, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_init.c, libfs/src/imfs/miniimfs_init.c: Use
+	rtems_filesystem_handlers_default instead of
+	rtems_filesystem_null_handlers.
+	* libnetworking/lib/ftpfs.c, libnetworking/lib/tftpDriver.c:
+	Initialize handler and operations table with proper defaults.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio.h: Removed file_info and handlers
+	fields in rtems_libio_t.
+	* libcsupport/src/close.c, libcsupport/src/fcntl.c,
+	libcsupport/src/fdatasync.c, libcsupport/src/fstat.c,
+	libcsupport/src/fsync.c, libcsupport/src/ftruncate.c,
+	libcsupport/src/getdents.c, libcsupport/src/ioctl.c,
+	libcsupport/src/libio_sockets.c, libcsupport/src/lseek.c,
+	libcsupport/src/open.c, libcsupport/src/read.c,
+	libcsupport/src/readv.c, libcsupport/src/write.c,
+	libcsupport/src/writev.c, libfs/src/devfs/devclose.c,
+	libfs/src/devfs/devioctl.c, libfs/src/devfs/devopen.c,
+	libfs/src/devfs/devread.c, libfs/src/devfs/devwrite.c
+	libfs/src/dosfs/msdos_dir.c libfs/src/dosfs/msdos_file.c
+	libfs/src/imfs/deviceio.c libfs/src/imfs/imfs_directory.c
+	libfs/src/imfs/imfs_fifo.c libfs/src/imfs/memfile.c
+	libfs/src/nfsclient/src/nfs.c libfs/src/rfs/rtems-rfs-rtems-file.c
+	libfs/src/rfs/rtems-rfs-rtems.h libnetworking/lib/ftpfs.c: Reflect
+	changes above.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/devfs/devfs.h, libfs/src/devfs/devfs_node_type.c: Fixed
+	devFS_node_type() prototype.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/include/rtems/seterr.h: Include <errno.h>.
+
+2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/include/rtems/libio.h: Changed
+	rtems_filesystem_node_types_t to an enum.  Declare
+	rtems_filesystem_handlers_default,
+	rtems_filesystem_operations_default,
+	rtems_filesystem_default_evalpath(),
+	rtems_filesystem_default_evalformake, and
+	rtems_filesystem_default_node_type().
+	* libfs/src/dosfs/msdos.h: Fixed msdos_node_type() prototype.
+	* libfs/src/defaults/default_evalformake.c,
+	libfs/src/defaults/default_handlers.c,
+	libfs/src/defaults/default_node_type.c,
+	libfs/src/defaults/default_ops.c: New files.
+	* libfs/Makefile.am: Reflect changes above.
+
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* libnetworking/rtems/rtems_syscall.c: Fix warning.

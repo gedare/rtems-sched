@@ -13,16 +13,15 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: types.h,v 1.2 2008/12/11 00:45:34 ralf Exp $
+ *  $Id: types.h,v 1.3 2010/07/16 08:39:36 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_TYPES_H
 #define _RTEMS_SCORE_TYPES_H
 
-#ifndef ASM
+#include <rtems/score/basedefs.h>
 
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef ASM
 
 #ifdef __cplusplus
 extern "C" {

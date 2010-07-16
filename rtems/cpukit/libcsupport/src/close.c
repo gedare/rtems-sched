@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: close.c,v 1.13 2010/07/01 15:12:36 jennifer Exp $
+ *  $Id: close.c,v 1.14 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -29,7 +29,7 @@ int close(
   rtems_libio_check_is_open(iop);
 
   rc = RTEMS_SUCCESSFUL;
-  rc = (*iop->handlers->close_h)( iop );
+  rc = (*iop->pathinfo.handlers->close_h)( iop );
 
   rtems_filesystem_freenode( &iop->pathinfo );
   rtems_libio_free( iop );

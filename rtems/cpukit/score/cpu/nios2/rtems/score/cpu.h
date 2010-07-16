@@ -26,7 +26,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.14 2010/06/29 00:31:47 joel Exp $
+ *  $Id: cpu.h,v 1.15 2010/07/16 08:42:14 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -36,10 +36,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/nios2.h>            /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/nios2.h>
 
 /* conditional compilation parameters */
 

@@ -3,7 +3,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: devfs_node_type.c,v 1.2 2009/11/29 13:18:56 ralf Exp $
+ *  $Id: devfs_node_type.c,v 1.3 2010/07/15 07:59:57 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -12,7 +12,7 @@
 
 #include "devfs.h"
 
-int devFS_node_type(
+rtems_filesystem_node_types_t devFS_node_type(
   rtems_filesystem_location_info_t  *pathloc
 )
 {

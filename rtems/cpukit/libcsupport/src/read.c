@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: read.c,v 1.17 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: read.c,v 1.18 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -40,7 +40,7 @@ ssize_t read(
   /*
    *  Now process the read().
    */
-  rc = (*iop->handlers->read_h)( iop, buffer, count );
+  rc = (*iop->pathinfo.handlers->read_h)( iop, buffer, count );
 
   if ( rc > 0 )
     iop->offset += rc;

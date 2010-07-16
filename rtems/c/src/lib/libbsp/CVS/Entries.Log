@@ -1,5 +1,6 @@
 A D/a29k////
 A D/bare////
+A D/c4x////
 A D/hppa1.1////
 A D/i960////
 A D/include////
@@ -14,5 +15,6 @@ R D/mips64orion////
 R D/include////
 R D/i960////
 R D/hppa1.1////
+R D/c4x////
 R D/bare////
 R D/a29k////

@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: getdents.c,v 1.10 2010/07/01 17:47:46 joel Exp $
+ *  $Id: getdents.c,v 1.11 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -51,5 +51,5 @@ int getdents(
    *  Return the number of bytes that were actually transfered as a result
    *  of the read attempt.
    */
-  return (*iop->handlers->read_h)( iop, dd_buf, dd_len  );
+  return (*iop->pathinfo.handlers->read_h)( iop, dd_buf, dd_len  );
 }

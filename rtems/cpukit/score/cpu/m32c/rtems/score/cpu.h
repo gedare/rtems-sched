@@ -27,7 +27,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.8 2010/06/29 00:31:14 joel Exp $
+ *  $Id: cpu.h,v 1.9 2010/07/16 08:39:36 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -37,10 +37,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/m32c.h>            /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
+#include <rtems/score/m32c.h>
 
 /* conditional compilation parameters */
 

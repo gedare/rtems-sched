@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: deviceio.c,v 1.23 2010/06/08 08:50:56 sh Exp $
+ *  $Id: deviceio.c,v 1.24 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -41,7 +41,7 @@ int device_open(
   rtems_status_code              status;
   IMFS_jnode_t                  *the_jnode;
 
-  the_jnode  = iop->file_info;
+  the_jnode  = iop->pathinfo.node_access;
 
   args.iop   = iop;
   args.flags = iop->flags;
@@ -70,7 +70,7 @@ int device_close(
   rtems_status_code              status;
   IMFS_jnode_t                  *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   args.iop   = iop;
   args.flags = 0;
@@ -103,7 +103,7 @@ ssize_t device_read(
   rtems_status_code       status;
   IMFS_jnode_t           *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   args.iop         = iop;
   args.offset      = iop->offset;
@@ -140,7 +140,7 @@ ssize_t device_write(
   rtems_status_code       status;
   IMFS_jnode_t           *the_jnode;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   args.iop         = iop;
   args.offset      = iop->offset;
@@ -181,7 +181,7 @@ int device_ioctl(
   args.command = command;
   args.buffer  = buffer;
 
-  the_jnode = iop->file_info;
+  the_jnode = iop->pathinfo.node_access;
 
   status = rtems_io_control(
     the_jnode->info.device.major,

@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos.h,v 1.24 2010/05/31 13:56:36 ccj Exp $
+ *  @(#) $Id: msdos.h,v 1.25 2010/07/15 07:36:37 sh Exp $
  */
 #ifndef __DOSFS_MSDOS_H__
 #define __DOSFS_MSDOS_H__
@@ -242,7 +242,7 @@ int msdos_unlink(rtems_filesystem_location_info_t *pathloc /* IN */);
 
 int msdos_free_node_info(rtems_filesystem_location_info_t *pathloc /* IN */);
 
-int msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
+rtems_filesystem_node_types_t msdos_node_type(rtems_filesystem_location_info_t    *pathloc);
 
 int msdos_mknod(
   const char                       *path,   /* IN */

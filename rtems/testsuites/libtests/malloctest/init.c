@@ -14,13 +14,13 @@
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  Copyright (c) 2009 embedded brains GmbH.
+ *  Copyright (c) 2009, 2010 embedded brains GmbH.
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.40 2010/06/28 17:05:25 joel Exp $
+ *  $Id: init.c,v 1.42 2010/07/15 13:54:54 joel Exp $
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
@@ -112,6 +112,8 @@ static void test_realloc(void)
    *  Realloc with a bad pointer to force a point
    */
   p4 = realloc( test_realloc, 32 );
+
+  p4 = _realloc_r( NULL, NULL, 1 );
 }
 
 #define TEST_HEAP_SIZE 2048
@@ -1023,6 +1025,20 @@ static void test_protected_heap_info(void)
   rtems_test_assert( rc == false );
 }
 
+static void test_rtems_heap_allocate_aligned_with_boundary(void)
+{
+  void *p = NULL;
+
+  p = rtems_heap_allocate_aligned_with_boundary(1, 1, 1);
+  rtems_test_assert( p != NULL );
+  free(p);
+
+  _Thread_Disable_dispatch();
+  p = rtems_heap_allocate_aligned_with_boundary(1, 1, 1);
+  _Thread_Enable_dispatch();
+  rtems_test_assert( p == NULL );
+}
+
 /*
  *  A simple test of posix_memalign
  */
@@ -1108,6 +1124,7 @@ rtems_task Init(
   test_heap_extend();
   test_heap_info();
   test_protected_heap_info();
+  test_rtems_heap_allocate_aligned_with_boundary();
 
   test_posix_memalign();
 

@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems.h,v 1.2 2010/04/12 05:29:25 ccj Exp $
+ *  $Id: rtems-rfs-rtems.h,v 1.3 2010/07/15 08:10:48 sh Exp $
  */
 /**
  * @file
@@ -194,7 +194,7 @@ typedef struct rtems_rfs_rtems_private
  * @return
  */
 #define rtems_rfs_rtems_get_iop_ino(_iop) \
-  ((intptr_t)(_iop)->file_info)
+  ((intptr_t)(_iop)->pathinfo.node_access)
 
 /**
  * Create the name of the handler's table given the type of handlers.

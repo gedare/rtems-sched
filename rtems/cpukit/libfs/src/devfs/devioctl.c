@@ -4,7 +4,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: devioctl.c,v 1.3 2008/09/18 13:21:49 joel Exp $
+ *  $Id: devioctl.c,v 1.4 2010/07/15 08:10:47 sh Exp $
  */
 
 #include "config.h"
@@ -25,7 +25,7 @@ int devFS_ioctl(
   rtems_status_code         status;
   rtems_device_name_t      *np;
 
-  np           = (rtems_device_name_t *)iop->file_info;
+  np           = (rtems_device_name_t *)iop->pathinfo.node_access;
 
   args.iop     = iop;
   args.command = command;

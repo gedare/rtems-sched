@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.17 2010/06/28 21:00:15 joel Exp $
+ *  $Id: test.c,v 1.18 2010/07/15 13:59:25 joel Exp $
  */
 
 #include <tmacros.h>
@@ -26,6 +26,8 @@
 #if !HAVE_DECL_ADJTIME
 extern int adjtime(const struct timeval *delta, struct timeval *olddelta);
 #endif
+
+extern int _gettimeofday(struct timeval *__p, void *__tz);
 
 void test_adjtime(void);
 void check_a_tod(
@@ -199,6 +201,11 @@ int main(
 
   puts( "gettimeofday( NULL, NULL ) - EFAULT" );
   sc = gettimeofday( NULL, NULL );
+  rtems_test_assert( sc == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  puts( "_gettimeofday( NULL, NULL ) - EFAULT" );
+  sc = _gettimeofday( NULL, NULL );
   rtems_test_assert( sc == -1 );
   rtems_test_assert( errno == EFAULT );
 

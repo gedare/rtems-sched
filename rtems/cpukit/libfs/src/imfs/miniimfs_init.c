@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: miniimfs_init.c,v 1.16 2010/07/01 20:18:41 joel Exp $
+ *  $Id: miniimfs_init.c,v 1.17 2010/07/15 08:46:06 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -54,8 +54,8 @@ int miniIMFS_initialize(
   return IMFS_initialize_support(
     mt_entry,
     &miniIMFS_ops,
-    &rtems_filesystem_null_handlers, /* for memfiles */
-    &rtems_filesystem_null_handlers, /* for directories */
-    &rtems_filesystem_null_handlers  /* for fifos */
+    &rtems_filesystem_handlers_default, /* for memfiles */
+    &rtems_filesystem_handlers_default, /* for directories */
+    &rtems_filesystem_handlers_default  /* for fifos */
   );
 }

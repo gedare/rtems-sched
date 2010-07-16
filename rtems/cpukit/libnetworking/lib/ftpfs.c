@@ -28,7 +28,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: ftpfs.c,v 1.31 2010/06/10 09:20:28 sh Exp $
+ * $Id: ftpfs.c,v 1.33 2010/07/15 08:46:06 sh Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -958,7 +958,7 @@ static int rtems_ftpfs_open(
     ? "STOR "
     : "RETR ";
   uint32_t client_address = 0;
-  char *location = iop->file_info;
+  char *location = iop->pathinfo.node_access;
 
   /* Invalidate data handle */
   iop->data1 = NULL;
@@ -982,7 +982,7 @@ static int rtems_ftpfs_open(
        * This is an access to the root node that will be used for file system
        * option settings.
        */
-      iop->handlers = &rtems_ftpfs_root_handlers;
+      iop->pathinfo.handlers = &rtems_ftpfs_root_handlers;
 
       return 0;
     } else {
@@ -1166,7 +1166,7 @@ static int rtems_ftpfs_eval_path(
   /*
    * The caller of this routine has striped off the mount prefix from the path.
    * We need to store this path here or otherwise we would have to do this job
-   * again.  The path is used in rtems_ftpfs_open() via iop->file_info.
+   * again.  The path is used in rtems_ftpfs_open() via iop->pathinfo.node_access.
    */
   char *pathname_dup = malloc(pathnamelen + 1);
 
@@ -1292,21 +1292,21 @@ static int rtems_ftpfs_fstat(
 
 static const rtems_filesystem_operations_table rtems_ftpfs_ops = {
   .evalpath_h = rtems_ftpfs_eval_path,
-  .evalformake_h = NULL,
-  .link_h = NULL,
-  .unlink_h = NULL,
+  .evalformake_h = rtems_filesystem_default_evalformake,
+  .link_h = rtems_filesystem_default_link,
+  .unlink_h = rtems_filesystem_default_unlink,
   .node_type_h = rtems_ftpfs_node_type,
-  .mknod_h = NULL,
-  .chown_h = NULL,
+  .mknod_h = rtems_filesystem_default_mknod,
+  .chown_h = rtems_filesystem_default_chown,
   .freenod_h = rtems_ftpfs_free_node,
-  .mount_h = NULL,
+  .mount_h = rtems_filesystem_default_mount,
   .fsmount_me_h = rtems_ftpfs_initialize,
-  .unmount_h = NULL,
+  .unmount_h = rtems_filesystem_default_unmount,
   .fsunmount_me_h = rtems_ftpfs_unmount_me,
-  .utime_h = NULL,
-  .eval_link_h = NULL,
-  .symlink_h = NULL,
-  .readlink_h = NULL
+  .utime_h = rtems_filesystem_default_utime,
+  .eval_link_h = rtems_filesystem_default_evaluate_link,
+  .symlink_h = rtems_filesystem_default_symlink,
+  .readlink_h = rtems_filesystem_default_readlink
 };
 
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_handlers = {
@@ -1314,31 +1314,31 @@ static const rtems_filesystem_file_handlers_r rtems_ftpfs_handlers = {
   .close_h = rtems_ftpfs_close,
   .read_h = rtems_ftpfs_read,
   .write_h = rtems_ftpfs_write,
-  .ioctl_h = NULL,
-  .lseek_h = NULL,
+  .ioctl_h = rtems_filesystem_default_ioctl,
+  .lseek_h = rtems_filesystem_default_lseek,
   .fstat_h = rtems_ftpfs_fstat,
-  .fchmod_h = NULL,
+  .fchmod_h = rtems_filesystem_default_fchmod,
   .ftruncate_h = rtems_ftpfs_ftruncate,
-  .fpathconf_h = NULL,
-  .fsync_h = NULL,
-  .fdatasync_h = NULL,
-  .fcntl_h = NULL,
-  .rmnod_h = NULL
+  .fpathconf_h = rtems_filesystem_default_fpathconf,
+  .fsync_h = rtems_filesystem_default_fsync,
+  .fdatasync_h = rtems_filesystem_default_fdatasync,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .rmnod_h = rtems_filesystem_default_rmnod
 };
 
 static const rtems_filesystem_file_handlers_r rtems_ftpfs_root_handlers = {
-  .open_h = NULL,
-  .close_h = NULL,
-  .read_h = NULL,
-  .write_h = NULL,
+  .open_h = rtems_filesystem_default_open,
+  .close_h = rtems_filesystem_default_close,
+  .read_h = rtems_filesystem_default_read,
+  .write_h = rtems_filesystem_default_write,
   .ioctl_h = rtems_ftpfs_ioctl,
-  .lseek_h = NULL,
-  .fstat_h = NULL,
-  .fchmod_h = NULL,
-  .ftruncate_h = NULL,
-  .fpathconf_h = NULL,
-  .fsync_h = NULL,
-  .fdatasync_h = NULL,
-  .fcntl_h = NULL,
-  .rmnod_h = NULL
+  .lseek_h = rtems_filesystem_default_lseek,
+  .fstat_h = rtems_filesystem_default_fstat,
+  .fchmod_h = rtems_filesystem_default_fchmod,
+  .ftruncate_h = rtems_filesystem_default_ftruncate,
+  .fpathconf_h = rtems_filesystem_default_fpathconf,
+  .fsync_h = rtems_filesystem_default_fsync,
+  .fdatasync_h = rtems_filesystem_default_fdatasync,
+  .fcntl_h = rtems_filesystem_default_fcntl,
+  .rmnod_h = rtems_filesystem_default_rmnod
 };

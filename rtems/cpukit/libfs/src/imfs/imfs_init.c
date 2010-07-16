@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_init.c,v 1.20 2010/07/14 15:44:43 joel Exp $
+ *  $Id: imfs_init.c,v 1.21 2010/07/15 08:46:06 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -56,6 +56,6 @@ int IMFS_initialize(
     &IMFS_ops,
     &IMFS_memfile_handlers,
     &IMFS_directory_handlers,
-    &rtems_filesystem_null_handlers  /* for fifos */
+    &rtems_filesystem_handlers_default  /* for fifos */
   );
 }

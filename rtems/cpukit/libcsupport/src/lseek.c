@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: lseek.c,v 1.17 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: lseek.c,v 1.18 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -61,7 +61,7 @@ off_t lseek(
    *  new offset.
    */
 
-  status = (*iop->handlers->lseek_h)( iop, offset, whence );
+  status = (*iop->pathinfo.handlers->lseek_h)( iop, offset, whence );
   if ( status == (off_t) -1 )
     iop->offset = old_offset;
 

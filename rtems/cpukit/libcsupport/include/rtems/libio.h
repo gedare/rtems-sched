@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio.h,v 1.76 2010/07/03 19:13:25 joel Exp $
+ *  $Id: libio.h,v 1.78 2010/07/15 08:10:46 sh Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO_H
@@ -56,20 +56,16 @@ extern "C" {
 typedef _off64_t rtems_off64_t;
 
 /**
- * @name File System Node Types
- *
- * @{
+ * @brief File system node types.
  */
-
-#define RTEMS_FILESYSTEM_DIRECTORY   1
-#define RTEMS_FILESYSTEM_DEVICE      2
-#define RTEMS_FILESYSTEM_HARD_LINK   3
-#define RTEMS_FILESYSTEM_SYM_LINK    4
-#define RTEMS_FILESYSTEM_MEMORY_FILE 5
-
-/** @} */
-
-typedef int rtems_filesystem_node_types_t;
+typedef enum {
+  RTEMS_FILESYSTEM_INVALID_NODE_TYPE,
+  RTEMS_FILESYSTEM_DIRECTORY,
+  RTEMS_FILESYSTEM_DEVICE,
+  RTEMS_FILESYSTEM_HARD_LINK,
+  RTEMS_FILESYSTEM_SYM_LINK,
+  RTEMS_FILESYSTEM_MEMORY_FILE
+} rtems_filesystem_node_types_t;
 
 /**
  * @name File System Node Operations
@@ -360,6 +356,10 @@ struct _rtems_filesystem_file_handlers_r {
    */
   rtems_filesystem_rmnod_t        rmnod_h;
 };
+
+extern const rtems_filesystem_file_handlers_r
+rtems_filesystem_handlers_default;
+
 /**
  *  This method defines the interface to the default open(2) 
  *  system call support which is provided by a file system 
@@ -892,10 +892,29 @@ struct _rtems_filesystem_operations_table {
     rtems_filesystem_statvfs_t       statvfs_h;
 };
 
-/*
- * @brief Default filesystem evalpath
- */
+extern const rtems_filesystem_operations_table
+rtems_filesystem_operations_default;
 
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of path evaluation.
+ */
+int rtems_filesystem_default_evalpath(
+  const char *pathname,
+  size_t pathnamelen,
+  int flags,
+  rtems_filesystem_location_info_t *pathloc
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation of path evaluation for make.
+ */
+int rtems_filesystem_default_evalformake(
+   const char *path,
+   rtems_filesystem_location_info_t *pathloc,
+   const char **name
+);
 
 /**
  * @brief Provides a defualt routine for filesystem
@@ -914,6 +933,14 @@ int rtems_filesystem_default_link(
 int rtems_filesystem_default_unlink(
  rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
  rtems_filesystem_location_info_t  *pathloc         /* IN */
+);
+
+/**
+ * @brief Provides a defualt routine for filesystem
+ * implementation to determine the node type.
+ */
+rtems_filesystem_node_types_t rtems_filesystem_default_node_type(
+  rtems_filesystem_location_info_t *pathloc
 );
 
 /**
@@ -1092,8 +1119,6 @@ struct rtems_libio_tt {
   rtems_id                                sem;
   uint32_t                                data0;     /* private to "driver" */
   void                                   *data1;     /* ... */
-  void                                   *file_info; /* used by file handlers */
-  const rtems_filesystem_file_handlers_r *handlers;  /* type specific handlers */
 };
 
 /**
