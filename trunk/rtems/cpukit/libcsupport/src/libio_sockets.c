@@ -9,17 +9,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_sockets.c,v 1.15 2010/07/14 15:01:00 joel Exp $
+ *  $Id: libio_sockets.c,v 1.16 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <rtems/libio_.h>             /* libio_.h pulls in rtems */
-#include <rtems.h>
-
-#include <errno.h>
+#include <rtems/libio_.h>
 #include <rtems/seterr.h>
 
 /*
@@ -70,8 +67,7 @@ int rtems_bsdnet_makeFdForSocket(
   iop->flags |= LIBIO_FLAGS_WRITE | LIBIO_FLAGS_READ;
   iop->data0 = fd;
   iop->data1 = so;
-  iop->handlers = h;
-  iop->pathinfo.handlers = rtems_filesystem_root.handlers;
-  iop->pathinfo.ops = rtems_filesystem_root.ops;
+  iop->pathinfo.handlers = h;
+  iop->pathinfo.ops = &rtems_filesystem_operations_default;
   return fd;
 }

@@ -7,7 +7,7 @@
  */
 
 /*
- * $Id: cpu.h,v 1.44 2010/07/06 07:52:36 sh Exp $
+ * $Id: cpu.h,v 1.45 2010/07/16 08:35:32 sh Exp $
  *
  *  This include file contains information pertaining to the ARM
  *  processor.
@@ -33,21 +33,8 @@
 #ifndef _RTEMS_SCORE_CPU_H
 #define _RTEMS_SCORE_CPU_H
 
+#include <rtems/score/types.h>
 #include <rtems/score/arm.h>
-
-#ifndef ASM
-  #include <rtems/score/types.h>
-#endif
-
-#ifndef TRUE
-  #warning "TRUE not defined"
-  #define TRUE 1
-#endif
-
-#ifndef FALSE
-  #warning "FALSE not defined"
-  #define FALSE 0
-#endif
 
 /**
  * @defgroup ScoreCPUARM ARM Specific Support

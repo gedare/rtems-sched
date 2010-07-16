@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: writev.c,v 1.4 2010/07/01 17:47:48 joel Exp $
+ *  $Id: writev.c,v 1.5 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -104,7 +104,11 @@ ssize_t writev(
     if ( iov[v].iov_len == 0 )
       continue;
 
-    bytes = (*iop->handlers->write_h)( iop, iov[v].iov_base, iov[v].iov_len );
+    bytes = (*iop->pathinfo.handlers->write_h)(
+      iop,
+      iov[v].iov_base,
+      iov[v].iov_len
+    );
 
     if ( bytes < 0 )
       return -1;

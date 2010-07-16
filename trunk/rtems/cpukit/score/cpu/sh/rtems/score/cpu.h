@@ -23,7 +23,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.32 2010/06/29 00:33:58 joel Exp $
+ *  $Id: cpu.h,v 1.33 2010/07/16 08:45:28 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -33,13 +33,8 @@
 extern "C" {
 #endif
 
-#include <rtems/score/sh.h>              /* pick up machine definitions */
-#ifndef ASM
 #include <rtems/score/types.h>
-#endif
-#if 0 && defined(__SH4__)
-#include <rtems/score/sh4_regs.h>
-#endif
+#include <rtems/score/sh.h>
 
 /* conditional compilation parameters */
 

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: write.c,v 1.18 2010/07/01 15:12:38 jennifer Exp $
+ *  $Id: write.c,v 1.19 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -47,7 +47,7 @@ ssize_t write(
   /*
    *  Now process the write() request.
    */
-  rc = (*iop->handlers->write_h)( iop, buffer, count );
+  rc = (*iop->pathinfo.handlers->write_h)( iop, buffer, count );
 
   if ( rc > 0 )
     iop->offset += rc;

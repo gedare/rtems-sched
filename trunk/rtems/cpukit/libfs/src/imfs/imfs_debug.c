@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_debug.c,v 1.15 2010/06/24 21:31:21 joel Exp $
+ *  $Id: imfs_debug.c,v 1.16 2010/07/15 08:59:46 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -30,20 +30,6 @@
 
 #include "imfs.h"
 #include <rtems/libio_.h>
-
-/*
- *  IMFS_types
- *
- *  Printable names for each of the IMFS file system types.
- */
-
-char *IMFS_types[ IMFS_NUMBER_OF_TYPES ] = {
-  "directory",
-  "device",
-  "link",
-  "memory file",
-  "linear file"
-};
 
 /*
  *  IMFS_print_jnode

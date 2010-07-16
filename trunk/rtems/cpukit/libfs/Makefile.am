@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.45 2010/07/14 15:44:43 joel Exp $
+## $Id: Makefile.am,v 1.46 2010/07/15 07:36:37 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -30,7 +30,9 @@ libdefaultfs_a_SOURCES = \
     src/defaults/default_write.c src/defaults/default_fpathconf.c \
     src/defaults/default_unmount.c src/defaults/default_evaluate_link.c \
     src/defaults/default_open.c src/defaults/default_close.c \
-    src/defaults/default_fsunmount.c src/defaults/default_mknod.c
+    src/defaults/default_fsunmount.c src/defaults/default_mknod.c \
+    src/defaults/default_node_type.c src/defaults/default_evalformake.c \
+    src/defaults/default_handlers.c src/defaults/default_ops.c
 
 noinst_LIBRARIES += libimfs.a
 libimfs_a_SOURCES =

@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.35 2009/12/04 04:26:32 ralf Exp $
+ *  $Id: cpu.h,v 1.36 2010/07/16 08:38:35 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -27,10 +27,10 @@
 extern "C" {
 #endif
 
-#include <rtems/score/i386.h>              /* pick up machine definitions */
+#include <rtems/score/types.h>
+#include <rtems/score/i386.h>
 
 #ifndef ASM
-#include <rtems/score/types.h>
 #include <rtems/score/interrupts.h>	/* formerly in libcpu/cpu.h> */
 #include <rtems/score/registers.h>	/* formerly part of libcpu */
 #endif

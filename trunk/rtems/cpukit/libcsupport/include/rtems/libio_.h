@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libio_.h,v 1.39 2010/07/01 13:05:18 sh Exp $
+ *  $Id: libio_.h,v 1.40 2010/07/15 08:46:06 sh Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBIO__H
@@ -37,7 +37,6 @@ extern "C" {
 #define RTEMS_LIBIO_IOP_SEM(n)  rtems_build_name('L', 'B', 'I', n)
 
 extern rtems_id                          rtems_libio_semaphore;
-extern const rtems_filesystem_file_handlers_r rtems_filesystem_null_handlers;
 
 /*
  *  File descriptor Table Information

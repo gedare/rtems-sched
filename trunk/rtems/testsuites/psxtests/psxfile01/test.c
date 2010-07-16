@@ -17,7 +17,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.26 2010/07/08 19:37:01 joel Exp $
+ *  $Id: test.c,v 1.28 2010/07/16 09:23:42 sh Exp $
  */
 
 #include <stdio.h>
@@ -30,6 +30,7 @@
 #include <errno.h>
 #include <string.h>
 #include <ctype.h>
+#include <reent.h>
 #include <rtems/imfs.h>
 
 #include <rtems.h>
@@ -338,7 +339,13 @@ int main(
   rtems_test_assert( fd == -1 );
   rtems_test_assert( errno == EINVAL );
 
-  status = unlink( "/tmp/bha" );
+  puts( "Exercise the reentrant version _link_r -- Expect EEXIST" );
+  status = _link_r( NULL, "", "" );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EEXIST );
+
+  puts( "Unlink /tmp/bha using the reentrant version -- OK" );
+  status = _unlink_r( NULL, "/tmp/bha" );
   rtems_test_assert( status == 0 );
 
   /*

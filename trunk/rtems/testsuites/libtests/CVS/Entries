@@ -33,8 +33,8 @@ D/termios03////
 D/termios04////
 D/gxx01////
 D/termios05////
-/Makefile.am/1.37/Mon Jul 12 23:18:27 2010//
-/configure.ac/1.44/Mon Jul 12 23:18:27 2010//
 D/malloc04////
 D/termios06////
-/ChangeLog/1.202/Wed Jul 14 20:59:00 2010//
+/ChangeLog/1.207/Fri Jul 16 19:36:01 2010//
+/Makefile.am/1.39/Fri Jul 16 19:36:01 2010//
+/configure.ac/1.46/Fri Jul 16 19:36:01 2010//

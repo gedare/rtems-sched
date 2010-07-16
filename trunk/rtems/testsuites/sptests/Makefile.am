@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.100 2010/07/14 16:02:40 joel Exp $
+##  $Id: Makefile.am,v 1.101 2010/07/15 13:53:27 joel Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../aclocal
@@ -29,7 +29,7 @@ SUBDIRS = \
     spintrcritical05 spintrcritical06 spintrcritical07 spintrcritical08 \
     spintrcritical09 spintrcritical10 spintrcritical11 spintrcritical12 \
     spintrcritical13 spintrcritical14 spintrcritical15 spintrcritical16 \
-    spintrcritical17 spmkdir
+    spintrcritical17 spmkdir spmountmgr01
 
 DIST_SUBDIRS = $(SUBDIRS) spfatal_support spintrcritical_support
 EXTRA_DIST = spfatal_support/init.c spfatal_support/system.h

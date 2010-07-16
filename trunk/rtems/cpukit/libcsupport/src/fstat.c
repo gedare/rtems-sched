@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fstat.c,v 1.12 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: fstat.c,v 1.13 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -50,7 +50,7 @@ int fstat(
    */
   memset( sbuf, 0, sizeof(struct stat) );
 
-  return (*iop->handlers->fstat_h)( &iop->pathinfo, sbuf );
+  return (*iop->pathinfo.handlers->fstat_h)( &iop->pathinfo, sbuf );
 }
 
 /*

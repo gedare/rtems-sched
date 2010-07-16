@@ -1,3 +1,27 @@
+2010-07-17	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1622/testing
+	* psxchroot01/test.c, psxchroot01/psxchroot01.scn: Added two test
+	cases to completely cover chroot().
+
+2010-07-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxfile01/test.c: Avoid NULL pointer access.
+
+2010-07-15	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1617/testing
+	* psxfile01/test.c, psxfile01/psxfile01.scn: Added new cases to
+	exercise_link_r and _unlink_r
+	* psxstat/test.c, psxstat/psxstat.scn: Added new cases to exercise
+	_lstat_r and _stat_r.
+	* psxtime/test.c, psxtime/psxtime.scn: Added new cases to exercise
+	_gettimeofday.
+
+2010-07-16	Sebastian Huber <Sebastian.Huber@embedded-brains.de>
+
+	* psxstat/test.c: Avoid NULL pointer access.
+
 2010-07-12	Bharath Suri <bharath.s.jois@gmail.com>
 
 	PR 1613/testing

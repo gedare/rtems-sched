@@ -3,7 +3,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: devclose.c,v 1.4 2010/06/08 08:30:04 sh Exp $
+ *  $Id: devclose.c,v 1.5 2010/07/15 08:10:47 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -23,7 +23,7 @@ int devFS_close(
   rtems_status_code              status;
   rtems_device_name_t           *np;
 
-  np         = (rtems_device_name_t *)iop->file_info;
+  np         = (rtems_device_name_t *)iop->pathinfo.node_access;
 
   args.iop   = iop;
   args.flags = 0;

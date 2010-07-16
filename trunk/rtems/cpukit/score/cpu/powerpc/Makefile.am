@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.37 2008/02/20 03:02:36 ralf Exp $
+## $Id: Makefile.am,v 1.38 2010/07/16 08:45:02 sh Exp $
 ##
 
 include $(top_srcdir)/automake/compile.am
@@ -10,9 +10,6 @@ include_rtems_HEADERS = rtems/asm.h
 include_rtems_scoredir = $(includedir)/rtems/score
 include_rtems_score_HEADERS = rtems/score/powerpc.h rtems/score/cpu.h \
     rtems/score/types.h
-
-include_rtems_new_exceptionsdir = $(includedir)/rtems/new-exceptions
-include_rtems_new_exceptions_HEADERS = rtems/new-exceptions/cpu.h
 
 include_rtems_powerpcdir = $(includedir)/rtems/powerpc
 include_rtems_powerpc_HEADERS = rtems/powerpc/registers.h

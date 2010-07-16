@@ -1,7 +1,6 @@
 /Unlimited.txt/1.3/Tue Jan 29 21:52:21 2008//
 /coremutex.c/1.34/Sun Nov 29 13:51:52 2009//
 /coremutexseize.c/1.17/Mon Dec 22 05:52:31 2008//
-/coremutexsurrender.c/1.22/Sun Nov 29 13:51:52 2009//
 /mpci.c/1.36/Sun Nov 29 13:51:52 2009//
 /threadchangepriority.c/1.12/Mon Dec 22 05:52:32 2008//
 /threadclearstate.c/1.10/Sun Nov 29 13:51:52 2009//
@@ -176,4 +175,5 @@
 /watchdogreportchain.c/1.1/Thu Jul  8 17:33:02 2010//
 /watchdogtickle.c/1.10/Thu Jul  8 17:33:02 2010//
 /wkspace.c/1.33/Thu Jul  8 17:33:02 2010//
+/coremutexsurrender.c/1.23/Result of merge+Fri Jul 16 19:35:57 2010//
 D

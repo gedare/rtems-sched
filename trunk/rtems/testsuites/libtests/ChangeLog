@@ -1,3 +1,32 @@
+2010-07-15	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1617/testing
+	* malloctest/init.c: Added new case to exercise _realloc_r.
+
+2010-07-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* malloctest/init.c: Added test for
+	rtems_heap_allocate_aligned_with_boundary().
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise devFS_Show().
+	* devfs01/.cvsignore, devfs01/Makefile.am, devfs01/devfs01.doc,
+	devfs01/devfs01.scn, devfs01/init.c: New files.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* Makefile.am, configure.ac: Add new test to exercise
+	malloc_get_statistics().
+	* malloc05/.cvsignore, malloc05/Makefile.am, malloc05/init.c,
+	malloc05/malloc05.doc, malloc05/malloc05.scn: New files.
+
+2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1535/tests
+	* malloc04/init.c, malloc04/malloc04.scn: Address issues in test. A mix
+	of work by Ralf and Joel.
+
 2010-07-14	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* termios01/init.c, termios01/termios01.scn: Fully exercise tcsetattr.

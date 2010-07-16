@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_creat.c,v 1.17 2010/06/24 21:37:08 joel Exp $
+ *  $Id: imfs_creat.c,v 1.18 2010/07/15 08:46:06 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -54,7 +54,7 @@ IMFS_jnode_t *IMFS_create_node(
    *  Reject creation of FIFOs if support is disabled.
    */
   if ( type == IMFS_FIFO &&
-       fs_info->fifo_handlers == &rtems_filesystem_null_handlers )
+       fs_info->fifo_handlers == &rtems_filesystem_handlers_default )
     return NULL;
 
   /*

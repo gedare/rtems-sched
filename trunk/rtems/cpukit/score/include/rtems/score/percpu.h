@@ -13,11 +13,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: percpu.h,v 1.2 2010/06/29 18:51:49 joel Exp $
+ *  $Id: percpu.h,v 1.3 2010/07/16 08:31:33 sh Exp $
  */
 
 #ifndef _RTEMS_PERCPU_H
 #define _RTEMS_PERCPU_H
+
+#include <rtems/score/cpu.h>
 
 #ifdef ASM
   #include <rtems/asm.h>
