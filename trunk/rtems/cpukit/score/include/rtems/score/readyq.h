@@ -96,16 +96,6 @@ struct Ready_queue_Control_struct {
   Ready_queue_Operations rq_ops;
 };
 
-/** @brief  Ready queue Initialize
- *
- *  This routine initializes @a the_ready_queue.
- */
-void _Ready_queue_Initialize(
-  Ready_queue_Control         *the_ready_queue
-);
-
-
-
 #ifndef __RTEMS_APPLICATION__
 
 /*RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First(

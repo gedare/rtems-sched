@@ -73,18 +73,5 @@ void _Scheduler_Initialize( )
 {
   Scheduler_Control *the_scheduler = &_Scheduler;
 
-  switch (Configuration.scheduler_policy) {
-
-    case _SCHED_PRI:
-      _Scheduler_Initialize_priority( the_scheduler );
-      break;
-
-    case _SCHED_FIFO:
-      _Scheduler_Initialize_fifo( the_scheduler );
-      break;
-
-    default:
-      while ( 1 ); /* should be easy to find */
-  }
-
+  (*(_Scheduler_Table[Configuration.scheduler_policy].init))(the_scheduler);
 }

@@ -147,9 +147,6 @@ libscore_a_SOURCES += src/pheapallocate.c \
     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
 
-## READYQ_C_FILES
-libscore_a_SOURCES += src/readyq.c
-
 ## READYQFIFO_C_FILES
 libscore_a_SOURCES += src/readyqfifo.c src/readyqdequeuefifo.c \
     src/readyqenqueuefifo.c src/readyqenqueuefirstfifo.c \
@@ -167,7 +164,7 @@ libscore_a_SOURCES += src/scheduler.c
 
 ## SCHEDULERQUEUE_C_FILES
 libscore_a_SOURCES += src/schedulerblockqueue.c \
-											src/schedulerschedulequeue.c src/schedulerqueue.c \
+											src/schedulerschedulequeue.c \
 											src/schedulerunblockqueue.c src/scheduleryieldqueue.c
 
 ## SCHEDULERFIFO_C_FILES

@@ -537,12 +537,109 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 /*
  * Scheduler configuration.
  * TODO: Where to place this in confdefs?
+ *
+ * The scheduler configuration allows an application to select the 
+ * scheduling policy to use.  The supported configurations are:
+ *  CONFIGURE_SCHEDULER_USER
+ *  CONFIGURE_SCHEDULER_PRIORITY
+ *  CONFIGURE_SCHEDULER_FIFO
+ * 
+ * If no configuration is specified by the application, then 
+ * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
+ * An application can define its own scheduling policy by defining
+ * CONFIGURE_SCHEDULER_USER and CONFIGURE_SCHEDULER_ENTRY_USER to point
+ * to an initialization routine.  
+ *
+ * To add a new scheduler:
  */
 #include <rtems/score/scheduler.h>
 
-#ifndef CONFIGURE_SCHEDULER_POLICY
-  #define CONFIGURE_SCHEDULER_POLICY SCHEDULER_DEFAULT_POLICY
+#if defined(CONFIGURE_SCHEDULER_USER) && \
+    !defined(CONFIGURE_SCHEDULER_ENTRY_USER)
+  #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER without CONFIGURE_SCHEDULER_ENTRY_USER"
 #endif
+
+/* enable all RTEMS-provided schedulers */
+#if defined(CONFIGURE_SCHEDULER_ALL)
+  #define CONFIGURE_SCHEDULER_PRIORITY
+  #define CONFIGURE_SCHEDULER_FIFO
+#endif
+
+/* If no scheduler is specified, the priority scheduler is default. */
+#if !defined(CONFIGURE_SCHEDULER_USER) && \
+    !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+    !defined(CONFIGURE_SCHEDULER_FIFO)
+  #define CONFIGURE_SCHEDULER_PRIORITY
+  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
+#endif
+
+/*
+ * If a user scheduler is specified and no policy is set, 
+ * the user scheduler is the default policy.
+ */
+#if defined(CONFIGURE_SCHEDULER_USER) && \
+    !defined(CONFIGURE_SCHEDULER_POLICY)
+  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_USER
+#endif
+
+/* 
+ * Check for priority scheduler next, as it is the default policy if there
+ * is no CONFIGURE_SCHEDULER_POLICY set and no USER scheduler provided.
+ */
+#if defined(CONFIGURE_SCHEDULER_PRIORITY)
+  #include <rtems/score/schedulerpriority.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_Initialize_priority }
+  #if !defined(CONFIGURE_SCHEDULER_POLICY)
+    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
+  #endif
+#endif
+
+/* Check for FIFO scheduler */
+#if defined(CONFIGURE_SCHEDULER_FIFO)
+  #include <rtems/score/schedulerfifo.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_FIFO { _Scheduler_Initialize_fifo }
+  #if !defined(CONFIGURE_SCHEDULER_POLICY)
+    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_FIFO
+  #endif
+#endif
+
+/* 
+ * Set up the scheduler table.  The scheduling code indexes this table to 
+ * invoke the correct scheduling implementation. The scheduler to use is 
+ * determined by the Configuration.scheduler_policy field, which is set
+ * by CONFIGURE_SCHEDULER_POLICY.  If a particular scheduler is not enabled,
+ * an empty entry is included in its entry in the scheduler table.
+ */
+
+  /**
+   * An empty scheduler entry
+   */
+  #define CONFIGURE_SCHEDULER_NULL { NULL }
+
+#ifdef CONFIGURE_INIT
+  /* the table of available schedulers. */
+  const Scheduler_Table_t _Scheduler_Table[] = {
+    #if defined(CONFIGURE_SCHEDULER_USER) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_USER)
+      CONFIGURE_SCHEDULER_ENTRY_USER,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+    #if defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_PRIORITY)
+      CONFIGURE_SCHEDULER_ENTRY_PRIORITY,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+    #if defined(CONFIGURE_SCHEDULER_FIFO) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_FIFO)
+      CONFIGURE_SCHEDULER_ENTRY_FIFO,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif   
+  };
+#endif
+
 
 /*
  *  If you said the IDLE task was going to do application initialization
