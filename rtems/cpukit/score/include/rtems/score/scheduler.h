@@ -35,33 +35,29 @@ extern "C" {
 #include <rtems/score/priority.h>
 #include <rtems/score/readyq.h>
 
-
-/** 
- * @brief The following defines provide configuration control over the 
- * scheduler implementation.
- *
- * When adding a new scheduler implementation, give it a unique definition 
- * here so that users can select an arbitrary scheduler for their application.
- * Also add a brief description of the option here.
- *
- * _SCHED_PRI:  
- *  Queue-based scheduling with a priority-map ready queue.
- * 
- * _SCHED_FIFO: 
- *  Queue-based scheduling with a FIFO ready queue.
- *
+/* 
+ * These defines are used to set the scheduler_policy value. The values 
+ * must correspond directly with the order of the fields in the scheduler
+ * table (Scheduler_Table_t), because the Configuration.scheduler_policy 
+ * field is used to index the scheduler table.
  */
-#define _SCHED_PRI (1)
-#define _SCHED_FIFO (2)
+#define _Scheduler_USER     (0)
+#define _Scheduler_PRIORITY (1)
+#define _Scheduler_FIFO     (2)
 
-/**
- * @brief SCHEDULER_DEFAULT_POLICY defines the default behavior of the 
- * scheduler via confdefs.  The default behavior is the original RTEMS 
- * priority-based scheduling using the priority map ready queue.
+typedef struct Scheduler_Control_struct Scheduler_Control;
+
+typedef void (*_Scheduler_Table_entry)( Scheduler_Control* );
+
+/* 
+ * TODO: Does it make sense to embed the Scheduler_Control for the scheduler
+ * here?  Probably not, if we use per-cpu Scheduler_Control...
  */
-#define SCHEDULER_DEFAULT_POLICY _SCHED_PRI
+typedef struct {
+  _Scheduler_Table_entry init;
+} Scheduler_Table_t;
 
-
+extern const Scheduler_Table_t _Scheduler_Table[]; /* declared in confdefs.h */
 
 /**
  * The following Scheduler_Per_thread_xxx structures are used to 
@@ -88,10 +84,6 @@ typedef struct {
 typedef struct {
   char nothing; /* it doesn't matter, this is never instantiated. */
 } Scheduler_Per_thread_fifo;
-
-
-
-typedef struct Scheduler_Control_struct Scheduler_Control;
 
 /**
  * function jump table that holds pointers to the functions that 

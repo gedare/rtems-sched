@@ -22,6 +22,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/readyq.h>
+#include <rtems/score/readyqfifo.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerfifo.h>
 #include <rtems/score/schedulerqueue.h>
@@ -44,6 +45,13 @@ void _Scheduler_Initialize_fifo (
     Scheduler_Control *the_scheduler
 )
 {
-  _Scheduler_Initialize_queue(the_scheduler);
-  /* Don't override sched_allocate, sched_free, or sched_update for FIFO */
+  the_scheduler->s_ops.schedule           = &_Scheduler_Schedule_queue;
+  the_scheduler->s_ops.yield              = &_Scheduler_Yield_queue;
+  the_scheduler->s_ops.block              = &_Scheduler_Block_queue;
+  the_scheduler->s_ops.unblock            = &_Scheduler_Unblock_queue;
+  the_scheduler->s_ops.sched_allocate     = &_Scheduler_Sched_allocate_nothing;
+  the_scheduler->s_ops.sched_free         = &_Scheduler_Sched_update_nothing;
+  the_scheduler->s_ops.sched_update       = &_Scheduler_Sched_update_nothing;
+ 
+  _Ready_queue_Initialize_fifo(&the_scheduler->ready_queue);
 }

@@ -31,14 +31,11 @@ extern "C" {
 
 #include <rtems/score/scheduler.h>
 
-/* Generic scheduling implementations that rely on the ready queue 
- * implementation to provide scheduling logic.
+/* 
+ * Generic scheduling implementations that rely on the ready queue 
+ * implementation to provide scheduling logic. 
+ * Note: There is no "queue" scheduler.
  */
-
-/**
- *  This routine initializes a queue-based scheduler.
- */
-void _Scheduler_Initialize_queue( Scheduler_Control *sched );
 
 /**
  *  This kernel routine sets the heir thread to be the next ready thread 
