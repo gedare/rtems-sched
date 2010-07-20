@@ -16,13 +16,13 @@ then
 #   --enable-rtemsbsp=${BSP} --enable-rtems-debug --enable-tests=samples
 
 ## Build all tests with debugging
-  ../rtems/configure --target=${TARGET} --disable-networking \
-  --enable-rtemsbsp=${BSP} --enable-rtems-debug --enable-tests 
+#  ../rtems/configure --target=${TARGET} --disable-networking \
+#  --enable-rtemsbsp=${BSP} --enable-rtems-debug --enable-tests 
 
 ## Build for QEMU
-#  ../rtems/configure --target=${TARGET} --disable-networking \
-#    --enable-rtemsbsp=${BSP} --enable-tests \
-#    USE_COM1_AS_CONSOLE=1 BSP_PRESS_KEY_FOR_RESET=0
+  ../rtems/configure --target=${TARGET} --disable-networking \
+    --enable-rtemsbsp=${BSP} --enable-tests \
+    USE_COM1_AS_CONSOLE=1 BSP_PRESS_KEY_FOR_RESET=0
 fi
 
 time make -j 4 2> make.error

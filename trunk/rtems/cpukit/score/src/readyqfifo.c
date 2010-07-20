@@ -45,9 +45,12 @@ void _Ready_queue_Initialize_fifo(
 )
 {
   /* allocate ready queue structures */
+  the_ready_queue->Queues.Fifo = (Chain_Control *) 
+    _Workspace_Allocate_or_fatal_error( (1) * sizeof(Chain_Control) 
+  );
 
   /* initialize ready queue structures */
-  _Chain_Initialize_empty( &the_ready_queue->Queues.Fifo );
+  _Chain_Initialize_empty( the_ready_queue->Queues.Fifo );
 
   /* initialize ready queue operations */
   the_ready_queue->rq_ops.dequeue = &_Ready_queue_Dequeue_fifo;

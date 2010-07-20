@@ -46,10 +46,10 @@ Thread_Control *_Ready_queue_Dequeue_fifo(
 {
   Thread_Control *the_thread;
 
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Fifo ) ) {
+  if ( !_Chain_Is_empty( the_ready_queue->Queues.Fifo ) ) {
 
     the_thread = (Thread_Control *)
-       _Chain_Get_first_unprotected( &the_ready_queue->Queues.Fifo );
+       _Chain_Get_first_unprotected( the_ready_queue->Queues.Fifo );
 
     return the_thread;
   }

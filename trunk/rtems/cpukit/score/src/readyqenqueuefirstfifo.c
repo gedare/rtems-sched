@@ -45,7 +45,7 @@ void _Ready_queue_Enqueue_first_fifo(
 )
 {
   _Chain_Prepend_unprotected(
-        &the_ready_queue->Queues.Fifo,
+        the_ready_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
 }
