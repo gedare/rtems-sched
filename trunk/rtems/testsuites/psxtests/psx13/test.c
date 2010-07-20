@@ -22,7 +22,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.16 2010/07/09 22:07:11 joel Exp $
+ *  $Id: test.c,v 1.17 2010/07/19 13:13:20 joel Exp $
  */
 
 #include <rtems.h>
@@ -415,9 +415,11 @@ int UTimeTest (void)
       else
 	retval = FALSE;
     }
-
     else
       retval = FALSE;
+
+    error = utime("testfile1.tst", NULL );
+    retval &= (error == 0) ? TRUE : FALSE;
   }
 
   /* assert (retval == TRUE);*/
@@ -562,6 +564,12 @@ int FPathConfTest (void)
     error = fpathconf(fd, _PC_PRIO_IO);
     error = fpathconf(fd, _PC_SYNC_IO);
     error = fpathconf(fd, 255);
+
+    close(fd);
+
+    fd = open("testfile1.tst", O_WRONLY);
+    
+    error = fpathconf(fd, _PC_LINK_MAX);
 
     retval = TRUE;
   }

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.30 2010/07/15 13:59:25 joel Exp $
+ *  $Id: test.c,v 1.31 2010/07/19 13:13:20 joel Exp $
  */
 
 #include <tmacros.h>
@@ -936,6 +936,11 @@ int main(
 
   puts( "Exercise the reentrant version - _lstat_r - expect EFAULT" );
   status = _lstat_r( NULL, NULL, NULL );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == EFAULT );
+
+  puts( "Try readlink with a bad buffer - expect EFAULT" );
+  status = readlink( "/tmp", NULL, 0 );
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == EFAULT );
 

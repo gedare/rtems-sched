@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.46 2010/07/14 23:53:49 joel Exp $
+## $Id: configure.ac,v 1.48 2010/07/19 13:54:46 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -61,6 +61,7 @@ rtmonuse/Makefile
 stackchk/Makefile
 stackchk01/Makefile
 stringto01/Makefile
+tar03/Makefile
 termios/Makefile
 termios01/Makefile
 termios02/Makefile
@@ -68,6 +69,8 @@ termios03/Makefile
 termios04/Makefile
 termios05/Makefile
 termios06/Makefile
+termios07/Makefile
+termios08/Makefile
 tztest/Makefile
 POSIX/Makefile
 ])
