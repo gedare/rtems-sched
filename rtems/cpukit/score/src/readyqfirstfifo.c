@@ -46,15 +46,15 @@ Thread_Control *_Ready_queue_First_fifo(
 )
 {
   Thread_Control *first;
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Fifo ) ) {
-    first = (Thread_Control *) _Chain_First(&the_ready_queue->Queues.Fifo);
+  if ( !_Chain_Is_empty( the_ready_queue->Queues.Fifo ) ) {
+    first = (Thread_Control *) _Chain_First(the_ready_queue->Queues.Fifo);
 
     /* if the idle thread is the first thread, requeue it to give other 
      * threads a chance to be the first on the FIFO queue.
      */
     if ( first == _Thread_Idle ) {
       _Ready_queue_Requeue_fifo(the_ready_queue, first);
-      first = (Thread_Control *) _Chain_First(&the_ready_queue->Queues.Fifo);
+      first = (Thread_Control *) _Chain_First(the_ready_queue->Queues.Fifo);
     }
 
     return first;

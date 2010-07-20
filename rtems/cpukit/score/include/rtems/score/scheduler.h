@@ -47,10 +47,15 @@ extern "C" {
 
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
+/* 
+ * Type definition for entries in the confdefs.h Scheduler Table. The intent
+ * is that each entry in the Scheduler Table is a pointer to the initialization
+ * routine for the scheduler implementation.
+ */
 typedef void (*_Scheduler_Table_entry)( Scheduler_Control* );
 
 /* 
- * TODO: Does it make sense to embed the Scheduler_Control for the scheduler
+ * TODO: Would it make sense to embed the Scheduler_Control for the scheduler
  * here?  Probably not, if we use per-cpu Scheduler_Control...
  */
 typedef struct {

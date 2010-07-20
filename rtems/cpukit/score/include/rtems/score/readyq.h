@@ -80,16 +80,19 @@ typedef struct {
  */
 struct Ready_queue_Control_struct {
   /** 
-   *  This union contains the data structures used to manage the ready
-   *  set of tasks which varies based upon the type of ready queue required
-   *  by the scheduler.
+   *  This union contains the pointer to the data structure used to manage 
+   *  the ready set of tasks. The pointer varies based upon the type of 
+   *  ready queue required by the scheduler.
    */
   union {
-    /** This is for a simple FIFO list. */
-    Chain_Control Fifo;
+    /** 
+     * This is the set of lists (an array of Chain_Control) for 
+     * priority scheduling. 
+     */
+    Chain_Control         *Priority;
 
-    /** This is the set of lists for priority scheduling. */
-    Chain_Control *Priority;
+    /** This points to the Chain_Control for a simple FIFO list. */
+    Chain_Control         *Fifo;
   } Queues;
 
   /** The jump table for ready queue structure-specific functions */

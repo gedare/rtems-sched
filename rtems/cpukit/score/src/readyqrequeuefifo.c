@@ -48,7 +48,7 @@ void _Ready_queue_Requeue_fifo(
 
   /* enqueue */
   _Chain_Append_unprotected(
-        &the_ready_queue->Queues.Fifo,
+        the_ready_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
 }
