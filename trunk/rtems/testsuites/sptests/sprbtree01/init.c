@@ -78,7 +78,7 @@ rtems_task Init(
   rtems_rbtree_control  rbtree1;
   rtems_rbtree_node    *p;
   test_node            node1, node2;
-  test_node            node_array[500];
+  test_node            node_array[100];
   int                  id;
   int i;
 
