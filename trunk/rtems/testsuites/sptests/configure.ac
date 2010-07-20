@@ -153,6 +153,7 @@ spmountmgr01/Makefile
 spnotepad01/Makefile
 spobjgetnext/Makefile
 spprintk/Makefile
+sprbtree01/Makefile
 spsched01/Makefile
 spsched02/Makefile
 spsize/Makefile
