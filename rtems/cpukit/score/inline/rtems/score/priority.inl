@@ -30,76 +30,6 @@
 
 #include <rtems/score/bitfield.h>
 
-
-/**
- *  Transparent, identically mapped uint32_t-based Priority_Control
- */
-RTEMS_INLINE_ROUTINE void _Priority_Set_transparent ( 
-    Priority_Control *priority_lhs,
-    Priority_Control *priority_rhs
-  )
-{
-  *priority_lhs = *priority_rhs;
-}
-
-RTEMS_INLINE_ROUTINE uint32_t _Priority_Get_value_transparent ( 
-    Priority_Control priority 
-)
-{
-  return ( priority );
-}
-
-RTEMS_INLINE_ROUTINE void _Priority_Set_value_transparent (
-    Priority_Control *priority_lhs,
-    uint32_t value
-  )
-{
-  *priority_lhs = value;
-}
-
-
-/**
- * Priority_Control external interface
- */
-/**
- * @brief Priority set operator
- *
- * Assign @a *priority_lhs = @a *priority_rhs
- */
-RTEMS_INLINE_ROUTINE void _Priority_Set ( 
-    Priority_Control *priority_lhs,
-    Priority_Control *priority_rhs
-  )
-{
-  _Priority_Set_transparent(priority_lhs, priority_rhs);
-}
-
-/**
- * @brief Priority Get value operator
- *
- * This method returns the integer priority representation value of 
- * @a _priority, a number between 0 and 255 representing the RTEMS priority.
- */
-RTEMS_INLINE_ROUTINE uint32_t _Priority_Get_value ( Priority_Control priority )
-{
-  return(_Priority_Get_value_transparent( priority ));
-}
-
-/**
- * @brief Priority Set value operator
- *
- * This method assigns the integer priority representation value of 
- * @a priority_lhs to be @a value, a number between 0 and 255 representing 
- * the RTEMS priority.
- */
-RTEMS_INLINE_ROUTINE void _Priority_Set_value (
-    Priority_Control *priority_lhs,
-    uint32_t value
-  )
-{
-  _Priority_Set_value_transparent(priority_lhs, value);
-}
-
 /**
  *  This routine performs the initialization necessary for this handler.
  */
@@ -127,7 +57,7 @@ RTEMS_INLINE_ROUTINE bool _Priority_Is_valid (
    *  then checking for less than 0 is unnecessary.
    */
 
-  return ( _Priority_Get_value(the_priority) <= PRIORITY_MAXIMUM );
+  return ( the_priority <= PRIORITY_MAXIMUM );
 }
 
 /**
@@ -138,7 +68,7 @@ RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Major (
   Priority_Control the_priority
 )
 {
-  return (Priority_Bit_map_control)( _Priority_Get_value(the_priority) / 16 );
+  return (Priority_Bit_map_control)( the_priority / 16 );
 }
 
 /**
@@ -149,7 +79,7 @@ RTEMS_INLINE_ROUTINE Priority_Bit_map_control   _Priority_Minor (
   Priority_Control the_priority
 )
 {
-  return (Priority_Bit_map_control)( _Priority_Get_value(the_priority) % 16 );
+  return (Priority_Bit_map_control)( the_priority % 16 );
 }
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == TRUE )
@@ -257,8 +187,8 @@ RTEMS_INLINE_ROUTINE void _Priority_Initialize_information_bit_map(
   Priority_Bit_map_control minor;
   Priority_Bit_map_control mask;
 
-  major = _Priority_Major( _Priority_Get_value(new_priority) );
-  minor = _Priority_Minor( _Priority_Get_value(new_priority) );
+  major = _Priority_Major( new_priority );
+  minor = _Priority_Minor( new_priority );
 
   the_priority_map->minor =
     &_Priority_Bit_map[ _Priority_Bits_index(major) ];

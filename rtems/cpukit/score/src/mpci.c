@@ -254,8 +254,7 @@ uint32_t   _MPCI_Send_request_packet (
 )
 {
   the_packet->source_tid      = _Thread_Executing->Object.id;
-  _Priority_Set(&the_packet->source_priority, 
-      &_Thread_Executing->current_priority);
+  the_packet->source_priority = _Thread_Executing->current_priority;
   the_packet->to_convert =
      ( the_packet->to_convert - sizeof(MP_packet_Prefix) ) / sizeof(uint32_t);
 

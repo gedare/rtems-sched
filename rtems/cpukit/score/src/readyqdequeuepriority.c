@@ -47,7 +47,7 @@ Thread_Control *_Ready_queue_Dequeue_priority(
   Chain_Control *rq;
   Thread_Control *the_thread;
 
-  index = _Priority_Get_value(_Priority_Get_highest());
+  index = _Priority_Get_highest();
   rq = &the_ready_queue->Queues.Priority[index];
   the_thread = (Thread_Control*) _Chain_First(rq);
   

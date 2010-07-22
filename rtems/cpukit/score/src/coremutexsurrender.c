@@ -37,7 +37,7 @@
       &thread->lock_mutex,
       &mutex->queue.lock_queue
     );
-	  _Priority_Set(&mutex->queue.priority_before, &thread->current_priority);
+    mutex->queue.priority_before = thread->current_priority;
   }
 
   static inline CORE_mutex_Status _CORE_mutex_Pop_priority(
@@ -60,8 +60,7 @@
      */
     _Chain_Get_first_unprotected( &holder->lock_mutex );
 
-    if (  _Priority_Get_value(mutex->queue.priority_before) != 
-          _Priority_Get_value(holder->current_priority) ) {
+    if (  mutex->queue.priority_before != holder->current_priority ) {
       _Thread_Change_priority( holder, mutex->queue.priority_before, true );
 
     return CORE_MUTEX_STATUS_SUCCESSFUL;
@@ -171,8 +170,7 @@ CORE_mutex_Status _CORE_mutex_Surrender(
      *  mutex (i.e. resource) this task has.
      */
     if ( holder->resource_count == 0 &&
-         _Priority_Get_value(holder->real_priority) != 
-          _Priority_Get_value(holder->current_priority) ) {
+         holder->real_priority != holder->current_priority ) {
       _Thread_Change_priority( holder, holder->real_priority, true );
     }
   }
@@ -213,8 +211,8 @@ CORE_mutex_Status _CORE_mutex_Surrender(
         case CORE_MUTEX_DISCIPLINES_PRIORITY_CEILING:
           _CORE_mutex_Push_priority( the_mutex, the_thread );
           the_thread->resource_count++;
-          if (_Priority_Get_value(the_mutex->Attributes.priority_ceiling) <
-              _Priority_Get_value(the_thread->current_priority)){
+          if ( the_mutex->Attributes.priority_ceiling < 
+                the_thread->current_priority ){
               _Thread_Change_priority(
                 the_thread,
                 the_mutex->Attributes.priority_ceiling,
