@@ -41,6 +41,7 @@
 #if defined(RTEMS_MULTIPROCESSING)
 #include <rtems/score/mpci.h>
 #endif
+#include <rtems/score/periodic.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/thread.h>

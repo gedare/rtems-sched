@@ -22,6 +22,7 @@
 #include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/rtems/periodic.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
@@ -42,19 +43,5 @@
 
 void _Rate_monotonic_Manager_initialization(void)
 {
-  _Objects_Initialize_information(
-    &_Rate_monotonic_Information,    /* object information table */
-    OBJECTS_CLASSIC_API,             /* object API */
-    OBJECTS_RTEMS_PERIODS,           /* object class */
-    Configuration_RTEMS_API.maximum_periods,
-                                     /* maximum objects of this class */
-    sizeof( Rate_monotonic_Control ),/* size of this object's control block */
-    false,                           /* true if the name is a string */
-    RTEMS_MAXIMUM_NAME_LENGTH        /* maximum length of an object name */
-#if defined(RTEMS_MULTIPROCESSING)
-    ,
-    false,                           /* true if this is a global object class */
-    NULL                             /* Proxy extraction support callout */
-#endif
-  );
+  _Periodic_Manager_initialization();
 }

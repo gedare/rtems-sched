@@ -103,6 +103,10 @@ $(PROJECT_INCLUDE)/rtems/score/percpu.h: include/rtems/score/percpu.h $(PROJECT_
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/percpu.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/percpu.h
 
+$(PROJECT_INCLUDE)/rtems/score/periodic.h: include/rtems/score/periodic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/periodic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/periodic.h
+
 $(PROJECT_INCLUDE)/rtems/score/priority.h: include/rtems/score/priority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
@@ -264,6 +268,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/isr.inl
 $(PROJECT_INCLUDE)/rtems/score/object.inl: inline/rtems/score/object.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
+
+$(PROJECT_INCLUDE)/rtems/score/periodic.inl: inline/rtems/score/periodic.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/periodic.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/periodic.inl
 
 $(PROJECT_INCLUDE)/rtems/score/priority.inl: inline/rtems/score/priority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.inl

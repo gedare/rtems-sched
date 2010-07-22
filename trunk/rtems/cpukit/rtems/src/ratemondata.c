@@ -9,6 +9,8 @@
  *  http://www.rtems.com/license/LICENSE.
  *
  *  $Id: ratemondata.c,v 1.1 2007/05/21 23:19:20 joel Exp $
+ *
+ *  Note: this file is deprecated.
  */
 
 #if HAVE_CONFIG_H

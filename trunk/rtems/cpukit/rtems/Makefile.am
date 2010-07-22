@@ -25,6 +25,7 @@ include_rtems_rtems_HEADERS = include/rtems/rtems/asr.h \
     include/rtems/rtems/intr.h include/rtems/rtems/message.h \
     include/rtems/rtems/modes.h include/rtems/rtems/object.h \
     include/rtems/rtems/options.h include/rtems/rtems/part.h \
+		include/rtems/rtems/periodic.h \
     include/rtems/rtems/ratemon.h include/rtems/rtems/region.h \
     include/rtems/rtems/rtemsapi.h include/rtems/rtems/sem.h \
     include/rtems/rtems/signal.h include/rtems/rtems/status.h \
@@ -70,12 +71,19 @@ librtems_a_SOURCES += src/tasks.c src/taskcreate.c src/taskdelete.c \
     src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
     src/taskvariable_invoke_dtor.c src/taskdata.c
 
+## PERIODIC_C_FILES
+librtems_a_SOURCES += src/periodiccancel.c src/periodicident.c \
+		src/periodiccreate.c src/periodicperiod.c src/periodicdelete.c \
+		src/periodicreportstatistics.c src/periodicgetstatistics.c \
+		src/periodicresetall.c src/periodicgetstatus.c \
+		src/periodicresetstatistics.c
+
 ## RATEMON_C_FILES
 librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
     src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
     src/ratemonresetstatistics.c src/ratemonresetall.c \
     src/ratemonreportstatistics.c src/ratemonident.c \
-    src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
+    src/ratemonperiod.c src/ratemondata.c
 
 ## INTR_C_FILES
 librtems_a_SOURCES += src/intrbody.c src/intrcatch.c

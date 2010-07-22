@@ -87,6 +87,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/part.h: include/rtems/rtems/part.h $(PROJECT_INCL
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.h
 
+$(PROJECT_INCLUDE)/rtems/rtems/periodic.h: include/rtems/rtems/periodic.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/periodic.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/periodic.h
+
 $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h: include/rtems/rtems/ratemon.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h

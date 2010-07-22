@@ -19,6 +19,7 @@
 #include <rtems/rtems/status.h>
 #include <rtems/rtems/support.h>
 #include <rtems/score/object.h>
+#include <rtems/rtems/periodic.h>
 #include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
@@ -27,30 +28,5 @@
  */
 void rtems_rate_monotonic_reset_all_statistics( void )
 {
-  Objects_Id        id;
-  rtems_status_code status;
-
-   /*
-    *  Prevent allocation or deallocation of any of the periods while
-    *  we are cycling.  Also this is an optimization which ensures that
-    *  we only disable/enable once.  The call to
-    *  rtems_rate_monotonic_reset_statistics will be in a nested dispatch
-    *  disabled critical section.
-    */
-  _Thread_Disable_dispatch();
-
-    /*
-     * Cycle through all possible ids and try to reset each one.  If it
-     * is a period that is inactive, we just get an error back.  No big deal.
-     */
-    for ( id=_Rate_monotonic_Information.minimum_id ;
-          id <= _Rate_monotonic_Information.maximum_id ;
-          id++ ) {
-      status = rtems_rate_monotonic_reset_statistics( id );
-    }
-
-  /*
-   *  Done so exit thread dispatching disabled critical section.
-   */
-  _Thread_Enable_dispatch();
+  rtems_periodic_reset_all_statistics();
 }
