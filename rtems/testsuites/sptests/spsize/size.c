@@ -33,7 +33,8 @@
 #endif
 #include <rtems/rtems/part.h>
 #include <rtems/score/priority.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/score/periodic.h>
+#include <rtems/rtems/periodic.h>
 #include <rtems/rtems/region.h>
 #include <rtems/rtems/sem.h>
 #include <rtems/rtems/signal.h>
@@ -81,7 +82,7 @@ void print_formula(void);
 #define PER_PART      \
      (long) (sizeof (Partition_Control) + NAME_PTR_SIZE)
 #define PER_PERIOD      \
-     (long) (sizeof (Rate_monotonic_Control) + NAME_PTR_SIZE)
+     (long) (sizeof (Periodic_Control) + NAME_PTR_SIZE)
 #define PER_PORT      \
      (long) (sizeof (Dual_ported_memory_Control) + NAME_PTR_SIZE)
 #define PER_EXTENSION     \
@@ -311,10 +312,10 @@ uninitialized =
 
 /*percpu.h*/    (sizeof _Per_CPU_Information)             +
 
+/*periodic.h*/  (sizeof _Periodic_Information)            +
+
 /*priority.h*/  (sizeof _Priority_Major_bit_map)          +
                 (sizeof _Priority_Bit_map)                +
-
-/*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
 
 /*region.h*/    (sizeof _Region_Information)              +
 

@@ -47,7 +47,7 @@ rtems_task Init(
 
   /* Check status values. */
   rtems_test_assert( period_status.owner == rtems_task_self() );
-  rtems_test_assert( period_status.state == RATE_MONOTONIC_INACTIVE );
+  rtems_test_assert( period_status.state == PERIODIC_INACTIVE );
   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
     rtems_test_assert( period_status.since_last_period.tv_sec == 0 );
     rtems_test_assert( period_status.since_last_period.tv_nsec == 0 );

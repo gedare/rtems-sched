@@ -1,5 +1,5 @@
 /*
- *  Rate Monotonic Manager -- Period End Timeout Handler
+ *  Periodic Manager -- Period End Timeout Handler
  *
  *  COPYRIGHT (c) 1989-2009.
  *  On-Line Applications Research Corporation (OAR).
@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ratemontimeout.c,v 1.10 2009/10/30 17:54:29 joel Exp $
+ *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -16,16 +16,14 @@
 #endif
 
 #include <rtems/system.h>
-#include <rtems/rtems/status.h>
-#include <rtems/rtems/support.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/rtems/ratemon.h>
+#include <rtems/score/periodic.h>
 #include <rtems/score/thread.h>
 
 /*PAGE
  *
- *  _Rate_monotonic_Timeout
+ *  _Periodic_Timeout
  *
  *  This routine processes a period ending.  If the owning thread
  *  is waiting for the period, that thread is unblocked and the
@@ -38,12 +36,12 @@
  *  Output parameters: NONE
  */
 
-void _Rate_monotonic_Timeout(
+void _Periodic_Timeout(
   Objects_Id  id,
   void       *ignored
 )
 {
-  Rate_monotonic_Control *the_period;
+  Periodic_Control *the_period;
   Objects_Locations       location;
   Thread_Control         *the_thread;
 
@@ -51,7 +49,7 @@ void _Rate_monotonic_Timeout(
    *  When we get here, the Timer is already off the chain so we do not
    *  have to worry about that -- hence no _Watchdog_Remove().
    */
-  the_period = _Rate_monotonic_Get( id, &location );
+  the_period = _Periodic_Get( id, &location );
   switch ( location ) {
 
     case OBJECTS_LOCAL:
@@ -60,17 +58,17 @@ void _Rate_monotonic_Timeout(
             the_thread->Wait.id == the_period->Object.id ) {
         _Thread_Unblock( the_thread );
 
-        _Rate_monotonic_Initiate_statistics( the_period );
+        _Periodic_Initiate_statistics( the_period );
 
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
-      } else if ( the_period->state == RATE_MONOTONIC_OWNER_IS_BLOCKING ) {
-        the_period->state = RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING;
+      } else if ( the_period->state == PERIODIC_OWNER_IS_BLOCKING ) {
+        the_period->state = PERIODIC_EXPIRED_WHILE_BLOCKING;
 
-        _Rate_monotonic_Initiate_statistics( the_period );
+        _Periodic_Initiate_statistics( the_period );
 
         _Watchdog_Insert_ticks( &the_period->Timer, the_period->next_length );
       } else
-        the_period->state = RATE_MONOTONIC_EXPIRED;
+        the_period->state = PERIODIC_EXPIRED;
       _Thread_Unnest_dispatch();
       break;
 

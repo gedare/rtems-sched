@@ -1,5 +1,5 @@
 /*
- *  Rate Monotonic Manager -- Reset Statistics
+ *  Periodic Manager -- Reset Statistics
  *
  *  COPYRIGHT (c) 1989-2007.
  *  On-Line Applications Research Corporation (OAR).
@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ratemonresetstatistics.c,v 1.4 2009/12/15 18:26:41 humph Exp $
+ *  $Id$
  */
 
 #if HAVE_CONFIG_H
@@ -21,18 +21,17 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/rtems/periodic.h>
-#include <rtems/rtems/ratemon.h>
 #include <rtems/score/thread.h>
 
 /*PAGE
  *
- *  rtems_rate_monotonic_reset_statistics
+ *  rtems_periodic_reset_statistics
  *
  *  This directive allows a thread to reset the statistics information
  *  on a specific period instance.
  *
  *  Input parameters:
- *    id         - rate monotonic id
+ *    id         - periodic id
  *
  *  Output parameters:
  *    RTEMS_SUCCESSFUL - if successful
@@ -40,9 +39,27 @@
  *
  */
 
-rtems_status_code rtems_rate_monotonic_reset_statistics(
+rtems_status_code rtems_periodic_reset_statistics(
   rtems_id id
 )
 {
-  return (rtems_periodic_reset_statistics( id ));
+  Objects_Locations              location;
+  Periodic_Control        *the_period;
+
+  the_period = _Periodic_Get( id, &location );
+  switch ( location ) {
+
+    case OBJECTS_LOCAL:
+      _Periodic_Reset_statistics( the_period );
+      _Thread_Enable_dispatch();
+      return RTEMS_SUCCESSFUL;
+
+#if defined(RTEMS_MULTIPROCESSING)
+    case OBJECTS_REMOTE:            /* should never return this */
+#endif
+    case OBJECTS_ERROR:
+      break;
+  }
+
+  return RTEMS_INVALID_ID;
 }

@@ -17,13 +17,13 @@ rtems_id Main_task;
 rtems_id Period;
 volatile bool case_hit;
 
-rtems_rate_monotonic_period_states getState(void)
+rtems_periodic_period_states getState(void)
 {
   Objects_Locations       location;
-  Rate_monotonic_Control *period;
+  Periodic_Control *period;
 
-  period = (Rate_monotonic_Control *)_Objects_Get(
-    &_Rate_monotonic_Information, Period, &location );
+  period = (Periodic_Control *)_Objects_Get(
+    &_Periodic_Information, Period, &location );
   if ( location != OBJECTS_LOCAL ) {
     puts( "Bad object lookup" );
     rtems_test_exit(0);
@@ -38,7 +38,7 @@ rtems_timer_service_routine test_release_from_isr(
   void     *arg
 )
 {
-  if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
+  if ( getState() == PERIODIC_EXPIRED_WHILE_BLOCKING )
     case_hit = true;
 }
 
@@ -53,12 +53,12 @@ rtems_task Init(
 
   puts( "Init - Trying to generate period ending while blocking" );
 
-  puts( "Init - rtems_rate_monotonic_create - OK" );
-  sc = rtems_rate_monotonic_create(
+  puts( "Init - rtems_periodic_create - OK" );
+  sc = rtems_periodic_create(
     rtems_build_name( 'P', 'E', 'R', '1' ),
     &Period
   );
-  directive_failed( sc, "rtems_rate_monotonic_create" );
+  directive_failed( sc, "rtems_periodic_create" );
 
   Main_task = rtems_task_self();
 
@@ -70,10 +70,10 @@ rtems_task Init(
     if ( interrupt_critical_section_test_support_delay() )
       resets++;
 
-    sc = rtems_rate_monotonic_period( Period, 1 );
+    sc = rtems_periodic_period( Period, 1 );
     if ( sc == RTEMS_TIMEOUT )
       continue;
-    directive_failed( sc, "rtems_monotonic_period");
+    directive_failed( sc, "rtems_periodic_period");
   }
 
   if ( case_hit ) {

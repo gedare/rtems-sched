@@ -25,8 +25,8 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
-    include/rtems/score/priority.h include/rtems/score/rbtree.h \
-		include/rtems/score/readyq.h \
+		include/rtems/score/periodic.h include/rtems/score/priority.h \
+		include/rtems/score/rbtree.h include/rtems/score/readyq.h \
 		include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
 		include/rtems/score/scheduler.h include/rtems/score/schedulerfifo.h \
 		include/rtems/score/schedulerpriority.h \
@@ -58,8 +58,8 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coremsg.inl inline/rtems/score/coremutex.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
-    inline/rtems/score/priority.inl inline/rtems/score/stack.inl \
-		inline/rtems/score/rbtree.inl \
+		inline/rtems/score/periodic.inl inline/rtems/score/priority.inl \
+		inline/rtems/score/stack.inl inline/rtems/score/rbtree.inl \
     inline/rtems/score/readyq.inl	inline/rtems/score/scheduler.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
     inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
@@ -142,6 +142,10 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
     src/objectidtoname.c src/objectgetnameasstring.c src/objectsetname.c \
     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
     src/objectnamespaceremove.c
+
+## PERIODIC_C_FILES
+libscore_a_SOURCES += src/periodic.c \
+		src/periodicgetstatus.c src/periodicstatistics.c src/periodictimeout.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \
