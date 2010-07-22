@@ -80,7 +80,7 @@ void _Scheduler_Unblock_queue(
    */
   if ( !_Thread_Is_executing( heir ) ) {
     if ( _Thread_Executing->is_preemptible || 
-         _Priority_Get_value(the_thread->current_priority) == 0 )
+         the_thread->current_priority == 0 )
       _Thread_Dispatch_necessary = true;
   }
 

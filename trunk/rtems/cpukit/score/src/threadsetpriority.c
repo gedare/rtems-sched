@@ -51,7 +51,7 @@ void _Thread_Set_priority(
   Priority_Control  new_priority
 )
 {
-  _Priority_Set(&the_thread->current_priority, &new_priority);
+  the_thread->current_priority = new_priority;
 
   _Scheduler_Sched_update(&_Scheduler, the_thread);
 }

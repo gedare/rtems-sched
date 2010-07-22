@@ -91,8 +91,7 @@ void _Thread_Change_priority(
    *  Do not bother recomputing all the priority related information if
    *  we are not REALLY changing priority.
    */
- if ( _Priority_Get_value(the_thread->current_priority) != 
-      _Priority_Get_value(new_priority) )
+ if ( the_thread->current_priority != new_priority )
     _Thread_Set_priority( the_thread, new_priority );
 
   _ISR_Disable( level );

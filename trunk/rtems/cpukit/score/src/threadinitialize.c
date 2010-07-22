@@ -193,8 +193,8 @@ bool _Thread_Initialize(
   the_thread->Wait.queue              = NULL;
   the_thread->resource_count          = 0;
 
-  _Priority_Set(&the_thread->real_priority, &priority);
-  _Priority_Set(&the_thread->Start.initial_priority, &priority);
+  the_thread->real_priority = priority;
+  the_thread->Start.initial_priority = priority;
   sched =_Scheduler_Sched_allocate( &_Scheduler, the_thread );
   if (!sched)
     goto failed;
