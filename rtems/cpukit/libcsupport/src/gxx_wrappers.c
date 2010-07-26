@@ -13,7 +13,7 @@
  *  Eric sent some e-mail in the rtems-list as a start point for this
  *  module implementation.
  *
- *  $Id: gxx_wrappers.c,v 1.20 2010/07/01 15:37:48 joel Exp $
+ *  $Id: gxx_wrappers.c,v 1.21 2010/07/25 14:52:27 joel Exp $
  */
 
 /*
@@ -122,9 +122,10 @@ int rtems_gxx_key_delete (__gthread_key_t key)
   status = rtems_task_variable_delete( RTEMS_SELF, (void **)key );
   if ( status == RTEMS_SUCCESSFUL ) {
     /* Hmm - hopefully all tasks using this key have gone away... */
-    if ( key ) free( (void *)key );
+    if ( key ) free( *(void **)key );
     return 0;
   }
+  key = NULL;
   return 0;
 }
 

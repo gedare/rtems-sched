@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.101 2010/07/15 13:53:27 joel Exp $
+##  $Id: Makefile.am,v 1.102 2010/07/26 15:38:40 joel Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../aclocal
@@ -14,7 +14,7 @@ SUBDIRS = \
     sp40 sp41 sp42 sp43 sp44 sp45 sp46 sp47 sp48 sp49 \
     sp50 sp51 sp52 sp53 sp54 sp55 sp56 sp57 sp58 sp59 \
     sp60 sp61 sp62 sp63 sp64 sp65 sp66 sp67 sp68 sp69 \
-    sp70 sp71 \
+    sp70 sp71 sp72 \
     spassoc01 spchain spclockget spcoverage spobjgetnext \
     spnotepad01 spprintk spsize spstkalloc spthreadq01 \
 		sprbtree01 spsched01 spsched02 \

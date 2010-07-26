@@ -22,7 +22,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.h,v 1.19 2009/11/29 13:51:52 ralf Exp $
+ *  $Id: init.h,v 1.20 2010/07/25 15:13:35 joel Exp $
  */
 
 #ifndef _RTEMS_INIT_H
@@ -90,7 +90,7 @@ void rtems_initialize_start_multitasking(void);
  */
 void rtems_shutdown_executive(
   uint32_t   result
-);
+) RTEMS_COMPILER_NO_RETURN_ATTRIBUTE;
 
 #ifdef __cplusplus
 }

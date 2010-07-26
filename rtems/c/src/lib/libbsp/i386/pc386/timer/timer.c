@@ -24,7 +24,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: timer.c,v 1.29 2010/05/10 00:29:30 joel Exp $
+ *  $Id: timer.c,v 1.30 2010/07/21 12:33:58 joel Exp $
  */
 
 #include <stdlib.h>
@@ -251,7 +251,8 @@ uint32_t benchmark_timer_read(void)
 
 void Timer_exit(void)
 {
-  return (*Timer_exit_function)();
+  if ( Timer_exit_function )
+    return (*Timer_exit_function)();
 }
 
 /*
