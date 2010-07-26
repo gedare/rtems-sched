@@ -1,14 +1,14 @@
 /*
  *  Rate Monotonic Manager - Period Blocking
  *
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ratemonperiod.c,v 1.27 2009/12/15 18:26:41 humph Exp $
+ *  $Id: ratemonperiod.c,v 1.28 2010/07/26 13:49:01 joel Exp $
  */
 
 #if HAVE_CONFIG_H

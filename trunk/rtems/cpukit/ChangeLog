@@ -1,3 +1,30 @@
+2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* rtems/src/ratemonperiod.c: Use if not switch since all cases of enum
+	are not valid and switch was generating dead code.
+
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/rtems/init.h: Mark rtems_shutdown_executive as a
+	noreturn method.
+
+2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/gxx_wrappers.c: Free contents of key not key itself.
+	Kye pointer will never be malloc'ed.
+
+2010-07-24	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/Makefile.am, libcsupport/src/termios_baud2num.c,
+	libcsupport/src/termios_num2baud.c: Use RTEMS associations to
+	simplify code and make easier for coverage.
+	* libcsupport/src/termios_baudtable.c: New file.
+
+2010-07-22	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1627/testing
+	* libfs/src/devfs/devstat.c:
+
 2010-07-16	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libcsupport/src/link.c: Do not overwrite errno with return status.

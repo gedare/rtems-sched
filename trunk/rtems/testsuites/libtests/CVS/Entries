@@ -37,6 +37,9 @@ D/malloc04////
 D/termios06////
 D/devfs01////
 D/malloc05////
-/ChangeLog/1.210/Tue Jul 20 15:51:31 2010//
-/Makefile.am/1.41/Tue Jul 20 15:51:31 2010//
-/configure.ac/1.48/Tue Jul 20 15:51:31 2010//
+D/tar03////
+D/termios07////
+D/termios08////
+/ChangeLog/1.214/Mon Jul 26 18:38:18 2010//
+/Makefile.am/1.42/Mon Jul 26 18:38:18 2010//
+/configure.ac/1.49/Mon Jul 26 18:38:18 2010//

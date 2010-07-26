@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.19 2010/07/08 16:44:21 ralf Exp $
+# $Id: Makefile.am,v 1.20 2010/07/26 09:41:44 ralf Exp $
 
 rtems_api = 4.11
 TARGET = mips-rtems4.11
@@ -11,12 +11,12 @@ BINUTILS_RPMREL = 2
 include ../binutils.am
 BINUTILS_OPTS +=
 
-GCC_VERS = 4.5.0
-GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 15
+GCC_VERS = 4.5.1
+GCC_PKGVERS = $(GCC_VERS)-RC-20100722
+GCC_RPMREL = 1
 NEWLIB_VERS = 1.18.0
 NEWLIB_PKGVERS = $(NEWLIB_VERS)
-NEWLIB_RPMREL = `expr $(GCC_RPMREL)`
+NEWLIB_RPMREL = `expr $(GCC_RPMREL) + 15`
 include ../gcc.am
 GCC_OPTS += --languages=cxx
 

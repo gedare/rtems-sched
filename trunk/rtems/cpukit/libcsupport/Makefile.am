@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.127 2010/07/15 08:46:06 sh Exp $
+##  $Id: Makefile.am,v 1.128 2010/07/24 16:12:49 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -57,7 +57,7 @@ TERMIOS_C_FILES = src/cfgetispeed.c src/cfgetospeed.c src/cfsetispeed.c \
     src/tcflow.c src/tcflush.c src/tcgetpgrp.c src/tcsendbreak.c \
     src/tcsetpgrp.c src/termios.c src/termiosinitialize.c \
     src/termios_baud2index.c src/termios_baud2num.c src/termios_num2baud.c \
-    src/termios_setinitialbaud.c
+    src/termios_setinitialbaud.c src/termios_baudtable.c
 
 SYSTEM_CALL_C_FILES = src/open.c src/close.c src/read.c src/write.c \
     src/write_r.c \

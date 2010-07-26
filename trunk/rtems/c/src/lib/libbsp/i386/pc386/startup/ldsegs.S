@@ -32,7 +32,7 @@
 | *  http://www.rtems.com/license/LICENSE.
 | **************************************************************************
 |
-|  $Id: ldsegs.S,v 1.18 2009/11/30 04:52:28 ralf Exp $
+|  $Id: ldsegs.S,v 1.19 2010/07/23 12:24:06 joel Exp $
 +--------------------------------------------------------------------------*/
 
 #include <rtems/asm.h>
@@ -156,23 +156,6 @@ next_step:
 	movw	$0xFFFB, SYM(i8259s_cache) /* set up same values in cache */
 
 	jmp	SYM (_establish_stack)	# return to the bsp entry code
-
-/*-------------------------------------------------------------------------+
-|         Function: _return_to_monitor
-|      Description: Return to board's monitor (we have none so simply restart).
-| Global Variables: None.
-|        Arguments: None.
-|          Returns: Nothing.
-+--------------------------------------------------------------------------*/
-
-	.p2align 4
-
-        PUBLIC (_return_to_monitor)
-SYM (_return_to_monitor):
-
-	call	SYM (Timer_exit)
-	call	SYM (Clock_exit)
-	jmp	SYM (start)
 
 /*-------------------------------------------------------------------------+
 |         Function: _default_int_handler

@@ -67,7 +67,6 @@
 /getpwent.c/1.14/Thu Jul  8 17:33:01 2010//
 /getrusage.c/1.2/Mon Jul 12 23:18:07 2010//
 /getuid.c/1.2/Thu Jul  8 17:33:01 2010//
-/gxx_wrappers.c/1.20/Thu Jul  8 17:33:01 2010//
 /isatty.c/1.6/Thu Jul  8 17:33:01 2010//
 /isatty_r.c/1.4/Thu Jul  8 17:33:01 2010//
 /issetugid.c/1.3/Thu Jul  8 17:33:01 2010//
@@ -140,8 +139,6 @@
 /telldir.c/1.13/Mon Jul 12 23:18:07 2010//
 /termios.c/1.63/Mon Jul 12 23:18:07 2010//
 /termios_baud2index.c/1.3/Thu Jul  8 17:33:01 2010//
-/termios_baud2num.c/1.4/Thu Jul  8 17:33:01 2010//
-/termios_num2baud.c/1.3/Thu Jul  8 17:33:01 2010//
 /termios_setinitialbaud.c/1.4/Thu Jul  8 17:33:01 2010//
 /termiosinitialize.c/1.3/Thu Jul  8 17:33:01 2010//
 /truncate.c/1.5/Thu Jul  8 17:33:01 2010//
@@ -171,4 +168,8 @@
 /readv.c/1.6/Fri Jul 16 19:35:48 2010//
 /write.c/1.19/Fri Jul 16 19:35:49 2010//
 /writev.c/1.5/Fri Jul 16 19:35:49 2010//
+/gxx_wrappers.c/1.21/Mon Jul 26 18:38:16 2010//
+/termios_baud2num.c/1.5/Mon Jul 26 18:38:16 2010//
+/termios_baudtable.c/1.1/Sat Jul 24 16:12:49 2010//
+/termios_num2baud.c/1.4/Mon Jul 26 18:38:16 2010//
 D
