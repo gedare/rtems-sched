@@ -20,10 +20,11 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
 /*
  *
@@ -46,7 +47,7 @@ void _Ready_queue_Enqueue_first_priority(
   Thread_Control                   *the_thread
 )
 {
-  _Priority_Add( &the_thread->sched.priority->Priority_map );
+  _Priority_Add_bit_map( &the_thread->sched.priority->Priority_map );
   _Chain_Prepend_unprotected( the_thread->sched.priority->ready_chain, 
       &the_thread->Object.Node );
 }

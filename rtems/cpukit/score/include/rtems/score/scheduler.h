@@ -33,6 +33,7 @@ extern "C" {
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/readyq.h>
 
 /* 
@@ -48,18 +49,16 @@ extern "C" {
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
 /* 
- * Type definition for entries in the confdefs.h Scheduler Table. The intent
- * is that each entry in the Scheduler Table is a pointer to the initialization
- * routine for the scheduler implementation.
- */
-typedef void (*_Scheduler_Table_entry)( Scheduler_Control* );
-
-/* 
  * TODO: Would it make sense to embed the Scheduler_Control for the scheduler
  * here?  Probably not, if we use per-cpu Scheduler_Control...
  */
+/*
+ * The Scheduler_Table_t type defines the scheduler initialization table, 
+ * which is set up by confdefs.h based on the user's choice of scheduler 
+ * policy.
+ */
 typedef struct {
-  _Scheduler_Table_entry init;
+  void (*sched_init)( Scheduler_Control * );
 } Scheduler_Table_t;
 
 extern const Scheduler_Table_t _Scheduler_Table[]; /* declared in confdefs.h */
@@ -80,7 +79,7 @@ typedef struct {
   Chain_Control *ready_chain;
 
   /** This field contains precalculated priority map indices. */
-  Priority_Information Priority_map;
+  Priority_Information_bit_map Priority_map;
 } Scheduler_Per_thread_priority;
 
 /**

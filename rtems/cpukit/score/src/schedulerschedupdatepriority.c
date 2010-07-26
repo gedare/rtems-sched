@@ -21,6 +21,8 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/readyq.h>
 #include <rtems/score/scheduler.h>
 #include <rtems/score/schedulerpriority.h>
@@ -51,6 +53,8 @@ void _Scheduler_Sched_update_priority (
       the_thread->current_priority 
     ];
 
-  _Priority_Initialize_information( &the_thread->sched.priority->Priority_map, 
-      the_thread->current_priority );
+  _Priority_Initialize_information_bit_map( 
+      &the_thread->sched.priority->Priority_map, 
+      the_thread->current_priority 
+  );
 }
