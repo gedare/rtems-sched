@@ -69,7 +69,7 @@ Thread_blocking_operation_States _Thread_queue_Enqueue_priority (
 
   _Chain_Initialize_empty( &the_thread->Wait.Block2n );
 
-  priority = the_thread->current_priority;
+  priority     = the_thread->current_priority;
   header_index = _Thread_queue_Header_number( priority );
   header       = &the_thread_queue->Queues.Priority[ header_index ];
   block_state  = the_thread_queue->state;
@@ -125,7 +125,7 @@ restart_forward_search:
   return THREAD_BLOCKING_OPERATION_NOTHING_HAPPENED;
 
 restart_reverse_search:
-  search_priority = PRIORITY_MAXIMUM + 1;
+  search_priority     = PRIORITY_MAXIMUM + 1;
 
   _ISR_Disable( level );
   search_thread = (Thread_Control *) header->last;
