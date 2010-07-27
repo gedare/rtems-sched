@@ -1,3 +1,26 @@
+2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1631/testing
+	* gxx02/init.c, gxx02/gxx02.scn, gxx02/gxx02.doc,
+	gxx02/Makefile.am, gxx02/gxx_wrappers.h: New test added
+	* Makefile.am, configure.ac: Changes to accommodate new tests
+
+2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1632/testing
+	* Makefile.am, configure.ac: Make dedicated fatal error test for
+	/dev/null already registered. Using code from Bharath in new test
+	framework.
+	* devnullfatal01/.cvsignore, devnullfatal01/Makefile.am,
+	devnullfatal01/devnullfatal01.doc, devnullfatal01/devnullfatal01.scn,
+	devnullfatal01/testcase.h: New files.
+
+2010-07-27	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1632/testing
+	* devfs04/init.c, devfs04/test_driver.c: Added cases to exercise
+	null_initialize() and null_write().
+
 2010-07-25	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* gxx01/gxx01.scn, gxx01/init.c: Remove local _exit().

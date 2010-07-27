@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.37 2010/06/07 09:40:27 ralf Exp $
+## $Id: Makefile.am,v 1.38 2010/07/27 09:17:31 ralf Exp $
 ##
 
 EXTRA_DIST =
@@ -10,6 +10,7 @@ DIST_SUBDIRS  = cygwin
 DIST_SUBDIRS += freebsd6.4
 DIST_SUBDIRS += freebsd7.3
 DIST_SUBDIRS += freebsd8.0
+DIST_SUBDIRS += freebsd8.1
 DIST_SUBDIRS += mingw32
 DIST_SUBDIRS += netbsd5.0.2
 DIST_SUBDIRS += solaris2.7

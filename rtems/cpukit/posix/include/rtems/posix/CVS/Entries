@@ -2,7 +2,6 @@
 /cancel.h/1.12/Thu Jul  8 17:33:08 2010//
 /cond.h/1.23/Thu Jul  8 17:33:08 2010//
 /config.h/1.21/Thu Jul  8 17:33:08 2010//
-/key.h/1.19/Thu Jul  8 17:33:08 2010//
 /mqueue.h/1.27/Thu Jul  8 17:33:08 2010//
 /mutex.h/1.26/Thu Jul  8 17:33:08 2010//
 /posixapi.h/1.10/Thu Jul  8 17:33:08 2010//
@@ -17,4 +16,5 @@
 /threadsup.h/1.30/Thu Jul  8 17:33:08 2010//
 /time.h/1.14/Thu Jul  8 17:33:08 2010//
 /timer.h/1.21/Thu Jul  8 17:33:08 2010//
+/key.h/1.20/Tue Jul 27 15:53:08 2010//
 D

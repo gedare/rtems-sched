@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/07/22 11:54:10 joel Exp $
+ *  $Id: init.c,v 1.2 2010/07/27 13:54:56 joel Exp $
  */
 
 #include <tmacros.h>
@@ -18,6 +18,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "test_driver.h"
+#include <rtems/devnull.h>
 
 rtems_task Init(
   rtems_task_argument argument
@@ -60,8 +61,10 @@ rtems_task Init(
   rtems_test_assert( status == -1 );
   rtems_test_assert( errno == ENOSYS );
 
-  puts( "*** END OF TEST DEVFS04 ***" );
+  status = mknod( "/dev/null", 0777 | S_IFCHR, 0LL );
+  rtems_test_assert( status == 0 );
 
+  puts( "*** END OF TEST DEVFS04 ***" );
   rtems_test_exit(0);
 }
 

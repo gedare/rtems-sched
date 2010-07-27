@@ -5,5 +5,5 @@ D/rtems////
 /README/1.1/Fri Sep 24 04:53:10 2004//
 /cpu_asm.S/1.10/Tue Jun 29 17:00:15 2010//
 /cpu.c/1.16/Thu Jul  8 17:33:02 2010//
-/ChangeLog/1.49/Fri Jul 16 19:35:55 2010//
-/preinstall.am/1.7/Thu Jul 22 20:21:05 2010//
+/ChangeLog/1.50/Tue Jul 27 15:53:10 2010//
+/preinstall.am/1.7/Mon Jul 26 20:46:24 2010//

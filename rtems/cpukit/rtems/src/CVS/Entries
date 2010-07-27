@@ -125,7 +125,6 @@
 /taskident.c/1.11/Thu Jul  8 17:33:01 2010//
 /taskinitusers.c/1.10/Thu Jul  8 17:33:01 2010//
 /taskissuspended.c/1.8/Thu Jul  8 17:33:01 2010//
-/taskmode.c/1.12/Thu Jul  8 17:33:01 2010//
 /taskmp.c/1.18/Thu Jul  8 17:33:01 2010//
 /taskrestart.c/1.9/Thu Jul  8 17:33:01 2010//
 /taskresume.c/1.10/Thu Jul  8 17:33:01 2010//
@@ -152,6 +151,7 @@
 /timerserverfireafter.c/1.15/Thu Jul  8 17:33:01 2010//
 /timerserverfirewhen.c/1.14/Thu Jul  8 17:33:01 2010//
 /workspace.c/1.5/Thu Jul  8 17:33:01 2010//
-/ratemonperiod.c/1.28/Result of merge+Mon Jul 26 18:38:16 2010//
 /ratemontimeout.c/1.10/Mon Jul 26 18:38:16 2010//
+/ratemonperiod.c/1.29/Result of merge+Tue Jul 27 15:53:08 2010//
+/taskmode.c/1.13/Tue Jul 27 15:53:08 2010//
 D

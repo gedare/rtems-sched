@@ -15,7 +15,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: tfsDriver.c,v 1.8 2010/06/30 14:32:36 joel Exp $
+ *  $Id: tfsDriver.c,v 1.10 2010/07/27 11:55:05 sh Exp $
  */
 
 #include <stdio.h>
@@ -466,7 +466,7 @@ static int rtems_tfs_open_worker(
     tip->tfd = tfd;
     tip->buf = buf;
     strcpy(tip->name,pathcopy);
-    iop->file_info = (void *)tfdidx;
+    iop->data0 = (uint32_t)tfdidx;
     return(0);
   } else {
     printk("%s: %s\n",pathcopy,
@@ -537,7 +537,7 @@ static ssize_t rtems_tfs_read(
 {
   int  ret, fd;
 
-  fd = (int) iop->file_info;
+  fd = (int) iop->data0;
 
   if (RTEMS_TFS_DEBUG)
     printk("_read_r(%d,%" PRId32 ")\n",fd,count);
@@ -563,7 +563,7 @@ static int rtems_tfs_close(
   char *info;
   struct tfdinfo *tip;
 
-  fd = (int)iop->file_info;
+  fd = (int)iop->data0;
 
   if (RTEMS_TFS_DEBUG)
     printk("rtems_tfs_close(%d)\n",fd);
@@ -598,7 +598,7 @@ static ssize_t rtems_tfs_write(
 {
   int  ret, fd;
 
-  fd = (int) iop->file_info;
+  fd = (int) iop->data0;
 
   if (RTEMS_TFS_DEBUG)
     printk("rtems_tfs_write(%d,%" PRId32" )\n",fd,count);
@@ -622,7 +622,7 @@ static rtems_off64_t rtems_tfs_lseek(
 {
   int ret, fd;
 
-  fd = (int) iop->file_info;
+  fd = (int) iop->data0;
 
   if (RTEMS_TFS_DEBUG)
     printk("rtems_tfs_lseek(%d,%ld,%d)\n",fd,(long)offset,whence);
@@ -656,7 +656,7 @@ static int rtems_tfs_ftruncate(
 {
   int ret, fd;
 
-  fd = (int) iop->file_info;
+  fd = (int) iop->data0;
   ret = mon_tfstruncate(tfdtable[fd].tfd,count);
   if (ret != TFS_OKAY)
     return(-1);
@@ -672,7 +672,7 @@ static int rtems_tfs_ioctl(
 {
   int  fd, ret;
 
-  fd = (int) iop->file_info;
+  fd = (int) iop->data0;
   ret = mon_tfsctrl(cmd,(long)buf,0);
   return(-1);
 }

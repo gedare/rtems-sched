@@ -1,5 +1,43 @@
 2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
+	* score/src/threadget.c: Conditionalize a check that can only occur
+	when POSIX is disabled.
+
+2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* rtems/src/taskmode.c, score/inline/rtems/score/thread.inl: Rework a
+	bit to eliminate unreachable path for task blocked while calling
+	rtems_task_mode() on itself.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Spelling.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/privateenv.c, libmisc/cpuuse/cpuusagereport.c,
+	posix/Makefile.am, posix/include/rtems/posix/key.h,
+	posix/src/keycreate.c, posix/src/keydelete.c,
+	score/src/iterateoverthreads.c: Since removing ITRON, the loop over
+	all APIs for tasks has a path that cannot be reached. Either modify
+	the code or mark tests for NULL as RTEMS_DEBUG.
+	* posix/src/keyfreememory.c: New file.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/imfs_load_tar.c: Formatting.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* sapi/include/confdefs.h: Do not cover up user configuation mistakes
+	on filesystems -- cite them as errors.
+
+2010-07-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* rtems/src/ratemonperiod.c: Remove tabs.
+
+2010-07-26	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
 	* rtems/src/ratemonperiod.c: Use if not switch since all cases of enum
 	are not valid and switch was generating dead code.
 

@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: privateenv.c,v 1.13 2010/07/15 21:31:10 joel Exp $
+ *  $Id: privateenv.c,v 1.14 2010/07/26 22:03:17 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -122,8 +122,7 @@ rtems_status_code rtems_libio_share_private_env(rtems_id task_id)
   rtems_user_env_t * shared_user_env;
   rtems_id           current_task_id;
 
-  sc=rtems_task_ident(RTEMS_SELF,0,&current_task_id);
-  if (sc != RTEMS_SUCCESSFUL) return sc;
+  current_task_id = rtems_task_self();
 
   if (rtems_current_user_env->task_id==current_task_id) {
    /* kill the current user env & task_var*/

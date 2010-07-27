@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.81 2010/06/16 19:12:19 joel Exp $
+## $Id: Makefile.am,v 1.82 2010/07/26 22:03:17 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -89,7 +89,8 @@ libposix_a_SOURCES += src/cond.c src/condattrdestroy.c \
 
 ## KEY_C_FILES
 libposix_a_SOURCES += src/key.c src/keycreate.c src/keydelete.c \
-    src/keygetspecific.c src/keyrundestructors.c src/keysetspecific.c
+    src/keygetspecific.c src/keyfreememory.c src/keyrundestructors.c \
+    src/keysetspecific.c
 
 ## MEMORY_C_FILES
 libposix_a_SOURCES += src/mprotect.c

@@ -1,4 +1,4 @@
-## $Id: configure.ac,v 1.75 2010/06/07 09:40:26 ralf Exp $
+## $Id: configure.ac,v 1.76 2010/07/27 09:17:31 ralf Exp $
 
 m4_define([RTEMS_API],[4.11])
 
@@ -167,6 +167,10 @@ AC_CONFIG_FILES([freebsd7.3/i586/Makefile])
 AC_CONFIG_FILES([freebsd8.0/Makefile])
 AC_CONFIG_FILES([freebsd8.0/i586/Makefile])
 AC_CONFIG_FILES([freebsd8.0/x86_64/Makefile])
+
+AC_CONFIG_FILES([freebsd8.1/Makefile])
+AC_CONFIG_FILES([freebsd8.1/i586/Makefile])
+AC_CONFIG_FILES([freebsd8.1/x86_64/Makefile])
 
 AC_CONFIG_FILES([netbsd5.0.2/Makefile])
 AC_CONFIG_FILES([netbsd5.0.2/i386/Makefile])

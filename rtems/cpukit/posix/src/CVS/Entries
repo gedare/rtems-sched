@@ -54,8 +54,6 @@
 /fork.c/1.4/Thu Jul  8 17:33:01 2010//
 /getitimer.c/1.2/Thu Jul  8 17:33:01 2010//
 /key.c/1.18/Thu Jul  8 17:33:01 2010//
-/keycreate.c/1.15/Thu Jul  8 17:33:01 2010//
-/keydelete.c/1.11/Thu Jul  8 17:33:01 2010//
 /keygetspecific.c/1.9/Thu Jul  8 17:33:01 2010//
 /keyrundestructors.c/1.9/Thu Jul  8 17:33:01 2010//
 /keysetspecific.c/1.8/Thu Jul  8 17:33:01 2010//
@@ -227,4 +225,7 @@
 /vfork.c/1.1/Thu Jul  8 17:33:01 2010//
 /wait.c/1.4/Thu Jul  8 17:33:01 2010//
 /waitpid.c/1.6/Thu Jul  8 17:33:01 2010//
+/keycreate.c/1.16/Tue Jul 27 15:53:08 2010//
+/keydelete.c/1.12/Tue Jul 27 15:53:08 2010//
+/keyfreememory.c/1.1/Mon Jul 26 22:03:18 2010//
 D

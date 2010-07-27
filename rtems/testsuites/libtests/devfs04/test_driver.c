@@ -7,7 +7,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test_driver.c,v 1.1 2010/07/22 11:54:10 joel Exp $
+ *  $Id: test_driver.c,v 1.2 2010/07/27 13:54:56 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -17,7 +17,7 @@
 #include <rtems.h>
 #include "test_driver.h"
 #include <rtems/libio.h>
-
+#include <rtems/devnull.h>
 /* 
  * The test driver routines are mostly derived from the null driver routines.
  */
@@ -158,7 +158,7 @@ rtems_device_driver testDriver_write(
 
   if ( rw_args ) {
     if( rw_args->count == 5 )
-      rw_args->bytes_moved = rw_args->count;
+      return null_write( 0, 0, pargp );
     else {
       rw_args->bytes_moved = 0;
       return RTEMS_NOT_IMPLEMENTED;
