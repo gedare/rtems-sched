@@ -25,5 +25,6 @@ D/netbsd5.0.2////
 /bootstrap/1.1/Wed Feb 15 15:16:33 2006//
 /mkspec.am/1.13/Sat Apr 26 05:33:04 2008//
 /specstrip/1.10/Wed Apr 14 17:14:36 2010//
-/Makefile.am/1.37/Wed Jun  9 22:19:07 2010//
-/configure.ac/1.75/Wed Jun  9 22:19:07 2010//
+/Makefile.am/1.38/Tue Jul 27 15:52:56 2010//
+/configure.ac/1.76/Tue Jul 27 15:52:56 2010//
+D/freebsd8.1////

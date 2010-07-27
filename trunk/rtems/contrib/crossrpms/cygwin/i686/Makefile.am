@@ -1,11 +1,11 @@
-# $Id: Makefile.am,v 1.59 2010/04/27 03:03:52 ralf Exp $
+# $Id: Makefile.am,v 1.61 2010/07/27 13:19:56 ralf Exp $
 
 TARGET = i686-pc-cygwin
 
 include $(top_srcdir)/mkspec.am
 
-CYGWIN_VERS = 1.7.1-1
-CYGWIN_RPMREL = 0.20100204.0%{?dist}
+CYGWIN_VERS = 1.7.5-1
+CYGWIN_RPMREL = 0.20100726.0%{?dist}
 include ../cygwin.am
 
 CLOOG_PPL_VERS = 0.15.7-1
@@ -32,8 +32,8 @@ TERMCAP_VERS = 20050421-1
 TERMCAP_RPMREL = 0.20090827.0%{?dist}
 include ../termcap.am
 
-TERMINFO_VERS = 5.7_20091114-13
-TERMINFO_RPMREL = 0.20100204.0%{?dist}
+TERMINFO_VERS = 5.7_20091114-14
+TERMINFO_RPMREL = 0.20100726.0%{?dist}
 include ../terminfo.am
 
 ZLIB_VERS = 1.2.3-10
@@ -62,7 +62,7 @@ BINUTILS_OPTS += --disable-infos
 
 GCC_VERS = 3.4.4
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100427.0
+GCC_RPMREL = 0.20100711.0
 include ../gcc.am
 GCC_OPTS += --languages=c,cxx
 GCC_OPTS += --disable-infos

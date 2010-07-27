@@ -22,7 +22,7 @@
  *  COPYRIGHT (c) 1994-1997.
  *  On-Line Applications Research Corporation (OAR).
  *
- *  $Id: asm.h,v 1.8 2010/05/10 16:31:24 joel Exp $
+ *  $Id: asm.h,v 1.9 2010/07/27 10:51:12 sh Exp $
  */
 
 #ifndef _RTEMS_ASM_H
@@ -94,15 +94,6 @@
 
 #define PUBLIC(sym) .globl SYM (sym)
 #define EXTERN(sym) .globl SYM (sym)
-
-
-
-
-
-
-
-#endif
-
 
 /* Copyright (c) 2002, 2005, 2006, 2007 Marek Michalkiewicz
    Copyright (c) 2006 Dmitry Xmelkov
@@ -469,4 +460,4 @@
 #endif
 	.endm
 
-
+#endif /* _RTEMS_ASM_H */

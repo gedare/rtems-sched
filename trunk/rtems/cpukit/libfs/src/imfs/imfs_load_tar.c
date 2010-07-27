@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id: imfs_load_tar.c,v 1.17 2010/07/13 21:43:32 joel Exp $
+ * $Id: imfs_load_tar.c,v 1.18 2010/07/26 21:29:24 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -106,11 +106,10 @@ int rtems_tarfs_load(
       0
    );
    if (status != 0)
-      return -1;
+     return -1;
 
-   if (root_loc.ops != &IMFS_ops
-       && root_loc.ops != &fifoIMFS_ops)
-      return -1;
+   if (root_loc.ops != &IMFS_ops && root_loc.ops != &fifoIMFS_ops)
+     return -1;
 
    /*
     * Create an IMFS node structure pointing to tar image memory.

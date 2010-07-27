@@ -1,15 +1,14 @@
 /*
- *  Thread Handler
+ *  Thread Handler - Object Id to Thread Pointer
  *
- *
- *  COPYRIGHT (c) 1989-1999.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadget.c,v 1.14 2009/11/29 13:51:52 ralf Exp $
+ *  $Id: threadget.c,v 1.15 2010/07/27 02:17:31 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -45,7 +44,6 @@
  *         cycles off the execution time, this routine is worth
  *         further optimization attention.
  */
-
 Thread_Control *_Thread_Get (
   Objects_Id         id,
   Objects_Locations *location
@@ -77,10 +75,15 @@ Thread_Control *_Thread_Get (
   }
 
   api_information = _Objects_Information_table[ the_api ];
-  if ( !api_information ) {
-    *location = OBJECTS_ERROR;
-    goto done;
-  }
+  /*
+   *  There is no way for this to happen if POSIX is enabled.
+   */ 
+  #if !defined(RTEMS_POSIX_API)
+    if ( !api_information ) {
+      *location = OBJECTS_ERROR;
+      goto done;
+    }
+  #endif
 
   information = api_information[ the_class ];
   if ( !information ) {

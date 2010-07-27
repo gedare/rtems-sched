@@ -1,14 +1,14 @@
 /*
  *  CPU Usage Reporter
  *
- *  COPYRIGHT (c) 1989-2009
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpuusagereport.c,v 1.14 2010/07/04 14:53:47 joel Exp $
+ *  $Id: cpuusagereport.c,v 1.15 2010/07/26 22:03:17 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -71,8 +71,14 @@ void rtems_cpu_usage_report_with_plugin(
     _Timestamp_Subtract( &CPU_usage_Uptime_at_last_reset, &uptime, &total );
   #else
     for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
-      if ( !_Objects_Information_table[ api_index ] )
-        continue;
+      /*
+       *  Since the removal of ITRON, this cannot occur.
+       */
+      #if defined(RTEMS_DEBUG)
+        if ( !_Objects_Information_table[ api_index ] )
+	  continue;
+      #endif
+
       information = _Objects_Information_table[ api_index ][ 1 ];
       if ( information ) {
         for ( i=1 ; i <= information->maximum ; i++ ) {
@@ -98,11 +104,15 @@ void rtems_cpu_usage_report_with_plugin(
      "------------+----------------------------------------+---------------+---------\n"
   );
 
-  for ( api_index = 1 ;
-        api_index <= OBJECTS_APIS_LAST ;
-        api_index++ ) {
-    if ( !_Objects_Information_table[ api_index ] )
-      continue;
+  for ( api_index = 1 ; api_index <= OBJECTS_APIS_LAST ; api_index++ ) {
+    /*
+     *  Since the removal of ITRON, this cannot occur.
+     */
+    #if defined(RTEMS_DEBUG)
+      if ( !_Objects_Information_table[ api_index ] )
+	continue;
+    #endif
+
     information = _Objects_Information_table[ api_index ][ 1 ];
     if ( information ) {
       for ( i=1 ; i <= information->maximum ; i++ ) {

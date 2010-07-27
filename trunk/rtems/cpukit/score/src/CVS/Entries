@@ -28,7 +28,6 @@
 /heapwalk.c/1.27/Thu Jul  8 17:33:02 2010//
 /interr.c/1.17/Thu Jul  8 17:33:02 2010//
 /isr.c/1.19/Thu Jul  8 17:33:02 2010//
-/iterateoverthreads.c/1.7/Thu Jul  8 17:33:02 2010//
 /objectallocate.c/1.10/Thu Jul  8 17:33:02 2010//
 /objectapimaximumclass.c/1.3/Thu Jul  8 17:33:02 2010//
 /objectclose.c/1.2/Thu Jul  8 17:33:02 2010//
@@ -63,7 +62,6 @@
 /threadblockingoperationcancel.c/1.6/Thu Jul  8 17:33:02 2010//
 /threadcreateidle.c/1.15/Thu Jul  8 17:33:02 2010//
 /threaddelayended.c/1.7/Thu Jul  8 17:33:02 2010//
-/threadget.c/1.14/Thu Jul  8 17:33:02 2010//
 /threadhandler.c/1.29/Thu Jul  8 17:33:02 2010//
 /threadloadenv.c/1.8/Thu Jul  8 17:33:02 2010//
 /threadq.c/1.25/Thu Jul  8 17:33:02 2010//
@@ -176,4 +174,6 @@
 /coretodusectoticks.c/1.1/Tue Jul 20 17:36:42 2010//
 /mpci.c/1.36/Thu Jul 22 17:20:22 2010//
 /threadreset.c/1.10/Thu Jul 22 17:16:46 2010//
+/iterateoverthreads.c/1.8/Tue Jul 27 15:53:14 2010//
+/threadget.c/1.15/Tue Jul 27 15:53:15 2010//
 D

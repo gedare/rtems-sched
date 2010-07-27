@@ -7,14 +7,14 @@
  *  This include file contains all the private support information for
  *  POSIX key.
  *
- *  COPYRIGHT (c) 1989-2008.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: key.h,v 1.19 2009/07/22 00:09:31 joel Exp $
+ *  $Id: key.h,v 1.20 2010/07/26 22:03:17 joel Exp $
  */
 
 #ifndef _RTEMS_POSIX_KEY_H
@@ -66,6 +66,17 @@ void _POSIX_Key_Manager_initialization(void);
  */
 void _POSIX_Keys_Run_destructors(
   Thread_Control *thread
+);
+
+/**
+ *  @brief Free Key Memory
+ *
+ *  This memory frees the key table memory associated with @a the_key.
+ *
+ *  @param[in] the_key is the POSIX key to free the table memory of.
+ */
+void _POSIX_Keys_Free_memory(
+  POSIX_Keys_Control *the_key
 );
 
 /**
