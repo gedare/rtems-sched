@@ -47,7 +47,7 @@ extern "C" {
  *  Each sixteen bit entry in this array is associated with one of
  *  the sixteen entries in the Priority Bit map.
  */
-SCORE_EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
+SCORE_EXTERN volatile Priority_bit_map_Control _Priority_Major_bit_map;
 
 /** Each bit in the Priority Bitmap indicates whether or not there are
  *  threads ready at a particular priority.  The mapping of
@@ -55,11 +55,11 @@ SCORE_EXTERN volatile Priority_Bit_map_control _Priority_Major_bit_map;
  *  dependent as is the value of each bit used to indicate that
  *  threads are ready at that priority.
  */
-SCORE_EXTERN Priority_Bit_map_control
+SCORE_EXTERN Priority_bit_map_Control
                _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /*
- *  The definition of the Priority_Bit_map_control type is CPU dependent.
+ *  The definition of the Priority_bit_map_Control type is CPU dependent.
  *
  */
 
@@ -69,16 +69,16 @@ SCORE_EXTERN Priority_Bit_map_control
  */
 typedef struct {
   /** This is the address of minor bit map slot. */
-  Priority_Bit_map_control *minor;
+  Priority_bit_map_Control *minor;
   /** This is the priority bit map ready mask. */
-  Priority_Bit_map_control  ready_major;
+  Priority_bit_map_Control  ready_major;
   /** This is the priority bit map ready mask. */
-  Priority_Bit_map_control  ready_minor;
+  Priority_bit_map_Control  ready_minor;
   /** This is the priority bit map block mask. */
-  Priority_Bit_map_control  block_major;
+  Priority_bit_map_Control  block_major;
   /** This is the priority bit map block mask. */
-  Priority_Bit_map_control  block_minor;
-}   Priority_Information_bit_map;
+  Priority_bit_map_Control  block_minor;
+}   Priority_bit_map_Information;
 
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )

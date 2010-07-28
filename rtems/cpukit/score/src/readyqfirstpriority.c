@@ -43,7 +43,7 @@ Thread_Control *_Ready_queue_First_priority(
   Ready_queue_Control *the_ready_queue
 )
 {
-  uint32_t   index = _Priority_Get_highest_bit_map();
+  uint32_t   index = _Priority_bit_map_Get_highest();
 
   if ( !_Chain_Is_empty( &the_ready_queue->Queues.Priority[ index ] ) )
     return (Thread_Control *) the_ready_queue->Queues.Priority[ index ].first;
