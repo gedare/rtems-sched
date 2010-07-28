@@ -16,12 +16,12 @@
  *  $Id$
  */
 
-#ifndef _RTEMS_SCORE_PRIORITYBITMAP_H
+#ifndef _RTEMS_SCORE_PRIORITYRBTREE_H
 # error "Never use <rtems/score/priorityrbtree.inl> directly; include <rtems/score/priorityrbtree.h> instead."
 #endif
 
-#ifndef _RTEMS_SCORE_PRIORITYBITMAP_INL
-#define _RTEMS_SCORE_PRIORITYBITMAP_INL
+#ifndef _RTEMS_SCORE_PRIORITYRBTREE_INL
+#define _RTEMS_SCORE_PRIORITYRBTREE_INL
 
 /**
  *  @addtogroup ScorePriority 

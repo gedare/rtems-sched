@@ -48,7 +48,7 @@ Thread_Control *_Ready_queue_edf_First(
   Scheduler_edf_Per_thread *tmp_sched = 0;
 
   /* if idle is going to be heir, adjust its Deadline and re-queue it. */
-  if ( the_ready_queue->EDF[_EDF_PERIODIC].first == _Thread_Idle ) {
+  if ( the_ready_queue->Queues.EDF[_EDF_PERIODIC].first == _Thread_Idle ) {
     tmp_sched = _Thread_Idle->sched.edf;
     _Ready_queue_edf_Extract( the_ready_queue, _Thread_Idle ); 
 
@@ -59,11 +59,11 @@ Thread_Control *_Ready_queue_edf_First(
   }
 
   /* if idle is still heir, check for aperiodic tasks to run instead */
-  if (the_ready_queue->EDF[_EDF_PERIODIC].first == _Thread_Idle &&
-      !_Chain_Is_empty(&the_ready_queue->EDF[_EDF_APERIODIC])) {
-    return (Thread_Control *) the_ready_queue->EDF[_EDF_APERIODIC].first;
+  if (the_ready_queue->Queues.EDF[_EDF_PERIODIC].first == _Thread_Idle &&
+      !_Chain_Is_empty(&the_ready_queue->Queues.EDF[_EDF_APERIODIC])) {
+    return (Thread_Control *) the_ready_queue->Queues.EDF[_EDF_APERIODIC].first;
   } 
 
   /* otherwise get the first element of the ready queue */
-  return (Thread_Control *) the_ready_queue->EDF[_EDF_PERIODIC].first;
+  return (Thread_Control *) the_ready_queue->Queues.EDF[_EDF_PERIODIC].first;
 }
