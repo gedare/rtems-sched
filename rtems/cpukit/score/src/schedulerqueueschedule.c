@@ -28,7 +28,7 @@
 
 /*
  *
- * _Scheduler_Schedule_queue
+ * _Scheduler_queue_Schedule
  *
  * This kernel routine implements scheduling decision logic for queue-based
  * scheduling.  Any scheduler that selects the next ready task based on the
@@ -43,7 +43,7 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Schedule_queue(
+void _Scheduler_queue_Schedule(
   Scheduler_Control *the_scheduler,
   Thread_Control    *the_thread
 )

@@ -37,7 +37,7 @@ extern "C" {
  *
  *  This routine initializes @a the_ready_queue for priority-based scheduling.
  */
-void _Ready_queue_Initialize_priority(
+void _Ready_queue_priority_Initialize(
   Ready_queue_Control         *the_ready_queue
 );
 
@@ -46,7 +46,7 @@ void _Ready_queue_Initialize_priority(
  * This function removes the next ready thread from the priority-based 
  * @a the_ready_queue.
  */
-Thread_Control *_Ready_queue_Dequeue_priority(
+Thread_Control *_Ready_queue_priority_Dequeue(
   Ready_queue_Control *the_ready_queue
 );
 
@@ -55,7 +55,7 @@ Thread_Control *_Ready_queue_Dequeue_priority(
  *  This routine enqueues @a the_thread on the priority-based
  *  @a the_ready_queue.
  */
-void _Ready_queue_Enqueue_priority(
+void _Ready_queue_priority_Enqueue(
   Ready_queue_Control        *the_ready_queue,
   Thread_Control             *the_thread
 );
@@ -69,7 +69,7 @@ void _Ready_queue_Enqueue_priority(
  *  
  */
 
-void _Ready_queue_Enqueue_first_priority(
+void _Ready_queue_priority_Enqueue_first(
   Ready_queue_Control         *the_ready_queue,
   Thread_Control                   *the_thread
 );
@@ -82,7 +82,7 @@ void _Ready_queue_Enqueue_first_priority(
  *  the_thread is removed from the_ready_queue and reinserted using
  *  its new priority.  This method has no impact on the state of the_thread
  */
-void _Ready_queue_Requeue_priority(
+void _Ready_queue_priority_Requeue(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 );
@@ -91,7 +91,7 @@ void _Ready_queue_Requeue_priority(
  *
  *  This routine removes @a the_thread from priority-based @a the_ready_queue
  */
-void _Ready_queue_Extract_priority(
+void _Ready_queue_priority_Extract(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 );
@@ -102,7 +102,7 @@ void _Ready_queue_Extract_priority(
  *  on the_ready_queue.  For priority-based scheduling, this is 
  *  the highest priority ready thread.
  */
-Thread_Control *_Ready_queue_First_priority(
+Thread_Control *_Ready_queue_priority_First(
   Ready_queue_Control *the_ready_queue
 );
 

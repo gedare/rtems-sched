@@ -588,7 +588,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  */
 #if defined(CONFIGURE_SCHEDULER_PRIORITY)
   #include <rtems/score/schedulerpriority.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_Initialize_priority }
+  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_priority_Initialize }
   #if !defined(CONFIGURE_SCHEDULER_POLICY)
     #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
   #endif
@@ -597,7 +597,7 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 /* Check for FIFO scheduler */
 #if defined(CONFIGURE_SCHEDULER_FIFO)
   #include <rtems/score/schedulerfifo.h>
-  #define CONFIGURE_SCHEDULER_ENTRY_FIFO { _Scheduler_Initialize_fifo }
+  #define CONFIGURE_SCHEDULER_ENTRY_FIFO { _Scheduler_fifo_Initialize }
   #if !defined(CONFIGURE_SCHEDULER_POLICY)
     #define CONFIGURE_SCHEDULER_POLICY _Scheduler_FIFO
   #endif

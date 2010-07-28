@@ -23,37 +23,33 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
 /*
  *
- *  _Ready_queue_Dequeue_fifo
+ *  _Ready_queue_fifo_Requeue
  *
- *  This routine removes the running thread from the specified readyq.  
  *
  *  Input parameters:
- *    the_ready_queue - pointer to readyq
+ *    the_ready_queue - pointer to a readyq header
+ *    the_thread       - pointer to a thread control block
  *
- *  Output parameters:
- *    returns - thread dequeued or NULL
+ *  Output parameters: NONE
  *
- *  INTERRUPT LATENCY:
+ *  INTERRUPT LATENCY: NONE
  */
 
-Thread_Control *_Ready_queue_Dequeue_fifo(
-  Ready_queue_Control *the_ready_queue
+void _Ready_queue_fifo_Requeue(
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control       *the_thread
 )
 {
-  Thread_Control *the_thread;
+  /* extract */
+  _Chain_Extract_unprotected( &the_thread->Object.Node );
 
-  if ( !_Chain_Is_empty( the_ready_queue->Queues.Fifo ) ) {
-
-    the_thread = (Thread_Control *)
-       _Chain_Get_first_unprotected( the_ready_queue->Queues.Fifo );
-
-    return the_thread;
-  }
-
-  return NULL;
-
+  /* enqueue */
+  _Chain_Append_unprotected(
+        the_ready_queue->Queues.Fifo,
+        &the_thread->Object.Node
+      );
 }
+

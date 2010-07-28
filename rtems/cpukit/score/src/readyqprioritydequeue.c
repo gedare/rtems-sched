@@ -28,7 +28,7 @@
 
 /*
  *
- *  _Ready_queue_Dequeue_priority
+ *  _Ready_queue_priority_Dequeue
  *
  *  This routine removes the running thread from the specified readyq.  
  *
@@ -41,7 +41,7 @@
  *  INTERRUPT LATENCY:
  */
 
-Thread_Control *_Ready_queue_Dequeue_priority(
+Thread_Control *_Ready_queue_priority_Dequeue(
   Ready_queue_Control *the_ready_queue
 )
 {

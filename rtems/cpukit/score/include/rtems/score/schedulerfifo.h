@@ -39,7 +39,7 @@ extern "C" {
 /**
  * This routine initializes the fifo scheduler.
  */
-void _Scheduler_Initialize_fifo( Scheduler_Control *sched );
+void _Scheduler_fifo_Initialize( Scheduler_Control *sched );
 
 #ifdef __cplusplus
 }

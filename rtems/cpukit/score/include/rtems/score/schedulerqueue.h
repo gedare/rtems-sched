@@ -41,7 +41,7 @@ extern "C" {
  *  This kernel routine sets the heir thread to be the next ready thread 
  *  on the ready queue.
  */
-void _Scheduler_Schedule_queue(
+void _Scheduler_queue_Schedule(
     Scheduler_Control *sched 
 );
 
@@ -49,7 +49,7 @@ void _Scheduler_Schedule_queue(
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
  */
-void _Scheduler_Yield_queue( Scheduler_Control *sched );
+void _Scheduler_queue_Yield( Scheduler_Control *sched );
 
 /**
  *  This routine removes @a the_thread from the scheduling decision, 
@@ -57,7 +57,7 @@ void _Scheduler_Yield_queue( Scheduler_Control *sched );
  *  any necessary scheduling operations including the selection of
  *  a new heir thread.
  */
-void _Scheduler_Block_queue( 
+void _Scheduler_queue_Block( 
     Scheduler_Control *sched,
     Thread_Control *the_thread 
 );
@@ -67,10 +67,12 @@ void _Scheduler_Block_queue(
  *  that is, adds it to the ready queue and 
  *  updates any appropriate scheduling variables, for example the heir thread.
  */
-void _Scheduler_Unblock_queue(
+void _Scheduler_queue_Unblock(
     Scheduler_Control *sched,
     Thread_Control *the_thread 
 );
+
+
 
 
 #ifdef __cplusplus

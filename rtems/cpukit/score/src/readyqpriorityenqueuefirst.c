@@ -20,32 +20,34 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
+#include <rtems/score/priority.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
-//#include <rtems/score/rqdata.h>
 
-/* 
- *  _Ready_queue_Enqueue_fifo
+/*
  *
- *  This routine puts @a the_thread on to the priority-based ready queue.
+ *  _Ready_queue_priority_Enqueue_first
+ *
+ *  This routine puts @a the_thread to the head of the ready queue. 
+ *  For priority-based ready queues, the thread will be the first thread
+ *  at its priority level.
  *  
  *  Input parameters:
  *    the_ready_queue - pointer to readyq
- *    the_thread  - pointer to thread
  *
  *  Output parameters: NONE
  *
  *  INTERRUPT LATENCY:
  */
 
-void _Ready_queue_Enqueue_fifo(
+void _Ready_queue_priority_Enqueue_first(
   Ready_queue_Control         *the_ready_queue,
   Thread_Control                   *the_thread
 )
 {
-  _Chain_Append_unprotected(
-        the_ready_queue->Queues.Fifo,
-        &the_thread->Object.Node
-      );
+  _Priority_bit_map_Add( &the_thread->sched.priority->Priority_map );
+  _Chain_Prepend_unprotected( the_thread->sched.priority->ready_chain, 
+      &the_thread->Object.Node );
 }

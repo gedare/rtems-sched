@@ -23,33 +23,29 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
+//#include <rtems/score/rqdata.h>
 
 /*
  *
- *  _Ready_queue_Requeue_fifo
+ *  _Ready_queue_fifo_Enqueue_first
  *
- *
+ *  This routine puts @a the_thread to the head of the ready queue. 
+ *  
  *  Input parameters:
- *    the_ready_queue - pointer to a readyq header
- *    the_thread       - pointer to a thread control block
+ *    the_ready_queue - pointer to readyq
  *
  *  Output parameters: NONE
  *
- *  INTERRUPT LATENCY: NONE
+ *  INTERRUPT LATENCY:
  */
 
-void _Ready_queue_Requeue_fifo(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
+void _Ready_queue_fifo_Enqueue_first(
+  Ready_queue_Control         *the_ready_queue,
+  Thread_Control                   *the_thread
 )
 {
-  /* extract */
-  _Chain_Extract_unprotected( &the_thread->Object.Node );
-
-  /* enqueue */
-  _Chain_Append_unprotected(
+  _Chain_Prepend_unprotected(
         the_ready_queue->Queues.Fifo,
         &the_thread->Object.Node
       );
 }
-

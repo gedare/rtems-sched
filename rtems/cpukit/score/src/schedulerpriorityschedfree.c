@@ -31,9 +31,9 @@
 
 /*
  *
- *  _Scheduler_Sched_allocate_priority
+ *  _Scheduler_priority_Sched_free
  *
- * Allocates the sched field of @a the_thread.
+ * Frees the sched field of @a the_thread.
  *
  *  Input parameters:
  *    the_scheduler - pointer to scheduler control
@@ -42,16 +42,10 @@
  *  Output parameters: NONE
  */
 
-void* _Scheduler_Sched_allocate_priority (
+void _Scheduler_priority_Sched_free (
     Scheduler_Control *the_scheduler,
     Thread_Control    *the_thread
 )
 {
-  void *sched;
-
-  sched = _Workspace_Allocate( sizeof(Scheduler_Per_thread_priority) );
-
-  the_thread->sched.priority = (Scheduler_Per_thread_priority*) sched;
-
-  return sched;
+  _Workspace_Free( the_thread->sched.priority );
 }

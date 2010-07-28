@@ -26,7 +26,7 @@
 
 /*
  *
- *  _Ready_queue_Extract_fifo
+ *  _Ready_queue_fifo_Extract
  *
  *  This routine removes a specific thread from the specified 
  *  fifo-based ready queue.
@@ -40,7 +40,7 @@
  *  INTERRUPT LATENCY: NONE
  */
 
-void _Ready_queue_Extract_fifo(
+void _Ready_queue_fifo_Extract(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 )

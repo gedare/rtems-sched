@@ -80,14 +80,14 @@ typedef struct {
 
   /** This field contains precalculated priority map indices. */
   Priority_bit_map_Information Priority_map;
-} Scheduler_Per_thread_priority;
+} Scheduler_priority_Per_thread;
 
 /**
  * Per-thread data related to the _SCHED_FIFO scheduling policy.
  */
 typedef struct {
   char nothing; /* it doesn't matter, this is never instantiated. */
-} Scheduler_Per_thread_fifo;
+} Scheduler_fifo_Per_thread;
 
 /**
  * function jump table that holds pointers to the functions that 
@@ -141,36 +141,7 @@ SCORE_EXTERN Scheduler_Control _Scheduler;
  *  through confdefs, or to the priority scheduler with ready chains by
  *  default.
  */
-void _Scheduler_Initialize( void );
-
-
-/**
- * This routine does nothing, and is used as a stub for Sched_allocate_xxx.
- *
- * Note: returns a non-zero value, or else thread initialize thinks the 
- * allocation failed.
- *
- * The overhead of a function call will still be imposed. :(
- */
-void * _Scheduler_Sched_allocate_nothing( 
-  Scheduler_Control *the_scheduler,
-  Thread_Control *the_thread
-  );
-
-/**
- * This routine does nothing, and is used as a stub for 
- *  Sched_update_xxx
- *  Sched_free_xxx
- *
- * The overhead of a function call will still be imposed. :(
- */
-void _Scheduler_Sched_update_nothing( 
-  Scheduler_Control *the_scheduler,
-  Thread_Control *the_thread
-  );
-
-
-
+void _Scheduler_Handler_initialization( void );
 
 #ifndef __RTEMS_APPLICATION__
 #include <rtems/score/scheduler.inl>

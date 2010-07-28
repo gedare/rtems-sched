@@ -161,33 +161,33 @@ libscore_a_SOURCES += src/rbtree.c \
 		src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
 
 ## READYQFIFO_C_FILES
-libscore_a_SOURCES += src/readyqfifo.c src/readyqdequeuefifo.c \
-    src/readyqenqueuefifo.c src/readyqenqueuefirstfifo.c \
-		src/readyqextractfifo.c src/readyqfirstfifo.c \
-		src/readyqrequeuefifo.c
+libscore_a_SOURCES += src/readyqfifo.c src/readyqfifodequeue.c \
+    src/readyqfifoenqueue.c src/readyqfifoenqueuefirst.c \
+		src/readyqfifoextract.c src/readyqfifofirst.c \
+		src/readyqfiforequeue.c
 
 ## READYQPRIORITY_C_FILES
-libscore_a_SOURCES += src/readyqpriority.c src/readyqdequeuepriority.c \
-    src/readyqenqueuepriority.c src/readyqenqueuefirstpriority.c \
-		src/readyqextractpriority.c src/readyqfirstpriority.c \
-		src/readyqrequeuepriority.c
+libscore_a_SOURCES += src/readyqpriority.c src/readyqprioritydequeue.c \
+    src/readyqpriorityenqueue.c src/readyqpriorityenqueuefirst.c \
+		src/readyqpriorityextract.c src/readyqpriorityfirst.c \
+		src/readyqpriorityrequeue.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
 
 ## SCHEDULERQUEUE_C_FILES
-libscore_a_SOURCES += src/schedulerblockqueue.c \
-											src/schedulerschedulequeue.c \
-											src/schedulerunblockqueue.c src/scheduleryieldqueue.c
+libscore_a_SOURCES += src/schedulerqueueblock.c \
+											src/schedulerqueueschedule.c \
+											src/schedulerqueueunblock.c src/schedulerqueueyield.c
 
 ## SCHEDULERFIFO_C_FILES
 libscore_a_SOURCES += src/schedulerfifo.c
 
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
-											src/schedulerschedallocatepriority.c \
-											src/schedulerschedfreepriority.c \
-											src/schedulerschedupdatepriority.c
+											src/schedulerpriorityschedallocate.c \
+											src/schedulerpriorityschedfree.c \
+											src/schedulerpriorityschedupdate.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \

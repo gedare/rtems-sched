@@ -20,33 +20,40 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
+//#include <rtems/score/rqdata.h>
 
 /*
  *
- *  _Ready_queue_First_priority
+ *  _Ready_queue_fifo_Dequeue
  *
- *  This routines returns a pointer to the first thread on @a the_ready_queue.
+ *  This routine removes the running thread from the specified readyq.  
  *
  *  Input parameters:
- *    the_ready_queue - pointer to thread queue
+ *    the_ready_queue - pointer to readyq
  *
  *  Output parameters:
- *    returns - first thread or NULL
+ *    returns - thread dequeued or NULL
+ *
+ *  INTERRUPT LATENCY:
  */
 
-Thread_Control *_Ready_queue_First_priority(
+Thread_Control *_Ready_queue_fifo_Dequeue(
   Ready_queue_Control *the_ready_queue
 )
 {
-  uint32_t   index = _Priority_bit_map_Get_highest();
+  Thread_Control *the_thread;
 
-  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Priority[ index ] ) )
-    return (Thread_Control *) the_ready_queue->Queues.Priority[ index ].first;
+  if ( !_Chain_Is_empty( the_ready_queue->Queues.Fifo ) ) {
+
+    the_thread = (Thread_Control *)
+       _Chain_Get_first_unprotected( the_ready_queue->Queues.Fifo );
+
+    return the_thread;
+  }
 
   return NULL;
+
 }

@@ -81,8 +81,6 @@ void _Thread_Handler_initialization(void)
 
   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
 
-  _Scheduler_Initialize( );
-
 #if defined(RTEMS_MULTIPROCESSING)
   _Thread_MP_Handler_initialization( maximum_proxies );
 #endif

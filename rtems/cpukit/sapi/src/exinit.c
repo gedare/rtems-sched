@@ -131,6 +131,8 @@ void rtems_initialize_data_structures(void)
   _TOD_Handler_initialization();
 
   _Thread_Handler_initialization();
+  
+  _Scheduler_Handler_initialization();
 
   #if defined(RTEMS_MULTIPROCESSING)
     _Objects_MP_Handler_initialization();
