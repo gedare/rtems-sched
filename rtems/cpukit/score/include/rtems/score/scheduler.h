@@ -34,6 +34,8 @@ extern "C" {
 #include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/prioritybitmap.h>
+#include <rtems/score/priorityrbtree.h>
+#include <rtems/score/rbtree.h>
 #include <rtems/score/readyq.h>
 
 /* 
@@ -45,6 +47,7 @@ extern "C" {
 #define _Scheduler_USER     (0)
 #define _Scheduler_PRIORITY (1)
 #define _Scheduler_FIFO     (2)
+#define _Scheduler_EDF      (3)
 
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
@@ -79,7 +82,7 @@ typedef struct {
   Chain_Control *ready_chain;
 
   /** This field contains precalculated priority map indices. */
-  Priority_bit_map_Information Priority_map;
+  Priority_bit_map_Information    Priority_map;
 } Scheduler_priority_Per_thread;
 
 /**
@@ -88,6 +91,27 @@ typedef struct {
 typedef struct {
   char nothing; /* it doesn't matter, this is never instantiated. */
 } Scheduler_fifo_Per_thread;
+
+/**
+ * Per-thread data related to the _SCHED_EDF scheduling policy.
+ */
+typedef struct {
+  /** Point back to this thread. */
+  Thread_Control                   *this_thread;
+
+  /** This field contains the thread's deadline information. */
+  RBTree_Node                       deadline;
+
+  bool                              periodic;
+  unsigned integer                  absolute_deadline;
+
+  /** 
+   * This field points to the last node in the ready queue that has 
+   * the same deadline (absolute) as this thread.
+   */
+  Chain_Node                       *last_duplicate;
+} Scheduler_edf_Per_thread;
+
 
 /**
  * function jump table that holds pointers to the functions that 

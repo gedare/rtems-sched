@@ -394,6 +394,7 @@ struct Thread_Control_struct {
   union {
     Scheduler_priority_Per_thread      *priority;
     Scheduler_fifo_Per_thread          *fifo;
+    Scheduler_edf_Per_thread           *edf;
   } sched;
   /** This field contains information about the starting state of
    *  this thread.
