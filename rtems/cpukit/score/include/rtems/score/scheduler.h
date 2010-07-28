@@ -103,7 +103,7 @@ typedef struct {
   RBTree_Node                       deadline;
 
   bool                              periodic;
-  unsigned integer                  absolute_deadline;
+  unsigned int                      absolute_deadline;
 
   /** 
    * This field points to the last node in the ready queue that has 

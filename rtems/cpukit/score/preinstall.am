@@ -297,6 +297,10 @@ $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybi
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
 
+$(PROJECT_INCLUDE)/rtems/score/priorityrbtree.inl: inline/rtems/score/priorityrbtree.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priorityrbtree.inl
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priorityrbtree.inl
+
 $(PROJECT_INCLUDE)/rtems/score/stack.inl: inline/rtems/score/stack.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.inl
