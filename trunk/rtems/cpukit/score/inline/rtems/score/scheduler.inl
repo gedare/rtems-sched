@@ -33,7 +33,7 @@
  * entries and add a case to the _Scheduler_Initialize routine. 
  *
  * Generic scheduling implementations that rely on the ready queue only can 
- * be found in the _Scheduler_XXX_queue functions.
+ * be found in the _Scheduler_queue_XXX functions.
  *
  */
 

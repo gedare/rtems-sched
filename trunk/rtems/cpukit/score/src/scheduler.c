@@ -28,39 +28,9 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 
-/**
- * This routine does nothing, and is used as a stub for Sched_allocate_xxx.
- *
- * Note: returns a non-zero value, or else thread initialize thinks the 
- * allocation failed.
- *
- * The overhead of a function call will still be imposed. :(
- */
-void * _Scheduler_Sched_allocate_nothing( 
-  Scheduler_Control *the_scheduler,
-  Thread_Control *the_thread
-  )
-{
-  return (void*)-1; /* maybe pick an appropriate poison value */
-}
-
-
-/**
- * This routine does nothing, and is used as a stub for Sched_update_xxx
- *
- * The overhead of a function call will still be imposed. :(
- */
-void _Scheduler_Sched_update_nothing( 
-  Scheduler_Control *the_scheduler,
-  Thread_Control *the_thread
-  )
-{
-
-}
-
 /*PAGE
  *
- *  _Scheduler_Initialize
+ *  _Scheduler_Handler_initialization
  *
  *  This routine initializes the scheduler
  *
@@ -69,11 +39,13 @@ void _Scheduler_Sched_update_nothing(
  *  Output parameters: NONE
  */
 
-void _Scheduler_Initialize( )
+void _Scheduler_Handler_initialization( )
 {
   Scheduler_Control *the_scheduler = &_Scheduler;
 
   /* call the sched_init function registered in the Configuration Scheduler 
    * Table. */
-  (*(_Scheduler_Table[Configuration.scheduler_policy].sched_init))(the_scheduler);
+  (*(_Scheduler_Table[Configuration.scheduler_policy].sched_init))(
+      the_scheduler
+  );
 }

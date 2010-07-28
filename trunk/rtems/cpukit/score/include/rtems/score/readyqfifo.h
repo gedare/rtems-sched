@@ -36,7 +36,7 @@ extern "C" {
  *
  *  This routine initializes @a the_ready_queue for fifo-based scheduling.
  */
-void _Ready_queue_Initialize_fifo(
+void _Ready_queue_fifo_Initialize(
   Ready_queue_Control         *the_ready_queue
 );
 
@@ -45,7 +45,7 @@ void _Ready_queue_Initialize_fifo(
  * This function removes the next ready thread from the fifo-based 
  * @a the_ready_queue.
  */
-Thread_Control *_Ready_queue_Dequeue_fifo(
+Thread_Control *_Ready_queue_fifo_Dequeue(
   Ready_queue_Control *the_ready_queue
 );
 
@@ -54,7 +54,7 @@ Thread_Control *_Ready_queue_Dequeue_fifo(
  *  This routine enqueues @a the_thread on the fifo-based
  *  @a the_ready_queue.
  */
-void _Ready_queue_Enqueue_fifo(
+void _Ready_queue_fifo_Enqueue(
   Ready_queue_Control        *the_ready_queue,
   Thread_Control             *the_thread
 );
@@ -68,7 +68,7 @@ void _Ready_queue_Enqueue_fifo(
  *  
  */
 
-void _Ready_queue_Enqueue_first_fifo(
+void _Ready_queue_fifo_Enqueue_first(
   Ready_queue_Control         *the_ready_queue,
   Thread_Control                   *the_thread
 );
@@ -81,7 +81,7 @@ void _Ready_queue_Enqueue_first_fifo(
  *  the_thread is removed from the_ready_queue and reinserted using
  *  its new fifo.  This method has no impact on the state of the_thread
  */
-void _Ready_queue_Requeue_fifo(
+void _Ready_queue_fifo_Requeue(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 );
@@ -90,7 +90,7 @@ void _Ready_queue_Requeue_fifo(
  *
  *  This routine removes @a the_thread from fifo-based @a the_ready_queue
  */
-void _Ready_queue_Extract_fifo(
+void _Ready_queue_fifo_Extract(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 );
@@ -101,7 +101,7 @@ void _Ready_queue_Extract_fifo(
  *  on the_ready_queue.  For fifo-based scheduling, this is 
  *  the highest fifo ready thread.
  */
-Thread_Control *_Ready_queue_First_fifo(
+Thread_Control *_Ready_queue_fifo_First(
   Ready_queue_Control *the_ready_queue
 );
 
@@ -111,7 +111,7 @@ Thread_Control *_Ready_queue_First_fifo(
  * This function sets the ready field of @a the_thread for the 
  * fifo-based ready queue.
  */
-void _Ready_queue_Set_ready_fifo(
+void _Ready_queue_fifo_Set_ready(
   Ready_queue_Control *the_ready_queue,
   Thread_Control *the_thread
 );

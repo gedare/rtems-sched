@@ -27,7 +27,7 @@
 
 /*
  *
- * _Scheduler_Block_queue
+ * _Scheduler_queue_Block
  *
  * This kernel routine removes the_thread from scheduling decisions based 
  * on simple queue extraction.
@@ -40,7 +40,7 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Block_queue(
+void _Scheduler_queue_Block(
   Scheduler_Control *the_scheduler,
   Thread_Control   *the_thread
 )

@@ -28,26 +28,25 @@
 
 /*
  *
- *  _Ready_queue_Enqueue_first_priority
+ *  _Ready_queue_priority_First
  *
- *  This routine puts @a the_thread to the head of the ready queue. 
- *  For priority-based ready queues, the thread will be the first thread
- *  at its priority level.
- *  
+ *  This routines returns a pointer to the first thread on @a the_ready_queue.
+ *
  *  Input parameters:
- *    the_ready_queue - pointer to readyq
+ *    the_ready_queue - pointer to thread queue
  *
- *  Output parameters: NONE
- *
- *  INTERRUPT LATENCY:
+ *  Output parameters:
+ *    returns - first thread or NULL
  */
 
-void _Ready_queue_Enqueue_first_priority(
-  Ready_queue_Control         *the_ready_queue,
-  Thread_Control                   *the_thread
+Thread_Control *_Ready_queue_priority_First(
+  Ready_queue_Control *the_ready_queue
 )
 {
-  _Priority_bit_map_Add( &the_thread->sched.priority->Priority_map );
-  _Chain_Prepend_unprotected( the_thread->sched.priority->ready_chain, 
-      &the_thread->Object.Node );
+  uint32_t   index = _Priority_bit_map_Get_highest();
+
+  if ( !_Chain_Is_empty( &the_ready_queue->Queues.Priority[ index ] ) )
+    return (Thread_Control *) the_ready_queue->Queues.Priority[ index ].first;
+
+  return NULL;
 }

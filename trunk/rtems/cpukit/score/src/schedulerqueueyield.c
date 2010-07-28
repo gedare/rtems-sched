@@ -34,7 +34,7 @@
 
 /*PAGE
  *
- *  _Scheduler_Yield_queue
+ *  _Scheduler_queue_Yield
  *
  *  This kernel routine will remove the running THREAD from the ready queue
  *  and place it immediatly at the rear of this chain.  Reset timeslice
@@ -53,7 +53,7 @@
  *    select heir
  */
 
-void _Scheduler_Yield_queue( Scheduler_Control *the_scheduler )
+void _Scheduler_queue_Yield( Scheduler_Control *the_scheduler )
 {
   ISR_Level       level;
   Thread_Control *executing;

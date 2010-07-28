@@ -39,12 +39,12 @@ extern "C" {
 /**
  * This routine initializes the priority scheduler.
  */
-void _Scheduler_Initialize_priority( Scheduler_Control *sched );
+void _Scheduler_priority_Initialize( Scheduler_Control *sched );
 
 /**
  * This routine allocates the sched field for a new thread.
  */
-void * _Scheduler_Sched_allocate_priority(
+void * _Scheduler_priority_Sched_allocate(
     Scheduler_Control *the_scheduler,
     Thread_Control *the_thread
 );
@@ -52,7 +52,7 @@ void * _Scheduler_Sched_allocate_priority(
 /**
  * This routine frees the sched field 
  */
-void _Scheduler_Sched_free_priority(
+void _Scheduler_priority_Sched_free(
     Scheduler_Control *the_scheduler,
     Thread_Control *the_thread
 );
@@ -61,7 +61,7 @@ void _Scheduler_Sched_free_priority(
  * This routine udpates the sched field of a thread based on the scheduler 
  * structures and thread state
  */
-void _Scheduler_Sched_update_priority(
+void _Scheduler_priority_Sched_update(
     Scheduler_Control *the_scheduler,
     Thread_Control *the_thread
 );

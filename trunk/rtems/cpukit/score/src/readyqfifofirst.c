@@ -30,7 +30,7 @@
 
 /*
  *
- *  _Ready_queue_First_fifo
+ *  _Ready_queue_fifo_First
  *
  *  This routines returns a pointer to the first thread on @a the_ready_queue.
  *
@@ -41,7 +41,7 @@
  *    returns - first thread or NULL
  */
 
-Thread_Control *_Ready_queue_First_fifo(
+Thread_Control *_Ready_queue_fifo_First(
   Ready_queue_Control *the_ready_queue
 )
 {
@@ -53,7 +53,7 @@ Thread_Control *_Ready_queue_First_fifo(
      * threads a chance to be the first on the FIFO queue.
      */
     if ( first == _Thread_Idle ) {
-      _Ready_queue_Requeue_fifo(the_ready_queue, first);
+      _Ready_queue_fifo_Requeue(the_ready_queue, first);
       first = (Thread_Control *) _Chain_First(the_ready_queue->Queues.Fifo);
     }
 

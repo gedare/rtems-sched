@@ -20,18 +20,16 @@
 #include <rtems/score/chain.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
-#include <rtems/score/priority.h>
-#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/readyq.h>
 
 /*
  *
- *  _Ready_queue_Extract_priority
+ *  _Ready_queue_priority_Requeue
  *
- *  This routine removes a specific thread from the specified 
- *  priority-based ready queue.
+ *  This routine is invoked when a thread changes priority and should be
+ *  moved to a different position on the ready queue.
  *
  *  Input parameters:
  *    the_ready_queue - pointer to a readyq header
@@ -42,18 +40,16 @@
  *  INTERRUPT LATENCY: NONE
  */
 
-void _Ready_queue_Extract_priority(
+void _Ready_queue_priority_Requeue(
   Ready_queue_Control *the_ready_queue,
   Thread_Control       *the_thread
 )
 {
-  Chain_Control *ready = the_thread->sched.priority->ready_chain;
-
-  if ( _Chain_Has_only_one_node( ready ) ) {
-
-    _Chain_Initialize_empty( ready );
-    _Priority_bit_map_Remove( &the_thread->sched.priority->Priority_map );
-
-  } else
+  if ( !_Chain_Has_only_one_node( the_thread->sched.priority->ready_chain ) ) {
     _Chain_Extract_unprotected( &the_thread->Object.Node );
+
+    _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
+      &the_thread->Object.Node );
+  }
 }
+

@@ -32,7 +32,7 @@
 
 /*
  *
- *  _Scheduler_Sched_update_priority
+ *  _Scheduler_priority_Sched_update
  *
  * Updates the sched field of @a the_thread.
  *
@@ -43,7 +43,7 @@
  *  Output parameters: NONE
  */
 
-void _Scheduler_Sched_update_priority (
+void _Scheduler_priority_Sched_update (
     Scheduler_Control *the_scheduler,
     Thread_Control    *the_thread
 )

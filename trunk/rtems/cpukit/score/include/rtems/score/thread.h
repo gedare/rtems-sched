@@ -392,8 +392,8 @@ struct Thread_Control_struct {
   Thread_CPU_usage_t                    cpu_time_used;
   /** This union holds per-thread data for the scheduler and ready queue. */
   union {
-    Scheduler_Per_thread_priority      *priority;
-    Scheduler_Per_thread_fifo          *fifo;
+    Scheduler_priority_Per_thread      *priority;
+    Scheduler_fifo_Per_thread          *fifo;
   } sched;
   /** This field contains information about the starting state of
    *  this thread.

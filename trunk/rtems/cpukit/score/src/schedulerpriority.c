@@ -31,7 +31,7 @@
 
 /*
  *
- *  _Scheduler_Initialize_priority
+ *  _Scheduler_priority_Initialize
  *
  * Initializes the scheduler for priority scheduling.
  *
@@ -41,18 +41,18 @@
  *  Output parameters: NONE
  */
 
-void _Scheduler_Initialize_priority (
+void _Scheduler_priority_Initialize (
     Scheduler_Control *the_scheduler
 )
 {
-  the_scheduler->s_ops.schedule           = &_Scheduler_Schedule_queue;
-  the_scheduler->s_ops.yield              = &_Scheduler_Yield_queue;
-  the_scheduler->s_ops.block              = &_Scheduler_Block_queue;
-  the_scheduler->s_ops.unblock            = &_Scheduler_Unblock_queue;
-  the_scheduler->s_ops.sched_allocate    = &_Scheduler_Sched_allocate_priority;
-  the_scheduler->s_ops.sched_free        = &_Scheduler_Sched_free_priority;
-  the_scheduler->s_ops.sched_update      = &_Scheduler_Sched_update_priority;
+  the_scheduler->s_ops.schedule           = &_Scheduler_queue_Schedule;
+  the_scheduler->s_ops.yield              = &_Scheduler_queue_Yield;
+  the_scheduler->s_ops.block              = &_Scheduler_queue_Block;
+  the_scheduler->s_ops.unblock            = &_Scheduler_queue_Unblock;
+  the_scheduler->s_ops.sched_allocate    = &_Scheduler_priority_Sched_allocate;
+  the_scheduler->s_ops.sched_free        = &_Scheduler_priority_Sched_free;
+  the_scheduler->s_ops.sched_update      = &_Scheduler_priority_Sched_update;
 
-  _Ready_queue_Initialize_priority(&the_scheduler->ready_queue);
+  _Ready_queue_priority_Initialize(&the_scheduler->ready_queue);
   _Priority_bit_map_Handler_initialization();
 }

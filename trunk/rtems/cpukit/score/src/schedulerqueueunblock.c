@@ -34,7 +34,7 @@
 
 /*
  *
- *  _Scheduler_Unblock_queue
+ *  _Scheduler_queue_Unblock
  *
  *  This kernel routine readies the requested thread according to the queuing 
  *  discipline. A new heir thread may be selected.
@@ -51,7 +51,7 @@
  *  INTERRUPT LATENCY:
  */
 
-void _Scheduler_Unblock_queue(
+void _Scheduler_queue_Unblock(
   Scheduler_Control *the_scheduler,
   Thread_Control *the_thread
 )
