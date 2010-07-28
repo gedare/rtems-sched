@@ -33,8 +33,8 @@ extern "C" {
 #include <rtems/score/readyq.h>
 #include <rtems/score/thread.h>
 
-#define _EDF_PERIODIC   (0)
-#define _EDF_APERIODIC  (1)
+#define EDF_PERIODIC   (0)
+#define EDF_APERIODIC  (1)
 
 /** @brief  Ready queue Initialize
  *
