@@ -71,7 +71,7 @@ void _Ready_queue_edf_Enqueue(
   /* queue aperiodic tasks separately */
   if (!sched->periodic) {
     _Chain_Append_unprotected(
-        &the_ready_queue->Queues.EDF[_EDF_APERIODIC], 
+        &the_ready_queue->Queues.EDF[EDF_APERIODIC], 
         &the_thread->Object.Node
     );
     return;
@@ -132,7 +132,7 @@ void _Ready_queue_edf_Enqueue(
 
   if (_RBTree_Is_root( &_Priority_RBTree, &tmp_sched->deadline )) { /* 4 */
     _Chain_Append_unprotected( 
-        &the_ready_queue->Queues.EDF[_EDF_PERIODIC], 
+        &the_ready_queue->Queues.EDF[EDF_PERIODIC], 
         &the_thread->Object.Node
     );
     return;

@@ -52,7 +52,7 @@ void _Ready_queue_edf_Enqueue_first(
 
   if (!sched->periodic) {
     _Chain_Prepend_unprotected(
-        &the_ready_queue->Queues.EDF[_EDF_APERIODIC],
+        &the_ready_queue->Queues.EDF[EDF_APERIODIC],
         &the_thread->Object.Node
     );
   }

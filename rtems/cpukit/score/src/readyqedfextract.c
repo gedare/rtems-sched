@@ -61,8 +61,8 @@ void _Ready_queue_edf_Extract(
 
   /* handle aperiodic tasks separately */
   if (!sched->periodic) {
-    if (_Chain_Has_only_one_node(&the_ready_queue->Queues.EDF[_EDF_APERIODIC]))
-      _Chain_Initialize_empty(&the_ready_queue->Queues.EDF[_EDF_APERIODIC]);
+    if (_Chain_Has_only_one_node(&the_ready_queue->Queues.EDF[EDF_APERIODIC]))
+      _Chain_Initialize_empty(&the_ready_queue->Queues.EDF[EDF_APERIODIC]);
     else
       _Chain_Extract_unprotected(&the_thread->Object.Node);
     return;
@@ -80,7 +80,7 @@ void _Ready_queue_edf_Extract(
 
       tmp_sched->last_duplicate = sched->last_duplicate;
       _Priority_rbtree_Add( &tmp_sched->deadline );
-      sched>last_duplicate = &the_thread->Object.Node;
+      sched->last_duplicate = &the_thread->Object.Node;
     }
   } else {
     /* the_thread is not on the RBTree. Find its duplicate and update 
@@ -107,8 +107,8 @@ void _Ready_queue_edf_Extract(
       tmp_sched->last_duplicate = _Chain_Previous(&the_thread->Object.Node);
   }
 
-  if (_Chain_Has_only_one_node( &the_ready_queue->Queues.EDF[_EDF_PERIODIC] ))
-    _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[_EDF_PERIODIC] );
+  if (_Chain_Has_only_one_node( &the_ready_queue->Queues.EDF[EDF_PERIODIC] ))
+    _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[EDF_PERIODIC] );
   else
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 }
