@@ -1,5 +1,5 @@
 #
-#  $Id: host.cfg.in,v 1.14 2001/02/05 18:21:18 joel Exp $
+#  $Id: host.cfg.in,v 1.15 2010/07/27 18:18:16 joel Exp $
 #
 # OS-specific configuration 
 #
@@ -29,6 +29,10 @@ SED=sed
 # Global tools
 ifndef PACKHEX
 PACKHEX=$(PROJECT_BIN)/packhex
+endif
+
+ifndef BIN2C
+BIN2C=$(PROJECT_BIN)/rtems-bin2c
 endif
 
 ifndef INSTALL_CHANGE

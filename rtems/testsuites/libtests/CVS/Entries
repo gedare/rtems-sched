@@ -43,8 +43,8 @@ D/termios08////
 D/devfs02////
 D/devfs03////
 D/devfs04////
-/ChangeLog/1.217/Tue Jul 27 15:53:18 2010//
-/Makefile.am/1.44/Tue Jul 27 15:53:18 2010//
-/configure.ac/1.51/Tue Jul 27 15:53:18 2010//
 D/devnullfatal01////
 D/gxx02////
+/ChangeLog/1.218/Wed Jul 28 15:11:37 2010//
+/Makefile.am/1.45/Wed Jul 28 15:11:37 2010//
+/configure.ac/1.52/Wed Jul 28 15:11:37 2010//

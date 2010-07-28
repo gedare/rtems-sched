@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: task1.c,v 1.14 2009/10/27 08:13:58 ralf Exp $
+ *  $Id: task1.c,v 1.15 2010/07/27 19:03:01 joel Exp $
  */
 
 #include "system.h"
@@ -361,8 +361,10 @@ rtems_test_pause();
     RTEMS_NO_TIMEOUT,
     &eventout
   );
-  if ( eventout ) printf( "ERROR -0x%08" PRIxrtems_event_set " events received\n", eventout );
-  else            puts( "TA1 - no events received" );
+  if ( eventout )
+    printf( "ERROR -0x%08" PRIxrtems_event_set " events received\n", eventout );
+  else
+    puts( "TA1 - no events received" );
   fatal_directive_status(
     status,
     RTEMS_UNSATISFIED,
@@ -403,6 +405,24 @@ rtems_test_pause();
     NULL
   );
   directive_failed( status, "rtems_timer_fire_after 200 ticks" );
+
+  /***** *****/
+  puts( "TA1 - rtems_event_send - send RTEMS_EVENT_4 to self" );
+  status = rtems_event_send( RTEMS_SELF, RTEMS_EVENT_4 );
+  directive_failed( status, "rtems_event_send" );
+
+  eventout = 0;
+  puts(
+    "TA1 - rtems_event_receive - RTEMS_EVENT_4 AND RTEMS_EVENT_5 - UNSATISFIED"
+  );
+  status  = rtems_event_receive(
+    RTEMS_EVENT_4 | RTEMS_EVENT_5,
+    RTEMS_NO_WAIT | RTEMS_EVENT_ALL,
+    RTEMS_NO_TIMEOUT,
+    &eventout
+  );
+  fatal_directive_status( status, RTEMS_UNSATISFIED, "rtems_event_receive" );
+  /***** *****/
 
   puts( "*** END OF TEST 11 ***" );
   rtems_test_exit( 0 );

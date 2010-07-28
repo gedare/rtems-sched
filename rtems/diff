@@ -1,0 +1,29 @@
+Index: cpukit/score/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/preinstall.am,v
+retrieving revision 1.23
+diff -u -p -r1.23 preinstall.am
+--- cpukit/score/preinstall.am	16 Jul 2010 08:31:34 -0000	1.23
++++ cpukit/score/preinstall.am	27 Jul 2010 16:58:54 -0000
+@@ -107,6 +107,10 @@ $(PROJECT_INCLUDE)/rtems/score/priority.
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
+ 
++$(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybitmap.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
++
+ $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
+@@ -237,6 +241,10 @@ $(PROJECT_INCLUDE)/rtems/score/priority.
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
+ 
++$(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl: inline/rtems/score/prioritybitmap.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
++
+ $(PROJECT_INCLUDE)/rtems/score/stack.inl: inline/rtems/score/stack.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.inl

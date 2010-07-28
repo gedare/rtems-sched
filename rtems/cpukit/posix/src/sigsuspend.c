@@ -8,13 +8,14 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: sigsuspend.c,v 1.5 2004/05/21 20:19:33 joel Exp $
+ *  $Id: sigsuspend.c,v 1.7 2010/07/27 17:37:54 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
+#include <assert.h>
 #include <signal.h>
 #include <errno.h>
 
@@ -28,17 +29,21 @@ int sigsuspend(
 )
 {
   sigset_t            saved_signals_blocked;
-  sigset_t            all_signals;
+  sigset_t            current_unblocked_signals;
   int                 status;
   POSIX_API_Control  *api;
 
   api = _Thread_Executing->API_Extensions[ THREAD_API_POSIX ];
 
+  /*
+   *  We use SIG_BLOCK and not SIG_SETMASK because there may be
+   *  signals which might be pending, which might get caught here.
+   *  We want the signals to be caught inside sigtimedwait.
+   */
   status = sigprocmask( SIG_BLOCK, sigmask, &saved_signals_blocked );
 
-  (void) sigfillset( &all_signals );
-
-  status = sigtimedwait( &all_signals, NULL, NULL );
+  current_unblocked_signals = ~(*sigmask);
+  status = sigtimedwait( &current_unblocked_signals, NULL, NULL );
 
   (void) sigprocmask( SIG_SETMASK, &saved_signals_blocked, NULL );
 
@@ -46,8 +51,9 @@ int sigsuspend(
    * sigtimedwait() returns the signal number while sigsuspend()
    * is supposed to return -1 and EINTR when a signal is caught.
    */
-  if ( status != -1 )
-    rtems_set_errno_and_return_minus_one( EINTR );
+  #if defined(RTEMS_DEBUG)
+    assert( status != -1 );
+  #endif
 
-  return status;
+  rtems_set_errno_and_return_minus_one( EINTR );
 }
