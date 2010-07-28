@@ -54,5 +54,5 @@ void _Scheduler_Initialize_priority (
   the_scheduler->s_ops.sched_update      = &_Scheduler_Sched_update_priority;
 
   _Ready_queue_Initialize_priority(&the_scheduler->ready_queue);
-  _Priority_Handler_initialization_bit_map();
+  _Priority_bit_map_Handler_initialization();
 }

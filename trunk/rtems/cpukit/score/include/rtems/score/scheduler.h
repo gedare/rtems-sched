@@ -79,7 +79,7 @@ typedef struct {
   Chain_Control *ready_chain;
 
   /** This field contains precalculated priority map indices. */
-  Priority_Information_bit_map Priority_map;
+  Priority_bit_map_Information Priority_map;
 } Scheduler_Per_thread_priority;
 
 /**

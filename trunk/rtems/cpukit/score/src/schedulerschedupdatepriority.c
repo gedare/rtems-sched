@@ -53,7 +53,7 @@ void _Scheduler_Sched_update_priority (
       the_thread->current_priority 
     ];
 
-  _Priority_Initialize_information_bit_map( 
+  _Priority_bit_map_Initialize_information( 
       &the_thread->sched.priority->Priority_map, 
       the_thread->current_priority 
   );
