@@ -34,17 +34,6 @@
  * routine.  See cpukit/score/src/readyq.c file.
  */
 
-/** @brief  Ready queue Dequeue
- *
- * This function removes the next ready thread from the ready queue.
- */
-RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_Dequeue(
-  Ready_queue_Control *the_ready_queue
-)
-{
-  return ( the_ready_queue->rq_ops.dequeue( the_ready_queue ) );
-}
-
 /** @brief  Ready queue Enqueue
  *
  *  This routine enqueues the given thread on
@@ -75,25 +64,6 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_Enqueue_first(
   the_ready_queue->rq_ops.enqueue_first( the_ready_queue, the_thread );
 }
 
-
-/**
- *  @brief Ready queue Requeue
- *
- *  This routine is invoked when a thread changes priority and remains
- *  ready.  If the queue is priority ordered,
- *  the_thread is removed from the_ready_queue and reinserted using
- *  its new priority.  This method has no impact on the state of the_thread
- *  or of any timeouts associated with this blocking.
- */
-RTEMS_INLINE_ROUTINE void _Ready_queue_Requeue(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-)
-{
-  the_ready_queue->rq_ops.requeue( the_ready_queue, the_thread );
-}
-
-
 /** @brief  Ready queue Extract
  *
  *  This routine removes the_thread from the_ready_queue
@@ -118,6 +88,23 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Ready_queue_First(
 )
 {
  return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
+}
+
+/**
+ *  @brief Ready queue Requeue
+ *
+ *  This routine is invoked when a thread changes priority and remains
+ *  ready.  If the queue is priority ordered,
+ *  the_thread is removed from the_ready_queue and reinserted using
+ *  its new priority.  This method has no impact on the state of the_thread
+ *  or of any timeouts associated with this blocking.
+ */
+RTEMS_INLINE_ROUTINE void _Ready_queue_Requeue(
+  Ready_queue_Control *the_ready_queue,
+  Thread_Control       *the_thread
+)
+{
+  the_ready_queue->rq_ops.requeue( the_ready_queue, the_thread );
 }
 
 /**@}*/

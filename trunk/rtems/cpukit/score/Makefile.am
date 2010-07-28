@@ -63,6 +63,7 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
 		inline/rtems/score/periodic.inl inline/rtems/score/priority.inl \
 		inline/rtems/score/prioritybitmap.inl \
+		inline/rtems/score/priorityrbtree.inl \
 		inline/rtems/score/stack.inl inline/rtems/score/rbtree.inl \
     inline/rtems/score/readyq.inl	inline/rtems/score/scheduler.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
@@ -168,13 +169,13 @@ libscore_a_SOURCES += src/readyqedf.c \
 		src/readyqedfextract.c src/readyqedffirst.c src/readyqedfrequeue.c
 
 ## READYQFIFO_C_FILES
-libscore_a_SOURCES += src/readyqfifo.c src/readyqfifodequeue.c \
+libscore_a_SOURCES += src/readyqfifo.c \
     src/readyqfifoenqueue.c src/readyqfifoenqueuefirst.c \
 		src/readyqfifoextract.c src/readyqfifofirst.c \
 		src/readyqfiforequeue.c
 
 ## READYQPRIORITY_C_FILES
-libscore_a_SOURCES += src/readyqpriority.c src/readyqprioritydequeue.c \
+libscore_a_SOURCES += src/readyqpriority.c \
     src/readyqpriorityenqueue.c src/readyqpriorityenqueuefirst.c \
 		src/readyqpriorityextract.c src/readyqpriorityfirst.c \
 		src/readyqpriorityrequeue.c

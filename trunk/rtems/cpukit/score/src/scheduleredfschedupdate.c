@@ -48,5 +48,17 @@ void _Scheduler_edf_Sched_update (
     Thread_Control    *the_thread
 )
 {
+  Scheduler_edf_Per_thread sched = the_thread->sched.edf;
 
+  sched->absolute_deadline = the_thread->real_priority;
+
+  if ( the_thread->real_priority = 254 ) /* HACK */
+    sched->periodic = true;
+
+  sched->this_thread = the_thread;
+  sched->last_duplicate = the_thread;
+
+  /* TODO: do this here? */
+  sched->deadline.value = sched->absolute_deadline + 
+    _Watchdog_Ticks_since_boot;
 }

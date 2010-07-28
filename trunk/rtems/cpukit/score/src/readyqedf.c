@@ -44,8 +44,6 @@ void _Ready_queue_edf_Initialize(
   Ready_queue_Control         *the_ready_queue
 )
 {
-  uint32_t index;
-
   /* allocate ready queue structures */
   the_ready_queue->Queues.EDF = (Chain_Control *) 
     _Workspace_Allocate_or_fatal_error( (2) * sizeof(Chain_Control) );
