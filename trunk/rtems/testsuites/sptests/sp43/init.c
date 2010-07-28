@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.23 2010/06/21 22:54:26 joel Exp $
+ *  $Id: init.c,v 1.24 2010/07/27 21:25:02 joel Exp $
  */
 
 #define __RTEMS_VIOLATE_KERNEL_VISIBILITY__
@@ -472,6 +472,24 @@ rtems_task Init(
     0
   );
   fatal_directive_status( sc, RTEMS_INVALID_ID, "rtems_semaphore_obtain" );
+
+  /*
+   * Invalid POSIX API pointer on get name
+   */
+  {
+    void *tmp;
+    tmp = _Objects_Information_table[OBJECTS_POSIX_API];
+    _Objects_Information_table[OBJECTS_POSIX_API] = NULL;
+
+    puts( "rtems_object_get_classic_name - bad API pointer - INVALID_ID" );
+    sc = rtems_object_get_classic_name(
+      rtems_build_id( OBJECTS_POSIX_API, OBJECTS_POSIX_THREADS, 1, 1 ),
+      &tmpName
+    );
+    fatal_directive_status( sc, RTEMS_INVALID_ID, "object_get_classic_name" );
+
+    _Objects_Information_table[OBJECTS_POSIX_API] = tmp;
+  }
 
   puts( "*** END OF TEST 43 ***" );
   rtems_test_exit( 0 );

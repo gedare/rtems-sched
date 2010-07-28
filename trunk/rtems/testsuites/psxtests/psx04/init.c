@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.22 2009/12/08 17:52:52 joel Exp $
+ *  $Id: init.c,v 1.23 2010/07/27 16:38:08 joel Exp $
  */
 
 #define CONFIGURE_INIT
@@ -413,6 +413,9 @@ void *POSIX_Init(
   rtems_test_assert(  !status );
 
   /* Suspend for signal that has already be sent */
+
+  status = sigemptyset( &mask );
+  rtems_test_assert(  !status );
 
   puts( "Init: sigsuspend for any signal" );
   status = sigsuspend( &mask );

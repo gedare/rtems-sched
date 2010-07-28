@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: keycreate.c,v 1.16 2010/07/26 22:03:17 joel Exp $
+ *  $Id: keycreate.c,v 1.17 2010/07/27 21:22:52 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -62,7 +62,7 @@ int pthread_key_create(
       /*
        *  Since the removal of ITRON, this cannot occur.
        */
-      if ( !_Objects_Information_table[ api_index ] )
+      if ( !_Objects_Information_table[ the_api ] )
 	continue;
 
       /*

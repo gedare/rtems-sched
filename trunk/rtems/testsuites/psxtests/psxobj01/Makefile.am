@@ -1,11 +1,11 @@
 ##
-## $Id: Makefile.am,v 1.3 2010/06/23 22:49:58 joel Exp $
+## $Id: Makefile.am,v 1.4 2010/07/27 20:16:23 joel Exp $
 ##
 
 MANAGERS = all
 
 rtems_tests_PROGRAMS = psxobj01
-psxobj01_SOURCES = init.c
+psxobj01_SOURCES = init.c ../../support/src/test_support.c
 
 dist_rtems_tests_DATA = psxobj01.scn
 dist_rtems_tests_DATA += psxobj01.doc
