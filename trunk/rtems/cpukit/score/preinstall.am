@@ -115,6 +115,14 @@ $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h: include/rtems/score/prioritybit
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
 
+$(PROJECT_INCLUDE)/rtems/score/priorityrbtree.h: include/rtems/score/priorityrbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priorityrbtree.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priorityrbtree.h
+
+$(PROJECT_INCLUDE)/rtems/score/readyqedf.h: include/rtems/score/readyqedf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqedf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqedf.h
+
 $(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h
@@ -134,6 +142,10 @@ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.h
 $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
 PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+
+$(PROJECT_INCLUDE)/rtems/score/scheduleredf.h: include/rtems/score/scheduleredf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
+PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
 
 $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h: include/rtems/score/schedulerfifo.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h
