@@ -57,10 +57,9 @@ void _Ready_queue_priority_Initialize(
     _Chain_Initialize_empty( &the_ready_queue->Queues.Priority[index] );
 
   /* initialize ready queue operations */
-  the_ready_queue->rq_ops.dequeue = &_Ready_queue_priority_Dequeue;
-  the_ready_queue->rq_ops.enqueue = &_Ready_queue_priority_Enqueue;
+  the_ready_queue->rq_ops.enqueue       = &_Ready_queue_priority_Enqueue;
   the_ready_queue->rq_ops.enqueue_first = &_Ready_queue_priority_Enqueue_first;
-  the_ready_queue->rq_ops.requeue = &_Ready_queue_priority_Requeue;
-  the_ready_queue->rq_ops.extract = &_Ready_queue_priority_Extract;
-  the_ready_queue->rq_ops.first = &_Ready_queue_priority_First;
+  the_ready_queue->rq_ops.extract       = &_Ready_queue_priority_Extract;
+  the_ready_queue->rq_ops.first         = &_Ready_queue_priority_First;
+  the_ready_queue->rq_ops.requeue       = &_Ready_queue_priority_Requeue;
 }

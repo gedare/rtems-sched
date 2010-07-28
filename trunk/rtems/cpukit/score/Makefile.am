@@ -26,10 +26,12 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
 		include/rtems/score/periodic.h include/rtems/score/priority.h \
-		include/rtems/score/prioritybitmap.h \
+		include/rtems/score/prioritybitmap.h include/rtems/score/priorityrbtree.h \
+		include/rtems/score/readyqedf.h \
 		include/rtems/score/rbtree.h include/rtems/score/readyq.h \
 		include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
-		include/rtems/score/scheduler.h include/rtems/score/schedulerfifo.h \
+		include/rtems/score/scheduler.h include/rtems/score/scheduleredf.h \
+		include/rtems/score/schedulerfifo.h \
 		include/rtems/score/schedulerpriority.h \
 		include/rtems/score/schedulerqueue.h include/rtems/score/stack.h \
     include/rtems/score/states.h include/rtems/score/sysstate.h \
@@ -160,6 +162,11 @@ libscore_a_SOURCES += src/rbtree.c \
 		src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
 		src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
 
+## READYQEDF_C_FILES
+libscore_a_SOURCES += src/readyqedf.c \
+		src/readyqedfenqueue.c src/readyqedfenqueuefirst.c \
+		src/readyqedfextract.c src/readyqedffirst.c src/readyqedfrequeue.c
+
 ## READYQFIFO_C_FILES
 libscore_a_SOURCES += src/readyqfifo.c src/readyqfifodequeue.c \
     src/readyqfifoenqueue.c src/readyqfifoenqueuefirst.c \
@@ -179,6 +186,11 @@ libscore_a_SOURCES += src/scheduler.c
 libscore_a_SOURCES += src/schedulerqueueblock.c \
 											src/schedulerqueueschedule.c \
 											src/schedulerqueueunblock.c src/schedulerqueueyield.c
+
+## SCHEDULEREDF_C_FILES
+libscore_a_SOURCES += src/scheduleredf.c \
+			src/scheduleredfschedallocate.c src/scheduleredfschedfree.c \
+      src/scheduleredfschedupdate.c
 
 ## SCHEDULERFIFO_C_FILES
 libscore_a_SOURCES += src/schedulerfifo.c

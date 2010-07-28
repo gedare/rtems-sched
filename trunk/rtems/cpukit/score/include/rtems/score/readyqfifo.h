@@ -40,15 +40,6 @@ void _Ready_queue_fifo_Initialize(
   Ready_queue_Control         *the_ready_queue
 );
 
-/** @brief  Ready queue Dequeue
- *
- * This function removes the next ready thread from the fifo-based 
- * @a the_ready_queue.
- */
-Thread_Control *_Ready_queue_fifo_Dequeue(
-  Ready_queue_Control *the_ready_queue
-);
-
 /** @brief  Ready queue Enqueue
  *
  *  This routine enqueues @a the_thread on the fifo-based
@@ -73,19 +64,6 @@ void _Ready_queue_fifo_Enqueue_first(
   Thread_Control                   *the_thread
 );
 
-/**
- *  @brief Ready queue Requeue
- *
- *  This routine is invoked when a thread changes fifo and remains
- *  ready.  For fifo-based ordering,
- *  the_thread is removed from the_ready_queue and reinserted using
- *  its new fifo.  This method has no impact on the state of the_thread
- */
-void _Ready_queue_fifo_Requeue(
-  Ready_queue_Control *the_ready_queue,
-  Thread_Control       *the_thread
-);
-
 /** @brief  Ready queue Extract
  *
  *  This routine removes @a the_thread from fifo-based @a the_ready_queue
@@ -105,15 +83,17 @@ Thread_Control *_Ready_queue_fifo_First(
   Ready_queue_Control *the_ready_queue
 );
 
-/** 
- * @brief Ready queue Set ready fifo
+/**
+ *  @brief Ready queue Requeue
  *
- * This function sets the ready field of @a the_thread for the 
- * fifo-based ready queue.
+ *  This routine is invoked when a thread changes fifo and remains
+ *  ready.  For fifo-based ordering,
+ *  the_thread is removed from the_ready_queue and reinserted using
+ *  its new fifo.  This method has no impact on the state of the_thread
  */
-void _Ready_queue_fifo_Set_ready(
+void _Ready_queue_fifo_Requeue(
   Ready_queue_Control *the_ready_queue,
-  Thread_Control *the_thread
+  Thread_Control       *the_thread
 );
 
 #ifdef __cplusplus
