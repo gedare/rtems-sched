@@ -53,5 +53,12 @@ void* _Scheduler_edf_Sched_allocate (
 
   the_thread->sched.edf = (Scheduler_edf_Per_thread*) sched;
 
+  if ( sched ) {
+    the_thread->sched.edf->last_duplicate = &the_thread->Object.Node;
+    the_thread->sched.edf->this_thread = the_thread;
+    the_thread->sched.edf->deadline.value = 0;
+    the_thread->sched.edf->absolute_deadline = 0;
+  }
+
   return sched;
 }
