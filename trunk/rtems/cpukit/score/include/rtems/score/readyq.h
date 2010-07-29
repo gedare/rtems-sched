@@ -32,7 +32,9 @@ extern "C" {
 
 #include <rtems/score/percpu.h>
 #include <rtems/score/chain.h>
+#include <rtems/score/rbtree.h>
 
+typedef struct Ready_queue_edf_Control_struct Ready_queue_edf_Control;
 typedef struct Ready_queue_Control_struct Ready_queue_Control;
 
 /**
@@ -84,17 +86,12 @@ struct Ready_queue_Control_struct {
      * This is the set of lists (an array of Chain_Control) for 
      * priority scheduling. 
      */
-    Chain_Control         *Priority;
+    Chain_Control            *Priority;
 
     /** This points to the Chain_Control for a simple FIFO list. */
-    Chain_Control         *Fifo;
+    Chain_Control            *Fifo;
 
-    /** 
-     * This points to an array of two Chain_Control structures for 
-     * EDF scheduling. EDF[0] is the edf queue, and EDF[1] is for tasks
-     * without a deadline.
-     */
-    Chain_Control         *EDF;
+    Ready_queue_edf_Control  *EDF;
   } Queues;
 
   /** The jump table for ready queue structure-specific functions */

@@ -31,17 +31,11 @@ extern "C" {
 
 #include <rtems/score/scheduler.h>
 
-/* Include generic scheduling implementations that rely on the ready queue 
+/* 
+ * Include generic scheduling implementations that rely on the ready queue 
  * implementation to provide scheduling logic.
  */
 #include <rtems/score/schedulerqueue.h>
-
-/* 
- * TODO: This should only be instantiated if using the rbtree handler.
- */
-
-SCORE_EXTERN RBTree_Control _Ready_queue_edf_RBTree;
-
 
 /**
  * This routine initializes the edf scheduler.

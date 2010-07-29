@@ -58,10 +58,10 @@ void _Ready_queue_edf_Extract(
   Scheduler_edf_Per_thread *tmp_sched = 0;
   Scheduler_edf_Per_thread *sched     = the_thread->sched.edf;
 
-  /* handle aperiodic tasks separately */
-  if (!sched->periodic) {
-    if (_Chain_Has_only_one_node(&the_ready_queue->Queues.EDF[EDF_APERIODIC]))
-      _Chain_Initialize_empty(&the_ready_queue->Queues.EDF[EDF_APERIODIC]);
+  /* handle tasks without a deadline separately */
+  if (!sched->deadline.value) {
+    if (_Chain_Has_only_one_node(&the_ready_queue->Queues.EDF->fifo_queue))
+      _Chain_Initialize_empty(&the_ready_queue->Queues.EDF->fifo_queue);
     else
       _Chain_Extract_unprotected(&the_thread->Object.Node);
     return;
@@ -109,8 +109,8 @@ void _Ready_queue_edf_Extract(
       tmp_sched->last_duplicate = _Chain_Previous(&the_thread->Object.Node);
   }
 
-  if (_Chain_Has_only_one_node( &the_ready_queue->Queues.EDF[EDF_PERIODIC] ))
-    _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[EDF_PERIODIC] );
+  if (_Chain_Has_only_one_node( &the_ready_queue->Queues.EDF->deadline_queue ))
+    _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->deadline_queue );
   else
     _Chain_Extract_unprotected( &the_thread->Object.Node );
 }

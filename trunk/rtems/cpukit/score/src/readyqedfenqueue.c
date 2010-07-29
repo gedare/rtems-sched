@@ -67,10 +67,10 @@ void _Ready_queue_edf_Enqueue(
   Scheduler_edf_Per_thread *sched = the_thread->sched.edf;
   Scheduler_edf_Per_thread *tmp_sched;
 
-  /* queue aperiodic tasks separately */
-  if (!sched->periodic) {
+  /* queue tasks without deadlines separately */
+  if (!sched->deadline.value) {
     _Chain_Append_unprotected(
-        &the_ready_queue->Queues.EDF[EDF_APERIODIC], 
+        &the_ready_queue->Queues.EDF->fifo_queue, 
         &the_thread->Object.Node
     );
     return;
@@ -137,7 +137,7 @@ void _Ready_queue_edf_Enqueue(
         &tmp_sched->deadline
     )) { /* 4 */
     _Chain_Append_unprotected( 
-        &the_ready_queue->Queues.EDF[EDF_PERIODIC], 
+        &the_ready_queue->Queues.EDF->deadline_queue, 
         &the_thread->Object.Node
     );
     return;

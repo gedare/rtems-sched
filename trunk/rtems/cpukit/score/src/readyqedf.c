@@ -27,6 +27,8 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
+RBTree_Control _Ready_queue_edf_RBTree;
+
 /*
  *
  *  _Ready_queue_edf_Initialize
@@ -45,14 +47,13 @@ void _Ready_queue_edf_Initialize(
 )
 {
   /* allocate ready queue structures */
-  the_ready_queue->Queues.EDF = (Chain_Control *) 
-    _Workspace_Allocate_or_fatal_error( (2) * sizeof(Chain_Control) );
+  the_ready_queue->Queues.EDF = (Ready_queue_edf_Control *) 
+    _Workspace_Allocate_or_fatal_error((1) * sizeof(Ready_queue_edf_Control));
 
   /* initialize ready queue structures */
-  _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[0] );
-  _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[1] );
-
-  _RBTree_Initialize_empty( &_Ready_queue_edf_RBTree );
+  _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->deadline_queue );
+  _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->fifo_queue );
+  _RBTree_Initialize_empty( &the_ready_queue->Queues.EDF->edf_rbtree );
 
   /* initialize ready queue operations */
   the_ready_queue->rq_ops.enqueue           = &_Ready_queue_edf_Enqueue;

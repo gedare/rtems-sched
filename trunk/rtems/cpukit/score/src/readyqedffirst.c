@@ -44,27 +44,23 @@ Thread_Control *_Ready_queue_edf_First(
   Ready_queue_Control *the_ready_queue
 )
 {
-  Scheduler_edf_Per_thread *tmp_sched = 0;
+  /* when there are periodic jobs to run, schedule them first */
+  if ( !_Chain_Is_empty(&the_ready_queue->Queues.EDF->deadline_queue ) )
+    return (Thread_Control *) the_ready_queue->Queues.EDF->deadline_queue.first;
 
-  /* if idle is going to be heir, adjust its Deadline and re-queue it. */
-  if ( the_ready_queue->Queues.EDF[EDF_PERIODIC].first == 
+  /* otherwise schedule aperiodic jobs as background tasks */
+
+  /* If idle is going to be heir, adjust its deadline and re-queue it. */
+  if ( the_ready_queue->Queues.EDF->fifo_queue.first == 
         &_Thread_Idle->Object.Node ) {
-    tmp_sched = _Thread_Idle->sched.edf;
     _Ready_queue_edf_Extract( the_ready_queue, _Thread_Idle ); 
 
-    tmp_sched->deadline.value = tmp_sched->absolute_deadline +
-      _Watchdog_Ticks_since_boot;
+    _Thread_Idle->sched.edf->deadline.value = 
+      _Thread_Idle->sched.edf->absolute_deadline + _Watchdog_Ticks_since_boot;
 
     _Ready_queue_edf_Enqueue( the_ready_queue, _Thread_Idle );
   }
 
-  /* if idle is still heir, check for aperiodic tasks to run instead */
-  if (the_ready_queue->Queues.EDF[EDF_PERIODIC].first == 
-      &_Thread_Idle->Object.Node &&
-      !_Chain_Is_empty(&the_ready_queue->Queues.EDF[EDF_APERIODIC])) {
-    return (Thread_Control *) the_ready_queue->Queues.EDF[EDF_APERIODIC].first;
-  } 
-
-  /* otherwise get the first element of the ready queue */
-  return (Thread_Control *) the_ready_queue->Queues.EDF[EDF_PERIODIC].first;
+  /* this is the idle thread if there are no other aperiodic jobs */
+  return (Thread_Control *) the_ready_queue->Queues.EDF->fifo_queue.first;
 }

@@ -39,7 +39,7 @@ extern "C" {
 
 /**
  *  This kernel routine sets the heir thread to be the next ready thread 
- *  on the ready queue.
+ *  on the ready queue by invoking sched->ready_queue->rq_ops->first().
  */
 void _Scheduler_queue_Schedule(
     Scheduler_Control *sched 
@@ -48,6 +48,8 @@ void _Scheduler_queue_Schedule(
 /**
  *  This routine is invoked when a thread wishes to voluntarily
  *  transfer control of the processor to another thread in the queue.
+ *  It invokes sched->ready_queue->rq_ops->requeue() followed by a 
+ *  call to sched->s_ops->schedule().
  */
 void _Scheduler_queue_Yield( Scheduler_Control *sched );
 

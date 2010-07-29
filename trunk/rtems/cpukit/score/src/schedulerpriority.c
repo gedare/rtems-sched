@@ -29,6 +29,12 @@
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 
+/* Instantiate any global variables needed by the priority scheduler */
+volatile Priority_bit_map_Control _Priority_Major_bit_map;
+
+Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+
+
 /*
  *
  *  _Scheduler_priority_Initialize

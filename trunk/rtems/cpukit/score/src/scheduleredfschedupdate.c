@@ -52,13 +52,13 @@ void _Scheduler_edf_Sched_update (
 
   sched->absolute_deadline = the_thread->real_priority;
 
-  if ( the_thread->real_priority == 254 ) /* HACK */
-    sched->periodic = true;
+  /* HACK: all aperiodic tasks must be either priority 254 or 255 (Idle) */
+  if ( the_thread->real_priority > 253 ) 
+    sched->absolute_deadline = 0;
 
   sched->this_thread = the_thread;
   sched->last_duplicate = &the_thread->Object.Node;
 
   /* TODO: do this here? */
-  sched->deadline.value = sched->absolute_deadline + 
-    _Watchdog_Ticks_since_boot;
+  sched->deadline.value = 0;
 }
