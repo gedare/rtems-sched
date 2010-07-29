@@ -107,7 +107,7 @@ void _Ready_queue_edf_Enqueue(
         deadline
     );
     _Chain_Insert_unprotected(
-        &tmp_sched->this_thread->Object.Node,
+        tmp_sched->last_duplicate,
         &the_thread->Object.Node
     );
     return;

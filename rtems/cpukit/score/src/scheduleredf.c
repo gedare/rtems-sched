@@ -48,6 +48,8 @@ void _Scheduler_edf_Release_job(
     the_period->owner->sched.edf->deadline.value 
       = the_period->owner->real_priority + /* TODO: deadline field? */
         _Watchdog_Ticks_since_boot;
+    the_period->owner->sched.edf->last_duplicate = 
+      &the_period->owner->Object.Node;
 
     _Ready_queue_edf_Enqueue(&_Scheduler.ready_queue, the_period->owner);
     _Scheduler_Schedule(&_Scheduler);
@@ -55,6 +57,8 @@ void _Scheduler_edf_Release_job(
     the_period->owner->sched.edf->deadline.value 
       = the_period->owner->real_priority + /* TODO: deadline field? */
         _Watchdog_Ticks_since_boot;
+    the_period->owner->sched.edf->last_duplicate = 
+      &the_period->owner->Object.Node;
   }
 
   if (the_period->owner != _Thread_Heir)
