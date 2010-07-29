@@ -69,10 +69,13 @@ void _Ready_queue_edf_Enqueue(
 
   /* queue tasks without deadlines separately */
   if (!sched->deadline.value) {
-    _Chain_Append_unprotected(
-        &the_ready_queue->Queues.EDF->fifo_queue, 
-        &the_thread->Object.Node
-    );
+    Chain_Control *fifo = &the_ready_queue->Queues.EDF->fifo_queue;
+    _Chain_Append_unprotected( fifo, &the_thread->Object.Node );
+    if ( the_thread != _Thread_Idle && 
+        fifo->first == &_Thread_Idle->Object.Node ) {
+      _Chain_Extract_unprotected( &_Thread_Idle->Object.Node );
+      _Chain_Append_unprotected( fifo, &_Thread_Idle->Object.Node );
+    }
     return;
   }
 
@@ -125,16 +128,9 @@ void _Ready_queue_edf_Enqueue(
     return;
   } 
 
-  tmp_node = _RBTree_Parent( &sched->deadline );
-
-  tmp_sched = _RBTree_Container_of(tmp_node, 
-      Scheduler_edf_Per_thread, 
-      deadline
-  );
-
   if (_RBTree_Is_root(
         &the_ready_queue->Queues.EDF->edf_rbtree,
-        &tmp_sched->deadline
+        &sched->deadline
     )) { /* 4 */
     _Chain_Append_unprotected( 
         &the_ready_queue->Queues.EDF->deadline_queue, 
@@ -142,7 +138,13 @@ void _Ready_queue_edf_Enqueue(
     );
     return;
   }  
-  
+
+  tmp_node = _RBTree_Parent( &sched->deadline );
+  tmp_sched = _RBTree_Container_of(tmp_node, 
+      Scheduler_edf_Per_thread, 
+      deadline
+  );
+
   if ( _RBTree_Are_nodes_equal(&sched->deadline, 
         _RBTree_Left(tmp_node))) { /* 5 */
     _Chain_Insert_unprotected(
