@@ -15,23 +15,24 @@
 
 #include <tmacros.h>
 
-/* types */
-
-struct counters {
-  uint32_t   count[7];
-};
-
 /* functions */
 
 rtems_task Init(
   rtems_task_argument argument
 );
 
-rtems_task Task_1_through_6(
+rtems_task Tasks_Periodic(
   rtems_task_argument argument
 );
 
-void Get_all_counters( void );
+rtems_task Tasks_Aperiodic(
+  rtems_task_argument argument
+);
+
+void set_timespec_from_us( 
+    struct timespec *ts, 
+    uint32_t time_us 
+);
 
 /* configuration information */
 
@@ -43,7 +44,7 @@ void Get_all_counters( void );
 #define CONFIGURE_MAXIMUM_TASKS               7
 #define CONFIGURE_MAXIMUM_PERIODS             10
 
-#define CONFIGURE_INIT_TASK_PRIORITY          10
+#define CONFIGURE_INIT_TASK_PRIORITY          100
 #define CONFIGURE_INIT_TASK_INITIAL_MODES     RTEMS_DEFAULT_MODES
 #define CONFIGURE_RTEMS_INIT_TASKS_TABLE
 
@@ -53,13 +54,23 @@ void Get_all_counters( void );
 
 #include <rtems/confdefs.h>
 
+#include <rtems/rtems/clock.h>
+#include <rtems/score/isr.h>
+#include <rtems/rtems/intr.h>
+
 /* global variables */
+#include "edfmacros.h"
+TEST_EXTERN rtems_id   Task_id[ 1+NUM_TASKS ];     /* array of task ids */
+TEST_EXTERN rtems_name Task_name[ 1+NUM_TASKS ];   /* array of task names */
+extern rtems_task_priority Priorities[ 1+NUM_TASKS ];
+extern uint32_t  Periods[ 1 + NUM_PERIODIC_TASKS ];
+extern uint32_t  Periods_us[1 + NUM_PERIODIC_TASKS ];
+extern uint32_t  Phases[1 + NUM_TASKS];
+extern uint32_t  Phases_us[1 + NUM_TASKS];
+extern uint32_t  Execution[1 + NUM_TASKS];
+extern uint32_t  Execution_us[1 + NUM_TASKS];
+extern uint32_t  Tick_Count[1 + NUM_TASKS];
 
-TEST_EXTERN rtems_id   Task_id[ 7 ];     /* array of task ids */
-TEST_EXTERN rtems_name Task_name[ 7 ];   /* array of task names */
-
-TEST_EXTERN struct counters Count;       /* iteration counters */
-TEST_EXTERN struct counters Temporary_count;
-extern rtems_task_priority Priorities[ 7 ];
+/* extern bool _EDF_hack_started; */
 
 /* end of include file */
