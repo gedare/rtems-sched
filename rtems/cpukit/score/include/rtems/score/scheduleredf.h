@@ -67,6 +67,12 @@ void _Scheduler_edf_Sched_update(
     Thread_Control *the_thread
 );
 
+#include <rtems/score/periodic.h>
+
+void _Scheduler_edf_Release_job(
+      Periodic_Control *the_period 
+    );
+
 #ifdef __cplusplus
 }
 #endif

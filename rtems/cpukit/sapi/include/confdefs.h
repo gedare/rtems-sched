@@ -536,13 +536,13 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 
 /*
  * Scheduler configuration.
- * TODO: Where to place this in confdefs?
  *
  * The scheduler configuration allows an application to select the 
  * scheduling policy to use.  The supported configurations are:
  *  CONFIGURE_SCHEDULER_USER
  *  CONFIGURE_SCHEDULER_PRIORITY
  *  CONFIGURE_SCHEDULER_FIFO
+ *  CONFIGURE_SCHEDULER_EDF
  * 
  * If no configuration is specified by the application, then 
  * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
@@ -563,12 +563,14 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
 #if defined(CONFIGURE_SCHEDULER_ALL)
   #define CONFIGURE_SCHEDULER_PRIORITY
   #define CONFIGURE_SCHEDULER_FIFO
+  #define CONFIGURE_SCHEDULER_EDF
 #endif
 
 /* If no scheduler is specified, the priority scheduler is default. */
 #if !defined(CONFIGURE_SCHEDULER_USER) && \
     !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
-    !defined(CONFIGURE_SCHEDULER_FIFO)
+    !defined(CONFIGURE_SCHEDULER_FIFO) && \
+    !defined(CONFIGURE_SCHEDULER_EDF)
   #define CONFIGURE_SCHEDULER_PRIORITY
   #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
 #endif
@@ -603,6 +605,16 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
+/* Check for EDF scheduler */
+#if defined(CONFIGURE_SCHEDULER_EDF)
+  #include <rtems/score/scheduleredf.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_EDF { _Scheduler_edf_Initialize }
+  #if !defined(CONFIGURE_SCHEDULER_POLICY)
+    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_EDF
+  #endif
+#endif
+
+
 /* 
  * Set up the scheduler table.  The scheduling code indexes this table to 
  * invoke the correct scheduling implementation. The scheduler to use is 
@@ -634,6 +646,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #if defined(CONFIGURE_SCHEDULER_FIFO) && \
         defined(CONFIGURE_SCHEDULER_ENTRY_FIFO)
       CONFIGURE_SCHEDULER_ENTRY_FIFO,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+    #if defined(CONFIGURE_SCHEDULER_EDF) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_EDF)
+      CONFIGURE_SCHEDULER_ENTRY_EDF,
     #else
       CONFIGURE_SCHEDULER_NULL,
     #endif   

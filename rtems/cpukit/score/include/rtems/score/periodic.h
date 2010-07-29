@@ -165,7 +165,7 @@ typedef struct {
 }   Periodic_Control;
 
 /**
- *  @brief Rate Monotonic Period Class Management Structure
+ *  @brief Periodic Period Class Management Structure
  *
  *  This instance of Objects_Information is used to manage the
  *  set of periodic period instances.

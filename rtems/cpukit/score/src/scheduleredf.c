@@ -27,6 +27,41 @@
 #include <rtems/score/scheduleredf.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
+#include <rtems/score/watchdog.h>
+
+/* TODO: put this somewhere more appropriate. */
+void _Scheduler_edf_Release_job(
+  Periodic_Control *the_period
+)
+{
+  ISR_Level       level;
+
+  _ISR_Disable( level );
+  
+  /* if the thread is already in a ready state, need to dequeue it from
+   * the ready queue and then re-enqueue it with the new deadline.
+   */
+  if ( _States_Is_ready( the_period->owner->current_state ) ) {
+    _Ready_queue_edf_Extract(&_Scheduler.ready_queue, the_period->owner);
+
+    /* stamp this job with its new deadline */
+    the_period->owner->sched.edf->deadline.value 
+      = the_period->owner->real_priority + /* TODO: deadline field? */
+        _Watchdog_Ticks_since_boot;
+
+    _Ready_queue_edf_Enqueue(&_Scheduler.ready_queue, the_period->owner);
+    _Scheduler_Schedule(&_Scheduler);
+  } else {
+    the_period->owner->sched.edf->deadline.value 
+      = the_period->owner->real_priority + /* TODO: deadline field? */
+        _Watchdog_Ticks_since_boot;
+  }
+
+  if (the_period->owner != _Thread_Heir)
+    _Thread_Dispatch_necessary = true;
+
+  _ISR_Enable( level );
+}
 
 /*
  *
