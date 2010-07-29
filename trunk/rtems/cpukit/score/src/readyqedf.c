@@ -27,8 +27,6 @@
 #include <rtems/score/wkspace.h>
 #include <rtems/config.h>
 
-RBTree_Control _Ready_queue_edf_RBTree;
-
 /*
  *
  *  _Ready_queue_edf_Initialize

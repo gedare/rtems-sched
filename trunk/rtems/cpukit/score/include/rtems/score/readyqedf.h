@@ -44,9 +44,6 @@ struct Ready_queue_edf_Control_struct {
   Chain_Control fifo_queue;
 };
 
-/* instantiated in readyqedf.c  */
-extern RBTree_Control _Ready_queue_edf_RBTree;
-
 /** @brief  Ready queue Initialize
  *
  *  This routine initializes @a the_ready_queue for edf-based scheduling.

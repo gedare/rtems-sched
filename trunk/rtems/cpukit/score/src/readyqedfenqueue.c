@@ -78,7 +78,7 @@ void _Ready_queue_edf_Enqueue(
 
   /* first add the_thread to red-black tree */
   tmp_node = _RBTree_Insert_unprotected(
-               &_Ready_queue_edf_RBTree, 
+               &the_ready_queue->Queues.EDF->edf_rbtree, 
                &sched->deadline
              );
   if (tmp_node) { /* 1 */
@@ -133,7 +133,7 @@ void _Ready_queue_edf_Enqueue(
   );
 
   if (_RBTree_Is_root(
-        &_Ready_queue_edf_RBTree,
+        &the_ready_queue->Queues.EDF->edf_rbtree,
         &tmp_sched->deadline
     )) { /* 4 */
     _Chain_Append_unprotected( 

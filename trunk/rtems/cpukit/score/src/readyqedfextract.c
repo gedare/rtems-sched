@@ -68,7 +68,10 @@ void _Ready_queue_edf_Extract(
   }
 
   if ( !(_RBTree_Is_node_off_rbtree( &sched->deadline )) ) {
-    _RBTree_Extract_unprotected( &_Ready_queue_edf_RBTree, &sched->deadline );
+    _RBTree_Extract_unprotected(
+        &the_ready_queue->Queues.EDF->edf_rbtree,
+        &sched->deadline
+    );
 
     if (sched->last_duplicate != &the_thread->Object.Node) {
       tmp_thd = (Thread_Control *) _Chain_Next(&the_thread->Object.Node);
@@ -79,7 +82,7 @@ void _Ready_queue_edf_Extract(
 
       tmp_sched->last_duplicate = sched->last_duplicate;
       _RBTree_Insert_unprotected(
-          &_Ready_queue_edf_RBTree,
+          &the_ready_queue->Queues.EDF->edf_rbtree,
           &tmp_sched->deadline
       );
       sched->last_duplicate = &the_thread->Object.Node;
@@ -88,7 +91,7 @@ void _Ready_queue_edf_Extract(
     /* the_thread is not on the RBTree. Find its duplicate and update 
      * the last_duplicate field if necessary. */
     tmp_node = _RBTree_Find_unprotected(
-        &_Ready_queue_edf_RBTree, 
+        &the_ready_queue->Queues.EDF->edf_rbtree, 
         sched->deadline.value
     );
     if (!tmp_node) {
