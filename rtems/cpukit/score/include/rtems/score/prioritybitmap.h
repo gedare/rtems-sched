@@ -40,14 +40,15 @@ extern "C" {
 #include <rtems/score/priority.h>
 
 /* 
- * TODO: These should only be instantiated if using the bit map handler.
+ * The Priority_bit_map_Control variables are instantiated only 
+ * if using the bit map handler.
  */
 
 /**
  *  Each sixteen bit entry in this array is associated with one of
  *  the sixteen entries in the Priority Bit map.
  */
-SCORE_EXTERN volatile Priority_bit_map_Control _Priority_Major_bit_map;
+extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
 
 /** Each bit in the Priority Bitmap indicates whether or not there are
  *  threads ready at a particular priority.  The mapping of
@@ -55,8 +56,7 @@ SCORE_EXTERN volatile Priority_bit_map_Control _Priority_Major_bit_map;
  *  dependent as is the value of each bit used to indicate that
  *  threads are ready at that priority.
  */
-SCORE_EXTERN Priority_bit_map_Control
-               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /*
  *  The definition of the Priority_bit_map_Control type is CPU dependent.

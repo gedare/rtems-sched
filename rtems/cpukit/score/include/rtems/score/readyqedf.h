@@ -33,8 +33,19 @@ extern "C" {
 #include <rtems/score/readyq.h>
 #include <rtems/score/thread.h>
 
-#define EDF_PERIODIC   (0)
-#define EDF_APERIODIC  (1)
+/*
+ * This structure is the Queues.EDF field of Ready_queue_Control when 
+ * using the EDF scheduling.   
+ */
+struct Ready_queue_edf_Control_struct {
+  RBTree_Control edf_rbtree;
+
+  Chain_Control deadline_queue;
+  Chain_Control fifo_queue;
+};
+
+/* instantiated in readyqedf.c  */
+extern RBTree_Control _Ready_queue_edf_RBTree;
 
 /** @brief  Ready queue Initialize
  *

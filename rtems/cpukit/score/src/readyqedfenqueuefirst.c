@@ -31,8 +31,6 @@
  *  _Ready_queue_edf_Enqueue_first
  *
  *  This routine puts @a the_thread to the head of the ready queue. 
- *  For priority-based ready queues, the thread will be the first thread
- *  at its priority level.
  *  
  *  Input parameters:
  *    the_ready_queue - pointer to readyq
@@ -49,11 +47,13 @@ void _Ready_queue_edf_Enqueue_first(
 {
   Scheduler_edf_Per_thread *sched = the_thread->sched.edf;
 
-  if (!sched->periodic) {
+  if (!sched->deadline.value) {
     _Chain_Prepend_unprotected(
-        &the_ready_queue->Queues.EDF[EDF_APERIODIC],
+        &the_ready_queue->Queues.EDF->fifo_queue,
         &the_thread->Object.Node
     );
   }
   return;
+
+  /* TODO: re-write enqueue logic to be lifo? */
 }

@@ -50,10 +50,6 @@ extern "C" {
 
 typedef struct Scheduler_Control_struct Scheduler_Control;
 
-/* 
- * TODO: Would it make sense to embed the Scheduler_Control for the scheduler
- * here?  Probably not, if we use per-cpu Scheduler_Control...
- */
 /*
  * The Scheduler_Table_t type defines the scheduler initialization table, 
  * which is set up by confdefs.h based on the user's choice of scheduler 
@@ -63,7 +59,8 @@ typedef struct {
   void (*sched_init)( Scheduler_Control * );
 } Scheduler_Table_t;
 
-extern const Scheduler_Table_t _Scheduler_Table[]; /* declared in confdefs.h */
+/* instantiated and initialized in confdefs.h */
+extern const Scheduler_Table_t _Scheduler_Table[]; 
 
 /**
  * The following Scheduler_Per_thread_xxx structures are used to 
@@ -101,7 +98,6 @@ typedef struct {
   /** This field contains the thread's deadline information. */
   RBTree_Node                       deadline;
 
-  bool                              periodic;
   unsigned int                      absolute_deadline;
 
   /** 
