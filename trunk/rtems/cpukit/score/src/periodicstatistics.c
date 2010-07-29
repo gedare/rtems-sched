@@ -19,6 +19,7 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/periodic.h>
+#include <rtems/score/scheduleredf.h>
 #include <rtems/score/thread.h>
 
 /*PAGE
@@ -85,6 +86,7 @@ void _Periodic_Initiate_statistics(
   #endif
     
     /* TODO: scheduler-specific job release */
+    _Scheduler_edf_Release_job( the_period );
 }
 
 /*PAGE

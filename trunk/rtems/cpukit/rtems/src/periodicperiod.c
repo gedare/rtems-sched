@@ -22,7 +22,9 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/periodic.h>
+#include <rtems/score/scheduleredf.h>
 #include <rtems/score/thread.h>
+
 
 /*PAGE
  *
@@ -150,6 +152,7 @@ rtems_status_code rtems_periodic_period(
         _Periodic_Update_statistics( the_period );
 
         /* TODO: scheduler-specific job release call-out */
+        _Scheduler_edf_Release_job( the_period );
 
         _ISR_Enable( level );
 
