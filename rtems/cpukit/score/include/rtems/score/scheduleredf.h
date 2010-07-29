@@ -36,6 +36,13 @@ extern "C" {
  */
 #include <rtems/score/schedulerqueue.h>
 
+/* 
+ * TODO: This should only be instantiated if using the rbtree handler.
+ */
+
+SCORE_EXTERN RBTree_Control _Ready_queue_edf_RBTree;
+
+
 /**
  * This routine initializes the edf scheduler.
  */
