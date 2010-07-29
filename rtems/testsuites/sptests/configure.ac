@@ -159,6 +159,7 @@ spsched01/Makefile
 spsched02/Makefile
 spsched03/Makefile
 spsched04/Makefile
+spsched05/Makefile
 spsize/Makefile
 spstkalloc/Makefile
 spthreadq01/Makefile
