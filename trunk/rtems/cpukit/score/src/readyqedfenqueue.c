@@ -21,7 +21,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/priorityrbtree.h>
 #include <rtems/score/states.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/rbtree.h>
@@ -78,7 +77,10 @@ void _Ready_queue_edf_Enqueue(
   }
 
   /* first add the_thread to red-black tree */
-  tmp_node = _Priority_rbtree_Add ( &sched->deadline );
+  tmp_node = _RBTree_Insert_unprotected(
+               &_Ready_queue_edf_RBTree, 
+               &sched->deadline
+             );
   if (tmp_node) { /* 1 */
     tmp_sched = _RBTree_Container_of(
         tmp_node, 
@@ -130,7 +132,10 @@ void _Ready_queue_edf_Enqueue(
       deadline
   );
 
-  if (_RBTree_Is_root( &_Priority_RBTree, &tmp_sched->deadline )) { /* 4 */
+  if (_RBTree_Is_root(
+        &_Ready_queue_edf_RBTree,
+        &tmp_sched->deadline
+    )) { /* 4 */
     _Chain_Append_unprotected( 
         &the_ready_queue->Queues.EDF[EDF_PERIODIC], 
         &the_thread->Object.Node

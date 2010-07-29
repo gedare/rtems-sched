@@ -53,5 +53,4 @@ void _Scheduler_edf_Initialize (
   the_scheduler->s_ops.sched_update       = &_Scheduler_edf_Sched_update;
 
   _Ready_queue_edf_Initialize( &the_scheduler->ready_queue );
-  _Priority_rbtree_Handler_initialization();
 }

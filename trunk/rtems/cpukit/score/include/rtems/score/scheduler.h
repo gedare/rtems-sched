@@ -34,7 +34,6 @@ extern "C" {
 #include <rtems/score/percpu.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/prioritybitmap.h>
-#include <rtems/score/priorityrbtree.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/readyq.h>
 

@@ -52,6 +52,8 @@ void _Ready_queue_edf_Initialize(
   _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[0] );
   _Chain_Initialize_empty( &the_ready_queue->Queues.EDF[1] );
 
+  _RBTree_Initialize_empty( &_Ready_queue_edf_RBTree );
+
   /* initialize ready queue operations */
   the_ready_queue->rq_ops.enqueue           = &_Ready_queue_edf_Enqueue;
   the_ready_queue->rq_ops.enqueue_first     = &_Ready_queue_edf_Enqueue_first;

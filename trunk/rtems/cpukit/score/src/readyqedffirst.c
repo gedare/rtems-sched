@@ -21,7 +21,6 @@
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
-#include <rtems/score/priorityrbtree.h>
 #include <rtems/score/rbtree.h>
 #include <rtems/score/readyq.h>
 #include <rtems/score/readyqedf.h>
