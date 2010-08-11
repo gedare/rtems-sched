@@ -25,14 +25,14 @@ include_rtems_score_HEADERS = include/rtems/score/address.h \
     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
     include/rtems/score/interr.h include/rtems/score/isr.h \
     include/rtems/score/object.h include/rtems/score/percpu.h \
-		include/rtems/score/periodic.h include/rtems/score/priority.h \
-		include/rtems/score/prioritybitmap.h include/rtems/score/readyqedf.h \
-		include/rtems/score/rbtree.h include/rtems/score/readyq.h \
-		include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
-		include/rtems/score/scheduler.h include/rtems/score/scheduleredf.h \
-		include/rtems/score/schedulerfifo.h \
-		include/rtems/score/schedulerpriority.h \
-		include/rtems/score/schedulerqueue.h include/rtems/score/stack.h \
+    include/rtems/score/periodic.h include/rtems/score/priority.h \
+    include/rtems/score/prioritybitmap.h include/rtems/score/readyqedf.h \
+    include/rtems/score/rbtree.h include/rtems/score/readyq.h \
+    include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
+    include/rtems/score/scheduler.h include/rtems/score/scheduleredf.h \
+    include/rtems/score/schedulerfifo.h \
+    include/rtems/score/schedulerpriority.h \
+    include/rtems/score/schedulerqueue.h include/rtems/score/stack.h \
     include/rtems/score/states.h include/rtems/score/sysstate.h \
     include/rtems/score/thread.h include/rtems/score/threadq.h \
     include/rtems/score/threadsync.h include/rtems/score/timespec.h \
@@ -60,10 +60,10 @@ include_rtems_score_HEADERS += inline/rtems/score/address.inl \
     inline/rtems/score/coremsg.inl inline/rtems/score/coremutex.inl \
     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
-		inline/rtems/score/periodic.inl inline/rtems/score/priority.inl \
-		inline/rtems/score/prioritybitmap.inl \
-		inline/rtems/score/stack.inl inline/rtems/score/rbtree.inl \
-    inline/rtems/score/readyq.inl	inline/rtems/score/scheduler.inl \
+    inline/rtems/score/periodic.inl inline/rtems/score/priority.inl \
+    inline/rtems/score/prioritybitmap.inl \
+    inline/rtems/score/stack.inl inline/rtems/score/rbtree.inl \
+    inline/rtems/score/readyq.inl  inline/rtems/score/scheduler.inl \
     inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
     inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
     inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
@@ -148,7 +148,7 @@ libscore_a_SOURCES += src/objectallocate.c src/objectclose.c \
 
 ## PERIODIC_C_FILES
 libscore_a_SOURCES += src/periodic.c \
-		src/periodicgetstatus.c src/periodicstatistics.c src/periodictimeout.c
+    src/periodicgetstatus.c src/periodicstatistics.c src/periodictimeout.c
 
 ## PROTECTED_HEAP_C_FILES
 libscore_a_SOURCES += src/pheapallocate.c \
@@ -158,37 +158,37 @@ libscore_a_SOURCES += src/pheapallocate.c \
 
 ## RBTREE_C FILES
 libscore_a_SOURCES += src/rbtree.c \
-		src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
-		src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
+    src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
+    src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
 
 ## READYQEDF_C_FILES
 libscore_a_SOURCES += src/readyqedf.c \
-		src/readyqedfenqueue.c src/readyqedfenqueuefirst.c \
-		src/readyqedfextract.c src/readyqedffirst.c src/readyqedfrequeue.c
+    src/readyqedfenqueue.c src/readyqedfenqueuefirst.c \
+    src/readyqedfextract.c src/readyqedffirst.c src/readyqedfrequeue.c
 
 ## READYQFIFO_C_FILES
 libscore_a_SOURCES += src/readyqfifo.c \
     src/readyqfifoenqueue.c src/readyqfifoenqueuefirst.c \
-		src/readyqfifoextract.c src/readyqfifofirst.c \
-		src/readyqfiforequeue.c
+    src/readyqfifoextract.c src/readyqfifofirst.c \
+    src/readyqfiforequeue.c
 
 ## READYQPRIORITY_C_FILES
 libscore_a_SOURCES += src/readyqpriority.c \
     src/readyqpriorityenqueue.c src/readyqpriorityenqueuefirst.c \
-		src/readyqpriorityextract.c src/readyqpriorityfirst.c \
-		src/readyqpriorityrequeue.c
+    src/readyqpriorityextract.c src/readyqpriorityfirst.c \
+    src/readyqpriorityrequeue.c
 
 ## SCHEDULER_C_FILES
 libscore_a_SOURCES += src/scheduler.c
 
 ## SCHEDULERQUEUE_C_FILES
 libscore_a_SOURCES += src/schedulerqueueblock.c \
-											src/schedulerqueueschedule.c \
-											src/schedulerqueueunblock.c src/schedulerqueueyield.c
+                      src/schedulerqueueschedule.c \
+                      src/schedulerqueueunblock.c src/schedulerqueueyield.c
 
 ## SCHEDULEREDF_C_FILES
 libscore_a_SOURCES += src/scheduleredf.c \
-			src/scheduleredfschedallocate.c src/scheduleredfschedfree.c \
+      src/scheduleredfschedallocate.c src/scheduleredfschedfree.c \
       src/scheduleredfschedupdate.c
 
 ## SCHEDULERFIFO_C_FILES
@@ -196,9 +196,9 @@ libscore_a_SOURCES += src/schedulerfifo.c
 
 ## SCHEDULERPRIORITY_C_FILES
 libscore_a_SOURCES += src/schedulerpriority.c \
-											src/schedulerpriorityschedallocate.c \
-											src/schedulerpriorityschedfree.c \
-											src/schedulerpriorityschedupdate.c
+                      src/schedulerpriorityschedallocate.c \
+                      src/schedulerpriorityschedfree.c \
+                      src/schedulerpriorityschedupdate.c
 
 ## THREAD_C_FILES
 libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
