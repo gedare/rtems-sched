@@ -3,7 +3,7 @@
 #  On-Line Applications Research Corporation (OAR).
 #  All rights reserved.
 #
-#  $Id: Makefile.am,v 1.27 2010/06/11 07:40:00 ralf Exp $
+#  $Id: Makefile.am,v 1.28 2010/08/13 17:31:35 joel Exp $
 #
 
 PROJECT = c_user
@@ -186,9 +186,10 @@ chains.texi: chains.t
 	    -u "Top" \
 	    -n "Directive Status Codes" < $< > $@
 
-EXTRA_DIST = bsp.t clock.t chains.t concepts.t cpuuse.t datatypes.t conf.t dpmem.t \
-    event.t fatal.t init.t intr.t io.t mp.t msg.t overview.t part.t region.t \
-    rtmon.t sem.t schedule.t signal.t stackchk.t task.t timer.t userext.t \
-    $(TXT_FILES) $(PNG_FILES) $(EPS_IMAGES) $(noinst_DATA)
+EXTRA_DIST = bsp.t clock.t chains.t concepts.t cpuuse.t datatypes.t conf.t \
+    dpmem.t event.t fatal.t init.t intr.t io.t mp.t msg.t overview.t \
+    part.t region.t rtmon.t sem.t schedule.t signal.t stackchk.t \
+    task.t timer.t userext.t $(TXT_FILES) $(PNG_FILES) $(EPS_IMAGES) \
+    $(noinst_DATA)
 
 CLEANFILES += c_user.info c_user.info-? c_user.info-??
