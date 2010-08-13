@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: libcsupport.h,v 1.25 2009/10/14 16:13:05 ralf Exp $
+ *  $Id: libcsupport.h,v 1.26 2010/08/10 13:15:30 joel Exp $
  */
 
 #ifndef _RTEMS_RTEMS_LIBCSUPPORT_H
@@ -35,6 +35,8 @@ void RTEMS_Malloc_Initialize(
 
 extern void malloc_dump(void);
 extern void malloc_walk(size_t source, size_t printf_enabled);
+void malloc_set_heap_pointer(Heap_Control *new_heap);
+Heap_Control *malloc_get_heap_pointer( void );
 extern void libc_init(void);
 extern int  host_errno(void);
 extern void fix_syscall_errno(void);

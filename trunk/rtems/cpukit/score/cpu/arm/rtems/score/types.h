@@ -7,7 +7,7 @@
  */
 
 /*
- *  $Id: types.h,v 1.19 2010/07/16 08:35:32 sh Exp $
+ *  $Id: types.h,v 1.20 2010/07/29 17:51:31 joel Exp $
  *
  *  This include file contains type definitions pertaining to the
  *  arm processor family.

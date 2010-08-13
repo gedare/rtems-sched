@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.4 2010/06/24 19:46:40 joel Exp $
+ *  $Id: init.c,v 1.5 2010/08/09 14:29:36 joel Exp $
  */
 
 #include <tmacros.h>
@@ -17,7 +17,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
-#include <rtems/score/heap.h>
+#include <rtems/libcsupport.h>
 
 #define MAXIMUM 10
 #define NUM_OPEN_REQ 26
@@ -27,8 +27,6 @@ int BarrierCount;
 
 rtems_id Semaphores[MAXIMUM];
 int SemaphoreCount;
-
-extern Heap_Control  *RTEMS_Malloc_Heap;
 
 void create_all_barriers(void)
 {
@@ -132,7 +130,6 @@ rtems_task Init(
   void *alloc_ptr = (void *)0;
   int num_opens = 0;
   int index = 0;
-  Heap_Information_block Info;
 
   puts( "\n\n*** TEST FIFO 08 ***" );
 
@@ -154,8 +151,7 @@ rtems_task Init(
 
   delete_semaphore();
 
-  _Heap_Get_information(RTEMS_Malloc_Heap, &Info);
-  alloc_ptr = malloc(Info.Free.largest-4);
+  alloc_ptr = malloc( malloc_free_space() - 4 );
   puts("Opening FIFO.. expect ENOMEM since no memory is available");
   open_fifo(ENOMEM, O_RDWR);
 

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: termios_testdriver.c,v 1.7 2009/12/10 14:26:32 ralf Exp $
+ *  $Id: termios_testdriver.c,v 1.8 2010/08/09 14:36:47 joel Exp $
  */
 
 #include "tmacros.h"
@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include <termios.h>
 #include <rtems/termiostypes.h>
+#include <rtems/libcsupport.h>
 #include "termios_testdriver.h"
 
 int termios_test_driver_inbyte_nonblocking( int port )
@@ -138,6 +139,10 @@ rtems_device_driver termios_test_driver_open(
   rtems_status_code sc;
   int               rc;
   rtems_libio_open_close_args_t *args = arg;
+  void *alloc_ptr = (void *)0;
+  static int test = 0;
+  size_t freeMemory;
+  
   static const rtems_termios_callbacks Callbacks = {
     NULL,                                    /* firstOpen */
     NULL,                                    /* lastClose */
@@ -154,6 +159,41 @@ rtems_device_driver termios_test_driver_open(
     rtems_test_exit(0);
   }
 
+  freeMemory = malloc_free_space();
+  if( test == 0 ) {
+    alloc_ptr = malloc( freeMemory - 4 );
+    
+    sc = rtems_termios_open (major, minor, arg, &Callbacks);
+    rtems_test_assert( sc == RTEMS_NO_MEMORY );
+    
+    free( alloc_ptr );
+    alloc_ptr = malloc( freeMemory - 4 - 10 -
+			sizeof( struct rtems_termios_tty ) );
+    
+    sc = rtems_termios_open (major, minor, arg, &Callbacks);
+    rtems_test_assert( sc == RTEMS_NO_MEMORY );
+    
+    free( alloc_ptr );
+    alloc_ptr = malloc( freeMemory - 4 - 20 -
+			sizeof( struct rtems_termios_tty ) -
+			128 );
+    
+    sc = rtems_termios_open (major, minor, arg, &Callbacks);
+    rtems_test_assert( sc == RTEMS_NO_MEMORY );
+    
+    free( alloc_ptr );
+    alloc_ptr = malloc( freeMemory - 4 - 20 -
+			sizeof( struct rtems_termios_tty ) -
+			128 -
+			80 );
+    
+    sc = rtems_termios_open (major, minor, arg, &Callbacks);
+    rtems_test_assert( sc == RTEMS_NO_MEMORY );
+    
+    free( alloc_ptr );
+    test = 1;
+  }
+  
   sc = rtems_termios_open (major, minor, arg, &Callbacks);
   directive_failed( sc, "rtems_termios_open" );
 

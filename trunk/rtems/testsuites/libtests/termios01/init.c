@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.11 2010/07/14 15:59:37 joel Exp $
+ *  $Id: init.c,v 1.14 2010/08/10 22:31:49 joel Exp $
  */
 
 #include "tmacros.h"
@@ -462,6 +462,7 @@ rtems_task Init(
   rtems_device_major_number registered;
   int                       test;
   struct termios            t;
+  int index = 0;
 
   puts( "\n\n*** TEST TERMIOS 01 ***" );
 
@@ -469,21 +470,9 @@ rtems_task Init(
   test_termios_baud2number();
   test_termios_number_to_baud();
 
-  /*
-   * tcsetattr - ERROR invalid operation
-   */
-  puts( "tcsetattr - invalid operation - ENOTSUP" );
-  rc = tcsetattr( 0, 0x12345, &t );
-  rtems_test_assert( rc == -1 );
-  rtems_test_assert( errno == ENOTSUP );
-  
-  /*
-   * tcsetattr - TCSADRAIN
-   */
-  puts( "\ntcsetattr - drain - OK" );
-  rc = tcsetattr( 1, TCSADRAIN, &t );
-  rtems_test_assert( rc == 0 );
-  
+  sc = rtems_termios_bufsize( 256, 138, 64 );
+  directive_failed( sc, "rtems_termios_bufsize" );
+
   /*
    * Register a driver
    */
@@ -504,6 +493,21 @@ rtems_task Init(
     printf( "ERROR - baud opening test device (%d)\n", test );
     rtems_test_exit(0);
   }
+
+  /*
+   * tcsetattr - ERROR invalid operation
+   */
+  puts( "tcsetattr - invalid operation - ENOTSUP" );
+  rc = tcsetattr( test, INT_MAX, &t );
+  rtems_test_assert( rc == -1 );
+  rtems_test_assert( errno == ENOTSUP );
+  
+  /*
+   * tcsetattr - TCSADRAIN
+   */
+  puts( "\ntcsetattr - drain - OK" );
+  rc = tcsetattr( test, TCSADRAIN, &t );
+  rtems_test_assert( rc == 0 );
 
   test_termios_set_baud(test);
 
@@ -587,6 +591,16 @@ rtems_task Init(
       test, strerror(errno) );
     rtems_test_exit(0);
   }
+
+
+  puts( "Multiple open of the device" );
+  for( ; index < 26; ++index ) {
+    test = open( TERMIOS_TEST_DRIVER_DEVICE_NAME, O_RDWR );
+    rtems_test_assert( test != -1 );
+    rc = close( test );
+    rtems_test_assert( rc == 0 );
+  }
+  puts( "" );
 
   puts( "*** END OF TEST TERMIOS 01 ***" );
   rtems_test_exit(0);

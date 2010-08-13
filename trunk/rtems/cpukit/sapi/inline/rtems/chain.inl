@@ -24,7 +24,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: chain.inl,v 1.8 2010/04/30 08:39:15 sh Exp $
+ *  $Id: chain.inl,v 1.9 2010/08/09 07:38:51 sh Exp $
  */
 
 #ifndef _RTEMS_CHAIN_H
@@ -363,6 +363,21 @@ RTEMS_INLINE_ROUTINE void rtems_chain_extract(
 )
 {
   _Chain_Extract( the_node );
+}
+
+/**
+ *  @brief Extract the specified node from a chain (unprotected).
+ *
+ *  This routine extracts @a the_node from the chain on which it resides.
+ *
+ *  @note It does NOT disable interrupts to ensure the atomicity of the
+ *  append operation.
+ */
+RTEMS_INLINE_ROUTINE void rtems_chain_extract_unprotected(
+  rtems_chain_node *the_node
+)
+{
+  _Chain_Extract_unprotected( the_node );
 }
 
 /**

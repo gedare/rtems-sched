@@ -1,3 +1,31 @@
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1513/doc
+	* user/chains.t: Added missing functions.  Uniform text for
+	unprotected functions.
+
+2010-08-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1650/cpukit
+	* user/part.t: Clarify.
+
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* porting/interrupts.t: Rename _Context_Switch_necessary to
+	_Thread_Dispatch_necessary to more properly reflect the intent.
+
+2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1635/cpukit
+	* porting/prioritybitmap.t: Refactoring of priority handling, to
+	isolate the bitmap implementation of priorities in the supercore so
+	that priority management is a little more modular. This change is in
+	anticipation of scheduler implementations that can select how they
+	manage tracking priority levels / finding the highest priority ready
+	task. Note that most of the changes here are simple renaming, to
+	clarify the use of the bitmap-based priority management.
+
 2010-06-28	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	PR 1573/cpukit

@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.128 2010/07/24 16:12:49 joel Exp $
+##  $Id: Makefile.am,v 1.131 2010/08/10 13:15:30 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -85,12 +85,14 @@ DIRECTORY_SCAN_C_FILES += src/getcwd.c
 
 ID_C_FILES = src/getegid.c src/geteuid.c src/getgid.c src/getgroups.c \
     src/getlogin.c src/getpgrp.c src/getpid.c src/getppid.c src/getuid.c \
-    src/setpgid.c src/setsid.c
+    src/seteuid.c src/setgid.c src/setuid.c src/seteuid.c src/setpgid.c \
+    src/setsid.c
 
 MALLOC_C_FILES = src/malloc_initialize.c src/calloc.c src/malloc.c \
     src/realloc.c src/_calloc_r.c src/_malloc_r.c \
     src/free.c src/freenode.c src/_free_r.c \
     src/_realloc_r.c src/mallocfreespace.c \
+   src/mallocgetheapptr.c src/mallocsetheapptr.c \
     src/mallocinfo.c src/malloc_walk.c src/malloc_get_statistics.c \
     src/malloc_report_statistics.c src/malloc_report_statistics_plugin.c \
     src/malloc_statistics_helpers.c src/posix_memalign.c \

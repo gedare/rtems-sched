@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.71 2010/07/13 21:13:12 joel Exp $
+## $Id: configure.ac,v 1.72 2010/07/29 22:40:50 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-psxtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -94,6 +94,7 @@ psxgetrusage01/Makefile
 psxhdrs/Makefile
 psxid01/Makefile
 psximfs01/Makefile
+psximfs02/Makefile
 psxintrcritical01/Makefile
 psxitimer/Makefile
 psxkey01/Makefile

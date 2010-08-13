@@ -10,16 +10,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_creat.c,v 1.18 2010/07/15 08:46:06 sh Exp $
+ *  $Id: imfs_creat.c,v 1.20 2010/08/02 18:27:22 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
 #include <stdlib.h>
 #include <string.h>
 #include "imfs.h"
@@ -67,50 +64,33 @@ IMFS_jnode_t *IMFS_create_node(
   /*
    *  Set the type specific information
    */
-  switch (type) {
-    case IMFS_DIRECTORY:
-      rtems_chain_initialize_empty(&node->info.directory.Entries);
-      break;
-
-    case IMFS_HARD_LINK:
-      node->info.hard_link.link_node = info->hard_link.link_node;
-      break;
-
-    case IMFS_SYM_LINK:
-      node->info.sym_link.name = info->sym_link.name;
-      break;
-
-    case IMFS_DEVICE:
-      node->info.device.major = info->device.major;
-      node->info.device.minor = info->device.minor;
-      break;
-
-    case IMFS_LINEAR_FILE:
-      node->info.linearfile.size      = 0;
-      node->info.linearfile.direct    = 0;
-
-    case IMFS_MEMORY_FILE:
+  if ( type == IMFS_DIRECTORY ) {
+    rtems_chain_initialize_empty(&node->info.directory.Entries);
+  } else if ( type == IMFS_HARD_LINK ) {
+    node->info.hard_link.link_node = info->hard_link.link_node;
+  } else if ( type == IMFS_SYM_LINK ) {
+    node->info.sym_link.name = info->sym_link.name;
+  } else if ( type == IMFS_DEVICE ) {
+    node->info.device.major = info->device.major;
+    node->info.device.minor = info->device.minor;
+  } else if ( type == IMFS_LINEAR_FILE ) {
+    node->info.linearfile.size      = 0;
+    node->info.linearfile.direct    = 0;
+    if ( type == IMFS_MEMORY_FILE ) {
       node->info.file.size            = 0;
       node->info.file.indirect        = 0;
       node->info.file.doubly_indirect = 0;
       node->info.file.triply_indirect = 0;
-      break;
-
-    case IMFS_FIFO:
-      node->info.fifo.pipe = NULL;
-      break;
-
-    default:
-      #if defined(RTEMS_DEBUG)
-        assert(0);
-      #endif
-      break;
+    }
+  } else if ( type == IMFS_FIFO ) {
+    node->info.fifo.pipe = NULL;
+  } else {
+    IMFS_assert(0);
   }
 
   /*
    *  This node MUST have a parent, so put it in that directory list.
    */
-
   node->Parent = parent;
   node->st_ino = ++fs_info->ino_count;
 

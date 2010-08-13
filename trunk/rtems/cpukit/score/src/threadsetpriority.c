@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadsetpriority.c,v 1.4 2005/01/27 05:57:05 ralf Exp $
+ *  $Id: threadsetpriority.c,v 1.5 2010/07/29 17:52:10 joel Exp $
  */
 
 #if HAVE_CONFIG_H

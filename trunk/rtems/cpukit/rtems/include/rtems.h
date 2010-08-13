@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems.h,v 1.37 2009/11/29 11:55:14 ralf Exp $
+ *  $Id: rtems.h,v 1.38 2010/08/09 08:59:57 sh Exp $
  */
 
 #ifndef _RTEMS_H
@@ -150,12 +150,29 @@ const char *rtems_get_version_string(void);
 
 /**
  * @brief Minimum stack size which every thread must exceed.
+ *
+ * It is the minimum stack size recommended for use on this processor. This
+ * value is selected by the RTEMS developers conservatively to minimize the
+ * risk of blown stacks for most user applications. Using this constant when
+ * specifying the task stack size, indicates that the stack size will be at
+ * least RTEMS_MINIMUM_STACK_SIZE bytes in size. If the user configured minimum
+ * stack size is larger than the recommended minimum, then it will be used. 
  */
 #define RTEMS_MINIMUM_STACK_SIZE  STACK_MINIMUM_SIZE
 
 /**
  * @brief Specifies that the task should be created with the configured minimum
  * stack size.
+ *
+ * Using this constant when specifying the task stack size indicates that this
+ * task is to be created with a stack size of the minimum stack size that was
+ * configured by the application. If not explicitly configured by the
+ * application, the default configured minimum stack size is the processor
+ * dependent value RTEMS_MINIMUM_STACK_SIZE. Since this uses the configured
+ * minimum stack size value, you may get a stack size that is smaller or larger
+ * than the recommended minimum. This can be used to provide large stacks for
+ * all tasks on complex applications or small stacks on applications that are
+ * trying to conserve memory. 
  */
 #define RTEMS_CONFIGURED_MINIMUM_STACK_SIZE  0
 

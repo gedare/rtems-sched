@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.51 2010/06/23 03:10:34 ccj Exp $
+## $Id: Makefile.am,v 1.52 2010/08/09 09:03:11 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -30,7 +30,8 @@ include_rtems_rtems_HEADERS = include/rtems/rtems/asr.h \
     include/rtems/rtems/rtemsapi.h include/rtems/rtems/sem.h \
     include/rtems/rtems/signal.h include/rtems/rtems/status.h \
     include/rtems/rtems/support.h include/rtems/rtems/tasks.h \
-    include/rtems/rtems/timer.h include/rtems/rtems/types.h
+    include/rtems/rtems/timer.h include/rtems/rtems/types.h \
+    mainpage.h
 
 if HAS_MP
 ## We only build multiprocessing related files if HAS_MP was defined

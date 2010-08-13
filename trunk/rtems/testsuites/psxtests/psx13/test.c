@@ -22,7 +22,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: test.c,v 1.17 2010/07/19 13:13:20 joel Exp $
+ *  $Id: test.c,v 1.18 2010/08/07 00:22:46 joel Exp $
  */
 
 #include <rtems.h>
@@ -142,7 +142,7 @@ int DeviceLSeekTest (void)
   else
     retval = FALSE;
 
-  /* assert (retval == TRUE);*/
+  close( fd );  /* assert (retval == TRUE);*/
 
   return (retval);
 }
@@ -187,6 +187,8 @@ int DupTest(void)
   else
     retval = FALSE;
 
+  close( fd1 );
+  close( fd2 );
   /* assert (retval == TRUE);*/
 
   return (retval);
@@ -257,7 +259,7 @@ int Dup2Test(void)
   }
 
   close (fd1);
-
+  close (fd2);
   /* assert (retval == TRUE);*/
 
   return (retval);

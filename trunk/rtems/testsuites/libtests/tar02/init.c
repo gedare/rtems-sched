@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/07/27 18:16:50 joel Exp $
+ *  $Id: init.c,v 1.2 2010/08/07 00:24:48 joel Exp $
  */
 
 #include <bsp.h> /* for device driver prototypes */
@@ -63,6 +63,7 @@ rtems_task Init(
   printf( "\n\n*** TAR02 TEST ***\n" );
 
   test_tarfs_load();
+  IMFS_dump();
 
   printf( "*** END OF TAR02 TEST ***\n" );
   exit( 0 );

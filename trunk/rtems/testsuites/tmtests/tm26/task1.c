@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: task1.c,v 1.30 2009/11/01 04:10:20 ralf Exp $
+ *  $Id: task1.c,v 1.31 2010/07/30 18:52:32 joel Exp $
  */
 
 #define CONFIGURE_INIT

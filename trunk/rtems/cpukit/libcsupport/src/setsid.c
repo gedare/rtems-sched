@@ -1,18 +1,13 @@
 /*
- *  $Id: setsid.c,v 1.2 2004/04/15 13:24:45 ralf Exp $
+ *  $Id: setsid.c,v 1.3 2010/08/03 15:56:25 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 
-#include <rtems/system.h>
-#include <rtems/score/object.h>
 #include <rtems/seterr.h>
 
 /*PAGE

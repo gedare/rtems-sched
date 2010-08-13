@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs.h,v 1.46 2010/07/15 08:59:46 sh Exp $
+ *  $Id: imfs.h,v 1.48 2010/08/08 20:25:00 joel Exp $
  */
 
 #ifndef _RTEMS_IMFS_H
@@ -559,6 +559,17 @@ extern int IMFS_rmnod(
   rtems_filesystem_location_info_t  *parent_pathloc, /* IN */
   rtems_filesystem_location_info_t  *pathloc         /* IN */
 );
+
+/*
+ *  Turn on IMFS assertions when RTEMS_DEBUG is defined.
+ */
+#ifdef RTEMS_DEBUG
+  #include <assert.h>
+
+  #define IMFS_assert(_x) assert(_x)
+#else
+  #define IMFS_assert(_x)
+#endif
 
 #ifdef __cplusplus
 }

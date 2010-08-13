@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.c,v 1.3 2010/06/29 00:39:41 joel Exp $
+ *  $Id: cpu_asm.c,v 1.4 2010/07/30 18:51:49 joel Exp $
  */
 
 #include <rtems/system.h>

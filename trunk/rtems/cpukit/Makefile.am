@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.100 2010/06/17 15:29:22 ralf Exp $
+## $Id: Makefile.am,v 1.101 2010/08/13 12:40:16 sh Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I aclocal
@@ -124,7 +124,8 @@ include_rtems_HEADERS += libblock/include/rtems/bdbuf.h \
     libblock/include/rtems/flashdisk.h libblock/include/rtems/ramdisk.h \
     libblock/include/rtems/nvdisk.h libblock/include/rtems/nvdisk-sram.h \
     libblock/include/rtems/ide_part_table.h \
-    libblock/include/rtems/bdpart.h
+    libblock/include/rtems/bdpart.h \
+    libblock/include/rtems/media.h
 
 ## ftpd
 if LIBNETWORKING

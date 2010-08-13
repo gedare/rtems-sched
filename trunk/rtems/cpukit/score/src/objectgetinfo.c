@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: objectgetinfo.c,v 1.7 2009/07/08 17:56:07 joel Exp $
+ *  $Id: objectgetinfo.c,v 1.8 2010/08/10 17:41:32 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -20,7 +20,7 @@
 
 Objects_Information *_Objects_Get_information(
   Objects_APIs   the_api,
-  uint32_t       the_class
+  uint16_t       the_class
 )
 {
   Objects_Information *info;

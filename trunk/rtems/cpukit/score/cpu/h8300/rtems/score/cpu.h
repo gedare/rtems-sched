@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.42 2010/07/27 11:03:38 sh Exp $
+ *  $Id: cpu.h,v 1.43 2010/07/29 17:51:36 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H

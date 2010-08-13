@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: termios.c,v 1.63 2010/07/05 21:31:56 joel Exp $
+ *  $Id: termios.c,v 1.64 2010/08/10 22:15:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -382,6 +382,7 @@ rtems_termios_close (void *arg)
         rtems_fatal_error_occurred (sc);
       }
       drainOutput (tty);
+      rtems_semaphore_release (tty->osem);
     }
 
     if (tty->device.outputUsesInterrupts == TERMIOS_TASK_DRIVEN) {

@@ -31,7 +31,7 @@ rtems_task Init(
   rtems_time_of_day time;
   rtems_status_code status;
 
-  puts( "\n\n*** SCHEDULER TEST 1 ***" );
+  puts( "\n\n*** SCHEDULER TEST 3 (EDF) ***" );
 
   build_time( &time, 12, 31, 1988, 9, 0, 0, 0 );
   status = rtems_clock_set( &time );

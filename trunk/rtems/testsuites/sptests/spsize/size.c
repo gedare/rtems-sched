@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: size.c,v 1.65 2010/06/29 00:40:29 joel Exp $
+ *  $Id: size.c,v 1.67 2010/08/08 16:34:00 joel Exp $
  */
 
 #include <rtems/system.h>
@@ -388,8 +388,6 @@ uninitialized =
                 (sizeof _Watchdog_Seconds_chain)          +
 
 /*wkspace.h*/   (sizeof _Workspace_Area);
-
-uninitialized = 0;
 
 #ifndef unix  /* make sure this is not a native compile */
 

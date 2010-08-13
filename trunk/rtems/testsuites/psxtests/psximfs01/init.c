@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.3 2010/06/30 14:41:56 joel Exp $
+ *  $Id: init.c,v 1.6 2010/08/09 14:29:33 joel Exp $
  */
 
 #include <tmacros.h>
@@ -17,6 +17,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <rtems/libcsupport.h>
 
 int TestFd;
 uint8_t Buffer[256];
@@ -138,6 +139,57 @@ void truncate_helper(void)
   } while (new > 0);
 }
 
+void extend_helper(void)
+{
+  off_t position;
+  off_t new;
+  off_t sc;
+  int   rc;
+
+  position = lseek( TestFd, 0, SEEK_END );
+  printf( "Seek to end .. returned %d\n", (int) position );
+
+  /* 
+   * test case to ftruncate a file to a length > its size 
+   */
+
+  rc = ftruncate( TestFd, 2 );
+  rtems_test_assert( rc == 0 );
+
+  puts( "lseek/ftruncate loop.." );
+  new = position;
+  do {
+    sc = lseek( TestFd, new, SEEK_SET );
+    if( sc == -1 ) {
+      if( errno == ENOSPC ) {
+	break;
+      }
+      else {
+	rtems_test_assert( 0 );
+      }
+    }
+
+    rc = ftruncate( TestFd, new );
+    if ( rc != 0 ) {
+      if( errno != ENOSPC ) {
+	fprintf(
+	  stderr,
+	  "ERROR - at offset %d - returned %d and error=%s\n",
+	  (int) new,
+	  rc,
+	  strerror( errno )
+        );
+	break;
+      }
+      else {
+	break;
+      }
+    }
+    rtems_test_assert( rc == 0 );
+    ++new;
+  } while ( 1 );
+}
+
 void close_it(void)
 {
   int rc;
@@ -147,11 +199,24 @@ void close_it(void)
   rtems_test_assert( rc == 0 );
 }
 
+void unlink_it(void)
+{
+  int rc;
+
+  puts( "unlink(" FILE_NAME ") - OK" );
+  rc = unlink( FILE_NAME );
+  rtems_test_assert( rc == 0 );
+}
+
 rtems_task Init(
   rtems_task_argument argument
 )
 {
   int i;
+  void *alloc_ptr = (void *)0;
+  int position = 0;
+  int status = 0;
+
   puts( "\n\n*** TEST IMFS 01 ***" );
 
   for (i=0 ; i<sizeof(Buffer) ; i++ )
@@ -169,8 +234,27 @@ rtems_task Init(
   
   open_it(false, false);
   truncate_helper();
+
+  /*
+   * Allocate the heap, so that extend cannot be successful
+   */
+  alloc_ptr = malloc( malloc_free_space() - 4 );
+
+  extend_helper();
+
+  /* 
+   * free the allocated heap memory
+   */
+  free(alloc_ptr);
+
+  extend_helper();
+  position = lseek( TestFd , 0, SEEK_END );
+  status = lseek( TestFd, position+2, SEEK_SET );
+  rtems_test_assert( status == -1 );
+  rtems_test_assert( errno == ENOSPC );
+
   close_it();
-  
+  unlink_it();
 
   puts( "*** END OF TEST IMFS 01 ***" );
 

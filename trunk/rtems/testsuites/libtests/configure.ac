@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.52 2010/07/27 18:16:49 joel Exp $
+## $Id: configure.ac,v 1.55 2010/08/07 00:24:47 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -28,6 +28,10 @@ RTEMS_CANONICALIZE_TOOLS
 RTEMS_CHECK_CUSTOM_BSP(RTEMS_BSP)
 RTEMS_CHECK_CXX(RTEMS_BSP)
 
+AC_PROG_LN_S
+AC_PATH_PROG([PAX],[pax])
+
+AM_CONDITIONAL(TARTESTS,test "$as_ln_s" = "ln -s" && test -n "$PAX")
 
 AM_CONDITIONAL(HAS_CXX,test "$rtems_cv_HAS_CPLUSPLUS" = "yes")
 
@@ -49,7 +53,9 @@ devfs01/Makefile
 devfs02/Makefile
 devfs03/Makefile
 devfs04/Makefile
+deviceio01/Makefile
 devnullfatal01/Makefile
+dumpbuf01/Makefile
 gxx01/Makefile
 gxx02/Makefile
 heapwalk/Makefile

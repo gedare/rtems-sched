@@ -22,7 +22,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.c,v 1.16 2010/06/29 00:39:41 joel Exp $
+ *  $Id: cpu_asm.c,v 1.17 2010/07/30 18:51:48 joel Exp $
  *
  */
 

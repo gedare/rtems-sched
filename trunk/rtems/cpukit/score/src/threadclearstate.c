@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadclearstate.c,v 1.10 2009/11/29 13:51:52 ralf Exp $
+ *  $Id: threadclearstate.c,v 1.12 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

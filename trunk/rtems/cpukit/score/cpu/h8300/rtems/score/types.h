@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: types.h,v 1.14 2010/07/16 08:37:53 sh Exp $
+ *  $Id: types.h,v 1.15 2010/07/29 17:51:36 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_TYPES_H

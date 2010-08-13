@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadsetstate.c,v 1.6 2008/12/22 05:52:32 ralf Exp $
+ *  $Id: threadsetstate.c,v 1.8 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

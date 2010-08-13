@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: objectinitializeinformation.c,v 1.18 2010/03/10 18:15:33 joel Exp $
+ *  $Id: objectinitializeinformation.c,v 1.19 2010/08/10 17:41:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -49,7 +49,7 @@
 void _Objects_Initialize_information(
   Objects_Information *information,
   Objects_APIs         the_api,
-  uint32_t             the_class,
+  uint16_t             the_class,
   uint32_t             maximum,
   uint16_t             size,
   bool                 is_string,

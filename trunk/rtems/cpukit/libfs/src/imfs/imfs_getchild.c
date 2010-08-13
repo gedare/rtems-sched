@@ -10,16 +10,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_getchild.c,v 1.11 2010/06/24 21:31:22 joel Exp $
+ *  $Id: imfs_getchild.c,v 1.12 2010/07/30 22:36:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#if defined(RTEMS_DEBUG)
-  #include <assert.h>
-#endif
 #include <errno.h>
 #include <string.h>
 #include "imfs.h"
@@ -40,16 +37,8 @@ IMFS_jnode_t *IMFS_find_match_in_dir(
    *  Check for fatal errors.  A NULL directory show a problem in the
    *  the IMFS code.
    */
-
-  #if defined(RTEMS_DEBUG)
-    assert( directory );
-    assert( name );
-  #endif
-  if ( !name )
-    return 0;
-
-  if ( !directory )
-    return 0;
+  IMFS_assert( directory );
+  IMFS_assert( name );
 
   /*
    *  Check for "." and ".."

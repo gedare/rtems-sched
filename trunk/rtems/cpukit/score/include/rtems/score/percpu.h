@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: percpu.h,v 1.3 2010/07/16 08:31:33 sh Exp $
+ *  $Id: percpu.h,v 1.4 2010/07/30 18:53:06 joel Exp $
  */
 
 #ifndef _RTEMS_PERCPU_H

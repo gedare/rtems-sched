@@ -1,3 +1,212 @@
+2010-08-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/src/media.c: Use unprotected chain extract.
+
+2010-08-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/media.h, libblock/src/media-desc.c,
+	libblock/src/media-dev-ident.c, libblock/src/media-path.c,
+	libblock/src/media-server.c, libblock/src/media.c: New files.
+	* Makefile.am, preinstall.am, libblock/Makefile.am: Reflect changes
+	above.
+
+2010-08-13	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/imfs/imfs_eval.c: Add the missing ';' for the debug
+	case.
+
+2010-08-11	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/include/confdefs.h: Include <rtems.h> to resolve all
+	dependencies.
+
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1658/cpukit
+	* sapi/src/exshutdown.c, score/include/rtems/score/interr.h: If the
+	system is not up, consider it a fatal error.
+
+2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1662/filesystem
+	* libcsupport/src/termios.c: osem is now released before attempt
+	to delete in rtems_termios_close.
+
+2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1660/filesystem
+	* libfs/src/pipe/fifo.c, libfs/src/pipe/pipe.h: Changed
+	int pipe_release to void pipe_release.
+	* libfs/src/imfs/imfs_fifo.c: Corresponding change to
+	IMFS_fifo_close since pipe_release does not return any error.
+	* libfs/src/imfs/imfs_initsupp.c: Changes to improve
+	IMFS_determine_bytes_per_block
+
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1661/testing
+	* libcsupport/Makefile.am, libcsupport/include/rtems/libcsupport.h: Add
+	public methods to get/set malloc heap pointer so the tests do not
+	have to peer behind the API.
+	* libcsupport/src/mallocgetheapptr.c,
+	libcsupport/src/mallocsetheapptr.c: New files.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* score/inline/rtems/score/object.inl: Use attribute unused in
+	_Objects_Is_local_id().
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/Makefile.am, rtems/preinstall.am: Install
+	<rtems/rtems/mainpage.h> to allow documentation generation.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtems/include/rtems.h, rtems/mainpage.h,
+	rtems/include/rtems/rtems/types.h: Documentation.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1604/cpukit
+	* rtems/src/regioncreate.c: Removed superfluous parameter check.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1615/cpukit
+	* posix/src/keyrundestructors.c: Improved POSIX compliance.  Now we may
+	have an unlimited number of iterations.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sapi/inline/rtems/chain.inl: Added
+	rtems_chain_extract_unprotected().
+
+2010-08-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/aio.h, posix/src/aio_return.c:
+	Let aio_return return ssize_t (Mandated by POSIX).
+
+2010-08-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/imfs.h: Fix typo.
+
+2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/src/getegid.c, libcsupport/src/geteuid.c,
+	libcsupport/src/getpid.c, libcsupport/src/getppid.c,
+	libcsupport/src/getuid.c, libcsupport/src/setegid.c,
+	libcsupport/src/seteuid.c, libcsupport/src/setsid.c
+	libcsupport/src/setuid.c: Remove redundant includes.
+
+2010-08-03	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1649/cpukit
+	* libcsupport/Makefile.am, libcsupport/src/getgid.c: Make sure all get
+	and set gid and egid routines are present and in their own files.
+	* libcsupport/src/setegid.c, libcsupport/src/setgid.c: New files.
+
+2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Apply RTEMS_CHECK_FUNC for set/get*id family of
+	functions. Extend set/get*id family of checks.
+	* aclocal/check-func.m4: New.
+
+2010-08-03	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add checks for [get|set][e][uid,gid] family of
+	functions.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libfs/src/imfs/imfs_creat.c, libfs/src/imfs/imfs_eval.c,
+	libfs/src/imfs/imfs_mknod.c, libfs/src/imfs/imfs_readlink.c,
+	libfs/src/pipe/fifo.c: Clean up for coverage improvements and
+	formatting.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/stackchk/check.c: If this port does not allocate the
+	interrupt stack, then it must always be a thread stack. Do not
+	include code to print the interrupt stack information.
+
+2010-08-02	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/base_fs.c, libcsupport/src/rtems_mkdir.c: Formatting.
+
+2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1645/cpukit
+	* libcsupport/src/getuid.c: Moved setuid() routine to its own
+	file.
+	* libcsupport/src/setuid.c: New file with setuid() routine.
+	* libcsupport/src/seteuid.c: New file with seteuid() routine.
+
+2010-07-30	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/fstat.c, libcsupport/src/rmdir.c,
+	libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_creat.c,
+	libfs/src/imfs/imfs_debug.c, libfs/src/imfs/imfs_getchild.c,
+	libfs/src/imfs/memfile.c: Add IMFS_assert. Clean up and remove all
+	checks which are redundant with system call layer. Formatting.
+
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* posix/src/psignalunblockthread.c, posix/src/pthreadkill.c,
+	rtems/src/signalsend.c, score/include/rtems/score/percpu.h,
+	score/inline/rtems/score/thread.inl, score/src/thread.c,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threaddispatch.c, score/src/threadready.c,
+	score/src/threadresume.c, score/src/threadsetstate.c,
+	score/src/threadstartmultitasking.c, score/src/threadsuspend.c,
+	score/src/threadyieldprocessor.c: Rename _Context_Switch_necessary to
+	_Thread_Dispatch_necessary to more properly reflect the intent.
+
+2010-07-30	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* sapi/include/confdefs.h: Add configuration macros for Go
+	requirements.
+
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1620/cpukit
+	* libcsupport/src/privateenv.c: Significant clean up and rework to
+	improve testability.
+
+2010-07-29	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1635/cpukit
+	* sapi/src/exinit.c, score/Makefile.am, score/preinstall.am,
+	score/include/rtems/score/bitfield.h,
+	score/include/rtems/score/priority.h,
+	score/include/rtems/score/thread.h,
+	score/inline/rtems/score/priority.inl,
+	score/inline/rtems/score/thread.inl,
+	score/src/threadchangepriority.c, score/src/threadclearstate.c,
+	score/src/threadready.c, score/src/threadresume.c,
+	score/src/threadsetpriority.c, score/src/threadsetstate.c,
+	score/src/threadsettransient.c, score/src/threadsuspend.c:
+	Refactoring of priority handling, to isolate the bitmap
+	implementation of priorities in the supercore so that priority
+	management is a little more modular. This change is in anticipation
+	of scheduler implementations that can select how they manage tracking
+	priority levels / finding the highest priority ready task. Note that
+	most of the changes here are simple renaming, to clarify the use of
+	the bitmap-based priority management.
+	* score/include/rtems/score/prioritybitmap.h,
+	score/inline/rtems/score/prioritybitmap.inl: New files.
+
+2010-07-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* posix/src/psignalunblockthread.c: Clean up and simplify.
+
+2010-07-28	Vinu Rajashekhar <vinutheraj@gmail.com>
+
+	* posix/src/condinit.c, posix/src/condwaitsupp.c,
+	posix/src/psignalunblockthread.c: Clean up some signal interruption
+	code.
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* posix/src/keycreate.c: Fix typo.

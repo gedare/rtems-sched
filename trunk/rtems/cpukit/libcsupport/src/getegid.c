@@ -1,14 +1,12 @@
 /*
- *  $Id: getegid.c,v 1.4 2010/07/01 15:37:48 joel Exp $
+ *  $Id: getegid.c,v 1.5 2010/08/03 15:56:25 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>

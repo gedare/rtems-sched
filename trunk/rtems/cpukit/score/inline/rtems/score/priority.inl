@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: priority.inl,v 1.25 2009/05/08 04:55:53 ccj Exp $
+ *  $Id: priority.inl,v 1.26 2010/07/29 17:52:10 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_PRIORITY_H

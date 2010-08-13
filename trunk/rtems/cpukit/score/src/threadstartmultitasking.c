@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadstartmultitasking.c,v 1.10 2009/08/28 18:26:05 joel Exp $
+ *  $Id: threadstartmultitasking.c,v 1.11 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

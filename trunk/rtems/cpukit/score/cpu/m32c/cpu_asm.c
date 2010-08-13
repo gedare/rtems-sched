@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.c,v 1.6 2010/06/29 00:31:14 joel Exp $
+ *  $Id: cpu_asm.c,v 1.7 2010/07/30 18:52:08 joel Exp $
  */
 
 /*

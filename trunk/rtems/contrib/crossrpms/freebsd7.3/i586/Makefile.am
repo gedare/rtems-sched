@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.4 2010/07/11 20:13:14 ralf Exp $
+# $Id: Makefile.am,v 1.5 2010/08/12 15:38:48 ralf Exp $
 
 TARGET = i586-pc-freebsd7.3
 
@@ -18,6 +18,6 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.5.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100711.0
+GCC_RPMREL = 0.20100812.0
 include ../gcc.am
 GCC_OPTS += --languages=cxx,fortran,objc

@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: aio_return.c,v 1.2 2009/01/02 10:04:23 ralf Exp $
+ *  $Id: aio_return.c,v 1.3 2010/08/09 07:33:58 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -22,7 +22,7 @@
 #include <rtems/system.h>
 #include <rtems/seterr.h>
 
-int aio_return(
+ssize_t aio_return(
   const struct aiocb  *aiocbp __attribute__((unused))
 )
 {

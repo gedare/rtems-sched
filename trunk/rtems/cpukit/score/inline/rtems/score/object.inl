@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: object.inl,v 1.44 2009/10/10 15:19:15 joel Exp $
+ *  $Id: object.inl,v 1.45 2010/08/09 09:16:08 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_OBJECT_H
@@ -162,7 +162,11 @@ RTEMS_INLINE_ROUTINE bool _Objects_Is_local_node(
  *  @note On a single processor configuration, this always returns true.
  */
 RTEMS_INLINE_ROUTINE bool _Objects_Is_local_id(
+#if defined(RTEMS_MULTIPROCESSING)
   Objects_Id id
+#else
+  Objects_Id id __attribute__((unused))
+#endif
 )
 {
 #if defined(RTEMS_MULTIPROCESSING)

@@ -7,14 +7,14 @@
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: priority.h,v 1.26 2010/06/14 06:08:40 ralf Exp $
+ *  $Id: priority.h,v 1.27 2010/07/29 17:52:10 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_PRIORITY_H

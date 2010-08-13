@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.3 2010/07/11 20:20:00 ralf Exp $
+# $Id: Makefile.am,v 1.4 2010/08/13 02:12:35 ralf Exp $
 
 TARGET = amd64-pc-netbsdelf5.0.2
 
@@ -18,7 +18,7 @@ BINUTILS_OPTS +=
 
 GCC_VERS = 4.5.0
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 0.20100711.0
+GCC_RPMREL = 0.20100812.0
 include ../gcc.am
 # C only
 GCC_OPTS += --languages=c,cxx,fortran,objc

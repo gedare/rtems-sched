@@ -56,7 +56,7 @@
  *  Further modified for the PPC405EX Haleakala board by
  *  Michael Hamel ADInstruments Ltd May 2008
  *
- *  $Id: bspstart.c,v 1.9 2009/12/17 08:42:16 thomas Exp $
+ *  $Id: bspstart.c,v 1.10 2010/08/03 14:16:35 joel Exp $
  */
 #include <string.h>
 #include <fcntl.h>
@@ -159,7 +159,8 @@ DirectUARTWrite(const char c)
 }
 
 /* We will provide our own printk output function as it may get used early */
-BSP_output_char_function_type BSP_output_char = DirectUARTWrite;
+BSP_output_char_function_type     BSP_output_char = DirectUARTWrite;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 /*===================================================================*/
 

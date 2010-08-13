@@ -3,19 +3,17 @@
  *
  *  This include file contains all thread priority manipulation routines for
  *  the bit map priority queue implementation.
- *  This Handler provides mechanisms which can be used to
- *  initialize and manipulate thread priorities.
  */
 
 /*
- *  COPYRIGHT (c) 1989-2006.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id$
+ *  $Id: prioritybitmap.h,v 1.1 2010/07/29 17:52:10 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_PRIORITYBITMAP_H
@@ -40,15 +38,17 @@ extern "C" {
 #include <rtems/score/priority.h>
 
 /* 
- * The Priority_bit_map_Control variables are instantiated only 
- * if using the bit map handler.
+ * TODO: 
+ * These should only be instantiated if using the bit map handler.  The 
+ * logical place for this is in confdefs.h when a scheduler that uses the 
+ * bit map handler is configured.
  */
 
 /**
  *  Each sixteen bit entry in this array is associated with one of
  *  the sixteen entries in the Priority Bit map.
  */
-extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
+SCORE_EXTERN volatile Priority_bit_map_Control _Priority_Major_bit_map;
 
 /** Each bit in the Priority Bitmap indicates whether or not there are
  *  threads ready at a particular priority.  The mapping of
@@ -56,7 +56,8 @@ extern volatile Priority_bit_map_Control _Priority_Major_bit_map;
  *  dependent as is the value of each bit used to indicate that
  *  threads are ready at that priority.
  */
-extern Priority_bit_map_Control _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
+SCORE_EXTERN Priority_bit_map_Control
+               _Priority_Bit_map[16] CPU_STRUCTURE_ALIGNMENT;
 
 /*
  *  The definition of the Priority_bit_map_Control type is CPU dependent.
@@ -78,7 +79,7 @@ typedef struct {
   Priority_bit_map_Control  block_major;
   /** This is the priority bit map block mask. */
   Priority_bit_map_Control  block_minor;
-}   Priority_bit_map_Information;
+} Priority_bit_map_Information;
 
 
 #if ( CPU_USE_GENERIC_BITFIELD_CODE == FALSE )

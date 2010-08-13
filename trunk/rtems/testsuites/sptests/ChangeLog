@@ -1,3 +1,48 @@
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1658/cpukit
+	* Makefile.am, configure.ac: If the system is not up, consider it a
+	fatal error. This eliminated sp61 and added spfatal23.
+	* spfatal23/.cvsignore, spfatal23/Makefile.am, spfatal23/spfatal23.doc,
+	spfatal23/spfatal23.scn, spfatal23/testcase.h: New files.
+	* sp61/.cvsignore, sp61/Makefile.am, sp61/init.c, sp61/sp61.doc,
+	sp61/sp61.scn: Removed.
+
+2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1663/testing
+	* spmkdir/init.c: New cases to get the error path in rtems_mkdir
+	routine.
+
+2010-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1661/testing
+	* spfifo02/init.c, spmountmgr01/init.c, spprivenv01/init.c: Eliminate
+	most references to RTEMS_Malloc_Heap.
+
+2010-08-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* sp09/screen12.c: Update for rtems_region_create() changes.
+	* sp09/sp09.scn: Update.
+
+2010-08-08	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1647/testing
+	* spsize/size.c: Remove redundant initialize uninitialized to 0.
+
+2010-07-30	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1599/cpukit
+	* spsize/size.c: Rename _Context_Switch_necessary to
+	_Thread_Dispatch_necessary to more properly reflect the intent.
+
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1621/testing
+	* Makefile.am, configure.ac: Improve coverage of private environment.
+	* spprivenv01/.cvsignore, spprivenv01/Makefile.am, spprivenv01/init.c,
+	spprivenv01/spprivenv01.doc, spprivenv01/spprivenv01.scn: New files.
+
 2010-07-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
 
 	* sp43/init.c, sp43/sp43.scn: Add code to exercise case where an API

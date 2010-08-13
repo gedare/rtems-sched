@@ -27,7 +27,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.6 2010/07/16 08:40:07 sh Exp $
+ *  $Id: cpu.h,v 1.7 2010/07/29 17:51:44 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
