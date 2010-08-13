@@ -1,8 +1,6 @@
 ##
-## $Id: Makefile.am,v 1.1 2010/07/19 13:12:40 joel Exp $
+## $Id: Makefile.am,v 1.2 2010/07/29 16:13:36 ralf Exp $
 ##
-
-MANAGERS = all
 
 rtems_tests_PROGRAMS = tar03
 tar03_SOURCES = init.c

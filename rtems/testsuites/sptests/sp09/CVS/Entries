@@ -1,7 +1,6 @@
 /.cvsignore/1.1/Thu Apr 13 14:36:57 2000//
 /Makefile.am/1.23/Fri Apr  3 12:48:12 2009//
 /sp09.doc/1.8/Thu Sep  4 18:53:48 2003//
-/sp09.scn/1.25/Mon Jun 21 16:59:48 2010//
 /delay.c/1.8/Thu Jul  8 17:33:00 2010//
 /init.c/1.13/Thu Jul  8 17:33:00 2010//
 /isr.c/1.8/Thu Jul  8 17:33:00 2010//
@@ -16,7 +15,6 @@
 /screen09.c/1.19/Thu Jul  8 17:33:00 2010//
 /screen10.c/1.13/Thu Jul  8 17:33:00 2010//
 /screen11.c/1.15/Thu Jul  8 17:33:00 2010//
-/screen12.c/1.22/Thu Jul  8 17:33:00 2010//
 /screen13.c/1.14/Thu Jul  8 17:33:00 2010//
 /screen14.c/1.21/Thu Jul  8 17:33:00 2010//
 /system.h/1.19/Thu Jul  8 17:33:08 2010//
@@ -24,4 +22,6 @@
 /task2.c/1.8/Thu Jul  8 17:33:00 2010//
 /task3.c/1.12/Thu Jul  8 17:33:00 2010//
 /task4.c/1.8/Thu Jul  8 17:33:00 2010//
+/screen12.c/1.23/Fri Aug 13 15:44:31 2010//
+/sp09.scn/1.26/Fri Aug 13 15:44:31 2010//
 D

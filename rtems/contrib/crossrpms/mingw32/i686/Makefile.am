@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.21 2010/03/19 08:56:29 ralf Exp $
+# $Id: Makefile.am,v 1.22 2010/08/13 03:06:36 ralf Exp $
 
 TARGET = i686-pc-mingw32
 
@@ -12,8 +12,8 @@ MPC_VERS = 0.8.1
 MPC_RPMREL = 0.20100319.1%{?dist}
 include ../mpc.am
 
-MPFR_VERS = 2.4.1
-MPFR_RPMREL = 0.20100319.1%{?dist}
+MPFR_VERS = 2.4.2
+MPFR_RPMREL = 0.20100813.1%{?dist}
 include ../mpfr.am
 
 @rpmprefix@$(TARGET)-binutils-helper.spec: $(TARGET)-binutils-helper.spec.in  

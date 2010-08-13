@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: fifo.c,v 1.9 2010/06/24 19:57:58 joel Exp $
+ * $Id: fifo.c,v 1.11 2010/08/10 17:41:32 joel Exp $
  */
 
 
@@ -190,10 +190,11 @@ static void pipe_unlock(void)
   rtems_status_code sc = RTEMS_SUCCESSFUL;
 
   sc = rtems_semaphore_release(pipe_semaphore);
-  if (sc != RTEMS_SUCCESSFUL) {
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
-  }
+  #ifdef RTEMS_DEBUG
+    if (sc != RTEMS_SUCCESSFUL) {
+      rtems_fatal_error_occurred(0xdeadbeef);
+    }
+  #endif
 }
 
 /*
@@ -240,7 +241,7 @@ out:
  * *pipep points to pipe control structure. When the last user releases pipe,
  * it will be set to NULL.
  */
-int pipe_release(
+void pipe_release(
   pipe_control_t **pipep,
   rtems_libio_t *iop
 )
@@ -248,15 +249,15 @@ int pipe_release(
   pipe_control_t *pipe = *pipep;
   uint32_t mode;
 
-  if (pipe_lock())
+  #if defined(RTEMS_DEBUG)
     /* WARN pipe not freed and pipep not set to NULL! */
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
+    if (pipe_lock())
+      rtems_fatal_error_occurred(0xdeadbeef);
 
-  if (!PIPE_LOCK(pipe))
     /* WARN pipe not released! */
-    /* FIXME */
-    rtems_fatal_error_occurred(0xdeadbeef);
+    if (!PIPE_LOCK(pipe))
+      rtems_fatal_error_occurred(0xdeadbeef);
+  #endif
 
   mode = LIBIO_ACCMODE(iop);
   if (mode & LIBIO_FLAGS_READ)
@@ -285,17 +286,16 @@ int pipe_release(
 
 #if 0
   if (! delfile)
-    return 0;
+    return;
   if (iop->pathinfo.ops->unlink_h == NULL)
-    return 0;
+    return;
 
   /* This is safe for IMFS, but how about other FSes? */
   iop->flags &= ~LIBIO_FLAGS_OPEN;
   if(iop->pathinfo.ops->unlink_h(&iop->pathinfo))
-    return -errno;
+    return;
 #endif
 
-  return 0;
 }
 
 /*

@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_initsupp.c,v 1.23 2010/06/24 21:31:22 joel Exp $
+ *  $Id: imfs_initsupp.c,v 1.24 2010/08/10 17:41:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -48,7 +48,10 @@ static int IMFS_determine_bytes_per_block(
   for (bit_mask = 16; !is_valid && (bit_mask <= 512); bit_mask <<= 1) {
     if (bit_mask == requested_bytes_per_block) {
       is_valid = true;
+      break;
     }
+    if(bit_mask > requested_bytes_per_block)
+      break;
   }
   *dest_bytes_per_block = ((is_valid)
 			   ? requested_bytes_per_block

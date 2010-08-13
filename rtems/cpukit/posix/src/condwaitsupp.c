@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: condwaitsupp.c,v 1.8 2008/09/04 15:23:11 ralf Exp $
+ *  $Id: condwaitsupp.c,v 1.9 2010/07/28 20:39:44 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -85,9 +85,16 @@ int _POSIX_Condition_variables_Wait_support(
          *  _Thread_queue_Enqueue.
          */
 
+        /*
+         *  If the thread is interrupted, while in the thread queue, by
+         *  a POSIX signal, then pthread_cond_wait returns spuriously,
+         *  according to the POSIX standard. It means that pthread_cond_wait
+         *  returns a success status, except for the fact that it was not
+         *  woken up a pthread_cond_signal or a pthread_cond_broadcast.
+         */
         status = _Thread_Executing->Wait.return_code;
-        if ( status && status != ETIMEDOUT )
-          return status;
+        if ( status == EINTR )
+          status = 0;
 
       } else {
         _Thread_Enable_dispatch();

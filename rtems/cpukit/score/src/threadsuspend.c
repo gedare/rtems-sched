@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: threadsuspend.c,v 1.7 2010/06/18 02:56:26 ralf Exp $
+ *  $Id: threadsuspend.c,v 1.9 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: regioncreate.c,v 1.13 2009/12/15 18:26:41 humph Exp $
+ *  $Id: regioncreate.c,v 1.14 2010/08/09 08:24:41 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -66,9 +66,6 @@ rtems_status_code rtems_region_create(
     return RTEMS_INVALID_ADDRESS;
 
   if ( !id )
-    return RTEMS_INVALID_ADDRESS;
-
-  if ( !_Addresses_Is_aligned( starting_address ) )
     return RTEMS_INVALID_ADDRESS;
 
   _RTEMS_Lock_allocator();                      /* to prevent deletion */

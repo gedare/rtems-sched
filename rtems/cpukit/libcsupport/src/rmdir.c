@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rmdir.c,v 1.18 2010/07/01 15:12:37 jennifer Exp $
+ *  $Id: rmdir.c,v 1.19 2010/07/30 22:36:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -74,7 +74,7 @@ int rmdir(
   /*
    * Verify you can remove this node as a directory.
    */
-  if (  (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ){
+  if ( (*loc.ops->node_type_h)( &loc ) != RTEMS_FILESYSTEM_DIRECTORY ) {
     rtems_filesystem_freenode( &loc );
     if ( free_parentloc )
       rtems_filesystem_freenode( &parentloc );

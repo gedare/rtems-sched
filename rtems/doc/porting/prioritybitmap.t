@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id: prioritybitmap.t,v 1.6 2002/01/17 21:47:45 joel Exp $
+@c  $Id: prioritybitmap.t,v 1.7 2010/07/29 17:52:18 joel Exp $
 @c
 
 @chapter Priority Bitmap Manipulation

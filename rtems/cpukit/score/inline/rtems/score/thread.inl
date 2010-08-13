@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.inl,v 1.41 2010/07/27 01:48:46 joel Exp $
+ *  $Id: thread.inl,v 1.43 2010/07/30 18:53:06 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_THREAD_H

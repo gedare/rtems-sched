@@ -8,5 +8,8 @@
 /newlib-1.18.0-rtems4.11-20100617.diff/1.1/Thu Jun 17 16:36:00 2010/-kb/
 /autoconf-2.66-611661.diff/1.1/Thu Jul  8 13:01:34 2010/-kb/
 /newlib-1.18.0-rtems4.11-20100708.diff/1.1/Thu Jul  8 16:34:11 2010/-kb/
-/gcc-core-4.5.1-RC-20100722-rtems4.11-20100726.diff/1.1/Tue Jul 27 15:23:30 2010/-kb/
+/gcc-core-4.5.1-rtems4.11-20100726.diff/1.1/Sun Aug  1 04:11:56 2010/-kb/
+/gdb-7.1-rtems4.11-20100812.diff/1.1/Thu Aug 12 14:10:27 2010/-kb/
+/newlib-1.18.0-rtems4.11-20100804.diff/1.1/Thu Aug  5 05:15:47 2010/-kb/
+/newlib-1.18.0-rtems4.11-20100810.diff/1.1/Tue Aug 10 04:01:15 2010/-kb/
 D

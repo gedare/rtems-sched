@@ -47,7 +47,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu_asm.S,v 1.42 2010/06/29 00:31:44 joel Exp $
+ *  $Id: cpu_asm.S,v 1.43 2010/07/30 18:52:12 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H

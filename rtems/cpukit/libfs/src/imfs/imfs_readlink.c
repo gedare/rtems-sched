@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_readlink.c,v 1.7 2004/04/17 08:34:41 ralf Exp $
+ *  $Id: imfs_readlink.c,v 1.8 2010/08/02 18:27:23 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -34,8 +34,7 @@ int IMFS_readlink(
 
   node = loc->node_access;
 
-  if ( node->type != IMFS_SYM_LINK )
-    rtems_set_errno_and_return_minus_one( EINVAL );
+  IMFS_assert( node->type == IMFS_SYM_LINK );
 
   for( i=0; ((i<bufsize) && (node->info.sym_link.name[i] != '\0')); i++ )
     buf[i] = node->info.sym_link.name[i];

@@ -1,18 +1,6 @@
 /Unlimited.txt/1.3/Tue Jan 29 21:52:21 2008//
-/threadchangepriority.c/1.12/Mon Dec 22 05:52:32 2008//
-/threadclearstate.c/1.10/Sun Nov 29 13:51:52 2009//
-/threadready.c/1.7/Mon Dec 22 05:52:32 2008//
-/threadsetpriority.c/1.4/Thu Jan 27 05:57:05 2005//
-/threadsetstate.c/1.6/Mon Dec 22 05:52:32 2008//
-/threadsettransient.c/1.5/Thu Jan 27 05:57:05 2005//
 /threadinitialize.c/1.39/Result of merge+Mon Jun 21 16:59:45 2010//
-/threadresume.c/1.10/Result of merge//
-/threadsuspend.c/1.7/Result of merge//
 /threadtickletimeslice.c/1.12/Fri Jun 25 16:24:13 2010//
-/thread.c/1.63/Result of merge//
-/threaddispatch.c/1.21/Tue Jun 29 17:23:44 2010//
-/threadstartmultitasking.c/1.10/Tue Jun 29 17:23:44 2010//
-/threadyieldprocessor.c/1.5/Tue Jun 29 17:23:44 2010//
 /threadclose.c/1.12/Fri Jul  2 15:01:22 2010//
 /heap.c/1.38/Thu Jul  8 17:33:02 2010//
 /heapallocate.c/1.17/Thu Jul  8 17:33:02 2010//
@@ -31,14 +19,12 @@
 /objectextendinformation.c/1.22/Thu Jul  8 17:33:02 2010//
 /objectfree.c/1.8/Thu Jul  8 17:33:02 2010//
 /objectget.c/1.14/Thu Jul  8 17:33:02 2010//
-/objectgetinfo.c/1.7/Thu Jul  8 17:33:02 2010//
 /objectgetinfoid.c/1.2/Thu Jul  8 17:33:02 2010//
 /objectgetisr.c/1.7/Thu Jul  8 17:33:02 2010//
 /objectgetnameasstring.c/1.12/Thu Jul  8 17:33:02 2010//
 /objectgetnext.c/1.6/Thu Jul  8 17:33:02 2010//
 /objectgetnoprotection.c/1.7/Thu Jul  8 17:33:02 2010//
 /objectidtoname.c/1.15/Thu Jul  8 17:33:02 2010//
-/objectinitializeinformation.c/1.18/Thu Jul  8 17:33:02 2010//
 /objectmp.c/1.27/Thu Jul  8 17:33:02 2010//
 /objectnamespaceremove.c/1.2/Thu Jul  8 17:33:02 2010//
 /objectnametoid.c/1.14/Thu Jul  8 17:33:02 2010//
@@ -176,4 +162,18 @@
 /coremutexsurrender.c/1.23/Tue Jul 27 16:30:11 2010//
 /threadmp.c/1.19/Tue Jul 27 16:34:57 2010//
 /threadqenqueuepriority.c/1.11/Tue Jul 27 16:35:20 2010//
+/objectgetinfo.c/1.8/Fri Aug 13 15:44:31 2010//
+/objectinitializeinformation.c/1.19/Fri Aug 13 15:44:31 2010//
+/thread.c/1.64/Result of merge//
+/threadchangepriority.c/1.14/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadclearstate.c/1.12/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadready.c/1.9/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadresume.c/1.12/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadsetpriority.c/1.5/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadsetstate.c/1.8/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadsettransient.c/1.6/Result of merge+Fri Aug 13 15:44:31 2010//
+/threadsuspend.c/1.9/Result of merge+Fri Aug 13 15:44:31 2010//
+/threaddispatch.c/1.22/Fri Aug 13 15:44:31 2010//
+/threadstartmultitasking.c/1.11/Fri Aug 13 15:44:31 2010//
+/threadyieldprocessor.c/1.6/Fri Aug 13 15:44:31 2010//
 D

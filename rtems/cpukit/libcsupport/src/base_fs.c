@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: base_fs.c,v 1.22 2010/05/31 13:56:36 ccj Exp $
+ *  $Id: base_fs.c,v 1.23 2010/08/02 18:24:15 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -48,14 +48,12 @@ void rtems_filesystem_initialize( void )
   /*
    *  mount the first filesystem.
    */
-
   if ( rtems_filesystem_mount_table_size == 0 )
     rtems_fatal_error_occurred( 0xABCD0001 );
 
   mt = &rtems_filesystem_mount_table[0];
 
   status = mount( mt->device, mt->mount_point, mt->type, mt->fsoptions, NULL );
-
   if ( status == -1 )
     rtems_fatal_error_occurred( 0xABCD0002 );
 

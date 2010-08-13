@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.189 2010/06/29 18:51:49 joel Exp $
+## $Id: configure.ac,v 1.191 2010/08/03 15:44:05 ralf Exp $
 
 AC_PREREQ(2.61)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -55,10 +55,28 @@ AC_CHECK_FUNCS([creat])
 AC_CHECK_FUNCS([__assert])
 AC_CHECK_FUNCS([execl execlp execle execv execvp execve])
 AC_CHECK_FUNCS([regcomp regexec regerror regfree])
-# Mandated by POSIX but not present in newlib
+
+# Mandated by POSIX, decls not present in some versions of newlib
 AC_CHECK_DECLS([flockfile],[AC_CHECK_FUNCS([flockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([funlockfile],[AC_CHECK_FUNCS([funlockfile])],,[#include <stdio.h>])
 AC_CHECK_DECLS([ftrylockfile],[AC_CHECK_FUNCS([ftrylockfile])],,[#include <stdio.h>])
+
+# Mandated by POSIX, decls not present in some versions of newlib,
+# some versions stubbed in newlib's rtems crt0
+RTEMS_CHECK_FUNC([seteuid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([geteuid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setegid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getegid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setuid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getuid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setgid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getgid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setsid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getsid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setpgid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getpgid],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([setpgrp],[#include <unistd.h>])
+RTEMS_CHECK_FUNC([getpgrp],[#include <unistd.h>])
 
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])

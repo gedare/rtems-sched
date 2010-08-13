@@ -46,7 +46,7 @@
  *
  *  http://www.OARcorp.com/rtems/license.html.
  *
- *  $Id: console.c,v 1.9 2010/01/19 09:11:34 thomas Exp $
+ *  $Id: console.c,v 1.10 2010/08/03 14:16:41 joel Exp $
  */
 
 #include <rtems.h>
@@ -856,7 +856,8 @@ static void console_debug_putc_onlcr(const char c)
   }
 }
 
-BSP_output_char_function_type BSP_output_char = console_debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = console_debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 
 /*

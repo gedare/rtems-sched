@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: psignalunblockthread.c,v 1.11 2010/06/29 00:34:11 joel Exp $
+ *  $Id: psignalunblockthread.c,v 1.14 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -98,24 +98,19 @@ bool _POSIX_signals_Unblock_thread(
      *    + Any other combination, do nothing.
      */
 
-    if ( the_thread->current_state & STATES_INTERRUPTIBLE_BY_SIGNAL ) {
+    if ( _States_Is_interruptible_by_signal( the_thread->current_state ) ) {
       the_thread->Wait.return_code = EINTR;
       /*
-       *  At this time, there is no RTEMS API object which lets a task
-       *  block on a thread queue and be interruptible by a POSIX signal.
-       *  If an object class with that requirement is ever added, enable
-       *  this code.
+       *  In pthread_cond_wait, a thread will be blocking on a thread
+       *  queue, but is also interruptible by a POSIX signal.
        */
-      #if 0
 	if ( _States_Is_waiting_on_thread_queue(the_thread->current_state) )
 	  _Thread_queue_Extract_with_proxy( the_thread );
-	else
-      #endif
-	  if ( _States_Is_delaying(the_thread->current_state) ){
-	    if ( _Watchdog_Is_active( &the_thread->Timer ) )
-	      (void) _Watchdog_Remove( &the_thread->Timer );
+	else if ( _States_Is_delaying(the_thread->current_state) ) {
+	    (void) _Watchdog_Remove( &the_thread->Timer );
 	    _Thread_Unblock( the_thread );
 	  }
+
     } else if ( the_thread->current_state == STATES_READY ) {
       if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
 	_Thread_Dispatch_necessary = true;

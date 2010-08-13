@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: bspgetworkarea.c,v 1.6 2009/11/29 15:33:27 ralf Exp $
+ *  $Id: bspgetworkarea.c,v 1.7 2010/08/03 14:17:15 joel Exp $
  */
 
 /* #define BSP_GET_WORK_AREA_DEBUG */
@@ -37,10 +37,10 @@ void bsp_get_work_area(
   /* must be identical to STACK_SIZE in start.S */
   #define STACK_SIZE (16 * 1024)
 
-  *work_area_start       = &end;
-  *work_area_size       = (void *)rdb_start - (void *)&end - STACK_SIZE;
-  *heap_start = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
-  *heap_size = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
+  *work_area_start = &end;
+  *work_area_size  = (void *)rdb_start - (void *)&end - STACK_SIZE;
+  *heap_start      = BSP_BOOTCARD_HEAP_USES_WORK_AREA;
+  *heap_size       = BSP_BOOTCARD_HEAP_SIZE_DEFAULT;
 
   /*
    *  The following may be helpful in debugging what goes wrong when

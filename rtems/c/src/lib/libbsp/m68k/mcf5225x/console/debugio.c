@@ -7,7 +7,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: debugio.c,v 1.1 2010/04/05 17:06:57 joel Exp $
+ *  $Id: debugio.c,v 1.2 2010/08/03 14:15:54 joel Exp $
  */
 
 #include <stdio.h>
@@ -37,4 +37,5 @@ static void _BSP_null_char(char c)
   rtems_interrupt_enable(level);
 }
 
-BSP_output_char_function_type BSP_output_char = _BSP_null_char;
+BSP_output_char_function_type     BSP_output_char = _BSP_null_char;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;

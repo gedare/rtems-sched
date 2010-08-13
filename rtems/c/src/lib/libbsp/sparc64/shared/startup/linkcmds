@@ -1,6 +1,6 @@
 /*  linkcmds
  * 
- *  $Id: linkcmds,v 1.1 2010/06/17 16:20:46 joel Exp $
+ *  $Id: linkcmds,v 1.2 2010/08/03 18:29:12 joel Exp $
  */
 
 /*
@@ -108,6 +108,7 @@ SECTIONS
     . = ALIGN (16);
 
     *(.gnu.linkonce.t*)
+    *(.gcc_except_table*)
 
     /*
      * C++ constructors

@@ -3,7 +3,7 @@
 @c  On-Line Applications Research Corporation (OAR).
 @c  All rights reserved.
 @c
-@c  $Id: part.t,v 1.19 2010/05/18 13:41:53 joel Exp $
+@c  $Id: part.t,v 1.20 2010/08/03 07:04:46 sh Exp $
 @c
 
 @chapter Partition Manager
@@ -457,3 +457,6 @@ preempted.
 Returning a buffer to a global partition which does
 not reside on the local node will generate a request telling the
 remote node to return the buffer to the specified partition.
+
+Returning a buffer multiple times is an error.  It will corrupt the internal
+state of the partition.

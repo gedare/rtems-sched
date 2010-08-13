@@ -30,7 +30,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: exception.S,v 1.4 2010/07/06 07:41:28 sh Exp $
+ *  $Id: exception.S,v 1.5 2010/07/30 18:51:12 joel Exp $
  */
 
 #include <bspopts.h>

@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.h,v 1.96 2010/06/29 00:34:11 joel Exp $
+ *  $Id: thread.h,v 1.97 2010/07/29 17:52:10 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_THREAD_H
@@ -71,6 +71,7 @@ extern "C" {
 #include <rtems/score/object.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/stack.h>
 #include <rtems/score/states.h>
 #include <rtems/score/tod.h>

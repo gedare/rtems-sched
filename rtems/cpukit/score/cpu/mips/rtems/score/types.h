@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: types.h,v 1.16 2010/07/16 08:41:50 sh Exp $
+ *  $Id: types.h,v 1.17 2010/07/29 17:51:48 joel Exp $
  */
 /* @(#)mipstypes.h       08/20/96     1.4 */
 

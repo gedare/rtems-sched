@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.7 2010/04/25 19:12:22 joel Exp $
+ *  $Id: init.c,v 1.8 2010/08/02 18:11:53 joel Exp $
  */
 
 #include <tmacros.h>
@@ -49,9 +49,21 @@ void test_errors(void)
   rtems_test_assert( p == NULL );
   
   bsp_boot_cmdline = "edit";
-  puts ( "rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = edit -no error" );
+  puts (
+    "rtems_bsp_cmdline_get_param - bsp_boot_cmdline = edit name = "
+      "edit -no error" );
   p = rtems_bsp_cmdline_get_param("edit", result, 5);
   rtems_test_assert( p != NULL );
+
+  bsp_boot_cmdline = "joel=123456789";
+  puts( "rtems_bsp_cmdline_get_param - too short buffer" );
+  p = rtems_bsp_cmdline_get_param("joel", result, 5);
+  rtems_test_assert( p != NULL );
+
+  bsp_boot_cmdline = "--arg1=X`";
+  puts( "rtems_bsp_cmdline_get_param_rhs - short match" );
+  p = rtems_bsp_cmdline_get_param_rhs("arg", result, 10);
+  rtems_test_assert( p == NULL );
 }
 
 void test_search(

@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.1 2010/07/01 17:26:35 joel Exp $
+ *  $Id: init.c,v 1.4 2010/08/10 14:50:14 joel Exp $
  */
 
 #include <bsp.h>
@@ -17,6 +17,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
+#include <limits.h>
 
 void print_passwd(
   struct passwd *pw
@@ -63,6 +64,8 @@ rtems_task Init(
   struct passwd *pw;
   struct group  *gr;
   int status = -1;
+  char str[100] = {0};
+  int max_int = INT_MAX;
 
   FILE *fp = NULL;
 
@@ -120,6 +123,45 @@ rtems_task Init(
   fp = fopen( "/etc/passwd", "w" );
   rtems_test_assert( fp != NULL );
   fprintf( fp, "user\n:x:2:2:dummy::/:/bin/sh\n" );
+  fclose( fp );
+
+  puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
+  pw = getpwnam( "root" );
+  rtems_test_assert( !pw ); 
+  rtems_test_assert( errno == EINVAL );
+
+  fp = fopen( "/etc/passwd", "w" );
+  rtems_test_assert( fp != NULL );
+  fprintf( fp, "user:x:999999999999:1:dummy::/:/bin/sh\n" );
+  fclose( fp );
+
+  puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
+  pw = getpwnam( "root" );
+  rtems_test_assert( !pw ); 
+  rtems_test_assert( errno == EINVAL );
+
+  sprintf( str, "user:x:%d%d:1:dummy::/:/bin/sh\n", max_int/10, max_int%10+1 );
+
+  fp = fopen( "/etc/passwd", "w" );
+  rtems_test_assert( fp != NULL );
+  fprintf( fp, str );
+  fclose( fp );
+
+  puts( "Init - getpwnam(\"root\") -- expected EINVAL" );
+  pw = getpwnam( "root" );
+  rtems_test_assert( !pw ); 
+  rtems_test_assert( errno == EINVAL );
+
+  fp = fopen( "/etc/passwd", "w" );
+  rtems_test_assert( fp != NULL );
+  fprintf( fp, "\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ\
+    :x:999999999999:1:dummy::/:/bin/sh\n" );
   fclose( fp );
 
   puts( "Init - getpwnam(\"root\") -- expected EINVAL" );

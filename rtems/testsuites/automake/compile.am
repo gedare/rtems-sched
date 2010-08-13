@@ -1,5 +1,5 @@
 ##
-## $Id: compile.am,v 1.22 2009/10/23 05:37:46 ralf Exp $
+## $Id: compile.am,v 1.23 2010/07/31 03:09:52 ralf Exp $
 ##
 
 CC = @CC@ $(GCCSPECS)
@@ -17,6 +17,4 @@ AM_CPPFLAGS =
 AM_CFLAGS =
 AM_CXXFLAGS =
 
-clean-local:
-	$(RM) *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf
-
+CLEANFILES = *.num *.nxe *.elf *.srec* *.bin *.bt *.ralf

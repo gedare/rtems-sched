@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: interr.h,v 1.31 2010/07/07 14:06:52 joel Exp $
+ *  $Id: interr.h,v 1.32 2010/08/10 22:56:35 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_INTERR_H
@@ -69,7 +69,8 @@ typedef enum {
   INTERNAL_ERROR_IMPLEMENTATION_KEY_CREATE_INCONSISTENCY,
   INTERNAL_ERROR_IMPLEMENTATION_BLOCKING_OPERATION_CANCEL,
   INTERNAL_ERROR_MUTEX_OBTAIN_FROM_BAD_STATE,
-  INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0
+  INTERNAL_ERROR_UNLIMITED_AND_MAXIMUM_IS_0,
+  INTERNAL_ERROR_SHUTDOWN_WHEN_NOT_UP
 } Internal_errors_Core_list;
 
 typedef uint32_t Internal_errors_t;

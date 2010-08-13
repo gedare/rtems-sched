@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: exinit.c,v 1.54 2010/06/18 03:03:22 ralf Exp $
+ *  $Id: exinit.c,v 1.55 2010/07/29 17:52:09 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -44,6 +44,7 @@
 #include <rtems/score/periodic.h>
 #include <rtems/score/priority.h>
 #include <rtems/score/scheduler.h>
+#include <rtems/score/prioritybitmap.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/tod.h>
 #include <rtems/score/userext.h>
@@ -126,6 +127,7 @@ void rtems_initialize_data_structures(void)
   _API_Mutex_Initialization( 1 );
   _API_Mutex_Allocate( &_RTEMS_Allocator_Mutex );
 
+  _Priority_bit_map_Handler_initialization();
   _Watchdog_Handler_initialization();
   _TOD_Handler_initialization();
 

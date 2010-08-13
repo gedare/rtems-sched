@@ -1,15 +1,12 @@
 /*
- *  $Id: getpid.c,v 1.4 2009/09/30 08:20:32 ralf Exp $
+ *  $Id: getpid.c,v 1.5 2010/08/03 15:56:25 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif
 
-#include <limits.h>
-#include <errno.h>
-#include <string.h>
-#include <sys/types.h>
+#include <unistd.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>

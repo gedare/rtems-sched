@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: fstat.c,v 1.13 2010/07/15 08:10:47 sh Exp $
+ *  $Id: fstat.c,v 1.14 2010/07/30 22:36:32 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -32,14 +32,12 @@ int fstat(
   /*
    *  Check to see if we were passed a valid pointer.
    */
-
   if ( !sbuf )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
   /*
    *  Now process the stat() request.
    */
-
   iop = rtems_libio_iop( fd );
   rtems_libio_check_fd( fd );
   rtems_libio_check_is_open(iop);

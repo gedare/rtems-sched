@@ -1,5 +1,5 @@
 #
-# $Id: configure.ac,v 1.18 2006/12/02 06:06:23 ralf Exp $
+# $Id: configure.ac,v 1.19 2010/07/30 12:09:37 ralf Exp $
 #
 
 AC_PREREQ(2.60)
@@ -13,8 +13,8 @@ AM_INIT_AUTOMAKE([no-define foreign 1.10])
 AM_MAINTAINER_MODE
 
 AC_PROG_CC
-AC_CHECK_HEADERS([getopt.h])
-AC_CHECK_FUNCS(strerror strtol)
+AC_CHECK_HEADERS([getopt.h libgen.h])
+AC_CHECK_FUNCS(strerror strtol basename)
 
 RTEMS_PATH_KSH
 

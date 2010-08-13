@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: pthreadkill.c,v 1.16 2010/06/29 00:34:11 joel Exp $
+ *  $Id: pthreadkill.c,v 1.17 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

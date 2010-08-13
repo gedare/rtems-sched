@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.86 2010/07/16 08:31:34 sh Exp $
+## $Id: Makefile.am,v 1.87 2010/07/29 17:52:09 joel Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am

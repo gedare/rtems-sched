@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: check.c,v 1.69 2010/07/04 14:53:47 joel Exp $
+ *  $Id: check.c,v 1.70 2010/08/02 18:26:30 joel Exp $
  *
  */
 
@@ -420,16 +420,23 @@ void Stack_check_Dump_threads_usage(
   else
     used = 0;
 
-  if ( the_thread ) {
-    (*print_handler)(
-      print_context,
-      "0x%08" PRIx32 "  %4s",
-      the_thread->Object.id,
-      rtems_object_get_name( the_thread->Object.id, sizeof(name), name )
-    );
-  } else {
-    (*print_handler)( print_context, "0x%08" PRIx32 "  INTR", ~0 );
-  }
+
+  #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+    if ( the_thread )
+  #endif
+    {
+      (*print_handler)(
+        print_context,
+        "0x%08" PRIx32 "  %4s",
+        the_thread->Object.id,
+        rtems_object_get_name( the_thread->Object.id, sizeof(name), name )
+      );
+    }
+    #if (CPU_ALLOCATE_INTERRUPT_STACK == TRUE)
+      else {
+        (*print_handler)( print_context, "0x%08" PRIx32 "  INTR", ~0 );
+      }
+    #endif
 
   (*print_handler)(
     print_context,

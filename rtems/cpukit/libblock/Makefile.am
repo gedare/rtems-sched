@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.38 2010/04/30 08:42:12 sh Exp $
+## $Id: Makefile.am,v 1.39 2010/08/13 12:40:16 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -20,6 +20,11 @@ libblock_a_SOURCES = src/bdbuf.c src/blkdev.c src/diskdevs.c src/flashdisk.c \
     src/bdpart-register.c \
     src/bdpart-sort.c \
     src/bdpart-write.c \
+    src/media-path.c \
+    src/media.c \
+    src/media-server.c \
+    src/media-desc.c \
+    src/media-dev-ident.c \
     include/rtems/bdbuf.h include/rtems/blkdev.h \
     include/rtems/diskdevs.h include/rtems/flashdisk.h \
     include/rtems/ramdisk.h include/rtems/nvdisk.h include/rtems/nvdisk-sram.h \

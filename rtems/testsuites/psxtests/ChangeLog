@@ -1,3 +1,73 @@
+2010-08-10	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1598/testing
+	* psxpasswd02/init.c, psxpasswd02/psxpasswd02.scn: New test case
+	added to improve coverage of getpwent.c.
+
+2010-08-10	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1665/testing
+	* psximfs02/init.c: Fix uninitialized variable warning.
+
+2010-08-09	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1661/testing
+	* psximfs02/init.c: Changes to improve coverage of
+	imfs_initsupp.c, by using a bad value for
+	CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK
+
+2010-08-09	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1661/testing
+	* psxchroot01/test.c, psximfs01/init.c, psximfs02/init.c,
+	psxpipe01/init.c: Eliminate most references to RTEMS_Malloc_Heap.
+
+2010-08-09	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* psxpasswd02/init.c: Remove unused variable.
+
+2010-08-06	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1654/testing
+	* psx13/test.c, psx13/psx13.scn: Test case to improve testing of
+	dup2 routine.
+	* psxfile01/test.c, psxfile01/psxfile01.scn: New test to improve
+	testing of fcntl routine.
+	* psximfs01/init.c, psximfs01/psximfs01.scn: Improve testing of
+	imfs routines.
+	* psximfs02/init.c, psximfs02/psximfs02.scn: Improve coverage of
+	imfs routines.
+	* psxpasswd02/init.c, psxpasswd02/psxpasswd02.scn: New tests to
+	improve coverage of getpwent.c.
+
+2010-08-06	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1652/GCC:
+	* psxpipe01/init.c: Expand incomplete initializers triggering
+	powerpc-gcc -msdata breakdown.
+
+2010-07-30	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1642/testing
+	* psximfs02/init.c, psximfs02/psximfs02.scn,
+	psximfs02/psximfs02.doc: Added test cases to exercise chmod(),
+	chown() and routines in imfs_debug.c.
+
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1642/testing
+	* psximfs02/init.c, psximfs02/psximfs02.scn,
+	psximfs02/psximfs02.doc, psximfs02/Makefile.am: New test added.
+	* configure.ac, Makefile.am: Changes to accommodate psximfs02
+	test.
+
+2010-07-29	Bharath Suri <bharath.s.jois@gmail.com>
+
+	PR 1633/testing
+	* psximfs01/init.c, psximfs01/psximfs01.scn,
+	psximfs01/psximfs01.doc: New cases to exercise
+	IMFS_memfile_remove.
+
 2010-07-27	Joel Sherrill <joel.sherrill@oarcorp.com>
 
 	* psxobj01/Makefile.am, psxobj01/init.c, psxobj01/psxobj01.scn: Add

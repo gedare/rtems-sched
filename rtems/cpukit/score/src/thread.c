@@ -9,7 +9,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: thread.c,v 1.63 2010/06/29 00:34:12 joel Exp $
+ *  $Id: thread.c,v 1.64 2010/07/30 18:53:06 joel Exp $
  */
 
 #if HAVE_CONFIG_H

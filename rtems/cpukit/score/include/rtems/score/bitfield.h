@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: bitfield.h,v 1.20 2009/11/28 05:58:53 ralf Exp $
+ *  $Id: bitfield.h,v 1.21 2010/07/29 17:52:10 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_BITFIELD_H
