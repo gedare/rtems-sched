@@ -105,3 +105,98 @@ _Note: One thing that needs to be determined is how to deal with opening up the 
 _Note: Another concern is ports that can "dispatch from ISR", as this represents another scheduling point._
 
 _Note: I have removed dispatch from the scheduler object. It seems better to isolate dispatch as a mechanism separate from the scheduler logic_
+
+== Adding New Schedulers ==
+To create a scheduler `Foo` follow these steps.
+
+Create a new header file `include/rtems/score/schedulerfoo.h` and add all of the `_Scheduler_foo_XXX` prototypes to the header file.  Add this header to the `cpukit/score/Makefile.am`.
+
+Then create `src/schedulerfoo.c` and define the `_Scheduler_foo_Initialize` routine to set the scheduler operations table for the `foo` scheduler.  The `priority` scheduler implementation is a good guide for creating new schedulers. Add this file to the `cpukit/score/Makefile.am`.
+
+Select or create a Ready queue handler for `foo`.  Add an entry `Foo` to the Queues field of `Ready_queue_Control`. The `Foo` entry will be the data structure used to organize ready threads.  If a new ready queue handler is created, add the new header, inline file, and source files to the cpukit Makefile.am file.
+
+Create a `Scheduler_foo_Per_thread` structure in scheduler.h. Add an entry `foo` of type `Scheduler_foo_Per_thread` to the scheduler field of `Thread_Control`. This structure is used to hold scheduler-specific data about individual threads. It is allocated and freed by the scheduler. It currently is only used when a thread changes priority.  However, more extensive use might be introduced in the future. If the per thread `scheduler` field is used by the `foo` scheduler, create appropriate `allocate`, `update`, and `free` routines.
+
+Add a `_Scheduler_FOO` entry to the define macros in scheduler.h.  The `_Scheduler_XXX` entries are used as indices in an array, so ensure that the value of `_Scheduler_FOO` is unique and matches the location of `CONFIGURE_SCHEDULER_ENTRY_FOO` in the `_Scheduler_Table` array declared in the confdefs.h file (discussed later in this howto).
+
+Add configure options for the `foo` scheduler in confdefs.h. Add or modify the following sections.
+
+Add `foo` to be included if all schedulers are selected:
+{{{
+  /* enable all RTEMS-provided schedulers */
+  #if defined(CONFIGURE_SCHEDULER_ALL)
+    #define CONFIGURE_SCHEDULER_PRIORITY
+    ...
+    #define CONFIGURE_SCHEDULER_FOO
+  #endif
+}}}
+
+Add a check for `foo` when checking for configured schedulers:
+{{{
+  /* If no scheduler is specified, the priority scheduler is default. */
+  #if !defined(CONFIGURE_SCHEDULER_USER) && \
+    !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+    ... && \
+    !defined(CONFIGURE_SCHEDULER_FOO)
+      #define CONFIGURE_SCHEDULER_PRIORITY
+      #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
+  #endif
+}}}
+
+Add a check to see if the `foo` scheduler should be included:
+{{{
+/* 
+ * Check for priority scheduler next, as it is the default policy if there
+ * is no CONFIGURE_SCHEDULER_POLICY set and no USER scheduler provided.
+ */
+#if defined(CONFIGURE_SCHEDULER_PRIORITY)
+  #include <rtems/score/schedulerpriority.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_priority_Initialize }
+  #if !defined(CONFIGURE_SCHEDULER_POLICY)
+    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
+  #endif
+#endif
+
+...
+
+/* 
+ * Check for foo scheduler
+ */
+#if defined(CONFIGURE_SCHEDULER_FOO)
+  #include <rtems/score/schedulerfoo.h>
+  #define CONFIGURE_SCHEDULER_ENTRY_FOO { _Scheduler_foo_Initialize }
+  #if !defined(CONFIGURE_SCHEDULER_POLICY)
+    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_FOO
+  #endif
+#endif
+}}}
+
+Add an entry for the `foo` scheduler in the `_Scheduler_Table` array. Ensure that the entry position corresponds with the value of `_Scheduler_FOO`:
+{{{
+#ifdef CONFIGURE_INIT
+  /* the table of available schedulers. */
+  const Scheduler_Table_t _Scheduler_Table[] = {
+    #if defined(CONFIGURE_SCHEDULER_USER) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_USER)
+      CONFIGURE_SCHEDULER_ENTRY_USER,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+    #if defined(CONFIGURE_SCHEDULER_PRIORITY) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_PRIORITY)
+      CONFIGURE_SCHEDULER_ENTRY_PRIORITY,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+    ...
+    #if defined(CONFIGURE_SCHEDULER_FOO) && \
+        defined(CONFIGURE_SCHEDULER_ENTRY_FOO)
+      CONFIGURE_SCHEDULER_ENTRY_FOO,
+    #else
+      CONFIGURE_SCHEDULER_NULL,
+    #endif
+  };
+#endif
+}}}
+
+Write a test case for the new scheduler.  A simple test case is to copy the `ticker` sample application and configure it to use the new scheduler by including `CONFIGURE_SCHEDULER_FOO` during application configuration.
