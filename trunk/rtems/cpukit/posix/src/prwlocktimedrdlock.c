@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: prwlocktimedrdlock.c,v 1.11 2009/11/30 15:44:21 ralf Exp $
+ *  $Id: prwlocktimedrdlock.c,v 1.12 2010/08/23 21:31:27 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -82,15 +82,11 @@ int pthread_rwlock_timedrdlock(
       _Thread_Enable_dispatch();
       if ( !do_wait ) {
         if ( _Thread_Executing->Wait.return_code == CORE_RWLOCK_UNAVAILABLE ) {
-	  switch (status) {
-	    case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-	      return EINVAL;
-	    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-	    case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-	      return ETIMEDOUT;
-	    case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-	      break;
-	  }
+	  if ( status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+	    return EINVAL;
+	  if ( status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+	       status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+	    return ETIMEDOUT;
         }
       }
 

@@ -53,11 +53,11 @@
 .register %g6, #scratch
 .register %g7, #scratch
 
-#if 0
+#if 1
 #define _BSP_DEBUG
 #endif
 
-#if _BSP_DEBUG
+#if defined(_BSP_DEBUG)
 /*
  * This is for debug and script support to identify RTEMS app termination
  */
@@ -147,7 +147,7 @@ setstack:
 	call SYM(boot_card)
 	sub	%sp, 0x60, %sp		! make room on stack (necessary?)
 
-#if _BSP_DEBUG
+#if defined(_BSP_DEBUG)
   /* execution returns here when RTEMS terminates */
 	sethi %hi(_end_token_string), %g1
 	add %g1, %lo(_end_token_string), %o0

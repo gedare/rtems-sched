@@ -1,14 +1,14 @@
 /*
  *  write() - POSIX 1003.1b 6.4.2 - Write to a File
  *
- *  COPYRIGHT (c) 1989-2007.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: write.c,v 1.19 2010/07/15 08:10:47 sh Exp $
+ *  $Id: write.c,v 1.20 2010/08/23 23:19:31 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -40,9 +40,6 @@ ssize_t write(
   rtems_libio_check_buffer( buffer );
   rtems_libio_check_count( count );
   rtems_libio_check_permissions( iop, LIBIO_FLAGS_WRITE );
-
-  if ( count == 0 )
-    return 0;
 
   /*
    *  Now process the write() request.

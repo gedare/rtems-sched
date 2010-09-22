@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.191 2010/08/03 15:44:05 ralf Exp $
+## $Id: configure.ac,v 1.192 2010/09/08 10:19:25 ralf Exp $
 
 AC_PREREQ(2.61)
 AC_INIT([rtems-cpukit],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -77,6 +77,12 @@ RTEMS_CHECK_FUNC([setpgid],[#include <unistd.h>])
 RTEMS_CHECK_FUNC([getpgid],[#include <unistd.h>])
 RTEMS_CHECK_FUNC([setpgrp],[#include <unistd.h>])
 RTEMS_CHECK_FUNC([getpgrp],[#include <unistd.h>])
+
+# pthread-functions not declared in some versions of newlib.
+RTEMS_CHECK_FUNC([pthread_attr_getguardsize],[#include <pthreads.h>])
+RTEMS_CHECK_FUNC([pthread_attr_setguardsize],[#include <pthreads.h>])
+RTEMS_CHECK_FUNC([pthread_attr_setstack],[#include <pthreads.h>])
+RTEMS_CHECK_FUNC([pthread_attr_getstack],[#include <pthreads.h>])
 
 # Newlib's unix/ directory
 AC_CHECK_FUNCS([ttyname getcwd])

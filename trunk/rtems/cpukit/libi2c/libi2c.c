@@ -1,4 +1,4 @@
-/* $Id: libi2c.c,v 1.17 2010/06/21 16:27:37 joel Exp $ */
+/* $Id: libi2c.c,v 1.19 2010/08/25 21:17:03 joel Exp $ */
 
 /* libi2c Implementation */
 
@@ -385,7 +385,8 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
 {
   int i;
   rtems_status_code err;
-  char *nmcpy = malloc (name ? strlen (name) + 1 : 20);
+  size_t length = (name ? strlen (name) + 1 : 20);
+  char *nmcpy = malloc(length);
   char tmp, *chpt;
   struct stat sbuf;
 
@@ -394,7 +395,7 @@ rtems_libi2c_register_bus (const char *name, rtems_libi2c_bus_t * bus)
     return -RTEMS_NO_MEMORY;
   }
 
-  strcpy (nmcpy, name ? name : "/dev/i2c");
+  strncpy (nmcpy, name ? name : "/dev/i2c", length);
 
   /* check */
   if ('/' != *nmcpy) {
@@ -603,8 +604,10 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
     break;
 
   case RTEMS_LIBI2C_IOCTL_START_TFM_READ_WRITE:
-    if (not_started (busno))
+    if (not_started (busno)) {
+      va_end(ap);
       return -RTEMS_NOT_OWNER_OF_RESOURCE;
+    }
 
     /*
      * address device, then set transfer mode and perform read_write transfer
@@ -642,7 +645,8 @@ rtems_libi2c_ioctl (rtems_device_minor_number minor,
     sc = bush->ops->ioctl (bush, cmd, args);
     break;
   }
-    return sc;
+  va_end(ap);
+  return sc;
 }
 
 static int
@@ -734,8 +738,9 @@ rtems_libi2c_register_drv (const char *name, rtems_libi2c_drv_t * drvtbl,
       minor = ((i + 1) << 13) | RTEMS_LIBI2C_MAKE_MINOR (busno, i2caddr);
 
       if (name) {
-        str = malloc (strlen (busses[busno].name) + strlen (name) + 2);
-        sprintf (str, "%s.%s", busses[busno].name, name);
+        size_t length = strlen (busses[busno].name) + strlen (name) + 2;
+        str = malloc (length);
+        snprintf (str, length, "%s.%s", busses[busno].name, name);
 
         dev = rtems_filesystem_make_dev_t (rtems_libi2c_major, minor);
 

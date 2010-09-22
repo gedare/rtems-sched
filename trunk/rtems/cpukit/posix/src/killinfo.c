@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: killinfo.c,v 1.25 2010/06/29 00:34:10 joel Exp $
+ *  $Id: killinfo.c,v 1.26 2010/08/29 19:50:33 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -265,7 +265,7 @@ int killinfo(
        *  If the interested thread is ready, don't think about changing.
        */
 
-      if ( !_States_Is_ready( interested->current_state ) ) {
+      if ( interested && !_States_Is_ready( interested->current_state ) ) {
         /* preferred ready over blocked */
         DEBUG_STEP("5");
         if ( _States_Is_ready( the_thread->current_state ) ) {

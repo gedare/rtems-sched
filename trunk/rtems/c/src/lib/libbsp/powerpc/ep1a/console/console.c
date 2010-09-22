@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: console.c,v 1.6 2009/11/30 04:25:26 ralf Exp $
+ *  $Id: console.c,v 1.7 2010/08/20 16:03:51 joel Exp $
  */
 
 #include <bsp.h>
@@ -268,6 +268,6 @@ debug_putc_onlcr(const char c)
   for (i=0;i<0x0fff;i++);
 }
 
-BSP_output_char_function_type   BSP_output_char = debug_putc_onlcr;
-/* const char arg to be compatible with BSP_output_char decl. */
+BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 

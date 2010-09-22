@@ -6,7 +6,7 @@
  * Copyright (C) 2001 OKTET Ltd., St.-Petersburg, Russia
  * Author: Eugeny S. Mints <Eugeny.Mints@oktet.ru>
  *
- * @(#) $Id: fat_file.c,v 1.15 2009/11/29 13:18:56 ralf Exp $
+ * @(#) $Id: fat_file.c,v 1.17 2010/08/23 23:17:42 joel Exp $
  *
  */
 
@@ -691,22 +691,25 @@ fat_file_ioctl(
             ret = va_arg(ap, uint32_t   *);
 
             /* sanity check */
-            if ( pos >= fat_fd->fat_file_size )
+            if ( pos >= fat_fd->fat_file_size ) {
+                va_end(ap);
                 rtems_set_errno_and_return_minus_one( EIO );
+            }
 
             if ((FAT_FD_OF_ROOT_DIR(fat_fd)) &&
                 (fs_info->vol.type & (FAT_FAT12 | FAT_FAT16)))
             {
                 /* cluster 0 (zero) reserved for root dir */
                 *ret  = 0;
-                return RC_OK;
+                rc = RC_OK;
+                break;
             }
 
             cl_start = pos >> fs_info->vol.bpc_log2;
 
             rc = fat_file_lseek(mt_entry, fat_fd, cl_start, &cur_cln);
             if ( rc != RC_OK )
-                return rc;
+                break;
 
             *ret = cur_cln;
             break;
@@ -716,6 +719,7 @@ fat_file_ioctl(
             rc = -1;
             break;
     }
+    va_end(ap);
     return rc;
 }
 

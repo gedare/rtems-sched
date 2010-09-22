@@ -5,3 +5,10 @@ D/start////
 D/startup////
 D/timer////
 D/tsmac////
+D/milkymist_ac97////
+D/milkymist_clock////
+D/milkymist_console////
+D/milkymist_framebuffer////
+D/milkymist_gpio////
+D/milkymist_networking////
+D/milkymist_timer////

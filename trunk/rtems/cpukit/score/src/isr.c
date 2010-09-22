@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: isr.c,v 1.19 2010/06/29 00:34:11 joel Exp $
+ *  $Id: isr.c,v 1.20 2010/08/19 12:13:56 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -63,7 +63,7 @@ void _ISR_Handler_initialization( void )
   );
 
   _CPU_Interrupt_stack_high = (void *)
-    ((uintptr_t) _CPU_Interrupt_stack_high & ~CPU_STACK_ALIGNMENT);
+    ((uintptr_t) _CPU_Interrupt_stack_high & ~(CPU_STACK_ALIGNMENT - 1));
 
   /* Interrupt stack might have to be aligned and/or setup
    * in a specific way.

@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: malloc_initialize.c,v 1.13 2010/07/08 20:09:56 joel Exp $
+ *  $Id: malloc_initialize.c,v 1.14 2010/08/25 14:30:01 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -110,15 +110,5 @@ void RTEMS_Malloc_Initialize(
   }
 
   MSBUMP( space_available, _Protected_heap_Get_size(RTEMS_Malloc_Heap) );
-
-  #if defined(RTEMS_HEAP_DEBUG)
-    if ( _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false ) ) {
-      printk( "Malloc heap not initialized correctly\n" );
-      rtems_print_buffer( heap_begin, 32 );
-      printk( "\n" );
-      rtems_print_buffer( (heap_begin + heap_size) - 48, 48 );
-      rtems_fatal_error_occurred( RTEMS_NO_MEMORY );
-    }
-  #endif
 }
 #endif

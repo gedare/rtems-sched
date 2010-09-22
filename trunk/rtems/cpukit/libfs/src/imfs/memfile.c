@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: memfile.c,v 1.38 2010/07/30 22:36:32 joel Exp $
+ *  $Id: memfile.c,v 1.39 2010/08/27 17:43:26 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -931,7 +931,7 @@ block_p *IMFS_memfile_get_block_pointer(
       return 0;
 
     p2 = (block_p *)p1[ doubly ];
-    if ( !p )
+    if ( !p2 )
       return 0;
 
     return (block_p *)&p2[ singly ];

@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems.h,v 1.3 2010/07/15 08:10:48 sh Exp $
+ *  $Id: rtems-rfs-rtems.h,v 1.4 2010/08/25 09:37:49 sh Exp $
  */
 /**
  * @file
@@ -305,14 +305,5 @@ int rtems_rfs_rtems_rmnod (rtems_filesystem_location_info_t* parent_pathloc,
  * @param iop
  */
 int rtems_rfs_rtems_fdatasync (rtems_libio_t* iop);
-
-/**
- * The following routine does a fcntl on an node.
- *
- * @param cmd
- * @param iop
- * @return int
- */
-int rtems_rfs_rtems_fcntl (int cmd, rtems_libio_t* iop);
 
 #endif

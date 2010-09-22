@@ -11,7 +11,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: ata_internal.h,v 1.12 2010/01/19 09:10:03 thomas Exp $
+ * $Id: ata_internal.h,v 1.14 2010/08/17 14:15:47 sh Exp $
  *
  */
 #ifndef __ATA_INTERNAL_H__
@@ -24,6 +24,10 @@
 
 #include <rtems/blkdev.h>
 #include <rtems/diskdevs.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /*
  * Conversion from and to little-endian byte order. (no-op on i386/i486)
@@ -299,5 +303,29 @@ typedef struct ata_ide_ctrl_s {
     ata_dev_t     device[2]; /* ata diveces description */
     rtems_chain_control reqs; /* requests chain */
 } ata_ide_ctrl_t;
+
+/* Block device request with a single buffer provided */
+typedef struct blkdev_request1 {
+    rtems_blkdev_request   req;
+    rtems_blkdev_sg_buffer sg[1];
+} blkdev_request1;
+
+void ata_breq_init(blkdev_request1 *breq, uint16_t *sector_buffer);
+
+rtems_status_code ata_identify_device(
+  rtems_device_minor_number ctrl_minor,
+  int dev,
+  uint16_t *sector_buffer,
+  ata_dev_t *device_entry
+);
+
+void ata_process_request_on_init_phase(
+  rtems_device_minor_number ctrl_minor,
+  ata_req_t *areq
+);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __ATA_INTERNAL_H__ */

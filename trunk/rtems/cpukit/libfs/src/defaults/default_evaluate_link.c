@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_evaluate_link.c,v 1.1 2010/06/29 19:37:28 jennifer Exp $
+ *  $Id: default_evaluate_link.c,v 1.2 2010/08/27 06:42:46 sh Exp $
  */
 
 #include <rtems/libio.h>
@@ -18,7 +18,6 @@ int rtems_filesystem_default_evaluate_link(
   int                               flags        /* IN     */
 )
 {
-  pathloc = NULL;
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
 

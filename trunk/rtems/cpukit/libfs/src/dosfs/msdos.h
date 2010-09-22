@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos.h,v 1.25 2010/07/15 07:36:37 sh Exp $
+ *  @(#) $Id: msdos.h,v 1.26 2010/08/23 21:29:31 joel Exp $
  */
 #ifndef __DOSFS_MSDOS_H__
 #define __DOSFS_MSDOS_H__
@@ -179,8 +179,8 @@ typedef rtems_filesystem_node_types_t msdos_node_type_t;
 #define MSDOS_NAME_MAX_LFN_WITH_DOT      (260)
 
 
-extern const char const* MSDOS_DOT_NAME;    /* ".", padded to MSDOS_NAME chars */
-extern const char const* MSDOS_DOTDOT_NAME; /* ".", padded to MSDOS_NAME chars */
+extern const char *const MSDOS_DOT_NAME;    /* ".", padded to MSDOS_NAME chars */
+extern const char *const MSDOS_DOTDOT_NAME; /* ".", padded to MSDOS_NAME chars */
 
 typedef enum msdos_name_types_e
 {

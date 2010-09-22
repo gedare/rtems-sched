@@ -1,5 +1,5 @@
 #
-#  $Id$
+#  $Id: spchain.doc,v 1.2 2010/08/24 15:01:04 sh Exp $
 #
 #  COPYRIGHT (c) 1989-2009.
 #  On-Line Applications Research Corporation (OAR).
@@ -19,6 +19,13 @@ directives:
   rtems_chain_append
   rtems_chain_insert
   rtems_chain_is_tail
+  rtems_chain_append_with_empty_check
+  rtems_chain_prepend_with_empty_check
+  rtems_chain_get_with_empty_check
+  rtems_chain_append_with_notification
+  rtems_chain_prepend_with_notification
+  rtems_chain_get_with_notification
+  rtems_chain_get_with_wait
 
 concepts:
 

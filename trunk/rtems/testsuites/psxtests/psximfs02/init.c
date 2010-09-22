@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.6 2010/08/10 14:41:47 joel Exp $
+ *  $Id: init.c,v 1.7 2010/08/30 16:58:12 ralf Exp $
  */
 
 #include <tmacros.h>
@@ -19,6 +19,10 @@
 #include <errno.h>
 #include <rtems/libio.h>
 #include <rtems/libcsupport.h>
+
+#if !HAVE_DECL_SETEUID
+extern int seteuid(uid_t euid);
+#endif
 
 void IMFS_dump( void );
 rtems_task Init(

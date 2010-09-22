@@ -1,7 +1,7 @@
-/.cvsignore/1.1/Mon Jul  5 21:14:39 2010//
-/Makefile.am/1.1/Mon Jul  5 21:14:39 2010//
-/termios06.doc/1.1/Mon Jul  5 21:14:39 2010/-kb/
-/termios06.scn/1.2/Tue Jul  6 19:54:00 2010//
-/test_pppd.c/1.1/Mon Jul  5 21:14:39 2010//
-/init.c/1.3/Tue Jul 20 15:51:31 2010//
+/.cvsignore/1.1/Tue Sep 21 16:07:00 2010//
+/Makefile.am/1.1/Tue Sep 21 16:07:00 2010//
+/init.c/1.3/Tue Sep 21 16:07:00 2010//
+/termios06.doc/1.1/Wed Sep 22 18:16:28 2010//
+/termios06.scn/1.2/Tue Sep 21 16:07:00 2010//
+/test_pppd.c/1.1/Tue Sep 21 16:07:00 2010//
 D

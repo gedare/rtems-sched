@@ -1,3 +1,373 @@
+2010-09-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libmd/md5.h: C++ compatibility.
+
+2010-09-08	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* configure.ac: Add checks for pthread_attr_getguardsize,
+	pthread_attr_setguardsize, pthread_attr_setstack,
+	pthread_attr_getstack.
+
+2010-09-08	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1698/cpukit
+	* libcsupport/src/privateenv.c: Check return values of
+	rtems_filesystem_evaluate_path().
+
+2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	PR 1696/networking:
+	* libnetworking/arpa/inet.h: Partial update from FreeBSD.
+	#include <rtems/endian.h>.
+	Remove addr2ascii, ascii2addr.
+
+2010-09-01	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libnetworking/libc/addr2ascii.c,
+	libnetworking/libc/ascii2addr.c,
+	libnetworking/libc/addr2ascii.3: Remove.
+	* libnetworking/Makefile.am: Reflect changes above.
+
+2010-08-30	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/devctl.h, posix/src/devctl.c: Remove.
+	* posix/Makefile.am: Remove devctl.
+
+2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* posix/src/killinfo.c: Ensure interested is non-NULL before using it.
+
+2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/src/privateenv.c: Add macro to test status when
+	RTEMS_DEBUG is enabled. Note than evaluation of root directory should
+	always work.
+
+2010-08-29	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libcsupport/src/getlogin.c: Modify to use strncpy() on all paths.
+
+2010-08-28	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	PR 1694/shell
+	* libmisc/shell/main_setenv.c: Address memory leak identified by
+	Coverity.
+
+2010-08-28	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	* libfs/src/pipe/pipe.c: Remove unreachable line flagged by Coverity as
+	dead code.
+
+2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/ctermid.c: Add comment explaining that this use of
+	strcpy() is a potential buffer overrun but because the API does not
+	provide a way to know the length of the user provided buffer, there
+	is nothing we can do about it.
+
+2010-08-27	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/shell/main_date.c: Use snprintf() not sprintf().
+
+2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1693/filesystem
+	* libfs/src/imfs/memfile.c: IMFS_memfile_get_block_pointer() was
+	checking incorrect pointer and thus had dead code.
+
+2010-08-27	Joel Sherrill <joel.sherrilL@OARcorp.com>
+
+	PR 1692/filesystem
+	* libcsupport/include/rtems/libio.h, libfs/src/devfs/devfs_eval.c,
+	libfs/src/imfs/imfs_eval.c: Fix implementation and use of
+	rtems_libio_is_valid_perms().
+
+2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/defaults/default_evalpath.c,
+	libfs/src/defaults/default_evaluate_link.c: Removed superfluous
+	assignment.
+
+2010-08-26	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/mount.c, libcsupport/src/mount-mgr.c: Avoid
+	strcpy().
+
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/sync.c: Add comment explaining why the return value
+	from fsync() and fdatasync() is not checked.
+
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libmisc/monitor/mon-symbols.c: Fix length of buffer passed to
+	strncpy() so there is room for a NULL terminator.
+
+2010-08-26	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/eval.c: Make some filesystem implementation
+	correctness checks conditional on RTEMS_DEBUG.
+
+2010-08-26	Chris Johns <chrisj@rtems.org>
+
+	* libfs/src/defaults/default_evaluate_link.c: Remove assignment.
+
+	* libfs/src/rfs/rtems-rfs-file.c: Check then load the inode is not
+	present on the close.
+	
+	* libfs/src/rfs/rtems-rfs-format.c: Initialise the buffer chain.
+	
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 93/NO_EFFECT
+	Coverity Id 94/NO_EFFECT
+	* libcsupport/src/readv.c, libcsupport/src/writev.c: size_t is unsigned
+	so it is useless to check for < 0.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 125
+	Coverity Id 126
+	* libi2c/libi2c.c: Use strncpy and snprintf.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* score/src/coremsginsert.c: Fix typo.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 148/STRAY_SEMICOLON
+	* score/src/coremsginsert.c: Slightly modify macro.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 169
+	* libmisc/stackchk/check.c: Readd line accidentally deleted between
+	1.67 and 1.68.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 163
+	* libmisc/stackchk/check.c: Adjust conditional compilation.
+
+2010-08-25	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	Coverity Id 164/UNINIT
+	Coverity Id 165/UNINIT
+	* posix/src/prwlockinit.c, posix/src/pspininit.c,
+	score/include/rtems/score/corespinlock.h,
+	score/inline/rtems/score/corerwlock.inl,
+	score/inline/rtems/score/corespinlock.inl: Add initialization helpers
+	for score rwlock and spinlock. Use them from POSIX.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libcsupport/src/free.c, libcsupport/src/malloc.c,
+	libcsupport/src/malloc_initialize.c: Remove heap walks in case
+	RTEMS_DEBUG is defined.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1672/cpukit
+	* score/include/rtems/score/heap.h, score/src/heap.c,
+	score/src/heapallocate.c, score/src/heapextend.c,
+	score/src/heapfree.c, score/src/heapresizeblock.c,
+	score/src/heapsizeofuserarea.c: Added heap protection in case
+	RTEMS_DEBUG is defined.
+	
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libfs/src/imfs/imfs_fcntl.c: Removed file.
+	* libfs/Makefile.am: Reflect change from above.
+	* libfs/src/defaults/default_fcntl.c: Return 0 instead of -1 and errno.
+	* libfs/src/imfs/imfs.h, libfs/src/imfs/imfs_fifo.c,
+	libfs/src/imfs/imfs_handlers_directory.c,
+	libfs/src/imfs/imfs_handlers_memfile.c, libfs/src/nfsclient/src/nfs.c,
+	libfs/src/rfs/rtems-rfs-rtems-dir.c,
+	libfs/src/rfs/rtems-rfs-rtems-file.c, libfs/src/rfs/rtems-rfs-rtems.c,
+	libfs/src/rfs/rtems-rfs-rtems.h: Use default file system handlers.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* libblock/include/rtems/media.h, libblock/src/media-server.c: Use
+	chains instead of a message queue.
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	CID 114/SECURE_CODING
+	* libblock/src/media.c: Avoid strcpy().
+
+2010-08-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	CID 113/SECURE_CODING
+	* libblock/src/media-path.c: Avoid strcpy().  Style.  Use assert() to
+	avoid dead code.
+
+2010-08-24	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1673/cpukit
+	* sapi/src/chainappendnotify.c, sapi/src/chaingetnotify.c,
+	sapi/src/chaingetwait.c, sapi/src/chainprependnotify.c: New files.
+	* sapi/Makefile.am: Reflect changes above.
+	* sapi/include/rtems/chain.h: Declare
+	rtems_chain_append_with_notification(),
+	rtems_chain_prepend_with_notification(),
+	rtems_chain_get_with_notification(), and rtems_chain_get_with_wait().
+	* sapi/inline/rtems/chain.inl: Define
+	rtems_chain_append_with_empty_check(),
+	rtems_chain_prepend_with_empty_check(), and
+	rtems_chain_get_with_empty_check().
+
+2010-08-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libmisc/untar/untar.c: Return if open fails.
+	Use ssize_t for read() return value.
+	* posix/src/aio_cancel.c: Spray pthread_mutex_unlocks.
+	* posix/src/aio_read.c: aio_nbytes is always >= 0.
+	* posix/src/aio_write.c: aio_nbytes is always >= 0.
+	Fix typo in comment.
+
+2010-08-24	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* libcsupport/include/sys/utsname.h: Remove times().
+	Remove unnecessary includes.
+	Introduce SYS_NMLN (From freebsd).
+	* libcsupport/src/utsname.c: Rework uname().
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/read.c, libcsupport/src/write.c: Remove redundant
+	check for 0 size request.
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libcsupport/src/open.c: Spacing.
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libi2c/libi2c.c: Fix typo in va_end().
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* libblock/src/flashdisk.c, libblock/src/nvdisk.c,
+	libcsupport/src/ioctl.c, libfs/src/dosfs/fat_file.c: Add va_end().
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	CID 79/DEADCODE
+	CID 78/DEADCODE
+	CID 77/DEADCODE
+	CID 76/DEADCODE
+	* posix/src/condtimedwait.c, posix/src/mutextimedlock.c,
+	posix/src/prwlocktimedrdlock.c, posix/src/prwlocktimedwrlock.c,
+	posix/src/semtimedwait.c: Resolve various dead code issues identified
+	by Coverity scanner.
+
+2010-08-23	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	CID 99
+	CID 100
+	CID 101
+	CID 102
+	* libfs/src/dosfs/fat_file.c, libfs/src/dosfs/msdos.h,
+	libfs/src/dosfs/msdos_misc.c: Resolve invalid use of const identified
+	by Coverity scanner.
+
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1673/cpukit
+	* score/src/chainappendempty.c, score/src/chaingetempty.c,
+	score/src/chainprependempty.c: New files.
+	* score/Makefile.am: Reflect changes above.
+	* score/include/rtems/score/chain.h: Declare
+	_Chain_Append_with_empty_check(), _Chain_Prepend_with_empty_check(),
+	and _Chain_Get_with_empty_check().
+	* score/inline/rtems/score/chain.inl: Define
+	_Chain_Append_with_empty_check_unprotected(),
+	_Chain_Prepend_with_empty_check_unprotected(), and
+	_Chain_Get_with_empty_check_unprotected().
+
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	PR 1671/cpukit
+	* libcsupport/include/rtems/gxx_wrappers.h: New file.
+	* libcsupport/Makefile.am, libcsupport/preinstall.am: Reflect change
+	above.
+	* libcsupport/src/gxx_wrappers.c: Include <rtems/gxx_wrappers.h>.  Use
+	_Internal_error_Occurred() instead of rtems_panic().
+	* score/include/rtems/score/interr.h: Added
+	INTERNAL_ERROR_GXX_KEY_ADD_FAILED and
+	INTERNAL_ERROR_GXX_MUTEX_INIT_FAILED.
+
+2010-08-20	<yann.sionneau@telecom-sudparis.eu>
+
+	* libmisc/fb/fb.h: Add constants for buffer modes.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/rtems/posix/aio_misc.h: Add decl for aio_request_queue.
+	* posix/src/aio_misc.c: Add aio_request_queue.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/rtems/posix/aio_misc.h: Remove rtems_aio_request_s,
+	rtems_aio_request_chain_s, rtems_aio_queue_s;
+	* posix/include/aio.h: Separate LIO-modes from LIO-opcodes (From
+	freebsd).
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* sapi/include/rtems/chain.h: Move extern "C".
+
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/include/aio.h: Add LIO_SYNC.
+	* posix/include/rtems/posix/aio_misc.h: Add aio_request_queue,
+	Cosmetics.
+	* posix/src/aio_cancel.c, posix/src/aio_fsync.c, posix/src/aio_misc.c:
+	Rework.
+
+2010-08-19	Gedare Bloom <giddyup44@yahoo.com>
+
+	PR 1680/cpukit
+	* score/src/isr.c: Correct initialization of _CPU_Interrupt_stack_high
+	to properly do the alignment. This most likely only would have caused
+	a propblem on CPUs where the stack grows down and have strict
+	alignment.
+
+2010-08-18	Chris Johns <chrisj@rtems.org>
+
+	PR 1677/filesystem
+	* libfs/src/imfs/imfs_creat.c: Fix creating of a file. Lost in the
+	change from a switch statement.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/include/rtems/posix/aio_misc.h: Remove
+	rtems_aio_queue_s.size (Unused).
+	* posix/src/aio_misc.c: Remove aio_request_queue.size.
+	Cosmetics.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Reflect aio-changes.
+
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/src/aio_misc.c: New.
+	* posix/src/aio_error.c, posix/src/aio_read.c,
+	* posix/src/aio_return.c, posix/src/aio_write.c:
+	New implementation.
+
+2010-08-16	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* posix/Makefile.am: Add include/rtems/posix/aio_misc.h.
+
+2010-08-16	Alin Rus <alin.codejunkie@gmail.com>
+
+	* posix/include/aio.h: Extend struct aiocb.
+	* posix/include/rtems/posix/aio_misc.h: New.
+
 2010-08-13	Sebastian Huber <sebastian.huber@embedded-brains.de>
 
 	* libblock/src/media.c: Use unprotected chain extract.

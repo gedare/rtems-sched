@@ -145,6 +145,33 @@ extern "C" {
 
 #define STACK_BIAS (2047)
 
+/* Additions to support MAGIC Simics commands */
+#ifdef ASM
+#define MAGIC(n) \
+  sethi n, %g0
+
+#endif /* ASM */
+
+#ifndef ASM
+
+#define __MAGIC_CASSERT(p) do {                                 \
+         typedef int __check_magic_argument[(p) ? 1 : -1];       \
+} while (0)
+
+#define MAGIC(n) do {                                   \
+    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
+         __asm__ __volatile__ ("sethi " #n ", %g0");     \
+} while (0)
+
+#endif /* !ASM */
+#define MAGIC_BREAKPOINT MAGIC(0x40000)
+#define MAGIC_STOP_CACHING    MAGIC(1)
+#define MAGIC_RESUME_CACHING  MAGIC(2)
+#define MAGIC_STOP_POWER      MAGIC(3)
+#define MAGIC_RESUME_POWER    MAGIC(4)
+#define MAGIC_STOP_TIMING     MAGIC(0x10000)
+#define MAGIC_RESUME_TIMING   MAGIC(0x20000)
+
 #ifdef ASM
 
 /* 
@@ -186,7 +213,7 @@ extern "C" {
 #define sparc64_set_pstate( _pstate ) \
   do { \
     asm volatile ( \
-      "wrpr  %g0, %0, %%pstate " : "=r" ((_pstate)) : "0" ((_pstate)) ); \
+      "wrpr  %%g0, %0, %%pstate " : "=r" ((_pstate)) : "0" ((_pstate)) ); \
   } while ( 0 )
 
 /*
@@ -201,7 +228,7 @@ extern "C" {
 
 #define sparc64_set_pil( _pil ) \
   do { \
-    asm volatile ( "wrpr  %g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
+    asm volatile ( "wrpr  %%g0, %0, %%pil " : "=r" ((_pil)) : "0" ((_pil)) ); \
   } while ( 0 )
 
 

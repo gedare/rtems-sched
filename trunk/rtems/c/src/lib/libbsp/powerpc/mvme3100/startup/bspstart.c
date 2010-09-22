@@ -16,7 +16,7 @@
  *
  *  Modified for mvme3100 by T. Straumann
  *
- *  $Id: bspstart.c,v 1.15 2009/11/30 04:34:37 ralf Exp $
+ *  $Id: bspstart.c,v 1.16 2010/08/20 16:30:25 joel Exp $
  */
 
 #include <string.h>
@@ -105,7 +105,8 @@ int i;
 }
 
 
-BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
+BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 void BSP_panic(char *s)
 {

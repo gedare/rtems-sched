@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: corespinlock.inl,v 1.5 2008/12/22 09:22:17 ralf Exp $
+ *  $Id: corespinlock.inl,v 1.6 2010/08/25 20:01:47 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CORESPINLOCK_H
@@ -27,6 +27,19 @@
  *  @addtogroup ScoreSpinlock 
  *  @{
  */
+
+/**
+ *
+ *  This method is used to initialize core spinlock attributes.
+ *
+ *  @param[in] the_attributes pointer to the attributes to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_spinlock_Initialize_attributes(
+  CORE_spinlock_Attributes *the_attributes
+)
+{
+  the_attributes->XXX = 0;
+}
 
 /**
  *

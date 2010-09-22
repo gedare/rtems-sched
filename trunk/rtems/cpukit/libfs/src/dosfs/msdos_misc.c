@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  @(#) $Id: msdos_misc.c,v 1.23 2010/03/30 11:16:29 ccj Exp $
+ *  @(#) $Id: msdos_misc.c,v 1.24 2010/08/23 21:29:31 joel Exp $
  */
 
 #define MSDOS_TRACE 1
@@ -40,8 +40,8 @@
 /*
  * External strings. Saves spave this way.
  */
-const char const* MSDOS_DOT_NAME    = ".          ";
-const char const* MSDOS_DOTDOT_NAME = "..         ";
+const char *const MSDOS_DOT_NAME    = ".          ";
+const char *const MSDOS_DOTDOT_NAME = "..         ";
 
 /* msdos_is_valid_name_char --
  *     Routine to check the character in a file or directory name.

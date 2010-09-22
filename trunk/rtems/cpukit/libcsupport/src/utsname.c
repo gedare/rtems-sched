@@ -1,5 +1,5 @@
 /*
- *  $Id: utsname.c,v 1.17 2006/08/30 13:18:38 joel Exp $
+ *  $Id: utsname.c,v 1.18 2010/08/24 05:51:51 ralf Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -8,15 +8,11 @@
 
 #include <stdio.h>
 #include <string.h>
-
-#include <errno.h>
 #include <sys/utsname.h>
-
+#include <inttypes.h>
 
 #include <rtems/system.h>
 #include <rtems/score/object.h>
-#include <inttypes.h>
-
 #include <rtems/seterr.h>
 
 /*PAGE
@@ -39,15 +35,15 @@ int uname(
   if ( !name )
     rtems_set_errno_and_return_minus_one( EFAULT );
 
-  strcpy( name->sysname, "RTEMS" );
+  strncpy( name->sysname, "RTEMS", sizeof(name->sysname) );
 
-  sprintf( name->nodename, "Node %" PRId16, _Objects_Local_node );
+  snprintf( name->nodename, sizeof(name->nodename), "Node %" PRId16, _Objects_Local_node );
 
-  strcpy( name->release, RTEMS_VERSION );
+  strncpy( name->release, RTEMS_VERSION, sizeof(name->release) );
 
-  strcpy( name->version, "" );
+  strncpy( name->version, "", sizeof(name->version) );
 
-  sprintf( name->machine, "%s/%s", CPU_NAME, CPU_MODEL_NAME );
+  snprintf( name->machine, sizeof(name->machine), "%s/%s", CPU_NAME, CPU_MODEL_NAME );
 
   return 0;
 }

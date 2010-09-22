@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.82 2010/07/26 22:03:17 joel Exp $
+## $Id: Makefile.am,v 1.85 2010/08/30 12:25:23 ralf Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -24,12 +24,11 @@ include_rtems_posix_HEADERS = include/rtems/posix/sigset.h
 
 if HAS_PTHREADS
 # include
-
 include_HEADERS = include/aio.h include/mqueue.h \
-    include/semaphore.h include/devctl.h
+    include/semaphore.h
 
 # include/rtems/posix
-
+include_rtems_posix_HEADERS += include/rtems/posix/aio_misc.h
 
 include_rtems_posix_HEADERS += include/rtems/posix/cancel.h \
     include/rtems/posix/cond.h include/rtems/posix/config.h \
@@ -50,12 +49,9 @@ include_rtems_posix_HEADERS += inline/rtems/posix/cond.inl \
     inline/rtems/posix/rwlock.inl inline/rtems/posix/spinlock.inl
 
 ## src
-
-# These are really in the stand but not really functional
-## BUILD_FOR_NOW_C_FILES
 libposix_a_SOURCES += src/aio_cancel.c src/aio_error.c src/aio_fsync.c \
     src/aio_read.c src/aio_return.c src/aio_suspend.c src/aio_write.c \
-    src/lio_listio.c src/devctl.c
+    src/lio_listio.c src/aio_misc.c
 
 ## ENOSYS_C_FILES
 libposix_a_SOURCES += src/_execve.c src/execl.c src/execle.c src/execlp.c \

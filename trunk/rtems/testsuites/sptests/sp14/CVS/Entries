@@ -1,10 +1,10 @@
-/.cvsignore/1.1/Thu Apr 13 14:36:57 2000//
-/Makefile.am/1.23/Fri Apr  3 12:48:12 2009//
-/sp14.doc/1.10/Thu Dec 10 22:58:05 2009//
-/sp14.scn/1.2/Thu Dec 10 22:58:05 2009//
-/asr.c/1.11/Thu Jul  8 17:33:00 2010//
-/init.c/1.12/Thu Jul  8 17:33:00 2010//
-/system.h/1.17/Thu Jul  8 17:33:08 2010//
-/task1.c/1.14/Thu Jul  8 17:33:00 2010//
-/task2.c/1.10/Thu Jul  8 17:33:00 2010//
+/.cvsignore/1.1/Tue Sep 21 16:07:47 2010//
+/Makefile.am/1.23/Tue Sep 21 16:07:47 2010//
+/asr.c/1.11/Tue Sep 21 16:07:47 2010//
+/init.c/1.12/Tue Sep 21 16:07:47 2010//
+/sp14.doc/1.10/Tue Sep 21 16:07:47 2010//
+/sp14.scn/1.2/Tue Sep 21 16:07:47 2010//
+/system.h/1.17/Tue Sep 21 16:07:47 2010//
+/task1.c/1.14/Tue Sep 21 16:07:47 2010//
+/task2.c/1.10/Tue Sep 21 16:07:47 2010//
 D

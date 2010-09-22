@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: aio.h,v 1.13 2010/08/09 07:33:58 ralf Exp $
+ *  $Id: aio.h,v 1.16 2010/08/20 13:30:32 ralf Exp $
  */
 
 #ifndef _AIO_H
@@ -46,20 +46,29 @@ extern "C" {
 
 /* lio_listio() options */
 
+/*
+ * LIO modes
+ */
 #define LIO_WAIT        0 /* calling process is to suspend until the */
                           /*   operation is complete */
 #define LIO_NOWAIT      1 /* calling process is to continue execution while */
                           /*   the operation is performed and no notification */
                           /*   shall be given when the operation is completed */
-#define LIO_READ        2 /* request a read() */
-#define LIO_WRITE       3 /* request a write() */
-#define LIO_NOP         4 /* no transfer is requested */
+
+/*
+ * LIO opcodes
+ */
+#define LIO_NOP         0 /* no transfer is requested */
+#define LIO_READ        1 /* request a read() */
+#define LIO_WRITE       2 /* request a write() */
+#define LIO_SYNC        3 /* needed by aio_fsync() */
 
 /*
  *  6.7.1.1 Asynchronous I/O Control Block, P1003.1b-1993, p. 151
  */
 
 struct aiocb {
+  /* public */
   int             aio_fildes;     /* File descriptor */
   off_t           aio_offset;     /* File offset */
   volatile void  *aio_buf;        /* Location of buffer */
@@ -67,6 +76,9 @@ struct aiocb {
   int             aio_reqprio;    /* Request priority offset */
   struct sigevent aio_sigevent;   /* Signal number and value */
   int             aio_lio_opcode; /* Operation to be performed */
+  /* private */
+  int		  error_code;      /* Used for aio_error() */
+  ssize_t	  return_value;     /* Used for aio_return() */
 };
 
 /*

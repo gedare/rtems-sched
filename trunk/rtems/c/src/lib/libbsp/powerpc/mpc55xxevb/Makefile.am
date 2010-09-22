@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.21 2010/04/30 11:59:05 sh Exp $
+## $Id: Makefile.am,v 1.22 2010/08/23 07:38:50 sh Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -57,8 +57,8 @@ libbsp_a_SOURCES += ../../shared/src/irq-generic.c \
     ../../shared/src/irq-info.c \
     ../../shared/src/irq-shell.c
 
-# tests
-libbsp_a_SOURCES += tests/tests.c startup/sd-card-init.c
+# Misc
+libbsp_a_SOURCES += startup/sd-card-init.c
 
 # bsp_i2c
 libbsp_a_SOURCES += i2c/i2c_init.c

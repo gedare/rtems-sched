@@ -7,7 +7,7 @@
  * found in the file LICENSE in this distribution or at
  * http://www.rtems.com/license/LICENSE.
  *
- * $Id: pipe.c,v 1.7 2010/07/09 18:39:36 joel Exp $
+ * $Id: pipe.c,v 1.9 2010/08/28 19:49:47 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -48,7 +48,7 @@ int pipe_create(
     }
     /* Just try once... */
     return -1;
-    sprintf(fifopath + 10, "%04x", rtems_pipe_no ++);
+    /* sprintf(fifopath + 10, "%04x", rtems_pipe_no ++); */
   }
 
   /* Non-blocking open to avoid waiting for writers */

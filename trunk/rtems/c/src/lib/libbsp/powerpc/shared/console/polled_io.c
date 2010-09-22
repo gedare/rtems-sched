@@ -12,7 +12,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- * $Id: polled_io.c,v 1.15 2010/04/28 18:51:58 joel Exp $
+ * $Id: polled_io.c,v 1.16 2010/08/15 23:31:10 joel Exp $
  */
 
 #include <rtems/system.h>
@@ -48,7 +48,8 @@ void  pfree(void *);
 #endif
 
 #ifndef __BOOT__
-BSP_output_char_function_type	BSP_output_char = debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 #endif
 
 #ifdef USE_KBD_SUPPORT

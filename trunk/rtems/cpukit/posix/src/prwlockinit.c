@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: prwlockinit.c,v 1.4 2008/08/15 16:29:22 joel Exp $
+ *  $Id: prwlockinit.c,v 1.5 2010/08/25 20:01:47 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -78,8 +78,10 @@ int pthread_rwlock_init(
 
   /*
    * Convert from POSIX attributes to Core RWLock attributes
+   * 
+   * NOTE: Currently there are no core rwlock attributes
    */
-  /*  Currently there are no core rwlock attributes */
+  _CORE_RWLock_Initialize_attributes( &the_attributes );
 
   /*
    * Enter dispatching critical section to allocate and initialize RWLock

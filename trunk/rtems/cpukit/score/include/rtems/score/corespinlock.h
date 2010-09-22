@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: corespinlock.h,v 1.4 2009/11/28 05:58:54 ralf Exp $
+ *  $Id: corespinlock.h,v 1.5 2010/08/25 20:01:47 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CORESPINLOCK_H
@@ -31,7 +31,6 @@
 extern "C" {
 #endif
 
-#include <rtems/score/thread.h>
 #include <rtems/score/thread.h>
 #include <rtems/score/priority.h>
 

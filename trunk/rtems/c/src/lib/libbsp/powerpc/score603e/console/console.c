@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: console.c,v 1.17 2009/12/17 08:42:16 thomas Exp $
+ *  $Id: console.c,v 1.18 2010/08/15 23:31:05 joel Exp $
  */
 
 #include <bsp.h>
@@ -425,6 +425,7 @@ debug_putc_onlcr(const char c)
   rtems_interrupt_enable( isrlevel );
 }
 
-BSP_output_char_function_type   BSP_output_char = debug_putc_onlcr;
+BSP_output_char_function_type     BSP_output_char = debug_putc_onlcr;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 /* const char arg to be compatible with BSP_output_char decl. */
 

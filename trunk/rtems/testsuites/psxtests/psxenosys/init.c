@@ -1,12 +1,12 @@
 /*
- *  COPYRIGHT (c) 1989-2009.
+ *  COPYRIGHT (c) 1989-2010.
  *  On-Line Applications Research Corporation (OAR).
  *
  *  The license and distribution terms for this file may be
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: init.c,v 1.10 2009/11/30 03:33:23 ralf Exp $
+ *  $Id: init.c,v 1.13 2010/08/30 12:21:31 ralf Exp $
  */
 
 #include <sys/types.h>
@@ -23,7 +23,6 @@
 
 #include <aio.h>
 #include <time.h>
-#include <devctl.h>
 #include <unistd.h>
 #include <sched.h>
 
@@ -52,36 +51,12 @@ void *POSIX_Init(
 
   puts( "\n\n*** POSIX TEST -- ENOSYS ***" );
 
-  puts( "aio_read -- ENOSYS" );
-  sc = aio_read( NULL );
-  check_enosys( sc );
-
-  puts( "aio_write -- ENOSYS" );
-  sc = aio_write( NULL );
-  check_enosys( sc );
-
   puts( "lio_listio -- ENOSYS" );
   sc = lio_listio( 0, NULL, 0, NULL );
   check_enosys( sc );
 
-  puts( "aio_error -- ENOSYS" );
-  sc = aio_error( NULL );
-  check_enosys( sc );
-
-  puts( "aio_return -- ENOSYS" );
-  sc = aio_return( NULL );
-  check_enosys( sc );
-
-  puts( "aio_cancel -- ENOSYS" );
-  sc = aio_cancel( 0, NULL );
-  check_enosys( sc );
-
   puts( "aio_suspend -- ENOSYS" );
   sc = aio_suspend( NULL, 0, NULL );
-  check_enosys( sc );
-
-  puts( "aio_fsync -- ENOSYS" );
-  sc = aio_fsync( 0, NULL );
   check_enosys( sc );
 
   puts( "clock_getcpuclockid -- ENOSYS" );
@@ -94,10 +69,6 @@ void *POSIX_Init(
 
   puts( "clock_setenable_attr -- ENOSYS" );
   sc = clock_setenable_attr( 0, 0 );
-  check_enosys( sc );
-
-  puts( "devctl -- ENOSYS" );
-  sc = devctl( 0, NULL, 0, NULL );
   check_enosys( sc );
 
   puts( "execl -- ENOSYS" );

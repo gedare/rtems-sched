@@ -11,12 +11,13 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: bspstart.c,v 1.11 2009/11/29 15:27:06 ralf Exp $
+ *  $Id: bspstart.c,v 1.12 2010/08/23 23:10:27 joel Exp $
  */
 
 #include <string.h>
 
 #include <bsp.h>
+#include <libcpu/isr_entries.h>
 
 uint32_t bsp_clicks_per_microsecond;
 

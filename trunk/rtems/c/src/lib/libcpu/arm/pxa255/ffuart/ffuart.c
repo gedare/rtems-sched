@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ffuart.c,v 1.7 2010/04/30 14:59:51 sh Exp $
+ *  $Id: ffuart.c,v 1.8 2010/08/15 23:28:46 joel Exp $
  */
 
 #include <bsp.h>
@@ -225,5 +225,5 @@ static int _BSP_poll_char(void) {
   return ffuart_poll_read(0);
 }
 
-BSP_output_char_function_type BSP_output_char = _BSP_put_char;
+BSP_output_char_function_type     BSP_output_char = _BSP_put_char;
 BSP_polling_getchar_function_type BSP_poll_char = _BSP_poll_char;

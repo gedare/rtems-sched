@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.72 2010/07/29 22:40:50 joel Exp $
+## $Id: configure.ac,v 1.74 2010/08/30 16:58:12 ralf Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-psxtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -53,6 +53,10 @@ AC_CHECK_DECLS([adjtime],[],[],[[#include <sys/time.h>]])
 # RTEMS provides a stub, despite newlib doesn't have sys/mman.h
 AC_CHECK_DECLS([mprotect],[],[],[[#include <sys/mman.h>]])
 
+# FIXME: IEEE Std 1003.1-2008 mandates seteuid in unistd.h
+# RTEMS provides it, despite newlib doesn't declare it.
+AC_CHECK_DECLS([seteuid],[],[],[#include <unistd.h>])
+
 # FIXME: We should get rid of this. It's a cludge.
 AC_CHECK_SIZEOF([off_t])
 
@@ -72,6 +76,8 @@ psx11/Makefile
 psx12/Makefile
 psx13/Makefile
 psx14/Makefile
+psxaio01/Makefile
+psxaio02/Makefile
 psxalarm01/Makefile
 psxautoinit01/Makefile
 psxautoinit02/Makefile

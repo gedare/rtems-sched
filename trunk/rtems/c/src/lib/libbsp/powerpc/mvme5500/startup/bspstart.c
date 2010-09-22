@@ -21,7 +21,7 @@
  *  Also, the settings of L1, L2, and L3 caches is not necessary here.
  *  (C) by Brookhaven National Lab., S. Kate Feng <feng1@bnl.gov>, 2003-2009
  *
- *  $Id: bspstart.c,v 1.34 2010/03/27 21:09:08 thomas Exp $
+ *  $Id: bspstart.c,v 1.35 2010/08/20 16:31:24 joel Exp $
  */
 
 #include <string.h>
@@ -58,7 +58,8 @@
 extern uint32_t probeMemoryEnd(void); /* from shared/startup/probeMemoryEnd.c */
 
 
-BSP_output_char_function_type BSP_output_char = BSP_output_char_via_serial;
+BSP_output_char_function_type     BSP_output_char = BSP_output_char_via_serial;
+BSP_polling_getchar_function_type BSP_poll_char = NULL;
 
 extern void _return_to_ppcbug(void);
 extern unsigned long __rtems_end[];

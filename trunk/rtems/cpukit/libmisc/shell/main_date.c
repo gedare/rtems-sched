@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: main_date.c,v 1.6 2009/11/29 12:12:39 ralf Exp $
+ *  $Id: main_date.c,v 1.7 2010/08/27 18:04:28 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -52,7 +52,7 @@ int rtems_shell_main_date(
     struct timespec timesp;
     char *result;
 
-    sprintf( buf, "%s %s", argv[1], argv[2] );
+    snprintf( buf, sizeof(buf), "%s %s", argv[1], argv[2] );
     result = strptime(
       buf,
       "%Y-%m-%d %T",

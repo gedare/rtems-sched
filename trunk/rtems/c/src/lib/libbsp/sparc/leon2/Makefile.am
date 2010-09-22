@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.24 2010/05/11 07:41:00 sh Exp $
+## $Id: Makefile.am,v 1.25 2010/08/26 06:06:55 ccj Exp $
 ##
 
 ACLOCAL_AMFLAGS = -I ../../../../aclocal
@@ -58,7 +58,8 @@ libbsp_a_SOURCES += ../../shared/bspclean.c ../../shared/bsplibc.c \
     ../../shared/bsppost.c ../../shared/bsppredriverhook.c \
     startup/bspstart.c ../../sparc/shared/bsppretaskinghook.c \
     ../../sparc/shared/bspgetworkarea.c ../../shared/bootcard.c \
-    ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c
+    ../../shared/sbrk.c startup/setvec.c startup/spurious.c startup/bspidle.c \
+    ../../shared/bspinit.c
 # gnatsupp
 libbsp_a_SOURCES += gnatsupp/gnatsupp.c ../../sparc/shared/gnatcommon.c
 # console

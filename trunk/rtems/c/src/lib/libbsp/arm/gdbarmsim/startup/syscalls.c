@@ -2,7 +2,7 @@
  *  Copied from libgloss 1 Oct 2009.
  *  Minor modifications to work with RTEMS.
  *
- *  $Id: syscalls.c,v 1.3 2010/05/15 12:29:46 joel Exp $
+ *  $Id: syscalls.c,v 1.4 2010/08/15 22:50:13 joel Exp $
  */
 
 /* Support files for GNU libc.  Files in the system namespace go here.
@@ -760,6 +760,7 @@ _clock (void)
   return timeval;
 }
 
+#if !defined(__rtems__)
 /* Return a clock that ticks at 100Hz.  */
 clock_t
 _times (struct tms * tp)
@@ -776,6 +777,7 @@ _times (struct tms * tp)
 
   return timeval;
 };
+#endif
 
 
 int

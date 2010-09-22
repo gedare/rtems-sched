@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: privateenv.c,v 1.15 2010/07/29 22:27:12 joel Exp $
+ *  $Id: privateenv.c,v 1.17 2010/09/08 07:31:28 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -21,7 +21,6 @@
 
 #include <rtems.h>
 #include <rtems/chain.h>
-#include <rtems/libio.h>
 #include <rtems/libio_.h>
 
 /* cleanup a user environment
@@ -33,24 +32,33 @@ free_user_env(void *venv)
 {
   rtems_user_env_t *env = (rtems_user_env_t*) venv ;
 
- if (env != &rtems_global_user_env
-#ifdef HAVE_USERENV_REFCNT
-  && --env->refcnt <= 0
-#endif
+  if (env != &rtems_global_user_env
+  #ifdef HAVE_USERENV_REFCNT
+      && --env->refcnt <= 0
+  #endif
   ) {
-  rtems_filesystem_freenode( &env->current_directory);
-  rtems_filesystem_freenode( &env->root_directory);
-  free(env);
- }
+    rtems_filesystem_freenode( &env->current_directory);
+    rtems_filesystem_freenode( &env->root_directory);
+    free(env);
+  }
 }
 
 rtems_status_code rtems_libio_set_private_env(void)
 {
-  rtems_status_code                 sc;
-  rtems_id                          task_id;
-  rtems_filesystem_location_info_t  loc;
+  rtems_status_code sc = RTEMS_SUCCESSFUL;
+  rtems_id task_id = rtems_task_self();
+  rtems_filesystem_location_info_t root_loc;
+  rtems_filesystem_location_info_t current_loc;
+  rtems_user_env_t *new_env = NULL;
+  int rv = 0;
 
-  task_id = rtems_task_self();
+  rv = rtems_filesystem_evaluate_path("/", 1, 0, &root_loc, 0);
+  if (rv != 0)
+    goto error_0;
+
+  rv = rtems_filesystem_evaluate_path("/", 1, 0, &current_loc, 0);
+  if (rv != 0)
+    goto error_1;
 
   /* 
    * Malloc is necessary whenever the current task does not
@@ -65,52 +73,61 @@ rtems_status_code rtems_libio_set_private_env(void)
    * if( rtems_current_user_env->task_id != task_id ) {
    */
 
-  if (rtems_current_user_env==&rtems_global_user_env || 
-      rtems_current_user_env->task_id != task_id ) {
-   rtems_user_env_t *tmp = malloc(sizeof(rtems_user_env_t));
-   if (!tmp)
-     return RTEMS_NO_MEMORY;
+  if (
+    rtems_current_user_env == &rtems_global_user_env
+      || rtems_current_user_env->task_id != task_id
+  ) {
+    new_env = malloc(sizeof(rtems_user_env_t));
+    if (new_env == NULL)
+      goto error_2;
 
-#ifdef HAVE_USERENV_REFCNT
-   tmp->refcnt = 1;
-#endif
+    #ifdef HAVE_USERENV_REFCNT
+      new_env->refcnt = 1;
+    #endif
 
-   sc = rtems_task_variable_add(
-    RTEMS_SELF,
-    (void*)&rtems_current_user_env,
-    (void(*)(void *))free_user_env
-   );
-   if (sc != RTEMS_SUCCESSFUL) {
-    /* don't use free_user_env because the pathlocs are
-     * not initialized yet
-     */
-     free(tmp);
-     return sc;
-   }
-   rtems_current_user_env = tmp;
+    sc = rtems_task_variable_add(
+      RTEMS_SELF,
+      (void*)&rtems_current_user_env,
+      (void(*)(void *))free_user_env
+    );
+    if (sc != RTEMS_SUCCESSFUL)
+      goto error_3;
+
+    rtems_current_user_env = new_env;
   }
 
-  *rtems_current_user_env = rtems_global_user_env; /* get the global values*/
-  rtems_current_user_env->task_id=task_id;         /* mark the local values*/
+  /* Inherit the global values */
+  *rtems_current_user_env = rtems_global_user_env;
 
-  /* Clone the pathlocs. In contrast to most other
-   * code we must _not_ free the original locs because
-   * what we are trying to do here is forking off
-   * clones. The reason is a pathloc can be allocated by the
-   * file system and needs to be freed when deleting the environment.
+  rtems_current_user_env->task_id = task_id;
+
+  /*
+   * Clone the pathlocs. In contrast to most other code we must _not_ free the
+   * original locs because what we are trying to do here is forking off clones.
+   * The reason is a pathloc can be allocated by the file system and needs to
+   * be freed when deleting the environment.
    */
-
-  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
-  rtems_filesystem_root    = loc;
-  rtems_filesystem_evaluate_path("/", 1, 0, &loc, 0);
-  rtems_filesystem_current = loc;
+  rtems_filesystem_root = root_loc;
+  rtems_filesystem_current = current_loc;
 
   return RTEMS_SUCCESSFUL;
+
+error_3:
+  free(new_env);
+
+error_2:
+  rtems_filesystem_freenode(&current_loc);
+
+error_1:
+  rtems_filesystem_freenode(&root_loc);
+
+error_0:
+  return RTEMS_NO_MEMORY;
 }
 
 /*
- *  Share a same private environment beetween two task:
- *   Task_id (remote) and RTEMS_SELF(current).
+ *  Share the same private environment between two tasks:
+ *      Task_id (remote) and RTEMS_SELF(current).
  */
 
 /* NOTE:

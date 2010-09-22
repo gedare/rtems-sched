@@ -6,7 +6,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: greth.c,v 1.10 2010/05/31 13:27:07 ralf Exp $
+ *  $Id: greth.c,v 1.11 2010/08/20 21:26:10 joel Exp $
  *
  * 2007-09-07, Ported GBIT support from 4.6.5
  */
@@ -44,6 +44,8 @@
 
 #if defined(__m68k__)
 extern m68k_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
+#elif defined(__lm32__)
+extern lm32_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 #else
 extern rtems_isr_entry set_vector( rtems_isr_entry, rtems_vector_number, int );
 #endif

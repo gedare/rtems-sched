@@ -17,7 +17,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: cpu.h,v 1.2 2010/07/16 08:46:28 sh Exp $
+ *  $Id: cpu.h,v 1.3 2010/08/19 12:11:42 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CPU_H
@@ -570,10 +570,10 @@ SCORE_EXTERN Context_Control_fp  _CPU_Null_fp_context CPU_STRUCTURE_ALIGNMENT;
  *  The SPARC supports a software based interrupt stack and these
  *  are required.
  */
-
+/*
 SCORE_EXTERN void *_CPU_Interrupt_stack_low;
 SCORE_EXTERN void *_CPU_Interrupt_stack_high;
-
+*/
 /*
  *  This flag is context switched with each thread.  It indicates
  *  that THIS thread has an _ISR_Dispatch stack frame on its stack.
