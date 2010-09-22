@@ -1,5 +1,5 @@
 /*
- *  $Id: getlogin.c,v 1.3 2010/07/05 21:31:56 joel Exp $
+ *  $Id: getlogin.c,v 1.4 2010/08/29 19:48:52 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -41,6 +41,7 @@ int getlogin_r(
 )
 {
   struct passwd *pw;
+  char          *pname;
 
   if ( !name ) 
     return EFAULT;
@@ -48,11 +49,13 @@ int getlogin_r(
   if ( namesize < LOGIN_NAME_MAX )
     return ERANGE;
 
+  /* Set the pointer to a default name */
+  pname = "";
+
   pw = getpwuid(getuid());
-  if ( !pw ) {
-   strcpy( name, "" );
-  } else {
-   strncpy( name, pw->pw_name, LOGIN_NAME_MAX );
-  }
+  if ( pw )
+   pname = pw->pw_name;
+
+  strncpy( name, pname, LOGIN_NAME_MAX );
   return 0;
 }

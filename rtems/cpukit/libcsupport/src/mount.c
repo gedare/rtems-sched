@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount.c,v 1.40 2010/07/04 14:53:44 joel Exp $
+ *  $Id: mount.c,v 1.41 2010/08/27 06:29:26 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -74,29 +74,27 @@ static rtems_filesystem_mount_table_entry_t *alloc_mount_table_entry(
   size_t filesystemtype_size = strlen( filesystemtype ) + 1;
   size_t source_size = source_or_null != NULL ?
     strlen( source_or_null ) + 1 : 0;
-  size_t target_length = strlen( target );
+  size_t target_size = strlen( target ) + 1;
   size_t size = sizeof( rtems_filesystem_mount_table_entry_t )
-    + filesystemtype_size + source_size + target_length + 1;
+    + filesystemtype_size + source_size + target_size;
   rtems_filesystem_mount_table_entry_t *mt_entry = calloc( 1, size );
 
   if ( mt_entry != NULL ) {
     char *str = (char *) mt_entry + sizeof( *mt_entry );
 
-    strcpy( str, filesystemtype );
+    memcpy( str, filesystemtype, filesystemtype_size );
     mt_entry->type = str;
     str += filesystemtype_size;
 
-    if ( source_or_null != NULL ) {
-      strcpy( str, source_or_null );
-      mt_entry->dev = str;
-      str += source_size;
-    }
+    memcpy( str, source_or_null, source_size );
+    mt_entry->dev = str;
+    str += source_size;
 
-    strcpy( str, target );
+    memcpy( str, target, target_size );
     mt_entry->target = str;
   }
 
-  *target_length_ptr = target_length;
+  *target_length_ptr = target_size - 1;
 
   return mt_entry;
 }

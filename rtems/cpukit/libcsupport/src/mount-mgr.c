@@ -12,7 +12,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mount-mgr.c,v 1.5 2010/07/04 14:53:44 joel Exp $
+ *  $Id: mount-mgr.c,v 1.6 2010/08/27 06:41:08 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -110,14 +110,15 @@ rtems_filesystem_register(
   rtems_filesystem_fsmount_me_t  mount_h
 )
 {
-  size_t fsn_size = sizeof( filesystem_node ) + strlen(type) + 1;
+  size_t type_size = strlen(type) + 1;
+  size_t fsn_size = sizeof( filesystem_node ) + type_size;
   filesystem_node *fsn = malloc( fsn_size );
-  char *type_storage = (char *) fsn + sizeof( filesystem_node );
+  char *type_storage = (char *) fsn + sizeof( *fsn );
 
   if ( fsn == NULL )
     rtems_set_errno_and_return_minus_one( ENOMEM );
 
-  strcpy(type_storage, type);
+  memcpy(type_storage, type, type_size);
   fsn->entry.type = type_storage;
   fsn->entry.mount_h = mount_h;
 

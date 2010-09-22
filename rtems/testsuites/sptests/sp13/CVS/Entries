@@ -1,12 +1,12 @@
-/.cvsignore/1.1/Thu Apr 13 14:36:57 2000//
-/Makefile.am/1.23/Fri Apr  3 12:48:12 2009//
-/sp13.doc/1.7/Thu Sep  4 18:53:48 2003//
-/sp13.scn/1.10/Thu Oct 18 19:49:46 2007//
-/fillbuff.c/1.9/Thu Jul  8 17:33:00 2010//
-/init.c/1.17/Thu Jul  8 17:33:00 2010//
-/putbuff.c/1.12/Thu Jul  8 17:33:00 2010//
-/system.h/1.21/Thu Jul  8 17:33:08 2010//
-/task1.c/1.27/Thu Jul  8 17:33:00 2010//
-/task2.c/1.15/Thu Jul  8 17:33:00 2010//
-/task3.c/1.12/Thu Jul  8 17:33:00 2010//
+/.cvsignore/1.1/Tue Sep 21 16:07:47 2010//
+/Makefile.am/1.23/Tue Sep 21 16:07:47 2010//
+/fillbuff.c/1.9/Tue Sep 21 16:07:47 2010//
+/init.c/1.17/Tue Sep 21 16:07:47 2010//
+/putbuff.c/1.12/Tue Sep 21 16:07:47 2010//
+/sp13.doc/1.7/Tue Sep 21 16:07:47 2010//
+/sp13.scn/1.10/Tue Sep 21 16:07:47 2010//
+/system.h/1.21/Tue Sep 21 16:07:47 2010//
+/task1.c/1.27/Tue Sep 21 16:07:47 2010//
+/task2.c/1.15/Tue Sep 21 16:07:47 2010//
+/task3.c/1.12/Tue Sep 21 16:07:47 2010//
 D

@@ -13,7 +13,7 @@
  *
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: dbgu.c,v 1.7 2010/04/30 14:59:51 sh Exp $
+ *  $Id: dbgu.c,v 1.8 2010/08/15 23:28:46 joel Exp $
  */
 #include <bsp.h>
 #include <rtems/libio.h>
@@ -218,7 +218,7 @@ static void _BSP_put_char( char c ) {
     dbgu_write_polled(0, '\r');
 }
 
-BSP_output_char_function_type BSP_output_char = _BSP_put_char;
+BSP_output_char_function_type     BSP_output_char = _BSP_put_char;
 
 int _BSP_poll_char(void)
 {

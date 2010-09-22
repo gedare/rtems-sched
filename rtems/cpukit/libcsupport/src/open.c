@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: open.c,v 1.27 2010/07/15 08:10:47 sh Exp $
+ *  $Id: open.c,v 1.28 2010/08/23 23:19:07 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -81,7 +81,6 @@ int open(
     eval_flags |= RTEMS_LIBIO_PERMS_READ;
   if ( ( status & _FWRITE ) == _FWRITE )
     eval_flags |= RTEMS_LIBIO_PERMS_WRITE;
-
 
   va_start(ap, flags);
 

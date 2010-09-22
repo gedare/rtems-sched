@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: coremsginsert.c,v 1.9 2009/09/13 16:05:14 joel Exp $
+ *  $Id: coremsginsert.c,v 1.11 2010/08/25 20:48:43 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -59,8 +59,10 @@ void _CORE_message_queue_Insert_message(
   #if defined(RTEMS_SCORE_COREMSG_ENABLE_NOTIFICATION)
     bool    notify = false;
     #define SET_NOTIFY() \
-      if ( the_message_queue->number_of_pending_messages == 0 )
-        notify = true;
+      do { \
+        if ( the_message_queue->number_of_pending_messages == 0 ) \
+          notify = true; \
+      } while (0)
   #else
     #define SET_NOTIFY()
   #endif

@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: heapresizeblock.c,v 1.12 2009/09/09 14:58:37 joel Exp $
+ *  $Id: heapresizeblock.c,v 1.13 2010/08/25 12:35:52 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -42,7 +42,7 @@ static Heap_Resize_status _Heap_Resize_block_checked(
   uintptr_t block_size = _Heap_Block_size( block );
   uintptr_t block_end = block_begin + block_size;
 
-  uintptr_t alloc_size = block_end - alloc_begin + HEAP_BLOCK_SIZE_OFFSET;
+  uintptr_t alloc_size = block_end - alloc_begin + HEAP_ALLOC_BONUS;
 
   Heap_Block *next_block = _Heap_Block_at( block, block_size );
   uintptr_t next_block_size = _Heap_Block_size( next_block );
@@ -79,7 +79,7 @@ static Heap_Resize_status _Heap_Resize_block_checked(
 
   block_size = _Heap_Block_size( block );
   next_block = _Heap_Block_at( block, block_size );
-  *new_size = (uintptr_t) next_block - alloc_begin + HEAP_BLOCK_SIZE_OFFSET;
+  *new_size = (uintptr_t) next_block - alloc_begin + HEAP_ALLOC_BONUS;
 
   /* Statistics */
   ++stats->resizes;
@@ -103,6 +103,8 @@ Heap_Resize_status _Heap_Resize_block(
 
   *old_size = 0;
   *new_size = 0;
+
+  _Heap_Protection_block_check( heap, block );
 
   if ( _Heap_Is_block_in_heap( heap, block ) ) {
     return _Heap_Resize_block_checked(

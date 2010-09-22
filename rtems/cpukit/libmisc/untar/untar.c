@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: untar.c,v 1.13 2010/07/27 18:11:42 joel Exp $
+ *  $Id: untar.c,v 1.14 2010/08/24 13:06:24 ralf Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -254,7 +254,7 @@ Untar_FromFile(
 {
    int            fd;
    char           *bufr;
-   size_t         n;
+   ssize_t        n;
    char           fname[100];
    char           linkname[100];
    int            sum;
@@ -265,15 +265,17 @@ Untar_FromFile(
    unsigned long  size;
    unsigned char  linkflag;
 
-
    retval = UNTAR_SUCCESSFUL;
-   bufr = (char *)malloc(512);
-   if (bufr == NULL)
-   {
-      return(UNTAR_FAIL);
+
+   if ((fd = open(tar_name, O_RDONLY)) < 0) {
+       return UNTAR_FAIL;
    }
 
-   fd = open(tar_name, O_RDONLY);
+   bufr = (char *)malloc(512);
+   if (bufr == NULL) {
+      return(UNTAR_FAIL);
+   }
+   
    while (1)
    {
       /* Read the header */

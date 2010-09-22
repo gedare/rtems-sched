@@ -22,13 +22,13 @@ D/shttpd////
 D/telnetd////
 D/wrapup////
 D/zlib////
-/.cvsignore/1.5/Mon Nov 24 09:57:09 2003//
-/ChangeLog-pre2007/1.1/Fri May 11 14:05:59 2007//
-/NEWS/1.1/Wed May  9 15:19:11 2007//
-/Doxyfile.in/1.6/Mon Jun 21 16:59:40 2010//
-/doxy-filter/1.1/Fri Jun 11 19:36:36 2010/-kb/
-/acinclude.m4/1.6/Fri Jun 25 17:41:27 2010//
-/ChangeLog/1.2565/Fri Aug 13 15:44:28 2010//
-/Makefile.am/1.101/Fri Aug 13 15:44:28 2010//
-/configure.ac/1.191/Fri Aug 13 15:44:28 2010//
-/preinstall.am/1.47/Fri Aug 13 15:51:18 2010//
+/.cvsignore/1.5/Tue Sep 21 16:10:43 2010//
+/ChangeLog/1.2626/Wed Sep 22 18:15:55 2010//
+/ChangeLog-pre2007/1.1/Tue Sep 21 16:10:43 2010//
+/Doxyfile.in/1.6/Tue Sep 21 16:10:43 2010//
+/Makefile.am/1.101/Tue Sep 21 16:10:43 2010//
+/NEWS/1.1/Tue Sep 21 16:10:43 2010//
+/acinclude.m4/1.6/Tue Sep 21 16:10:43 2010//
+/configure.ac/1.192/Wed Sep 22 18:15:55 2010//
+/doxy-filter/1.1/Tue Sep 21 16:10:43 2010/-kb/
+/preinstall.am/1.47/Wed Sep 22 15:29:11 2010//

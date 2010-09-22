@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_fcntl.c,v 1.2 2010/06/29 01:53:18 joel Exp $
+ *  $Id: default_fcntl.c,v 1.3 2010/08/25 09:37:48 sh Exp $
  */
 
 #include <rtems/libio.h>
@@ -18,5 +18,5 @@ int rtems_filesystem_default_fcntl(
   rtems_libio_t *iop
 )
 {
-  rtems_set_errno_and_return_minus_one( ENOTSUP );
+  return 0;
 }

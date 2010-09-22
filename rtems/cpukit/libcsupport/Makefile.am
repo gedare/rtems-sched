@@ -1,5 +1,5 @@
 ##
-##  $Id: Makefile.am,v 1.131 2010/08/10 13:15:30 joel Exp $
+##  $Id: Makefile.am,v 1.132 2010/08/23 07:59:38 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -23,7 +23,8 @@ include_rtems_motorola_HEADERS = include/motorola/mc68230.h \
 ## rtems
 include_rtems_HEADERS += include/rtems/assoc.h include/rtems/error.h \
     include/rtems/libcsupport.h include/rtems/libio.h include/rtems/libio_.h \
-    include/rtems/malloc.h include/rtems/termiostypes.h
+    include/rtems/malloc.h include/rtems/termiostypes.h \
+    include/rtems/gxx_wrappers.h
 
 ## zilog
 

@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: heapsizeofuserarea.c,v 1.17 2009/09/06 15:24:07 joel Exp $
+ *  $Id: heapsizeofuserarea.c,v 1.18 2010/08/25 12:35:52 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -51,7 +51,7 @@ bool _Heap_Size_of_alloc_area(
     return false;
   }
 
-  *alloc_size = (uintptr_t) next_block + HEAP_BLOCK_SIZE_OFFSET - alloc_begin;
+  *alloc_size = (uintptr_t) next_block + HEAP_ALLOC_BONUS - alloc_begin;
 
   return true;
 }

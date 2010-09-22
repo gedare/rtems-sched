@@ -1,11 +1,14 @@
 /**
- *  @file  rtems/score/chain.h
+ * @file
  *
- *  This include file contains all the constants and structures associated
- *  with the Doubly-Linked Chain Handler.
+ * @ingroup ScoreChain
+ *
+ * @brief Chain Handler API.
  */
 
 /*
+ *  Copyright (c) 2010 embedded brains GmbH.
+ *
  *  COPYRIGHT (c) 1989-2006.
  *  On-Line Applications Research Corporation (OAR).
  *
@@ -13,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: chain.h,v 1.24 2009/11/30 13:20:29 thomas Exp $
+ *  $Id: chain.h,v 1.25 2010/08/23 16:10:53 sh Exp $
  */
 
 #ifndef _RTEMS_SCORE_CHAIN_H
@@ -21,6 +24,8 @@
 
 /**
  *  @defgroup ScoreChain Chain Handler
+ *
+ *  @ingroup Score
  *
  *  The Chain Handler is used to manage sets of entities.  This handler
  *  provides two data structures.  The Chain Node data structure is included
@@ -183,6 +188,66 @@ void _Chain_Insert(
 void _Chain_Append(
   Chain_Control *the_chain,
   Chain_Node    *the_node
+);
+
+/**
+ * @brief Append a node and check if the chain was empty before.
+ *
+ * This routine appends the_node onto the end of the_chain.
+ *
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be appended.
+ *
+ * @note It disables interrupts to ensure the atomicity of the append
+ * operation.
+ *
+ * @retval true The chain was empty before.
+ * @retval false The chain contained at least one node before.
+ */
+bool _Chain_Append_with_empty_check(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+);
+
+/**
+ * @brief Prepend a node and check if the chain was empty before.
+ *
+ * This routine prepends the_node onto the front of the_chain.
+ *
+ * @param[in] the_chain is the chain to be operated upon.
+ * @param[in] the_node is the node to be prepended.
+ *
+ * @note It disables interrupts to ensure the atomicity of the append
+ * operation.
+ *
+ * @retval true The chain was empty before.
+ * @retval false The chain contained at least one node before.
+ */
+bool _Chain_Prepend_with_empty_check(
+  Chain_Control *the_chain,
+  Chain_Node    *the_node
+);
+
+/**
+ * @brief Get the first node and check if the chain is empty afterwards.
+ *
+ * This function removes the first node from the_chain and returns
+ * a pointer to that node in @a the_node.  If the_chain is empty, then NULL is
+ * returned.
+ *
+ * @param[in] the_chain is the chain to attempt to get the first node from.
+ * @param[out] the_node is the first node on the chain or NULL if the chain is
+ * empty.
+ *
+ * @note It disables interrupts to ensure the atomicity of the append
+ * operation.
+ *
+ * @retval true The chain is empty now.
+ * @retval false The chain contains at least one node now.
+ */
+bool _Chain_Get_with_empty_check(
+  Chain_Control *the_chain,
+  Chain_Node **the_node
 );
 
 #ifndef __RTEMS_APPLICATION__

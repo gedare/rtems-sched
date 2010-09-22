@@ -22,7 +22,7 @@
 # http://www.gnu.org or write to the Free Software Foundation, Inc.,
 # 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-# $Id: specstrip,v 1.10 2010/04/06 11:31:11 ralf Exp $
+# $Id: specstrip,v 1.14 2010/09/08 04:11:06 ralf Exp $
 
 use Getopt::Long;
 
@@ -201,28 +201,20 @@ foreach my $line ( @buffer3 )
   } elsif ( $line =~/^%if\s+(.*)\s*$/ )
   {
     my $exp = $1;
-    if ( $condstack[$#condstack] =~ m/<FALSE:.*\s*>$/ ) {
-      push @condstack,"<FALSE:$exp>";
-    } else {
-      push @condstack,"<IFOT:$exp>";
-      push @buffer4, "$line\n";
-    }
+    push @condstack,"<IFOT:$exp>";
+    push @buffer4, "@condstack:$line\n";
   } elsif ( $line =~/^%if((os|narch)\s+.*)\s*$/ )
   {
     my $exp = $1;
-    if ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
-      push @condstack,"<FALSE:$exp>";
-    } else {
-      push @condstack,"<IFOT:$exp>";
-      push @buffer4, "$line\n";
-    }
+    push @condstack,"<IFOT:$exp>";
+    push @buffer4, "@condstack:$line\n";
   } elsif ( $line =~ /^%else\s*$/ ) {
     if ( $condstack[$#condstack] =~ m/<TRUE:(.*)\s*>$/ ) {
       $condstack[$#condstack] = "<FALSE:$1>";
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:(.*)\s*>$/ ) {
       $condstack[$#condstack] = "<TRUE:$1>";
     } else {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     }
   } elsif ( $line =~ /^%endif\s*$/ ) {
 
@@ -231,21 +223,33 @@ foreach my $line ( @buffer3 )
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
 #    print STDERR "ENDIF: FALSE\n";
     } else {
-      push @buffer4, "%endif\n";
+      push @buffer4, "@condstack:$line\n";
     }
 #    print STDERR "POP: $line\n";
     pop @condstack;
   } else {
 #  print STDERR "CATCH $condstack[$#condstack]:$line\n";
     if ( $condstack[$#condstack] =~ m/<TRUE:.*>$/ ) {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     } elsif ( $condstack[$#condstack] =~ m/<FALSE:.*>$/ ) {
     } else {
-      push @buffer4, "$line\n";
+      push @buffer4, "@condstack:$line\n";
     }
   }
 
 #  print STDERR @condstack, "LINE: $line\n";
 }
 
-print STDOUT @buffer4;
+print STDERR @buffer4 if $verbose > 2;
+
+foreach my $line (@buffer4) {
+  if ( $line =~ /^(<.*>):(.*)$/ ) {
+    if ( $1 =~ m/.*<FALSE:.*$/ ) {
+    } else {
+      print STDOUT "$2\n";
+    }
+  } else {
+    die "Unexpected value: $line\n";
+  }
+}
+

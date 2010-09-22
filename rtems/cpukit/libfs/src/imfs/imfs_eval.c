@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs_eval.c,v 1.30 2010/08/13 04:49:31 ccj Exp $
+ *  $Id: imfs_eval.c,v 1.31 2010/08/27 17:32:59 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -80,9 +80,8 @@ int IMFS_evaluate_permission(
   IMFS_jnode_t *jnode;
   int           flags_to_test;
 
-  if ( !rtems_libio_is_valid_perms( flags ) ) {
-    rtems_set_errno_and_return_minus_one( EIO );
-  }
+  if ( !rtems_libio_is_valid_perms( flags ) )
+    rtems_set_errno_and_return_minus_one( EPERM );
 
   jnode = node->node_access;
 

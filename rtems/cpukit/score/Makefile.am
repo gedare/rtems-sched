@@ -1,5 +1,5 @@
 ##
-## $Id: Makefile.am,v 1.87 2010/07/29 17:52:09 joel Exp $
+## $Id: Makefile.am,v 1.88 2010/08/23 16:10:53 sh Exp $
 ##
 
 include $(top_srcdir)/automake/multilib.am
@@ -257,6 +257,7 @@ libscore_a_SOURCES += src/userextaddset.c \
 ## STD_C_FILES
 libscore_a_SOURCES += src/apiext.c src/chain.c src/chainappend.c \
     src/chainextract.c src/chainget.c src/chaininsert.c \
+    src/chainappendempty.c src/chainprependempty.c src/chaingetempty.c \
     src/interr.c src/isr.c src/wkspace.c
 
 EXTRA_DIST = src/Unlimited.txt

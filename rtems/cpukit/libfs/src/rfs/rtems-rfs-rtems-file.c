@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-rtems-file.c,v 1.7 2010/07/15 08:10:48 sh Exp $
+ *  $Id: rtems-rfs-rtems-file.c,v 1.8 2010/08/25 09:37:49 sh Exp $
  */
 /**
  * @file
@@ -341,6 +341,6 @@ const rtems_filesystem_file_handlers_r rtems_rfs_rtems_file_handlers = {
   .fpathconf_h = rtems_filesystem_default_fpathconf,
   .fsync_h     = rtems_rfs_rtems_fdatasync,
   .fdatasync_h = rtems_rfs_rtems_fdatasync,
-  .fcntl_h     = rtems_rfs_rtems_fcntl,
+  .fcntl_h     = rtems_filesystem_default_fcntl,
   .rmnod_h     = rtems_rfs_rtems_rmnod
 };

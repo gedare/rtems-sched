@@ -1,10 +1,10 @@
 ## Process this file with autoconf to produce a configure script.
 ##
-## $Id: configure.ac,v 1.2 2009/11/28 06:28:40 ralf Exp $
+## $Id: configure.ac,v 1.3 2010/08/20 21:22:31 joel Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-lib-libbsp-lm32],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
-AC_CONFIG_SRCDIR([lm32_evr])
+AC_CONFIG_SRCDIR([../lm32])
 RTEMS_TOP(../../../../..)
 
 RTEMS_CANONICAL_TARGET_CPU

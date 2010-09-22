@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: corerwlock.inl,v 1.3 2008/08/19 08:32:59 ralf Exp $
+ *  $Id: corerwlock.inl,v 1.4 2010/08/25 20:01:47 joel Exp $
  */
 
 #ifndef _RTEMS_SCORE_CORERWLOCK_H
@@ -30,6 +30,19 @@
 
 #include <rtems/score/thread.h>
 #include <rtems/score/threadq.h>
+
+/**
+ *
+ *  This method is used to initialize core rwlock attributes.
+ *
+ *  @param[in] the_attributes pointer to the attributes to initialize.
+ */
+RTEMS_INLINE_ROUTINE void _CORE_RWLock_Initialize_attributes(
+  CORE_RWLock_Attributes *the_attributes
+)
+{
+  the_attributes->XXX = 0;
+}
 
 
 /**@}*/

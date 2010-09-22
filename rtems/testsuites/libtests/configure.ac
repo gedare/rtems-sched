@@ -1,6 +1,6 @@
 ## Process this file with autoconf to produce a configure script.
 ## 
-## $Id: configure.ac,v 1.55 2010/08/07 00:24:47 joel Exp $
+## $Id: configure.ac,v 1.56 2010/08/23 08:32:51 sh Exp $
 
 AC_PREREQ(2.60)
 AC_INIT([rtems-c-src-tests-libtests],[_RTEMS_VERSION],[http://www.rtems.org/bugzilla])
@@ -57,7 +57,6 @@ deviceio01/Makefile
 devnullfatal01/Makefile
 dumpbuf01/Makefile
 gxx01/Makefile
-gxx02/Makefile
 heapwalk/Makefile
 malloctest/Makefile
 malloc02/Makefile

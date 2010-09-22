@@ -11,7 +11,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: ioctl.c,v 1.17 2010/07/15 08:10:47 sh Exp $
+ *  $Id: ioctl.c,v 1.18 2010/08/23 23:17:42 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -49,5 +49,6 @@ int ioctl(
    */
   rc = (*iop->pathinfo.handlers->ioctl_h)( iop, command, buffer );
 
+  va_end( ap );
   return rc;
 }

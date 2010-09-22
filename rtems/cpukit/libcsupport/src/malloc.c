@@ -9,7 +9,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: malloc.c,v 1.59 2010/06/30 15:36:48 joel Exp $
+ *  $Id: malloc.c,v 1.60 2010/08/25 14:30:01 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -47,13 +47,6 @@ void *malloc(
   if ( _System_state_Is_up(_System_state_Get()) &&
        !malloc_is_system_state_OK() )
     return NULL;
-
-  /*
-   *  Walk the heap and verify its integrity
-   */
-  #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
-  #endif
 
   /*
    * Try to give a segment in the current heap if there is not

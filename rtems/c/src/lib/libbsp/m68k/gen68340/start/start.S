@@ -22,7 +22,7 @@
  *
  * e-mail: g_montel@yahoo.com
  *
- *  $Id: start.S,v 1.14 2009/04/28 06:25:48 ccj Exp $
+ *  $Id: start.S,v 1.15 2010/09/15 15:57:32 joel Exp $
  */
 
 #include <rtems/asm.h>
@@ -809,7 +809,7 @@ _BCCfill_loop:
 	subq.l 	#1,crt0_temp
 	bne 	_BCCfill_loop
 
-	*-------------------------------------------------*/
+	/*-------------------------------------------------*/
 _dont_fill:
 	move.b	crt0_csswitch,_AsteccCsSwitch
 	move.b	crt0_buswidth,_AsteccBusWidth

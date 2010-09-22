@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: imfs.h,v 1.48 2010/08/08 20:25:00 joel Exp $
+ *  $Id: imfs.h,v 1.49 2010/08/25 09:37:48 sh Exp $
  */
 
 #ifndef _RTEMS_IMFS_H
@@ -539,11 +539,6 @@ extern int IMFS_rename(
 );
 
 extern int IMFS_fdatasync(
-  rtems_libio_t *iop
-);
-
-extern int IMFS_fcntl(
-  int            cmd,
   rtems_libio_t *iop
 );
 

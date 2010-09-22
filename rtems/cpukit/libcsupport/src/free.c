@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: free.c,v 1.9 2010/06/30 15:36:48 joel Exp $
+ *  $Id: free.c,v 1.10 2010/08/25 14:30:01 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -27,10 +27,6 @@ void free(
 
   if ( !ptr )
     return;
-
-  #if defined(RTEMS_HEAP_DEBUG)
-    _Protected_heap_Walk( RTEMS_Malloc_Heap, 0, false );
-  #endif
 
   /*
    *  Do not attempt to free memory if in a critical section or ISR.

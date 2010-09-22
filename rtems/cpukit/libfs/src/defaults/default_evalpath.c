@@ -6,7 +6,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: default_evalpath.c,v 1.3 2010/06/29 19:37:28 jennifer Exp $
+ *  $Id: default_evalpath.c,v 1.4 2010/08/27 06:42:45 sh Exp $
  */
 
 #include <rtems/libio.h>
@@ -20,7 +20,6 @@ int rtems_filesystem_default_evalpath(
   rtems_filesystem_location_info_t  *pathloc        /* IN/OUT */
 )
 {
-  pathloc = NULL;
   rtems_set_errno_and_return_minus_one( ENOTSUP );
 }
 

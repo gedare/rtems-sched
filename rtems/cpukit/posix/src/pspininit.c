@@ -8,7 +8,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: pspininit.c,v 1.3 2009/11/30 15:44:21 ralf Exp $
+ *  $Id: pspininit.c,v 1.4 2010/08/25 20:01:47 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -64,6 +64,8 @@ int pthread_spin_init(
     _Thread_Enable_dispatch();
     return EAGAIN;
   }
+
+  _CORE_spinlock_Initialize_attributes( &attributes );
 
   _CORE_spinlock_Initialize( &the_spinlock->Spinlock, &attributes );
 

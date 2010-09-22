@@ -7,7 +7,7 @@
  * Saskatoon, Saskatchewan, CANADA
  * eric@skatter.usask.ca
  *
- *  $Id: init68360.c,v 1.28 2010/04/28 19:16:22 joel Exp $
+ *  $Id: init68360.c,v 1.29 2010/08/24 17:08:07 joel Exp $
  */
 
 #include <rtems.h>
@@ -47,6 +47,9 @@ void _Init68360 (void)
 	int i;
 	m68k_isr_entry *vbr;
 	unsigned long ramSize;
+	volatile unsigned long *RamBase_p;
+
+	RamBase_p = (volatile unsigned long *)&RamBase;
 
 #if (defined (__mc68040__))
 	/*
@@ -152,7 +155,7 @@ void _Init68360 (void)
 	for (i = 0; i < 50000; i++)
 		continue;
 	for (i = 0; i < 8; ++i)
-		*((volatile unsigned long *)(unsigned long)&RamBase);
+		*RamBase_p;
 
 	/*
 	 * Step 13: Copy  the exception vector table to system RAM
@@ -753,7 +756,7 @@ void _Init68360 (void)
 		for (i = 0; i < 50000; i++)
 			continue;
 		for (i = 0; i < 8; ++i)
-			*((volatile unsigned long *)(unsigned long)&RamBase);
+			*RamBase_p;
 
 		/*
 		 * Determine memory size (1, 4, or 16 Mbytes)

@@ -1,5 +1,5 @@
 /*
- *  File:	symbols.c
+ *  File: symbols.c
  *
  *  Description:
  *    Symbol table manager for the RTEMS monitor.
@@ -8,7 +8,7 @@
  *
  *  TODO:
  *
- *  $Id: mon-symbols.c,v 1.33 2010/04/12 15:21:42 ralf Exp $
+ *  $Id: mon-symbols.c,v 1.34 2010/08/26 21:41:41 joel Exp $
  */
 
 #ifdef HAVE_CONFIG_H
@@ -339,7 +339,7 @@ rtems_monitor_symbol_canonical(
 {
     canonical_symbol->value = sp->value;
     canonical_symbol->offset = 0;
-    strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name));
+    strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name)-1);
 }
 
 
@@ -355,7 +355,7 @@ rtems_monitor_symbol_canonical_by_name(
 
     canonical_symbol->value = sp ? sp->value : 0;
 
-    strncpy(canonical_symbol->name, name, sizeof(canonical_symbol->name));
+    strncpy(canonical_symbol->name, name, sizeof(canonical_symbol->name) - 1);
     canonical_symbol->offset = 0;
 }
 
@@ -373,7 +373,7 @@ rtems_monitor_symbol_canonical_by_value(
     {
         canonical_symbol->value = sp->value;
         canonical_symbol->offset = value - sp->value;
-        strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name));
+        strncpy(canonical_symbol->name, sp->name, sizeof(canonical_symbol->name)-1);
     }
     else
     {

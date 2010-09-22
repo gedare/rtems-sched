@@ -14,7 +14,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: sync.c,v 1.10 2008/09/17 16:12:02 joel Exp $
+ *  $Id: sync.c,v 1.11 2010/08/26 21:42:21 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -47,6 +47,11 @@ static void sync_wrapper(FILE *f)
 {
   int fn = fileno(f);
 
+  /*
+   *  We are explicitly NOT checking the return values as it does not
+   *  matter if they succeed.  We are just making a best faith attempt
+   *  at both and trusting that we were passed a good FILE pointer.
+   */
   fsync(fn);
   fdatasync(fn);
 }

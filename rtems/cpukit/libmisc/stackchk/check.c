@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: check.c,v 1.70 2010/08/02 18:26:30 joel Exp $
+ *  $Id: check.c,v 1.72 2010/08/25 20:29:41 joel Exp $
  *
  */
 
@@ -142,6 +142,7 @@ void Stack_check_Initialize( void )
     0xDEADF00D, 0x600D0D06   /* DEAD FOOD but GOOD DOG */
   };
 
+  if ( Stack_check_Initialized )
     return;
 
   /*
@@ -403,12 +404,11 @@ void Stack_check_Dump_threads_usage(
       the_thread = 0;
       current = 0;
     } else 
-  #else
+  #endif
     {
       stack  = &the_thread->Start.Initial_stack;
       current = (void *)_CPU_Context_Get_SP( &the_thread->Registers );
     }
-  #endif
 
   low  = Stack_check_usable_stack_start(stack);
   size = Stack_check_usable_stack_size(stack);

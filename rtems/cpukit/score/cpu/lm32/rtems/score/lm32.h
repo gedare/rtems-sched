@@ -13,7 +13,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: lm32.h,v 1.2 2009/12/04 04:27:21 ralf Exp $
+ *  $Id: lm32.h,v 1.3 2010/08/20 21:24:16 joel Exp $
  *
  *  Jukka Pietarinen <jukka.pietarinen@mrf.fi>, 2008,
  *  Micro-Research Finland Oy
@@ -67,6 +67,9 @@ extern "C" {
 #ifdef __cplusplus
 }
 #endif
+
+#define lm32_read_interrupts( _ip) \
+  asm volatile ("rcsr %0, ip":"=r"(_ip));
 
 #define lm32_disable_interrupts( _level ) \
   do { register uint32_t ie; \

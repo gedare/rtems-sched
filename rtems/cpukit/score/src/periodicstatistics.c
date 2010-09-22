@@ -16,9 +16,11 @@
 #endif
 
 #include <rtems/system.h>
+#include <rtems/config.h>
 #include <rtems/score/isr.h>
 #include <rtems/score/object.h>
 #include <rtems/score/periodic.h>
+#include <rtems/score/scheduler.h>
 #include <rtems/score/scheduleredf.h>
 #include <rtems/score/thread.h>
 
@@ -86,7 +88,8 @@ void _Periodic_Initiate_statistics(
   #endif
     
     /* TODO: scheduler-specific job release */
-    _Scheduler_edf_Release_job( the_period );
+    if (Configuration.scheduler_policy == _Scheduler_EDF)
+      _Scheduler_edf_Release_job( the_period );
 }
 
 /*PAGE

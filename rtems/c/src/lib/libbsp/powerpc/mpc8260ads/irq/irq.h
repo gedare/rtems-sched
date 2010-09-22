@@ -23,7 +23,7 @@
  *  found in found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: irq.h,v 1.10 2010/04/30 12:33:44 sh Exp $
+ *  $Id: irq.h,v 1.11 2010/08/23 16:08:53 joel Exp $
  */
 
 #ifndef LIBBSP_POWERPC_IRQ_H
@@ -186,6 +186,9 @@ extern void BSP_rtems_irq_mng_init(unsigned cpuId);
 #ifdef __cplusplus
 }
 #endif
+
+/* Now that we have defined some basics, include the generic support */
+#include <bsp/irq-generic.h>
 
 #endif
 

@@ -5,7 +5,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: rtems-rfs-format.c,v 1.6 2010/06/17 03:46:53 ralf Exp $
+ *  $Id: rtems-rfs-format.c,v 1.7 2010/08/26 06:31:15 ccj Exp $
  */
 /**
  * @file
@@ -538,6 +538,7 @@ rtems_rfs_format (const char* name, const rtems_rfs_format_config* config)
   
   memset (&fs, 0, sizeof (rtems_rfs_file_system));
 
+  rtems_chain_initialize_empty (&fs.buffers);
   rtems_chain_initialize_empty (&fs.release);
   rtems_chain_initialize_empty (&fs.release_modified);
   rtems_chain_initialize_empty (&fs.file_shares);

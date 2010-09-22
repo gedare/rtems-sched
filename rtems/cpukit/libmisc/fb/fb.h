@@ -4,7 +4,7 @@
  * MODULE DESCRIPTION:
  * Micro FrameBuffer interface for Embedded Systems.
  *
- * $Id: fb.h,v 1.2 2009/11/29 11:57:23 ralf Exp $
+ * $Id: fb.h,v 1.3 2010/08/20 21:24:44 joel Exp $
  */
 
 #ifndef _MW_FB_H
@@ -24,7 +24,11 @@ extern "C" {
 #define FBIOGETCMAP		0x4604
 #define FBIOPUTCMAP		0x4605
 #define FB_EXEC_FUNCTION	0x4606
+#define FBIOSWAPBUFFERS         0x4607
+#define FBIOSETBUFFERMODE       0x4608
 
+#define FB_SINGLE_BUFFERED  0
+#define FB_TRIPLE_BUFFERED  1
 
 #define FB_TYPE_PACKED_PIXELS          0    /* Packed Pixels    */
 #define FB_TYPE_PLANES                 1    /* Non interleaved planes */

@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.23 2010/08/10 04:04:17 ralf Exp $
+# $Id: Makefile.am,v 1.26 2010/08/26 02:16:19 ralf Exp $
 
 rtems_api = 4.11
 TARGET = bfin-rtems4.11
@@ -7,13 +7,13 @@ include $(top_srcdir)/mkspec.am
 
 BINUTILS_VERS = 2.20.1
 BINUTILS_PKGVERS = $(BINUTILS_VERS)
-BINUTILS_RPMREL = 2
+BINUTILS_RPMREL = 3
 include ../binutils.am
 BINUTILS_OPTS +=
 
 GCC_VERS = 4.5.1
 GCC_PKGVERS = $(GCC_VERS)
-GCC_RPMREL = 4
+GCC_RPMREL = 6
 NEWLIB_VERS = 1.18.0
 NEWLIB_PKGVERS = $(NEWLIB_VERS)
 NEWLIB_RPMREL = `expr $(GCC_RPMREL) + 15`

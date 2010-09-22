@@ -32,7 +32,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: bspstart.c,v 1.25 2010/06/14 16:01:37 joel Exp $
+ *  $Id: bspstart.c,v 1.26 2010/08/23 16:08:53 joel Exp $
  */
 
 #include <bsp.h>
@@ -46,6 +46,7 @@
 #include <rtems/powerpc/powerpc.h>
 
 #include <rtems/bspIo.h>
+#include <bsp/irq.h>
 #include <libcpu/cpuIdent.h>
 #include <libcpu/spr.h>
 

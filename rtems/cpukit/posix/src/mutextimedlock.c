@@ -10,7 +10,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: mutextimedlock.c,v 1.11 2009/11/30 15:44:21 ralf Exp $
+ *  $Id: mutextimedlock.c,v 1.12 2010/08/23 21:31:27 joel Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -72,15 +72,11 @@ int pthread_mutex_timedlock(
    *  make sure the right reason is returned.
    */
   if ( !do_wait && (lock_status == EBUSY) ) {
-    switch (lock_status) {
-      case POSIX_ABSOLUTE_TIMEOUT_INVALID:
-        return EINVAL;
-      case POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST:
-      case POSIX_ABSOLUTE_TIMEOUT_IS_NOW:
-        return ETIMEDOUT;
-      case POSIX_ABSOLUTE_TIMEOUT_IS_IN_FUTURE:
-        break;
-    }
+    if ( lock_status == POSIX_ABSOLUTE_TIMEOUT_INVALID )
+      return EINVAL;
+    if ( lock_status == POSIX_ABSOLUTE_TIMEOUT_IS_IN_PAST ||
+         lock_status == POSIX_ABSOLUTE_TIMEOUT_IS_NOW )
+      return ETIMEDOUT;
   }
 
   return lock_status;

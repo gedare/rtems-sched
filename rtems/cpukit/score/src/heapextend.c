@@ -16,7 +16,7 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: heapextend.c,v 1.17 2010/06/07 09:35:01 sh Exp $
+ *  $Id: heapextend.c,v 1.18 2010/08/25 12:35:52 sh Exp $
  */
 
 #if HAVE_CONFIG_H
@@ -194,9 +194,11 @@ bool _Heap_Extend(
   extend_first_block->prev_size = extend_area_end;
   extend_first_block->size_and_flag =
     extend_first_block_size | HEAP_PREV_BLOCK_USED;
+  _Heap_Protection_block_initialize( heap, extend_first_block );
 
   extend_last_block->prev_size = extend_first_block_size;
   extend_last_block->size_and_flag = 0;
+  _Heap_Protection_block_initialize( heap, extend_last_block );
 
   if ( (uintptr_t) extend_first_block < (uintptr_t) heap->first_block ) {
     heap->first_block = extend_first_block;

@@ -13,10 +13,11 @@
  *  found in the file LICENSE in this distribution or at
  *  http://www.rtems.com/license/LICENSE.
  *
- *  $Id: spinit.c,v 1.6 2006/09/11 21:43:55 joel Exp $
+ *  $Id: spinit.c,v 1.7 2010/08/13 20:49:09 joel Exp $
  */
 
 #include <bsp.h>
+#include <bsp/bootcard.h>
 #include <stdio.h>
 
 const char * const _Spurious_Error_[] = {"Reset","Bus Error","Address Error",
