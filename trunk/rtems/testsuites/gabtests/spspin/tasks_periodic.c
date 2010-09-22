@@ -103,24 +103,7 @@ rtems_task Tasks_Periodic(
     deadlines_missed += local_deadlines_missed;
 
     if ( NUM_TASKS == tasks_completed ) {
-      MAGIC_STOP_POWER;
-      MAGIC_STOP_CACHING;
-      MAGIC_STOP_TIMING;
-
-      sparc64_read_tick( tick_stop );
-      printf("%d\tDeadlines missed\n", deadlines_missed);
-
-      /*
-      printf("#inst spun: %lu \n", tick_stop - tick_start);
-      printf("Time spun: %d us\n", 
-          (tick_stop - tick_start) / (Instructions_per_us) );
-      printf("OS Ticks spun: %d ticks\n", (tick_stop - tick_start) 
-          / (Instructions_per_us) / CONFIGURE_MICROSECONDS_PER_TICK );
-     */
-      printf("END_TOKEN\n");
-      printf("\n\n");
-      puts( "*** END OF TEST TICKS ***" );
-
+      MAGIC(deadlines_missed);
       MAGIC_BREAKPOINT;
       rtems_test_exit( 0 );
     }
