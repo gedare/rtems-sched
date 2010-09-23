@@ -67,7 +67,6 @@ Watchdog_States _Watchdog_Remove(
       break;
   }
   the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
-
   _ISR_Enable( level );
   return( previous_state );
 }

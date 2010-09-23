@@ -97,6 +97,7 @@ void _Ready_queue_edf_Extract(
     if (!tmp_node) {
       /* TODO: remove after debugging */
       printk("invalid thread\n");
+      MAGIC_BREAKPOINT;
       while(1);
     }
     tmp_sched = _RBTree_Container_of(

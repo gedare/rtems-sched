@@ -93,7 +93,7 @@ rtems_task Tasks_Periodic(
     */
 
     /* termination condition: based on amount of 'work' completed. */
-    if ( periods_executed*Periods[argument] >= 4*MAX_PERIOD ) break; 
+    if ( periods_executed*Periods[argument] >= 2*MAX_PERIOD ) break; 
   }
 
   status = rtems_semaphore_obtain( tasks_complete_sem, 
