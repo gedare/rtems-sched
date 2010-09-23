@@ -36,8 +36,8 @@ diff -uprN -X /home/gedare/work/rtems/rtems-4.10/dontdiff rtems/cpukit/score/inl
  )
  {
 + MAGIC_HWDS1_START;
-  return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
-+ MAGIC_HWDS1_END;
+  Thread_Control *t=the_ready_queue->rq_ops.first( the_ready_queue );
++ MAGIC_HWDS1_END; return t;
  }
  
  /**
