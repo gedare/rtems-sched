@@ -5,7 +5,7 @@
  */
 
 /* This file was generated with the following parameters: 
--T 1,0.027,0 -T 2,0.025,0 -T 3,0.036,0 -T 3,0.015,0 -T 4,0.010,0 -T 5,0.034,0 -T 6,0.017,0 -T 10,0.035,0 -T 10,0.017,0 -T 11,0.033,0 -T 11,0.003,0 -T 12,0.029,0 -T 12,0.023,0 -T 13,0.014,0 -T 17,0.017,0 -T 18,0.027,0 -T 18,0.006,0 -T 18,0.000,0 -T 18,0.031,0 -T 18,0.013,0 -T 19,0.033,0 -T 20,0.020,0 -T 20,0.029,0 -T 23,0.029,0 -T 23,0.023,0 -T 23,0.029,0 -T 24,0.024,0 -T 24,0.005,0 -T 25,0.019,0 -T 25,0.025,0 -T 26,0.028,0 -T 27,0.016,0 -T 29,0.034,0 -T 30,0.029,0 -T 30,0.017,0 -T 31,0.011,0 -T 31,0.001,0 -T 32,0.011,0 -T 33,0.015,0 -T 33,0.015,0 -T 34,0.024,0 -T 35,0.006,0 -T 37,0.019,0 -T 41,0.013,0 -T 42,0.001,0 -T 45,0.006,0 -T 46,0.035,0 -T 46,0.026,0 -T 49,0.021,0 -T 50,0.025,0 
+-T 1,0.002,0 -T 1,0.003,0 -T 1,0.002,0 -T 1,0.003,0 -T 3,0.001,0 -T 4,0.004,0 -T 4,0.004,0 -T 4,0.004,0 -T 5,0.000,0 -T 5,0.002,0 -T 7,0.001,0 -T 8,0.004,0 -T 8,0.003,0 -T 8,0.001,0 -T 9,0.002,0 -T 9,0.003,0 -T 11,0.001,0 -T 12,0.000,0 -T 12,0.003,0 -T 12,0.003,0 -T 13,0.000,0 -T 17,0.001,0 -T 17,0.000,0 -T 17,0.002,0 -T 18,0.002,0 -T 19,0.003,0 -T 19,0.003,0 -T 19,0.003,0 -T 19,0.001,0 -T 20,0.002,0 -T 22,0.002,0 -T 23,0.004,0 -T 25,0.005,0 -T 26,0.005,0 -T 26,0.003,0 -T 27,0.004,0 -T 28,0.000,0 -T 28,0.004,0 -T 29,0.003,0 -T 29,0.002,0 -T 29,0.003,0 -T 30,0.005,0 -T 30,0.002,0 -T 31,0.002,0 -T 32,0.003,0 -T 32,0.002,0 -T 32,0.004,0 -T 33,0.004,0 -T 34,0.000,0 -T 34,0.004,0 -T 35,0.003,0 -T 35,0.002,0 -T 35,0.003,0 -T 36,0.004,0 -T 36,0.002,0 -T 37,0.000,0 -T 38,0.001,0 -T 38,0.002,0 -T 39,0.001,0 -T 39,0.003,0 -T 39,0.003,0 -T 39,0.001,0 -T 40,0.001,0 -T 40,0.002,0 -T 40,0.004,0 -T 41,0.003,0 -T 42,0.003,0 -T 43,0.005,0 -T 44,0.004,0 -T 44,0.003,0 -T 45,0.002,0 -T 46,0.001,0 -T 46,0.001,0 -T 48,0.002,0 -T 48,0.002,0 -T 48,0.004,0 -T 49,0.004,0 -T 50,0.001,0 -T 50,0.003,0 -T 50,0.004,0 
 */
 
 #ifndef __PARAMS_H_
@@ -13,70 +13,100 @@
 
 #define  HP_LENGTH                  (-1)
 #define  MAX_PERIOD                 (50)
-#define  NUM_PERIODIC_TASKS         (50)
+#define  NUM_PERIODIC_TASKS         (80)
 #define  NUM_APERIODIC_TASKS        (0)
 #define  NUM_TASKS                  ( NUM_PERIODIC_TASKS + NUM_APERIODIC_TASKS )
 uint32_t  periodic_tasks            = NUM_PERIODIC_TASKS;
 
-rtems_task_priority Priorities[1+NUM_TASKS]= { 0, 1, 2, 3, 3, 4, 5, 6, 10, 10, 11, 11, 12, 12, 13, 17, 18, 18, 18, 18, 18, 19, 20, 20, 23, 23, 23, 24, 24, 25, 25, 26, 27, 29, 30, 30, 31, 31, 32, 33, 33, 34, 35, 37, 41, 42, 45, 46, 46, 49, 50 };
+rtems_task_priority Priorities[1+NUM_TASKS]= { 0, 1, 1, 1, 1, 3, 4, 4, 4, 5, 5, 7, 8, 8, 8, 9, 9, 11, 12, 12, 12, 13, 17, 17, 17, 18, 19, 19, 19, 19, 20, 22, 23, 25, 26, 26, 27, 28, 28, 29, 29, 29, 30, 30, 31, 32, 32, 32, 33, 34, 34, 35, 35, 35, 36, 36, 37, 38, 38, 39, 39, 39, 39, 40, 40, 40, 41, 42, 43, 44, 44, 45, 46, 46, 48, 48, 48, 49, 50, 50, 50 };
 
-uint32_t  Periods[1+NUM_PERIODIC_TASKS]    = { 0, 1, 2, 3, 3, 4, 5, 6, 10, 10, 11, 11, 12, 12, 13, 17, 18, 18, 18, 18, 18, 19, 20, 20, 23, 23, 23, 24, 24, 25, 25, 26, 27, 29, 30, 30, 31, 31, 32, 33, 33, 34, 35, 37, 41, 42, 45, 46, 46, 49, 50 };
+uint32_t  Periods[1+NUM_PERIODIC_TASKS]    = { 0, 1, 1, 1, 1, 3, 4, 4, 4, 5, 5, 7, 8, 8, 8, 9, 9, 11, 12, 12, 12, 13, 17, 17, 17, 18, 19, 19, 19, 19, 20, 22, 23, 25, 26, 26, 27, 28, 28, 29, 29, 29, 30, 30, 31, 32, 32, 32, 33, 34, 34, 35, 35, 35, 36, 36, 37, 38, 38, 39, 39, 39, 39, 40, 40, 40, 41, 42, 43, 44, 44, 45, 46, 46, 48, 48, 48, 49, 50, 50, 50 };
 
 uint32_t  Execution_us[1+NUM_TASKS]        = {
                                              0*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             1*0.027*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             2*0.025*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             3*0.036*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             3*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             4*0.01*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             5*0.034*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             6*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             10*0.035*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             10*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             11*0.033*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             11*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             12*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             12*0.023*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             13*0.014*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             17*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             18*0.027*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             18*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             18*0*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             18*0.031*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             18*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             19*0.033*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             20*0.02*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             20*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             23*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             23*0.023*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             23*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             24*0.024*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             24*0.005*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             25*0.019*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             25*0.025*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             26*0.028*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             27*0.016*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             29*0.034*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             30*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             30*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             31*0.011*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             31*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             32*0.011*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             33*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             33*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             34*0.024*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             35*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             37*0.019*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             41*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             42*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             45*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             46*0.035*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             46*0.026*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             49*0.021*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             50*0.025*CONFIGURE_MICROSECONDS_PER_TICK
+                                             1*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             1*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             1*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             1*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             3*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             4*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             4*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             4*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             5*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             5*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             7*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             8*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             8*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             8*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             9*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             9*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             11*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             12*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             12*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             12*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             13*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             17*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             17*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             17*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             18*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             19*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             19*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             19*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             19*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             20*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             22*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             23*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             25*0.005*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             26*0.005*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             26*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             27*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             28*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             28*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             29*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             29*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             29*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             30*0.005*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             30*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             31*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             32*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             32*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             32*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             33*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             34*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             34*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             35*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             35*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             35*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             36*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             36*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             37*0*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             39*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             39*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             39*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             39*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             40*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             40*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             40*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             41*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             42*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             43*0.005*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             44*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             44*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             45*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             46*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             46*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             48*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             48*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             48*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             49*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             50*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             50*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             50*0.004*CONFIGURE_MICROSECONDS_PER_TICK
                                              };
 
-uint32_t  Phases[1+NUM_TASKS]           = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+uint32_t  Phases[1+NUM_TASKS]           = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 #define build_task_name() do { \
 Task_name[ 1 ] =  rtems_build_name( 'P', 'T', '0', '1' );\
@@ -129,6 +159,36 @@ Task_name[ 47 ] =  rtems_build_name( 'P', 'T', '4', '7' );\
 Task_name[ 48 ] =  rtems_build_name( 'P', 'T', '4', '8' );\
 Task_name[ 49 ] =  rtems_build_name( 'P', 'T', '4', '9' );\
 Task_name[ 50 ] =  rtems_build_name( 'P', 'T', '5', '0' );\
+Task_name[ 51 ] =  rtems_build_name( 'P', 'T', '5', '1' );\
+Task_name[ 52 ] =  rtems_build_name( 'P', 'T', '5', '2' );\
+Task_name[ 53 ] =  rtems_build_name( 'P', 'T', '5', '3' );\
+Task_name[ 54 ] =  rtems_build_name( 'P', 'T', '5', '4' );\
+Task_name[ 55 ] =  rtems_build_name( 'P', 'T', '5', '5' );\
+Task_name[ 56 ] =  rtems_build_name( 'P', 'T', '5', '6' );\
+Task_name[ 57 ] =  rtems_build_name( 'P', 'T', '5', '7' );\
+Task_name[ 58 ] =  rtems_build_name( 'P', 'T', '5', '8' );\
+Task_name[ 59 ] =  rtems_build_name( 'P', 'T', '5', '9' );\
+Task_name[ 60 ] =  rtems_build_name( 'P', 'T', '6', '0' );\
+Task_name[ 61 ] =  rtems_build_name( 'P', 'T', '6', '1' );\
+Task_name[ 62 ] =  rtems_build_name( 'P', 'T', '6', '2' );\
+Task_name[ 63 ] =  rtems_build_name( 'P', 'T', '6', '3' );\
+Task_name[ 64 ] =  rtems_build_name( 'P', 'T', '6', '4' );\
+Task_name[ 65 ] =  rtems_build_name( 'P', 'T', '6', '5' );\
+Task_name[ 66 ] =  rtems_build_name( 'P', 'T', '6', '6' );\
+Task_name[ 67 ] =  rtems_build_name( 'P', 'T', '6', '7' );\
+Task_name[ 68 ] =  rtems_build_name( 'P', 'T', '6', '8' );\
+Task_name[ 69 ] =  rtems_build_name( 'P', 'T', '6', '9' );\
+Task_name[ 70 ] =  rtems_build_name( 'P', 'T', '7', '0' );\
+Task_name[ 71 ] =  rtems_build_name( 'P', 'T', '7', '1' );\
+Task_name[ 72 ] =  rtems_build_name( 'P', 'T', '7', '2' );\
+Task_name[ 73 ] =  rtems_build_name( 'P', 'T', '7', '3' );\
+Task_name[ 74 ] =  rtems_build_name( 'P', 'T', '7', '4' );\
+Task_name[ 75 ] =  rtems_build_name( 'P', 'T', '7', '5' );\
+Task_name[ 76 ] =  rtems_build_name( 'P', 'T', '7', '6' );\
+Task_name[ 77 ] =  rtems_build_name( 'P', 'T', '7', '7' );\
+Task_name[ 78 ] =  rtems_build_name( 'P', 'T', '7', '8' );\
+Task_name[ 79 ] =  rtems_build_name( 'P', 'T', '7', '9' );\
+Task_name[ 80 ] =  rtems_build_name( 'P', 'T', '8', '0' );\
 } while(0)
 
 #endif
