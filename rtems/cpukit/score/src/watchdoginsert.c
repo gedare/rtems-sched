@@ -96,7 +96,7 @@ restart:
       *  mechanism used here WAS redesigned to address this.
       */
 
-  //   _ISR_Flash( level );
+//     _ISR_Flash( level );
 
      if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
        goto exit_insert;
