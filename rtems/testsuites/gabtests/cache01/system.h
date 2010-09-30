@@ -96,7 +96,7 @@ extern rtems_id   tasks_complete_sem;
 extern rtems_id   final_barrier;
 
 extern uint32_t *shared_array;
-#define SHARED_ARRAY_SIZE (1024 * 32 * 1) /* 1KB * num_kb * multiplier */
+#define SHARED_ARRAY_SIZE (1024 * 32 * 10) /* 1KB * num_kb * multiplier */
 extern uint32_t cache_line_length;
 extern uint32_t cache_num_lines_to_access;
 /* end of include file */
