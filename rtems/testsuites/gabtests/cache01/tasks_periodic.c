@@ -23,9 +23,11 @@ rtems_task Tasks_Periodic(
   rtems_id          rmid;
   rtems_id          test_rmid;
   rtems_status_code status;
+  int i=0;
   //int               start, stop;
   uint32_t          periods_executed;
   uint32_t          local_deadlines_missed;
+  uint32_t          temp = 0;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
@@ -78,10 +80,29 @@ rtems_task Tasks_Periodic(
     */
      
     /* active computing */
-//    busy_wait( Execution_us[argument], Instructions_per_us );
+//    busy_wait( Execution_us[argument], Instructions_per_us ); 
 
     /* loop through shared_array by cache_line_length until 
-     * done accessing cache_num_lines_to_access */
+     * done accessing cache_num_lines_to_access. half of accesses 
+     * are writes, and half are reads. */
+    for ( i = (argument*SHARED_ARRAY_SIZE/NUM_TASKS); 
+          i < (argument*SHARED_ARRAY_SIZE/NUM_TASKS) + cache_num_lines_to_access; 
+          i++) 
+    {
+      if ((argument+i)%2) {
+        /* read */
+        if(shared_array[ 
+                i*(cache_line_length/sizeof(uint32_t)) % (SHARED_ARRAY_SIZE/sizeof(uint32_t))
+             ] == argument)
+          temp++;
+      }
+      else {
+        /* write */
+        shared_array[
+            i*(cache_line_length/sizeof(uint32_t)) % (SHARED_ARRAY_SIZE/sizeof(uint32_t))
+          ] = argument;
+      }
+    }
 
     /*
       sparc64_read_tick( tick_stop );
@@ -111,6 +132,7 @@ rtems_task Tasks_Periodic(
         MAGIC(1);
       }
       MAGIC_BREAKPOINT;
+      printf("%d\n", temp); /* so the compiler doesn't DCE */
       rtems_test_exit( 0 );
     }
   status = rtems_semaphore_release( tasks_complete_sem );
