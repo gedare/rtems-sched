@@ -57,6 +57,7 @@ AM_CONDITIONAL(MPTESTS,test "$rtems_cv_RTEMS_MULTIPROCESSING" = "yes")
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+cache01/Makefile
 spinpause/Makefile
 spspin/Makefile
 spspin50/Makefile
