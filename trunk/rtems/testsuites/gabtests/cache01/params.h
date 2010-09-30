@@ -79,7 +79,7 @@ uint32_t  Execution_us[1+NUM_TASKS]        = {
 uint32_t  Phases[1+NUM_TASKS]           = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
 uint32_t  cache_line_length = 64;
-uint32_t  cache_num_lines_to_access = 512*(0.2) /* 512*(% of cache) */
+uint32_t  cache_num_lines_to_access = 512*(0.2); /* 512*(% of cache) */
 
 #define build_task_name() do { \
 Task_name[ 1 ] =  rtems_build_name( 'P', 'T', '0', '1' );\

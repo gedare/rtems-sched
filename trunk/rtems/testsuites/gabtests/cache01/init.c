@@ -97,7 +97,7 @@ rtems_task Init(
     directive_failed( status, "rtems_task_create loop" );
   }
 
-  shared_array = malloc(1024* 32 * 10); /* 1 KB * num */
+  shared_array = malloc(SHARED_ARRAY_SIZE); /* 1 KB * num */
   if (!shared_array) {
     puts( "error, unable to allocate from workspace" );
     rtems_test_exit(0);

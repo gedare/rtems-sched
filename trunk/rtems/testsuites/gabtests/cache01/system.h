@@ -72,7 +72,7 @@ rtems_task Tasks_Aperiodic(
 #include "macros.h"
 #define CONFIGURE_MAXIMUM_TASKS               (1+NUM_TASKS)
 #define CONFIGURE_MAXIMUM_PERIODS             (1+NUM_PERIODIC_TASKS)
-#define CONFIGURE_SCHEDULER_EDF
+//#define CONFIGURE_SCHEDULER_EDF
 #include <rtems/confdefs.h>
 
 #include <rtems/rtems/clock.h>
@@ -96,6 +96,7 @@ extern rtems_id   tasks_complete_sem;
 extern rtems_id   final_barrier;
 
 extern uint32_t *shared_array;
+#define SHARED_ARRAY_SIZE (1024 * 32 * 1) /* 1KB * num_kb * multiplier */
 extern uint32_t cache_line_length;
 extern uint32_t cache_num_lines_to_access;
 /* end of include file */
