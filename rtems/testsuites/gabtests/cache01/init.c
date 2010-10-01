@@ -41,6 +41,9 @@ rtems_id  tasks_complete_sem;
 rtems_id  final_barrier;
 uint32_t *shared_array;
 
+uint32_t  cache_line_length = 64;
+uint32_t  cache_num_lines_to_access = 512*(0.1 + 0.1); /* 512*(% of cache) */
+
 rtems_task Init(
   rtems_task_argument argument
 )
