@@ -29,6 +29,7 @@ rtems_task Tasks_Periodic(
   uint32_t          local_deadlines_missed;
   uint32_t          temp = 0;
   uint32_t          count = 0;
+  uint64_t  start_tick, stop_tick;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
@@ -86,6 +87,7 @@ rtems_task Tasks_Periodic(
     /* loop through shared_array by cache_line_length until 
      * done accessing cache_num_lines_to_access. half of accesses 
      * are writes, and half are reads. */
+    count = 0;
     for ( i = (argument*SHARED_ARRAY_SIZE/NUM_TASKS); 
           i < (argument*SHARED_ARRAY_SIZE/NUM_TASKS) + cache_num_lines_to_access; 
           i++) 
@@ -104,7 +106,7 @@ rtems_task Tasks_Periodic(
           ] = argument;
       }
       count += 40; /* rough estimate of the loop length */
-      if (count > Execution_us[argument]/Instructions_per_us) {
+      if (count > Instructions_per_us * Execution_us[argument]) {
         break;
       }
     }
