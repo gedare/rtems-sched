@@ -28,6 +28,7 @@ rtems_task Tasks_Periodic(
   uint32_t          periods_executed;
   uint32_t          local_deadlines_missed;
   uint32_t          temp = 0;
+  uint32_t          count = 0;
 
   status = rtems_rate_monotonic_create( argument, &rmid );
   directive_failed( status, "rtems_rate_monotonic_create" );
@@ -101,6 +102,10 @@ rtems_task Tasks_Periodic(
         shared_array[
             i*(cache_line_length/sizeof(uint32_t)) % (SHARED_ARRAY_SIZE/sizeof(uint32_t))
           ] = argument;
+      }
+      count += 40; /* rough estimate of the loop length */
+      if (count > Execution_us[argument]/Instructions_per_us) {
+        break;
       }
     }
 
