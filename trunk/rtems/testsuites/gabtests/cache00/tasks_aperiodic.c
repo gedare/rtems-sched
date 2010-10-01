@@ -39,7 +39,7 @@ rtems_task Tasks_Aperiodic(
   */
 
   /* active computing */
-  busy_wait( Execution_us[argument], Instructions_per_us );
+//  busy_wait( Execution_us[argument], Instructions_per_us );
 
   /*
   rtems_clock_get(RTEMS_CLOCK_GET_TICKS_SINCE_BOOT, &stop);
