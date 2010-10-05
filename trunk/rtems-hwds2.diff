@@ -71,7 +71,7 @@ diff -upr -X dontdiff rtems/cpukit/score/src/watchdoginsert.c rtems-hwds/cpukit/
        */
  
 +  MAGIC_HWDS2_PAUSE;
-      _ISR_Flash( level );
+ //    _ISR_Flash( level );
 +  MAGIC_HWDS2_UNPAUSE;
  
       if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
