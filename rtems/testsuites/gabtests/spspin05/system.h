@@ -72,7 +72,7 @@ rtems_task Tasks_Aperiodic(
 #include "macros.h"
 #define CONFIGURE_MAXIMUM_TASKS               (1+NUM_TASKS)
 #define CONFIGURE_MAXIMUM_PERIODS             (1+NUM_PERIODIC_TASKS)
-#define CONFIGURE_SCHEDULER_EDF
+//#define CONFIGURE_SCHEDULER_EDF
 #include <rtems/confdefs.h>
 
 #include <rtems/rtems/clock.h>
