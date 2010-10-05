@@ -5,7 +5,7 @@
  */
 
 /* This file was generated with the following parameters: 
--T 1,0.026,0 -T 2,0.004,0 -T 7,0.015,0 -T 7,0.001,0 -T 10,0.024,0 -T 11,0.023,0 -T 12,0.017,0 -T 13,0.010,0 -T 15,0.043,0 -T 16,0.008,0 -T 17,0.026,0 -T 19,0.024,0 -T 21,0.058,0 -T 25,0.013,0 -T 25,0.028,0 -T 26,0.000,0 -T 26,0.016,0 -T 26,0.015,0 -T 27,0.026,0 -T 28,0.030,0 -T 29,0.045,0 -T 29,0.012,0 -T 31,0.008,0 -T 31,0.028,0 -T 32,0.026,0 -T 32,0.023,0 -T 32,0.046,0 -T 33,0.010,0 -T 33,0.003,0 -T 35,0.015,0 -T 35,0.029,0 -T 38,0.030,0 -T 39,0.006,0 -T 40,0.029,0 -T 41,0.023,0 -T 41,0.001,0 -T 43,0.020,0 -T 45,0.008,0 -T 49,0.003,0 -T 49,0.029,0 
+-T 2,0.011,0 -T 5,0.013,0 -T 5,0.017,0 -T 5,0.003,0 -T 6,0.004,0 -T 8,0.035,0 -T 8,0.012,0 -T 11,0.006,0 -T 12,0.007,0 -T 14,0.007,0 -T 15,0.007,0 -T 16,0.017,0 -T 19,0.002,0 -T 20,0.003,0 -T 23,0.001,0 -T 24,0.001,0 -T 25,0.002,0 -T 27,0.013,0 -T 28,0.011,0 -T 28,0.014,0 -T 28,0.018,0 -T 29,0.017,0 -T 30,0.014,0 -T 31,0.006,0 -T 31,0.012,0 -T 33,0.008,0 -T 35,0.014,0 -T 35,0.002,0 -T 37,0.014,0 -T 38,0.011,0 -T 38,0.015,0 -T 38,0.003,0 -T 38,0.008,0 -T 45,0.001,0 -T 45,0.008,0 -T 46,0.006,0 -T 46,0.009,0 -T 47,0.002,0 -T 48,0.013,0 -T 49,0.032,0 
 */
 
 #ifndef __PARAMS_H_
@@ -18,52 +18,52 @@
 #define  NUM_TASKS                  ( NUM_PERIODIC_TASKS + NUM_APERIODIC_TASKS )
 uint32_t  periodic_tasks            = NUM_PERIODIC_TASKS;
 
-rtems_task_priority Priorities[1+NUM_TASKS]= { 0, 1, 2, 7, 7, 10, 11, 12, 13, 15, 16, 17, 19, 21, 25, 25, 26, 26, 26, 27, 28, 29, 29, 31, 31, 32, 32, 32, 33, 33, 35, 35, 38, 39, 40, 41, 41, 43, 45, 49, 49 };
+rtems_task_priority Priorities[1+NUM_TASKS]= { 0, 2, 5, 5, 5, 6, 8, 8, 11, 12, 14, 15, 16, 19, 20, 23, 24, 25, 27, 28, 28, 28, 29, 30, 31, 31, 33, 35, 35, 37, 38, 38, 38, 38, 45, 45, 46, 46, 47, 48, 49 };
 
-uint32_t  Periods[1+NUM_PERIODIC_TASKS]    = { 0, 1, 2, 7, 7, 10, 11, 12, 13, 15, 16, 17, 19, 21, 25, 25, 26, 26, 26, 27, 28, 29, 29, 31, 31, 32, 32, 32, 33, 33, 35, 35, 38, 39, 40, 41, 41, 43, 45, 49, 49 };
+uint32_t  Periods[1+NUM_PERIODIC_TASKS]    = { 0, 2, 5, 5, 5, 6, 8, 8, 11, 12, 14, 15, 16, 19, 20, 23, 24, 25, 27, 28, 28, 28, 29, 30, 31, 31, 33, 35, 35, 37, 38, 38, 38, 38, 45, 45, 46, 46, 47, 48, 49 };
 
 uint32_t  Execution_us[1+NUM_TASKS]        = {
                                              0*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             1*0.026*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             2*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             7*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             7*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             10*0.024*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             11*0.023*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             12*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             13*0.01*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             15*0.043*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             16*0.008*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             17*0.026*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             19*0.024*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             21*0.058*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             25*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             25*0.028*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             26*0*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             26*0.016*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             26*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             27*0.026*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             28*0.03*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             29*0.045*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             29*0.012*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             31*0.008*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             31*0.028*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             32*0.026*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             32*0.023*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             32*0.046*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             33*0.01*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             33*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             35*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             35*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             38*0.03*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             39*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             40*0.029*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             41*0.023*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             41*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             43*0.02*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             2*0.011*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             5*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             5*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             5*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             6*0.004*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             8*0.035*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             8*0.012*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             11*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             12*0.007*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             14*0.007*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             15*0.007*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             16*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             19*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             20*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             23*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             24*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             25*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             27*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             28*0.011*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             28*0.014*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             28*0.018*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             29*0.017*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             30*0.014*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             31*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             31*0.012*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             33*0.008*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             35*0.014*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             35*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             37*0.014*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.011*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.015*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             38*0.008*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             45*0.001*CONFIGURE_MICROSECONDS_PER_TICK,
                                              45*0.008*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             49*0.003*CONFIGURE_MICROSECONDS_PER_TICK,
-                                             49*0.029*CONFIGURE_MICROSECONDS_PER_TICK
+                                             46*0.006*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             46*0.009*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             47*0.002*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             48*0.013*CONFIGURE_MICROSECONDS_PER_TICK,
+                                             49*0.032*CONFIGURE_MICROSECONDS_PER_TICK
                                              };
 
 uint32_t  Phases[1+NUM_TASKS]           = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

@@ -24,16 +24,18 @@ diff -upr -X dontdiff rtems2/cpukit/rtems/src/clocktick.c rtems-hwsched2/cpukit/
 diff -upr -X dontdiff rtems2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h rtems-hwsched2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h
 --- rtems2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-09-26 14:03:01.000000000 -0400
 +++ rtems-hwsched2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-02 21:04:23.000000000 -0400
-@@ -165,10 +165,16 @@ extern "C" {
+@@ -165,10 +165,18 @@ extern "C" {
  
  #endif /* !ASM */
  #define MAGIC_BREAKPOINT MAGIC(0x40000)
 +#define MAGIC_HWSCHED_START   MAGIC(0x10)
++#define MAGIC_HWSCHED_UNPAUSE   MAGIC(0x20)
  #define MAGIC_HWDS1_START      MAGIC(0x100)
  #define MAGIC_HWDS2_START      MAGIC(0x200)
 +#define MAGIC_HWDS2_UNPAUSE    MAGIC(0x300)
 +
 +#define MAGIC_HWSCHED_END     MAGIC(0x80)
++#define MAGIC_HWSCHED_PAUSE     MAGIC(0x90)
  #define MAGIC_HWDS1_END        MAGIC(0x800)
  #define MAGIC_HWDS2_END        MAGIC(0x900)
 +#define MAGIC_HWDS2_PAUSE      MAGIC(0xA00)
