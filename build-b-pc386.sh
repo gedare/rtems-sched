@@ -23,6 +23,7 @@ then
   ../rtems/configure --target=${TARGET} --disable-networking \
     --enable-rtemsbsp=${BSP} --enable-tests \
     USE_COM1_AS_CONSOLE=1 BSP_PRESS_KEY_FOR_RESET=0
+
 fi
 
 time make -j 4 2> make.error

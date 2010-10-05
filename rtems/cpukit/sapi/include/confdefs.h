@@ -549,8 +549,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
  * An application can define its own scheduling policy by defining
  * CONFIGURE_SCHEDULER_USER and CONFIGURE_SCHEDULER_ENTRY_USER to point
  * to an initialization routine.  
- *
- * To add a new scheduler:
  */
 #include <rtems/score/scheduler.h>
 
@@ -596,6 +594,12 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
   #endif
 #endif
 
+/* 
+ * For additional schedulers, add a check for the configured scheduler 
+ * here. Copy the above block for the priority scheduler, and then replace
+ * PRIORITY and priority with an appropriate mnemonic for the new scheduler.
+ */
+
 /* Check for FIFO scheduler */
 #if defined(CONFIGURE_SCHEDULER_FIFO)
   #include <rtems/score/schedulerfifo.h>
@@ -613,7 +617,6 @@ rtems_fs_init_functions_t    rtems_fs_init_helper =
     #define CONFIGURE_SCHEDULER_POLICY _Scheduler_EDF
   #endif
 #endif
-
 
 /* 
  * Set up the scheduler table.  The scheduling code indexes this table to 
