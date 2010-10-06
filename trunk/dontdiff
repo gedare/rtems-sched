@@ -1,0 +1,15 @@
+CVS
+*.in
+*.m4
+*.swp
+*.cache
+configure
+compile
+*.guess
+config.sub
+depcomp
+*-sh
+*.tex
+missing
+*.svn
+*.html
