@@ -1,0 +1,94 @@
+#summary A more detailed project description, primarily drawn from the project proposal. This is meant to be the "entry point" to the wiki.
+#labels Featured
+
+= Introduction =
+
+The current RTEMS scheduler is tightly coupled with the `SuperCore` Thread Handler's thread management code.  This tight coupling prevents easy implementation and testing of alternate scheduling mechanisms.  Refactoring the scheduler into a new `SuperCore` Scheduler Manager enables RTEMS developers to explore new scheduling mechanisms.  Part of this refactoring will be to identify the critical section protection of scheduler data structures and dispatch points, and to provide interfaces for this code and data at the critical sections that are used by the invoking code.  These critical section levels will define abstract critical sections that can be implemented in flexible ways, depending on the system; e.g. interrupt and thread dispatch critical sections might be different on uni and SMP systems.  This interface will be like the Chain API, which has both protected and unprotected functions, and an associated API contract that the invoker will take care of obtaining the necessary critical section before invoking an unprotected function.
+
+Refactoring critical section management can also be considered.  A Thread State manager might also be helpful, which would include data structures and code that manipulates the tcb->current_state fields.  Thread queues for blocking are already pretty well separated, but would be worth looking at to see if additional encapsulation/modularization will help make synchronization primitives easier to implement on SMP. As the scheduler code separates from the rest of thread management and control, possible benefits of additional classes might become more clear.
+
+= Current Scheduler =
+
+As it exists today, the RTEMS scheduler provides a fixed priority scheduling mechanism, with 254 priority levels available for an application to use for assigning to its tasks (levels 0 and 255 are reserved).  This fixed priority scheduling is implemented with a ready queue using a priority bitmap array of size 256 bits, and an array of 256 linked lists.  The scheduler sets a bit in the i'th position of the bitmap if there is a ready task in the i'th linked list.  The first set bit in the bitmap provides the index of the highest priority ready task in the system.  A task is removed from the ready queue only when it terminates or becomes blocked.  This ready queue provides O(1) scheduling and is very fast with hardware support for finding the first set bit.  On top of this ready queue RTEMS also provides a periodic task management interface that can be used to schedule tasks with the rate monotonic scheduling algorithm.  There is also configurable support to reduce the number of priority levels in order to reduce the footprint of the ready queue. 
+
+Unfortunately, the RTEMS scheduler ready queue is inflexible and cannot be used directly to implement dynamic priority algorithms, such as EDF scheduling.  For EDF scheduling, a similar structure can be laid over the existing ready queue, by replacing the priority bitmap with a binary search tree [1].  Alternately, the entire ready queue can be replaced by a binary search tree or similar priority queue structure [2].  Either approach requires modifying the behavior of the ready queue, and suggests that the RTEMS scheduler ready queue should be factored to a modular object contained by the scheduling subsystem.  Such refactoring will also make future ready queue implementations easier to design and test, for example to provide a minimal footprint ready queue for TinyRTEMS or a scalable, distributed ready queue for SMP scheduling.
+
+= Project Objective =
+
+After finishing this project, the RTEMS scheduler internal data structures will be encapsulated in a module that provides a protected interface such that none of the thread management code directly touches scheduling data.  The interface will define a set of scheduler functions necessary to schedule threads that are callable from any context. A particular scheduler implementation is responsible for ensuring the protection of any encapsulated data reachable through the interface functions.  This can allow one implementation to have interrupt critical sections, whereas another scheduling module might be re-entrant with fine-grained locks.  The Scheduler Manager interface will define functions that are called from specific levels of protection, so that some of the protection concerns can remain outside of the scheduler. Furthermore, a scheduler implementation may have additional internal functions available to it, for example to do load-balancing or to dispatch worker threads to handle ISRs: these internal functions will be isolated from the rest of the `SuperCore` because of the Scheduler Manager's interface.
+
+= Project Outcomes =
+
+Perhaps the most important outcome of this project will be enabling exploration of scheduling for symmetric multiprocessing (SMP) and multicore platforms.  An SMP system is a closely-coupled system with multiple CPU chips interconnected with main memory; a multicore system is even more tightly coupled, with multiple CPUs interconnected on a single chip.  Although RTEMS currently supports multiprocessing systems, the support is designed for coarse grained systems. Each processing element (core) runs a separate RTEMS application and executive, and communication is routed through a portion of shared memory.  Scheduling decisions are made locally at each core, and tasks are not able to migrate between cores.  By supporting global scheduling decisions and task migration, RTEMS will be able to balance a processing load across multiple CPUs.  Further, unifying the executive across all the cores in the system allows RTEMS to make smarter decisions and to reduce the effort of end users in deploying SMP and multicore configurations.  Although this project will not provide such support, the goal of refactoring the scheduler is to facilitate implementing an SMP scheduler, so care will be taken to make sure the interface does not enforce any policies that might deter an SMP scheduler.
+
+Other benefits of this project include: facilitating new scheduling mechanisms for RTEMS, such as real-time EDF scheduling or power-aware scheduling; allowing for a reduced scheduler footprint for memory-constrained platforms using Tiny/RTEMS; and capturing the RTEMS scheduler code to enable simulation of scheduler behavior.  Part of this project will include an implementation of EDF scheduling that uses the new scheduler interfaces. If a Tiny/RTEMS project gets accepted this year, it would be interesting to have a simple single ready chain sorted by priority and FIFO within priority as an implementation.  That would not need priority bit maps and should be a quite smaller implementation, although care must be taken as it will be less predictable (or have a worse upper bound on performance) than the current scheduler.
+
+= Configuration =
+In order to support new scheduling mechanisms, the Scheduler Manager needs to be configurable so that a user can decide which scheduler implementation to use.  There are two approaches to consider.  First, the scheduler could be statically configured by the autoconf tools. Second, the scheduler could be dynamically configurable using confdefs.h.  The advantages to static configuration include reduced code size and lower execution overhead.  The advantages of dynamic configuration comes from all of the schedulers being included in the build process, allowing user applications to select the scheduler of choice, and also allowing a user to swap scheduler implementations without re-building the application with a new configuration.  A hybrid approach to configuration might be best, allowing for coarse grained static configuration options that address the concerns of many, but also providing dynamic configuration so that users can choose to build all schedulers and select from among them at runtime. My plan is to add a Scheduler configuration table as a support table for the existing Configuration table, and to place dynamic configuration options in the Scheduler table.  I do not foresee adding static command line configure options during this project, but I do expect that the SMP implementation will add a configure option to enable SMP.
+
+*Update: see the [ConfiguringRTEMS] page*
+
+= Development Environment =
+Code will be developed using the pc386 BSP in QEMU with coverage tests to ensure that new and modified code is reached by either existing test cases or by new test cases.
+
+= Deliverables and Milestones =
+
+  * May 24 (coding begins) - Demonstrated ability to modify and build RTEMS. Start Google Code project and provide access to stakeholders.  Coordinate with mentor regarding design document.
+  # June 15th - Refactor ready queue to abstract insert and extract operations that provide for their own critical sections (i.e. they can safely be called at any code point). Implement the existing ready queue using the new abstractions. Add configuration options in confdefs.h to specify a ready queue implementation.  Document the interface provided by the ready queue abstractions. Submit patch to merge new ready queue to RTEMS CVS.
+  # July 12th (Midterm Evaluation) - Refactor thread scheduling points in the `SuperCore` Thread Handler to invoke functionality of a new, extensible `SuperCore` Scheduler Manager. Demonstrate the fixed priority scheduler using the new Scheduler Manager. Add configuration options in confdefs.h to specify a scheduler implementation.  Submit patch to merge new Scheduler Manager to RTEMS CVS.
+  # August 9th (Final Evaluation) - Document the interface provided by the `SuperCore` Scheduler Manager. Demonstrate modularity of the Scheduler Manager by providing an EDF scheduler using an alternate ready queue and the new Scheduler Manager.  Provide  test cases to demonstrate how to configure and use the EDF scheduler. Submit patch to merge EDF Scheduler to RTEMS CVS. Bonus: Provide a Tiny/RTEMS scheduler and test cases.
+  # August 23rd (Final Results Announced) - Identify any lingering (non-critical) issues that might have been skipped. Improve documentation of the `SuperCore` Scheduler Manager, especially Doxygen comments.  Merge any additional code that has not already been submitted.
+
+= Project Schedule =
+
+== April 26 - May 23 2010 (Design) ==
+
+Identify pieces of `SuperCore` Thread Handler that provide scheduling policy and mechanism, including management of thread dispatching.  Determine how to separate scheduler structures (especially the ready queue) from thread management code.  Identify fields of the Thread_Control structure (TCB) that are used for scheduling decisions.  Identify global variables (e.g. _Thread_Heir) that are used for scheduling decisions, and locate where those variables are manipulated.
+
+*Update: see the ReadyQueueAndPriority page.*
+
+== May 24 - June 15 2010 (Refactor Data Structures) ==
+
+Create abstractions for the ready queue and priority map structures within the TCB and provide a well-defined interface for manipulating those structures as part of a new `SuperCore` Scheduler Manager. Replace all direct use of the structures in the `SuperCore` Thread Handler with calls to the interface.  Create a scheduler configuration table with configuration options in confdefs.h so that the existing ready queue is used by default; add conditional compilation points to the ready queue and priority map abstractions, so that replacing the structures and code with alternate implementations is both straightforward and efficient.  Create doxygen comments for the new Scheduler Manager.  Prepare a patch for the new ready queue infrastructure.
+
+*Update: see the NewReadyQueue, NewPriorityHandler, and [ConfiguringRTEMS] pages* 
+
+== June 16 - July 12 2010 (Refactor Scheduling Code) ==
+
+Extend the `SuperCore` Scheduler Manager with an interface that captures the scheduling points.  Replace all code and direct scheduling variable uses with calls to Scheduler Manager functions.  Update the `SuperCore` Thread Handler (and any other code points that directly access the scheduling structures) to use the new interface. Document where these changes are located. Add configuration options to the scheduler configuration table in confdefs.h so that the existing scheduler is used by default; add configuration points to the Scheduler Manager functions so that replacing code with an alternate implementation is both straightforward and efficient.  Add doxygen comments for the new interfaces to the Scheduler Manager.  Prepare a patch with the new scheduler infrastructure and merge.
+
+*Update: see the NewScheduler and ConfiguringRTEMS pages.*
+
+== July 13 - August 9 2010 (Implement EDF) ==
+ 
+Implement an earliest deadline first (EDF) scheduler using the new `SuperCore` Scheduler Manager and an alternate ready queue structure, with new configuration options and conditional compilation guided by confdefs.h.  Write test cases, in the format of RTEMS sptests, that demonstrate the EDF scheduler. Run coverage tests of the added EDF code and get 100% coverage of the EDF implementation. Demonstrate running a task workload that would fail to meet its deadlines using the rate monotonic scheduling algorithm.  Use the test cases to show how to use confdefs.h to configure the EDF scheduling algorithm.  Prepare a patch with the new scheduler implementation and test cases and get it merged.  If time allows, implement a Tiny/RTEMS Scheduler using a single chain priority-based ready queue with FIFO to break priority ties. If time and technology allows, implement an initial SMP Scheduler.
+
+== August 10 - August 23 2010 (Cleanup) ==
+
+Documentation, code clean ups for final deliverable submission. Most of the code should already be merged by this point.
+
+= Challenges Foreseen =
+
+  * The scheduling code is widely dispersed throughout the thread management code base. Capturing all of the scheduling points will take some care, and ensuring that all points are captured will require testing and implementing schedulers to demonstrate the modularity.
+  * Much of the scheduling code is called from within critical sections.  Determining how the Scheduler Manager should protect its structures should be left to the Scheduler, but if the scheduler is called by a critical section, then there should be some way to specify that it is protected.  How to do this properly without duplicating a lot of code will take some care; a similar issue is seen in the RTEMS Chains implementation, so that might provide some guidance.
+  * Some of the scheduling variables are manipulated by architecture-dependent code (specifically counter variables to control thread dispatching, signals to running threads, and the context switch necessary flag).  How this will interact with the new Scheduler Manager may require some care. 
+
+= Future Improvements =
+
+  * Refactor support for critical sections in to new `SuperCore` objects for Thread and Interrupt critical sections.
+  * Integrate the scheduling simulator, which emulates the scheduling infrastructure, so that schedulers can be implemented and tested outside of the RTEMS kernel.
+  * Implement additional scheduling mechanisms. With the new scheduling abstraction, other real-time schedulers should be implementable in RTEMS, for example:
+    * Constant utilization / Total bandwidth servers
+    * Slack stealing server
+    * Weighted fair queuing
+  * Implement SMP scheduling.  This will be a substantial project, but one that will be made possible by a refactored scheduler.  It will have its own set of future work.
+  * Implement Tiny/RTEMS scheduler. There are a few options, a simple one is to use a single chain that is priority sorted and FIFO in case of a priority tie. 
+
+
+
+= References =
+
+  # Real-Time Systems. Jane W. S. Liu. Prentice-Hall, Inc. New Jersey. 2000.
+  # Martin Molnár. The EDF scheduler implementation in RTEMS Operating System. Master's Thesis. Czech Technical University in Prague Faculty of Electrical Engineering, 2006. http://docs.google.com/a/gwmail.gwu.edu/leaf?id=0B_sSLBedk3o1ZDVlMzYzZjktMmJkOC00MmFkLWIyYzItYmE1YjU0NzA2NjY1&hl=en
+  # RTEMS documentation sets - RTEMS Applications C User’s Guide. http://www.rtems.org/onlinedocs.html
+  # RTEMS University. OAR Corporation. RTEMS class slides. http://www.rtems.com/moodle/
