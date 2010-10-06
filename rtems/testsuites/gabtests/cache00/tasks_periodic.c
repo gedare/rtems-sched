@@ -89,7 +89,8 @@ rtems_task Tasks_Periodic(
      * are writes, and half are reads. */
     count = 0;
     for ( i = (argument*SHARED_ARRAY_SIZE/NUM_TASKS); 
-          i < (argument*SHARED_ARRAY_SIZE/NUM_TASKS) + cache_num_lines_to_access; 
+          i < (argument*SHARED_ARRAY_SIZE/NUM_TASKS) + cache_num_lines*
+          (((double)Execution_us[argument]/(double)Periods[argument]/CONFIGURE_MICROSECONDS_PER_TICK/0.6)); 
           i++) 
     {
       if ((argument+i)%2) {

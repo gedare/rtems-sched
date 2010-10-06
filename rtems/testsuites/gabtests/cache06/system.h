@@ -98,5 +98,5 @@ extern rtems_id   final_barrier;
 extern uint32_t *shared_array;
 #define SHARED_ARRAY_SIZE (1024 * 32 * 10) /* 1KB * num_kb * multiplier */
 extern uint32_t cache_line_length;
-extern uint32_t cache_num_lines_to_access;
+extern uint32_t cache_num_lines;
 /* end of include file */
