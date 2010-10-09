@@ -145,43 +145,6 @@ extern "C" {
 
 #define STACK_BIAS (2047)
 
-/* Additions to support MAGIC Simics commands */
-#ifdef ASM
-#define MAGIC(n) \
-  sethi n, %g0
-
-#endif /* ASM */
-
-#ifndef ASM
-
-#define __MAGIC_CASSERT(p) do {                                 \
-         typedef int __check_magic_argument[(p) ? 1 : -1];       \
-} while (0)
-
-#define MAGIC(n) do {                                   \
-    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
-         __asm__ __volatile__ ("sethi " #n ", %g0");     \
-} while (0)
-
-#endif /* !ASM */
-#define MAGIC_BREAKPOINT MAGIC(0x40000)
-#define MAGIC_HWDS1_START      MAGIC(0x100)
-#define MAGIC_HWDS2_START      MAGIC(0x200)
-#define MAGIC_HWDS2_UNPAUSE    MAGIC(0x300)
-
-#define MAGIC_HWDS1_END        MAGIC(0x800)
-#define MAGIC_HWDS2_END        MAGIC(0x900)
-#define MAGIC_HWDS2_PAUSE      MAGIC(0xA00)
-
-#define MAGIC_STOP_CACHING    MAGIC(0x1000)
-#define MAGIC_RESUME_CACHING  MAGIC(0x2000)
-#define MAGIC_STOP_POWER      MAGIC(0x4000)
-#define MAGIC_RESUME_POWER    MAGIC(0x8000)
-#define MAGIC_STOP_TIMING     MAGIC(0x10000)
-#define MAGIC_RESUME_TIMING   MAGIC(0x20000)
-
-#ifdef ASM
-
 /* 
  * To enable the FPU we need to set both PSTATE.pef and FPRS.fef
  */
