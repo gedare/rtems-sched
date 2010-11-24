@@ -98,8 +98,6 @@ typedef struct {
   /** This field contains the thread's deadline information. */
   RBTree_Node                       deadline;
 
-  unsigned int                      absolute_deadline;
-
   /** 
    * This field points to the last node in the ready queue that has 
    * the same deadline (absolute) as this thread.

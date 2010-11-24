@@ -245,11 +245,11 @@ extern "C" {
    *  @note It does NOT disable interrupts to ensure the atomicity
    *        of the extract operation.
    */
-  RBTree_Node *_RBTree_Insert_unprotected(
+/*  RBTree_Node *_RBTree_Insert_unprotected(
       RBTree_Control *the_rbtree,
       RBTree_Node *the_node
   );
-
+*/
   /**
    *  @brief Insert a node on a rbtree
    *
@@ -272,11 +272,11 @@ extern "C" {
    *        of the extract operation.
    */
 
-  void _RBTree_Extract_unprotected(
+/*  void _RBTree_Extract_unprotected(
       RBTree_Control *the_rbtree,
       RBTree_Node *the_node
   );
-
+*/
 
   /**
    *  @brief Delete a node from the rbtree
