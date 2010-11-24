@@ -116,7 +116,7 @@ rtems_task Init(
 
   /* protected by semaphore */
   sparc64_read_tick( tick_start );
-  break_start_opal();
+  asm volatile("break_start_opal:");
 
   /* release all of the waiting tasks */
   status = rtems_semaphore_flush( tasks_complete_sem );

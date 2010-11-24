@@ -67,8 +67,8 @@ cache06/Makefile
 cache07/Makefile
 cache08/Makefile
 cache09/Makefile
-spinpause/Makefile
 spspin/Makefile
+spinpause/Makefile
 spspin50/Makefile
 spspin49/Makefile
 spspin48/Makefile

@@ -50,5 +50,5 @@ void _Scheduler_edf_Sched_update (
 {
   Scheduler_edf_Per_thread *sched = the_thread->sched.edf;
 
-  sched->absolute_deadline = the_thread->real_priority;
+  sched->deadline.value = the_thread->real_priority;
 }
