@@ -1,0 +1,53 @@
+Index: cpukit/sapi/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/Makefile.am,v
+retrieving revision 1.39
+diff -u -p -r1.39 Makefile.am
+--- cpukit/sapi/Makefile.am	18 Jun 2010 02:58:15 -0000	1.39
++++ cpukit/sapi/Makefile.am	27 Jul 2010 16:13:57 -0000
+@@ -10,12 +10,13 @@ include_rtemsdir = $(includedir)/rtems
+ include_rtems_HEADERS = include/confdefs.h
+ include_rtems_HEADERS += include/rtems/chain.h include/rtems/config.h \
+     include/rtems/extension.h include/rtems/fatal.h include/rtems/init.h \
+-    include/rtems/io.h include/rtems/mptables.h include/rtems/sptables.h
++    include/rtems/io.h include/rtems/mptables.h include/rtems/rbtree.h \
++		include/rtems/sptables.h
+ 
+ EXTRA_DIST = include/rtems/README
+ 
+ include_rtems_HEADERS += inline/rtems/chain.inl \
+-    inline/rtems/extension.inl
++    inline/rtems/extension.inl inline/rtems/rbtree.inl
+ 
+ ## src
+ AM_CPPFLAGS += -D__RTEMS_INSIDE__
+Index: cpukit/sapi/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/preinstall.am,v
+retrieving revision 1.11
+diff -u -p -r1.11 preinstall.am
+--- cpukit/sapi/preinstall.am	5 Aug 2009 21:18:29 -0000	1.11
++++ cpukit/sapi/preinstall.am	27 Jul 2010 16:13:57 -0000
+@@ -60,6 +60,10 @@ $(PROJECT_INCLUDE)/rtems/mptables.h: inc
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h
++
+ $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
+@@ -72,6 +76,10 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: 
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
++
+ $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
+ TMPINSTALL_FILES += $(PROJECT_LIB)/libsapi.a
+

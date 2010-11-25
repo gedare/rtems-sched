@@ -1,0 +1,3043 @@
+Index: cpukit/posix/src/nanosleep.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/posix/src/nanosleep.c,v
+retrieving revision 1.11
+diff -u -p -r1.11 nanosleep.c
+--- cpukit/posix/src/nanosleep.c	22 Jun 2010 15:36:06 -0000	1.11
++++ cpukit/posix/src/nanosleep.c	13 Aug 2010 19:21:09 -0000
+@@ -18,6 +18,7 @@
+ 
+ #include <rtems/system.h>
+ #include <rtems/score/isr.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/thread.h>
+ #include <rtems/score/tod.h>
+ 
+@@ -56,7 +57,7 @@ int nanosleep(
+ 
+   if ( !ticks ) {
+     _Thread_Disable_dispatch();
+-      _Thread_Yield_processor();
++      _Scheduler_Yield();
+     _Thread_Enable_dispatch();
+     if ( rmtp ) {
+        rmtp->tv_sec = 0;
+Index: cpukit/posix/src/sched_yield.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/posix/src/sched_yield.c,v
+retrieving revision 1.1
+diff -u -p -r1.1 sched_yield.c
+--- cpukit/posix/src/sched_yield.c	13 Dec 2007 16:52:21 -0000	1.1
++++ cpukit/posix/src/sched_yield.c	13 Aug 2010 19:21:09 -0000
+@@ -19,6 +19,7 @@
+ #include <errno.h>
+ 
+ #include <rtems/system.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/tod.h>
+ #include <rtems/score/thread.h>
+ #include <rtems/seterr.h>
+@@ -28,7 +29,7 @@
+ int sched_yield( void )
+ {
+   _Thread_Disable_dispatch();
+-    _Thread_Yield_processor();
++    _Scheduler_Yield();
+   _Thread_Enable_dispatch();
+   return 0;
+ }
+Index: cpukit/rtems/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/Makefile.am,v
+retrieving revision 1.52
+diff -u -p -r1.52 Makefile.am
+--- cpukit/rtems/Makefile.am	9 Aug 2010 09:03:11 -0000	1.52
++++ cpukit/rtems/Makefile.am	13 Aug 2010 19:21:09 -0000
+@@ -25,6 +25,7 @@ include_rtems_rtems_HEADERS = include/rt
+     include/rtems/rtems/intr.h include/rtems/rtems/message.h \
+     include/rtems/rtems/modes.h include/rtems/rtems/object.h \
+     include/rtems/rtems/options.h include/rtems/rtems/part.h \
++		include/rtems/rtems/periodic.h \
+     include/rtems/rtems/ratemon.h include/rtems/rtems/region.h \
+     include/rtems/rtems/rtemsapi.h include/rtems/rtems/sem.h \
+     include/rtems/rtems/signal.h include/rtems/rtems/status.h \
+@@ -71,12 +72,19 @@ librtems_a_SOURCES += src/tasks.c src/ta
+     src/taskvariableadd.c src/taskvariabledelete.c src/taskvariableget.c \
+     src/taskvariable_invoke_dtor.c src/taskdata.c
+ 
++## PERIODIC_C_FILES
++librtems_a_SOURCES += src/periodiccancel.c src/periodicident.c \
++		src/periodiccreate.c src/periodicperiod.c src/periodicdelete.c \
++		src/periodicreportstatistics.c src/periodicgetstatistics.c \
++		src/periodicresetall.c src/periodicgetstatus.c \
++		src/periodicresetstatistics.c
++
+ ## RATEMON_C_FILES
+ librtems_a_SOURCES += src/ratemon.c src/ratemoncancel.c src/ratemoncreate.c \
+     src/ratemondelete.c src/ratemongetstatus.c src/ratemongetstatistics.c \
+     src/ratemonresetstatistics.c src/ratemonresetall.c \
+     src/ratemonreportstatistics.c src/ratemonident.c \
+-    src/ratemonperiod.c src/ratemontimeout.c src/ratemondata.c
++    src/ratemonperiod.c src/ratemondata.c
+ 
+ ## INTR_C_FILES
+ librtems_a_SOURCES += src/intrbody.c src/intrcatch.c
+Index: cpukit/rtems/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/preinstall.am,v
+retrieving revision 1.14
+diff -u -p -r1.14 preinstall.am
+--- cpukit/rtems/preinstall.am	9 Aug 2010 09:03:11 -0000	1.14
++++ cpukit/rtems/preinstall.am	13 Aug 2010 19:21:09 -0000
+@@ -87,6 +87,10 @@ $(PROJECT_INCLUDE)/rtems/rtems/part.h: i
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/part.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/part.h
+ 
++$(PROJECT_INCLUDE)/rtems/rtems/periodic.h: include/rtems/rtems/periodic.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/periodic.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/periodic.h
++
+ $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h: include/rtems/rtems/ratemon.h $(PROJECT_INCLUDE)/rtems/rtems/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rtems/ratemon.h
+Index: cpukit/rtems/include/rtems/rtems/ratemon.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/include/rtems/rtems/ratemon.h,v
+retrieving revision 1.42
+diff -u -p -r1.42 ratemon.h
+--- cpukit/rtems/include/rtems/rtems/ratemon.h	15 Dec 2009 18:26:41 -0000	1.42
++++ cpukit/rtems/include/rtems/rtems/ratemon.h	13 Aug 2010 19:21:09 -0000
+@@ -28,16 +28,6 @@
+ #ifndef _RTEMS_RTEMS_RATEMON_H
+ #define _RTEMS_RTEMS_RATEMON_H
+ 
+-/**
+- *  This constant is defined to extern most of the time when using
+- *  this header file.  However by defining it to nothing, the data
+- *  declared in this header file can be instantiated.  This is done
+- *  in a single per manager file.
+- */
+-#ifndef RTEMS_RATEMON_EXTERN
+-#define RTEMS_RATEMON_EXTERN extern
+-#endif
+-
+ #include <rtems/bspIo.h>
+ 
+ /**
+@@ -59,220 +49,21 @@
+ extern "C" {
+ #endif
+ 
+-/**
+- *  This is the public type used for the rate monotonic timing
+- *  statistics.
+- */
+-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-  #include <rtems/score/timespec.h>
+-
+-  typedef struct timespec rtems_rate_monotonic_period_time_t;
+-#else
+-  typedef uint32_t rtems_rate_monotonic_period_time_t;
+-#endif
+-
+-/**
+- *  This is the internal type used for the rate monotonic timing
+- *  statistics.
+- */
+-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-  #include <rtems/score/timestamp.h>
+-
+-  typedef Timestamp_Control Rate_monotonic_Period_time_t;
+-#else
+-  typedef uint32_t Rate_monotonic_Period_time_t;
+-#endif
+-
+-#include <rtems/score/object.h>
+-#include <rtems/score/thread.h>
+-#include <rtems/score/watchdog.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/status.h>
+ #include <rtems/rtems/support.h>
+ 
++#include <rtems/score/periodic.h>
++
+ #include <string.h>
+ 
++typedef rtems_periodic_period_states rtems_rate_monotonic_period_states; 
+ 
+-/**
+- *  The following enumerated type defines the states in which a
+- *  period may be.
+- */
+-typedef enum {
+-  /**
+-   * This value indicates the period is off the watchdog chain,
+-   * and has never been initialized.
+-   */
+-  RATE_MONOTONIC_INACTIVE,
+-
+-  /**
+-   * This value indicates the period is on the watchdog chain, and
+-   * the owner is blocked waiting on it.
+-   */
+-  RATE_MONOTONIC_OWNER_IS_BLOCKING,
+-
+-  /**
+-   * This value indicates the period is on the watchdog chain, and
+-   * running.  The owner should be executed or blocked waiting on
+-   * another object.
+-   */
+-  RATE_MONOTONIC_ACTIVE,
+-
+-  /**
+-   * This value indicates the period is on the watchdog chain, and
+-   * has expired.  The owner should be blocked waiting for the next period.
+-   */
+-  RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING,
+-
+-  /**
+-   * This value indicates the period is off the watchdog chain, and
+-   * has expired.  The owner is still executing and has taken too much
+-   * all time to complete this iteration of the period.
+-   */
+-  RATE_MONOTONIC_EXPIRED
+-}   rtems_rate_monotonic_period_states;
+-
+-/**
+- *  The following constant is the interval passed to the rate_monontonic_period
+- *  directive to obtain status information.
+- */
+-#define RTEMS_PERIOD_STATUS       WATCHDOG_NO_TIMEOUT
+-
+-/**
+- *  The following defines the PUBLIC data structure that has the
+- *  statistics kept on each period instance.
+- *
+- *  @note The public structure uses struct timespec while the
+- *        internal one uses Timestamp_Control.
+- */
+-typedef struct {
+-  /** This field contains the number of periods executed. */
+-  uint32_t     count;
+-  /** This field contains the number of periods missed. */
+-  uint32_t     missed_count;
+-
+-  /** This field contains the least amount of CPU time used in a period. */
+-  rtems_thread_cpu_usage_t             min_cpu_time;
+-  /** This field contains the highest amount of CPU time used in a period. */
+-  rtems_thread_cpu_usage_t             max_cpu_time;
+-  /** This field contains the total amount of wall time used in a period. */
+-  rtems_thread_cpu_usage_t             total_cpu_time;
+-
+-  /** This field contains the least amount of wall time used in a period. */
+-  rtems_rate_monotonic_period_time_t   min_wall_time;
+-  /** This field contains the highest amount of wall time used in a period. */
+-  rtems_rate_monotonic_period_time_t   max_wall_time;
+-  /** This field contains the total amount of CPU time used in a period. */
+-  rtems_rate_monotonic_period_time_t   total_wall_time;
+-}  rtems_rate_monotonic_period_statistics;
+-
+-/**
+- *  The following defines the INTERNAL data structure that has the
+- *  statistics kept on each period instance.
+- */
+-typedef struct {
+-  /** This field contains the number of periods executed. */
+-  uint32_t     count;
+-  /** This field contains the number of periods missed. */
+-  uint32_t     missed_count;
+-
+-  /** This field contains the least amount of CPU time used in a period. */
+-  Thread_CPU_usage_t                   min_cpu_time;
+-  /** This field contains the highest amount of CPU time used in a period. */
+-  Thread_CPU_usage_t                   max_cpu_time;
+-  /** This field contains the total amount of wall time used in a period. */
+-  Thread_CPU_usage_t                   total_cpu_time;
+-
+-  /** This field contains the least amount of wall time used in a period. */
+-  Rate_monotonic_Period_time_t         min_wall_time;
+-  /** This field contains the highest amount of wall time used in a period. */
+-  Rate_monotonic_Period_time_t         max_wall_time;
+-  /** This field contains the total amount of CPU time used in a period. */
+-  Rate_monotonic_Period_time_t         total_wall_time;
+-}  Rate_monotonic_Statistics;
+-
+-/**
+- *  The following defines the period status structure.
+- */
+-typedef struct {
+-  /** This is the Id of the thread using this period. */
+-  rtems_id                             owner;
+-
+-  /** This is the current state of this period. */
+-  rtems_rate_monotonic_period_states   state;
+-
+-  /**
+-   *  This is the length of wall time that has passed since this period
+-   *  was last initiated.  If the period is expired or has not been initiated,
+-   *  then this field has no meaning.
+-   */
+-  rtems_rate_monotonic_period_time_t   since_last_period;
+-
+-  /**
+-   *  This is the amount of CPU time that has been used since this period
+-   *  was last initiated.  If the period is expired or has not been initiated,
+-   *  then this field has no meaning.
+-   */
+-  rtems_thread_cpu_usage_t             executed_since_last_period;
+-}  rtems_rate_monotonic_period_status;
+-
+-/**
+- *  The following structure defines the control block used to manage
+- *  each period.
+- */
+-typedef struct {
+-  /** This field is the object management portion of a Period instance. */
+-  Objects_Control                         Object;
+-
+-  /** This is the timer used to provide the unblocking mechanism. */
+-  Watchdog_Control                        Timer;
+-
+-  /** This field indicates the current state of the period. */
+-  rtems_rate_monotonic_period_states      state;
+-
+-  /**
+-   * This field contains the length of the next period to be
+-   * executed.
+-   */
+-  uint32_t                                next_length;
+-
+-  /**
+-   * This field contains a pointer to the TCB for the thread
+-   * which owns and uses this period instance.
+-   */
+-  Thread_Control                         *owner;
+-
+-  /**
+-   * This field contains the cpu usage value of the owning thread when
+-   * the period was initiated.  It is used to compute the period's
+-   * statistics.
+-   */
+-  Thread_CPU_usage_t                      cpu_usage_period_initiated;
+-
+-  /**
+-   * This field contains the wall time value when the period
+-   * was initiated.  It is used to compute the period's statistics.
+-   */
+-  Rate_monotonic_Period_time_t            time_period_initiated;
+-
+-  /**
+-   * This field contains the statistics maintained for the period.
+-   */
+-  Rate_monotonic_Statistics               Statistics;
+-}   Rate_monotonic_Control;
++typedef rtems_periodic_period_statistics rtems_rate_monotonic_period_statistics;
+ 
+-/**
+- *  @brief Rate Monotonic Period Class Management Structure
+- *
+- *  This instance of Objects_Information is used to manage the
+- *  set of rate monotonic period instances.
+- */
+-RTEMS_RATEMON_EXTERN Objects_Information _Rate_monotonic_Information;
++typedef rtems_periodic_period_status rtems_rate_monotonic_period_status; 
+ 
+-/**
+- *  @brief Rate Monotonic Manager Initialization
+- *
+- *  This routine performs the initialization necessary for this manager.
+- */
+-void _Rate_monotonic_Manager_initialization(void);
++typedef Periodic_Control Rate_monotonic_Control;
+ 
+ /**
+  *  @brief rtems_rate_monotonic_create
+@@ -393,115 +184,12 @@ rtems_status_code rtems_rate_monotonic_p
+ );
+ 
+ /**
+- *  @brief _Rate_monotonic_Timeout
+- *
+- *  This routine is invoked when the period represented
+- *  by ID expires.  If the thread which owns this period is blocked
+- *  waiting for the period to expire, then it is readied and the
+- *  period is restarted.  If the owning thread is not waiting for the
+- *  period to expire, then the period is placed in the EXPIRED
+- *  state and not restarted.
+- */
+-void _Rate_monotonic_Timeout(
+-  rtems_id    id,
+-  void       *ignored
+-);
+-
+-/**
+- *  @brief _Rate_monotonic_Get_status(
+- *
+- *  This routine is invoked to compute the elapsed wall time and cpu
+- *  time for a period.
+- *
+- *  @param[in] the_period points to the period being operated upon.
+- *  @param[out] wall_since_last_period is set to the wall time elapsed
+- *              since the period was initiated.
+- *  @param[out] cpu_since_last_period is set to the cpu time used by the
+- *              owning thread since the period was initiated.
+- *
+- *  @return This routine returns true if the status can be determined
+- *          and false otherwise.
+- */
+-bool _Rate_monotonic_Get_status(
+-  Rate_monotonic_Control        *the_period,
+-  Rate_monotonic_Period_time_t  *wall_since_last_period,
+-  Thread_CPU_usage_t            *cpu_since_last_period
+-);
+-
+-/**
+- *  @brief _Rate_monotonic_Initiate_statistics(
+- *
+- *  This routine is invoked when a period is initiated via an explicit
+- *  call to rtems_rate_monotonic_period for the period's first iteration
+- *  or from _Rate_monotonic_Timeout for period iterations 2-n.
+- *
+- *  @param[in] the_period points to the period being operated upon.
+- */
+-void _Rate_monotonic_Initiate_statistics(
+-  Rate_monotonic_Control *the_period
+-);
+-
+-/**
+- *  @brief _Rate_monotonic_Reset_wall_time_statistics
+- *
+- *  This method resets the statistics information for a period instance.
+- */
+-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
+-     do { \
+-        /* set the minimums to a large value */ \
+-        _Timestamp_Set( \
+-          &(_the_period)->Statistics.min_wall_time, \
+-          0x7fffffff, \
+-          0x7fffffff \
+-        ); \
+-     } while (0)
+-#else
+-  #define _Rate_monotonic_Reset_wall_time_statistics( _the_period ) \
+-     do { \
+-        /* set the minimum to a large value */ \
+-        (_the_period)->Statistics.min_wall_time = 0xffffffff; \
+-     } while (0)
+-#endif
+-
+-/**
+- *  @brief Rate_monotonic_Reset_cpu_use_statistics
++ *  @brief Rate Monotonic Manager Initialization
+  *
+- *  This helper method resets the period CPU usage statistics structure.
++ *  This routine performs the initialization necessary for this manager.
+  */
+-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
+-     do { \
+-        /* set the minimums to a large value */ \
+-        _Timestamp_Set( \
+-          &(_the_period)->Statistics.min_cpu_time, \
+-          0x7fffffff, \
+-          0x7fffffff \
+-        ); \
+-     } while (0)
+-#else
+-  #define _Rate_monotonic_Reset_cpu_use_statistics( _the_period ) \
+-     do { \
+-        /* set the minimum to a large value */ \
+-        (_the_period)->Statistics.min_cpu_time = 0xffffffff; \
+-     } while (0)
+-#endif
++void _Rate_monotonic_Manager_initialization(void);
+ 
+-/**
+- *  @brief Rate_monotonic_Reset_statistics
+- *
+- *  This helper method resets the period wall time statistics structure.
+- */
+-#define _Rate_monotonic_Reset_statistics( _the_period ) \
+-  do { \
+-    memset( \
+-      &(_the_period)->Statistics, \
+-      0, \
+-      sizeof( rtems_rate_monotonic_period_statistics ) \
+-    ); \
+-    _Rate_monotonic_Reset_cpu_use_statistics( _the_period ); \
+-    _Rate_monotonic_Reset_wall_time_statistics( _the_period ); \
+-  } while (0)
+ 
+ #ifndef __RTEMS_APPLICATION__
+ #include <rtems/rtems/ratemon.inl>
+Index: cpukit/rtems/inline/rtems/rtems/ratemon.inl
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/inline/rtems/rtems/ratemon.inl,v
+retrieving revision 1.16
+diff -u -p -r1.16 ratemon.inl
+--- cpukit/rtems/inline/rtems/rtems/ratemon.inl	4 Sep 2008 17:43:18 -0000	1.16
++++ cpukit/rtems/inline/rtems/rtems/ratemon.inl	13 Aug 2010 19:21:09 -0000
+@@ -27,99 +27,7 @@
+  *  @{
+  */
+ 
+-/**
+- *  @brief Rate_monotonic_Allocate
+- *
+- *  This function allocates a period control block from
+- *  the inactive chain of free period control blocks.
+- */
+-RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Allocate( void )
+-{
+-  return (Rate_monotonic_Control *)
+-    _Objects_Allocate( &_Rate_monotonic_Information );
+-}
+ 
+-/**
+- *  @brief Rate_monotonic_Free
+- *
+- *  This routine allocates a period control block from
+- *  the inactive chain of free period control blocks.
+- */
+-RTEMS_INLINE_ROUTINE void _Rate_monotonic_Free (
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  _Objects_Free( &_Rate_monotonic_Information, &the_period->Object );
+-}
+-
+-/**
+- *  @brief Rate_monotonic_Get
+- *
+- *  This function maps period IDs to period control blocks.
+- *  If ID corresponds to a local period, then it returns
+- *  the_period control pointer which maps to ID and location
+- *  is set to OBJECTS_LOCAL.  Otherwise, location is set
+- *  to OBJECTS_ERROR and the_period is undefined.
+- */
+-RTEMS_INLINE_ROUTINE Rate_monotonic_Control *_Rate_monotonic_Get (
+-  Objects_Id         id,
+-  Objects_Locations *location
+-)
+-{
+-  return (Rate_monotonic_Control *)
+-    _Objects_Get( &_Rate_monotonic_Information, id, location );
+-}
+-
+-/**
+- *  @brief Rate_monotonic_Is_active
+- *
+- *  This function returns TRUE if the_period is in the ACTIVE state,
+- *  and FALSE otherwise.
+- */
+-RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_active (
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  return (the_period->state == RATE_MONOTONIC_ACTIVE);
+-}
+-
+-/**
+- *  @brief Rate_monotonic_Is_inactive
+- *
+- *  This function returns TRUE if the_period is in the ACTIVE state,
+- *  and FALSE otherwise.
+- */
+-RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_inactive (
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  return (the_period->state == RATE_MONOTONIC_INACTIVE);
+-}
+-
+-/**
+- *  @brief Rate_monotonic_Is_expired
+- *
+- *  This function returns TRUE if the_period is in the EXPIRED state,
+- *  and FALSE otherwise.
+- */
+-RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_expired (
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  return (the_period->state == RATE_MONOTONIC_EXPIRED);
+-}
+-
+-/**
+- *  @brief Rate_monotonic_Is_null
+- *
+- *  This function returns TRUE if the_period is NULL and FALSE otherwise.
+- */
+-RTEMS_INLINE_ROUTINE bool _Rate_monotonic_Is_null (
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  return (the_period == NULL);
+-}
+ 
+ /**@}*/
+ 
+Index: cpukit/rtems/src/ratemon.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemon.c,v
+retrieving revision 1.24
+diff -u -p -r1.24 ratemon.c
+--- cpukit/rtems/src/ratemon.c	6 Jan 2009 05:02:25 -0000	1.24
++++ cpukit/rtems/src/ratemon.c	13 Aug 2010 19:21:09 -0000
+@@ -22,6 +22,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -42,19 +43,5 @@
+ 
+ void _Rate_monotonic_Manager_initialization(void)
+ {
+-  _Objects_Initialize_information(
+-    &_Rate_monotonic_Information,    /* object information table */
+-    OBJECTS_CLASSIC_API,             /* object API */
+-    OBJECTS_RTEMS_PERIODS,           /* object class */
+-    Configuration_RTEMS_API.maximum_periods,
+-                                     /* maximum objects of this class */
+-    sizeof( Rate_monotonic_Control ),/* size of this object's control block */
+-    false,                           /* true if the name is a string */
+-    RTEMS_MAXIMUM_NAME_LENGTH        /* maximum length of an object name */
+-#if defined(RTEMS_MULTIPROCESSING)
+-    ,
+-    false,                           /* true if this is a global object class */
+-    NULL                             /* Proxy extraction support callout */
+-#endif
+-  );
++  _Periodic_Manager_initialization();
+ }
+Index: cpukit/rtems/src/ratemoncancel.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemoncancel.c,v
+retrieving revision 1.10
+diff -u -p -r1.10 ratemoncancel.c
+--- cpukit/rtems/src/ratemoncancel.c	15 Dec 2009 18:26:41 -0000	1.10
++++ cpukit/rtems/src/ratemoncancel.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -41,28 +42,5 @@ rtems_status_code rtems_rate_monotonic_c
+   rtems_id id
+ )
+ {
+-  Rate_monotonic_Control *the_period;
+-  Objects_Locations       location;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-  switch ( location ) {
+-
+-    case OBJECTS_LOCAL:
+-      if ( !_Thread_Is_executing( the_period->owner ) ) {
+-        _Thread_Enable_dispatch();
+-        return RTEMS_NOT_OWNER_OF_RESOURCE;
+-      }
+-      (void) _Watchdog_Remove( &the_period->Timer );
+-      the_period->state = RATE_MONOTONIC_INACTIVE;
+-      _Thread_Enable_dispatch();
+-      return RTEMS_SUCCESSFUL;
+-
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return (rtems_periodic_cancel(id));
+ }
+Index: cpukit/rtems/src/ratemoncreate.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemoncreate.c,v
+retrieving revision 1.10
+diff -u -p -r1.10 ratemoncreate.c
+--- cpukit/rtems/src/ratemoncreate.c	15 Dec 2009 18:26:41 -0000	1.10
++++ cpukit/rtems/src/ratemoncreate.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -45,37 +46,5 @@ rtems_status_code rtems_rate_monotonic_c
+   rtems_id   *id
+ )
+ {
+-  Rate_monotonic_Control *the_period;
+-
+-  if ( !rtems_is_name_valid( name ) )
+-    return RTEMS_INVALID_NAME;
+-
+-  if ( !id )
+-    return RTEMS_INVALID_ADDRESS;
+-
+-  _Thread_Disable_dispatch();            /* to prevent deletion */
+-
+-  the_period = _Rate_monotonic_Allocate();
+-
+-  if ( !the_period ) {
+-    _Thread_Enable_dispatch();
+-    return RTEMS_TOO_MANY;
+-  }
+-
+-  the_period->owner = _Thread_Executing;
+-  the_period->state = RATE_MONOTONIC_INACTIVE;
+-
+-  _Watchdog_Initialize( &the_period->Timer, NULL, 0, NULL );
+-
+-  _Rate_monotonic_Reset_statistics( the_period );
+-
+-  _Objects_Open(
+-    &_Rate_monotonic_Information,
+-    &the_period->Object,
+-    (Objects_Name) name
+-  );
+-
+-  *id = the_period->Object.id;
+-  _Thread_Enable_dispatch();
+-  return RTEMS_SUCCESSFUL;
++  return (rtems_periodic_create( name, id ));
+ }
+Index: cpukit/rtems/src/ratemondata.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemondata.c,v
+retrieving revision 1.1
+diff -u -p -r1.1 ratemondata.c
+--- cpukit/rtems/src/ratemondata.c	21 May 2007 23:19:20 -0000	1.1
++++ cpukit/rtems/src/ratemondata.c	13 Aug 2010 19:21:09 -0000
+@@ -9,6 +9,8 @@
+  *  http://www.rtems.com/license/LICENSE.
+  *
+  *  $Id: ratemondata.c,v 1.1 2007/05/21 23:19:20 joel Exp $
++ *
++ *  Note: this file is deprecated.
+  */
+ 
+ #if HAVE_CONFIG_H
+Index: cpukit/rtems/src/ratemondelete.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemondelete.c,v
+retrieving revision 1.9
+diff -u -p -r1.9 ratemondelete.c
+--- cpukit/rtems/src/ratemondelete.c	15 Dec 2009 18:26:41 -0000	1.9
++++ cpukit/rtems/src/ratemondelete.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -41,26 +42,5 @@ rtems_status_code rtems_rate_monotonic_d
+   rtems_id id
+ )
+ {
+-  Rate_monotonic_Control *the_period;
+-  Objects_Locations       location;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-  switch ( location ) {
+-
+-    case OBJECTS_LOCAL:
+-      _Objects_Close( &_Rate_monotonic_Information, &the_period->Object );
+-      (void) _Watchdog_Remove( &the_period->Timer );
+-      the_period->state = RATE_MONOTONIC_INACTIVE;
+-      _Rate_monotonic_Free( the_period );
+-      _Thread_Enable_dispatch();
+-      return RTEMS_SUCCESSFUL;
+-
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:            /* should never return this */
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return(rtems_periodic_delete(id));
+ }
+Index: cpukit/rtems/src/ratemongetstatistics.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemongetstatistics.c,v
+retrieving revision 1.7
+diff -u -p -r1.7 ratemongetstatistics.c
+--- cpukit/rtems/src/ratemongetstatistics.c	15 Dec 2009 18:26:41 -0000	1.7
++++ cpukit/rtems/src/ratemongetstatistics.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -45,47 +46,5 @@ rtems_status_code rtems_rate_monotonic_g
+   rtems_rate_monotonic_period_statistics *statistics
+ )
+ {
+-  Objects_Locations                        location;
+-  Rate_monotonic_Control                  *the_period;
+-  rtems_rate_monotonic_period_statistics  *dst;
+-  Rate_monotonic_Statistics               *src;
+-
+-  if ( !statistics )
+-    return RTEMS_INVALID_ADDRESS;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-  switch ( location ) {
+-
+-    case OBJECTS_LOCAL:
+-      dst = statistics;
+-      src = &the_period->Statistics;
+-      dst->count        = src->count;
+-      dst->missed_count = src->missed_count;
+-      #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-        _Timestamp_To_timespec( &src->min_cpu_time,   &dst->min_cpu_time );
+-        _Timestamp_To_timespec( &src->max_cpu_time,   &dst->max_cpu_time );
+-        _Timestamp_To_timespec( &src->total_cpu_time, &dst->total_cpu_time );
+-        _Timestamp_To_timespec( &src->min_wall_time,   &dst->min_wall_time );
+-        _Timestamp_To_timespec( &src->max_wall_time,   &dst->max_wall_time );
+-        _Timestamp_To_timespec( &src->total_wall_time, &dst->total_wall_time );
+-      #else
+-        dst->min_cpu_time    = src->min_cpu_time;
+-        dst->max_cpu_time    = src->max_cpu_time;
+-        dst->total_cpu_time  = src->total_cpu_time;
+-        dst->min_wall_time   = src->min_wall_time;
+-        dst->max_wall_time   = src->max_wall_time;
+-        dst->total_wall_time = src->total_wall_time;
+-      #endif
+-
+-      _Thread_Enable_dispatch();
+-      return RTEMS_SUCCESSFUL;
+-
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:            /* should never return this */
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return(rtems_periodic_get_statistics( id, statistics ));
+ }
+Index: cpukit/rtems/src/ratemongetstatus.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemongetstatus.c,v
+retrieving revision 1.18
+diff -u -p -r1.18 ratemongetstatus.c
+--- cpukit/rtems/src/ratemongetstatus.c	15 Dec 2009 18:26:41 -0000	1.18
++++ cpukit/rtems/src/ratemongetstatus.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -49,70 +50,5 @@ rtems_status_code rtems_rate_monotonic_g
+   rtems_rate_monotonic_period_status *status
+ )
+ {
+-  Thread_CPU_usage_t             executed;
+-  Objects_Locations              location;
+-  Rate_monotonic_Period_time_t   since_last_period;
+-  Rate_monotonic_Control        *the_period;
+-  bool                           valid_status;
+-
+-  if ( !status )
+-    return RTEMS_INVALID_ADDRESS;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-  switch ( location ) {
+-
+-    case OBJECTS_LOCAL:
+-      status->owner = the_period->owner->Object.id;
+-      status->state = the_period->state;
+-
+-      /*
+-       *  If the period is inactive, there is no information.
+-       */
+-      if ( status->state == RATE_MONOTONIC_INACTIVE ) {
+-        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          _Timespec_Set_to_zero( &status->since_last_period );
+-          _Timespec_Set_to_zero( &status->executed_since_last_period );
+-        #else
+-          status->since_last_period = 0;
+-          status->executed_since_last_period = 0;
+-        #endif
+-
+-      } else {
+-
+-        /*
+-         *  Grab the current status.
+-         */
+-        valid_status =
+-          _Rate_monotonic_Get_status(
+-            the_period, &since_last_period, &executed
+-          );
+-        if (!valid_status) {
+-          _Thread_Enable_dispatch();
+-          return RTEMS_NOT_DEFINED;
+-        }
+-
+-        #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          _Timestamp_To_timespec(
+-            &since_last_period, &status->since_last_period
+-          );
+-          _Timestamp_To_timespec(
+-            &executed, &status->executed_since_last_period
+-          );
+-        #else
+-          status->since_last_period = since_last_period;
+-          status->executed_since_last_period = executed;
+-        #endif
+-      }
+-
+-      _Thread_Enable_dispatch();
+-      return RTEMS_SUCCESSFUL;
+-
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:            /* should never return this */
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return (rtems_periodic_get_status( id, status ));
+ }
+Index: cpukit/rtems/src/ratemonident.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonident.c,v
+retrieving revision 1.11
+diff -u -p -r1.11 ratemonident.c
+--- cpukit/rtems/src/ratemonident.c	15 Dec 2009 18:26:41 -0000	1.11
++++ cpukit/rtems/src/ratemonident.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -45,14 +46,5 @@ rtems_status_code rtems_rate_monotonic_i
+   rtems_id   *id
+ )
+ {
+-  Objects_Name_or_id_lookup_errors  status;
+-
+-  status = _Objects_Name_to_id_u32(
+-    &_Rate_monotonic_Information,
+-    name,
+-    OBJECTS_SEARCH_LOCAL_NODE,
+-    id
+-  );
+-
+-  return _Status_Object_name_errors_to_status[ status ];
++  return (rtems_periodic_ident( name, id ));
+ }
+Index: cpukit/rtems/src/ratemonperiod.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonperiod.c,v
+retrieving revision 1.29
+diff -u -p -r1.29 ratemonperiod.c
+--- cpukit/rtems/src/ratemonperiod.c	26 Jul 2010 20:27:04 -0000	1.29
++++ cpukit/rtems/src/ratemonperiod.c	13 Aug 2010 19:21:09 -0000
+@@ -1,5 +1,5 @@
+ /*
+- *  Rate Monotonic Manager - Period Blocking and Status
++ *  Rate Monotonic Manager - Period Blocking
+  *
+  *  COPYRIGHT (c) 1989-2010.
+  *  On-Line Applications Research Corporation (OAR).
+@@ -20,212 +20,10 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+-bool _Rate_monotonic_Get_status(
+-  Rate_monotonic_Control        *the_period,
+-  Rate_monotonic_Period_time_t  *wall_since_last_period,
+-  Thread_CPU_usage_t            *cpu_since_last_period
+-)
+-{
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    Timestamp_Control        uptime;
+-  #endif
+-    Thread_Control          *owning_thread = the_period->owner;
+-    Thread_CPU_usage_t       used;
+-
+-  /*
+-   *  Determine elapsed wall time since period initiated.
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    _TOD_Get_uptime( &uptime );
+-    _Timestamp_Subtract(
+-      &the_period->time_period_initiated, &uptime, wall_since_last_period
+-    );
+-  #else
+-    *wall_since_last_period =
+-      _Watchdog_Ticks_since_boot - the_period->time_period_initiated;
+-  #endif
+-
+-  /*
+-   *  Determine cpu usage since period initiated.
+-   */
+-  used = owning_thread->cpu_time_used;
+-
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    if (owning_thread == _Thread_Executing) {
+-
+-      Thread_CPU_usage_t ran;
+-
+-      /* How much time time since last context switch */
+-      _Timestamp_Subtract(
+-        &_Thread_Time_of_last_context_switch, &uptime, &ran
+-      );
+-
+-      /* cpu usage += ran */
+-      _Timestamp_Add_to( &used, &ran );
+-
+-      /*
+-       *  The cpu usage info was reset while executing.  Can't
+-       *  determine a status.
+-       */
+-      if (_Timestamp_Less_than(&used, &the_period->cpu_usage_period_initiated))
+-        return false;
+-
+-       /* used = current cpu usage - cpu usage at start of period */
+-      _Timestamp_Subtract(
+-         &the_period->cpu_usage_period_initiated,
+-         &used,
+-         cpu_since_last_period
+-      );
+-    }
+-  #else
+-      /*
+-       *  The cpu usage info was reset while executing.  Can't
+-       *  determine a status.
+-       */
+-      if (used < the_period->cpu_usage_period_initiated)
+-        return false;
+-
+-      *cpu_since_last_period = used - the_period->cpu_usage_period_initiated;
+-  #endif
+-  return true;
+-}
+-
+-void _Rate_monotonic_Initiate_statistics(
+-  Rate_monotonic_Control *the_period
+-)
+-{
+-  Thread_Control *owning_thread = the_period->owner;
+-
+-  /*
+-   *  If using nanosecond statistics, we need to obtain the uptime.
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    Timestamp_Control  uptime;
+-
+-    _TOD_Get_uptime( &uptime );
+-  #endif
+-
+-  /*
+-   *  Set the starting point and the CPU time used for the statistics.
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    the_period->time_period_initiated = uptime;
+-  #else
+-    the_period->time_period_initiated = _Watchdog_Ticks_since_boot;
+-  #endif
+-
+-  the_period->cpu_usage_period_initiated = owning_thread->cpu_time_used;
+-
+-  /*
+-   *  If using nanosecond statistics and the period's thread is currently
+-   *  executing, then we need to take into account how much time the
+-   *  executing thread has run since the last context switch.  When this
+-   *  routine is invoked from rtems_rate_monotonic_period, the owner will
+-   *  be the executing thread.  When this routine is invoked from
+-   *  _Rate_monotonic_Timeout, it will not.
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    if (owning_thread == _Thread_Executing) {
+-
+-      rtems_thread_cpu_usage_t ran;
+-
+-      /*
+-       *  Adjust the CPU time used to account for the time since last
+-       *  context switch.
+-       */
+-      _Timespec_Subtract(
+-        &_Thread_Time_of_last_context_switch, &uptime, &ran
+-      );
+-
+-      _Timespec_Add_to( &the_period->cpu_usage_period_initiated, &ran );
+-    }
+-  #endif
+-}
+-
+-void _Rate_monotonic_Update_statistics(
+-  Rate_monotonic_Control    *the_period
+-)
+-{
+-  Thread_CPU_usage_t              executed;
+-  Rate_monotonic_Period_time_t    since_last_period;
+-  Rate_monotonic_Statistics      *stats;
+-  bool                            valid_status;
+-
+-  /*
+-   *  Assume we are only called in states where it is appropriate
+-   *  to update the statistics.  This should only be RATE_MONOTONIC_ACTIVE
+-   *  and RATE_MONOTONIC_EXPIRED.
+-   */
+-
+-  /*
+-   *  Update the counts.
+-   */
+-  stats = &the_period->Statistics;
+-  stats->count++;
+-
+-  if ( the_period->state == RATE_MONOTONIC_EXPIRED )
+-    stats->missed_count++;
+-
+-  /*
+-   *  Grab status for time statistics.
+-   */
+-  valid_status =
+-    _Rate_monotonic_Get_status( the_period, &since_last_period, &executed );
+-  if (!valid_status)
+-    return;
+-
+-  /*
+-   *  Update CPU time
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    _Timestamp_Add_to( &stats->total_cpu_time, &executed );
+-
+-    if ( _Timestamp_Less_than( &executed, &stats->min_cpu_time ) )
+-      stats->min_cpu_time = executed;
+-
+-    if ( _Timestamp_Greater_than( &executed, &stats->max_cpu_time ) )
+-      stats->max_cpu_time = executed;
+-  #else
+-    stats->total_cpu_time  += executed;
+-
+-    if ( executed < stats->min_cpu_time )
+-      stats->min_cpu_time = executed;
+-
+-    if ( executed > stats->max_cpu_time )
+-      stats->max_cpu_time = executed;
+-  #endif
+-
+-  /*
+-   *  Update Wall time
+-   */
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    _Timestamp_Add_to( &stats->total_wall_time, &since_last_period );
+-
+-    if ( _Timestamp_Less_than( &since_last_period, &stats->min_wall_time ) )
+-      stats->min_wall_time = since_last_period;
+-
+-    if ( _Timestamp_Greater_than( &since_last_period, &stats->max_wall_time ) )
+-      stats->max_wall_time = since_last_period;
+-  #else
+-
+-    /* Sanity check wall time */
+-    if ( since_last_period < executed )
+-      since_last_period = executed;
+-
+-    stats->total_wall_time += since_last_period;
+-
+-    if ( since_last_period < stats->min_wall_time )
+-      stats->min_wall_time = since_last_period;
+-
+-    if ( since_last_period > stats->max_wall_time )
+-      stats->max_wall_time = since_last_period;
+-  #endif
+-}
+-
+-
+ /*PAGE
+  *
+  *  rtems_rate_monotonic_period
+@@ -246,129 +44,5 @@ rtems_status_code rtems_rate_monotonic_p
+   rtems_interval length
+ )
+ {
+-  Rate_monotonic_Control              *the_period;
+-  Objects_Locations                    location;
+-  rtems_status_code                    return_value;
+-  rtems_rate_monotonic_period_states   local_state;
+-  ISR_Level                            level;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-
+-  switch ( location ) {
+-    case OBJECTS_LOCAL:
+-      if ( !_Thread_Is_executing( the_period->owner ) ) {
+-        _Thread_Enable_dispatch();
+-        return RTEMS_NOT_OWNER_OF_RESOURCE;
+-      }
+-
+-      if ( length == RTEMS_PERIOD_STATUS ) {
+-        switch ( the_period->state ) {
+-          case RATE_MONOTONIC_INACTIVE:
+-            return_value = RTEMS_NOT_DEFINED;
+-            break;
+-          case RATE_MONOTONIC_EXPIRED:
+-          case RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING:
+-            return_value = RTEMS_TIMEOUT;
+-            break;
+-          case RATE_MONOTONIC_ACTIVE:
+-          default:              /* unreached -- only to remove warnings */
+-            return_value = RTEMS_SUCCESSFUL;
+-            break;
+-        }
+-        _Thread_Enable_dispatch();
+-        return( return_value );
+-      }
+-
+-      _ISR_Disable( level );
+-      if ( the_period->state == RATE_MONOTONIC_INACTIVE ) {
+-        _ISR_Enable( level );
+-
+-        /*
+-         *  Baseline statistics information for the beginning of a period.
+-         */
+-        _Rate_monotonic_Initiate_statistics( the_period );
+-
+-        the_period->state = RATE_MONOTONIC_ACTIVE;
+-        _Watchdog_Initialize(
+-          &the_period->Timer,
+-          _Rate_monotonic_Timeout,
+-          id,
+-          NULL
+-        );
+-
+-        the_period->next_length = length;
+-
+-        _Watchdog_Insert_ticks( &the_period->Timer, length );
+-        _Thread_Enable_dispatch();
+-        return RTEMS_SUCCESSFUL;
+-      }
+-
+-      if ( the_period->state == RATE_MONOTONIC_ACTIVE ) {
+-        /*
+-         *  Update statistics from the concluding period.
+-         */
+-        _Rate_monotonic_Update_statistics( the_period );
+-
+-        /*
+-         *  This tells the _Rate_monotonic_Timeout that this task is
+-         *  in the process of blocking on the period and that we
+-         *  may be changing the length of the next period.
+-         */
+-        the_period->state = RATE_MONOTONIC_OWNER_IS_BLOCKING;
+-        the_period->next_length = length;
+-
+-        _ISR_Enable( level );
+-
+-        _Thread_Executing->Wait.id = the_period->Object.id;
+-        _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
+-
+-        /*
+-         *  Did the watchdog timer expire while we were actually blocking
+-         *  on it?
+-         */
+-        _ISR_Disable( level );
+-          local_state = the_period->state;
+-          the_period->state = RATE_MONOTONIC_ACTIVE;
+-        _ISR_Enable( level );
+-
+-        /*
+-         *  If it did, then we want to unblock ourself and continue as
+-         *  if nothing happen.  The period was reset in the timeout routine.
+-         */
+-        if ( local_state == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
+-          _Thread_Clear_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
+-
+-        _Thread_Enable_dispatch();
+-        return RTEMS_SUCCESSFUL;
+-      }
+-
+-      if ( the_period->state == RATE_MONOTONIC_EXPIRED ) {
+-        /*
+-         *  Update statistics from the concluding period
+-         */
+-        _Rate_monotonic_Update_statistics( the_period );
+-
+-        _ISR_Enable( level );
+-
+-        the_period->state = RATE_MONOTONIC_ACTIVE;
+-        the_period->next_length = length;
+-
+-        _Watchdog_Insert_ticks( &the_period->Timer, length );
+-        _Thread_Enable_dispatch();
+-        return RTEMS_TIMEOUT;
+-      }
+-
+-      /*
+-       *  These should never happen so just return invalid Id.
+-       *    - RATE_MONOTONIC_OWNER_IS_BLOCKING:
+-       *    - RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING:
+-       */
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:            /* should never return this */
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return (rtems_periodic_period( id, length ));
+ }
+Index: cpukit/rtems/src/ratemonreportstatistics.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonreportstatistics.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 ratemonreportstatistics.c
+--- cpukit/rtems/src/ratemonreportstatistics.c	2 Dec 2009 18:22:18 -0000	1.12
++++ cpukit/rtems/src/ratemonreportstatistics.c	13 Aug 2010 19:21:09 -0000
+@@ -20,16 +20,11 @@
+ #include <ctype.h>
+ #include <inttypes.h>
+ 
++#include <rtems/rtems/periodic.h>
++
+ #include <rtems/bspIo.h>
+ #include <rtems/score/timespec.h>
+ 
+-#ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-  /* We print to 1/10's of milliseconds */
+-  #define NANOSECONDS_DIVIDER 1000
+-  #define PERCENT_FMT     "%04" PRId32
+-  #define NANOSECONDS_FMT "%06" PRId32
+-#endif
+-
+ /*
+  *  This directive allows a thread to print the statistics information
+  *  on ALL period instances which have non-zero counts using printk.
+@@ -43,165 +38,10 @@ void rtems_rate_monotonic_report_statist
+   rtems_printk_plugin_t  print
+ )
+ {
+-  rtems_status_code                      status;
+-  rtems_id                               id;
+-  rtems_rate_monotonic_period_statistics the_stats;
+-  rtems_rate_monotonic_period_status     the_status;
+-  char                                   name[5];
+-
+-  if ( !print )
+-    return;
+-
+-  (*print)( context, "Period information by period\n" );
+-  #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-    (*print)( context, "--- CPU times are in seconds ---\n" );
+-    (*print)( context, "--- Wall times are in seconds ---\n" );
+-  #endif
+-/*
+-Layout by columns -- in memory of Hollerith :)
+-
+-1234567890123456789012345678901234567890123456789012345678901234567890123456789\
+-   ID     OWNER COUNT MISSED X
+-ididididid NNNN ccccc mmmmmm X
+-
+-  Uncomment the following if you are tinkering with the formatting.
+-  Be sure to test the various cases.
+-  (*print)( context,"\
+-1234567890123456789012345678901234567890123456789012345678901234567890123456789\
+-\n");
+-*/
+-  (*print)( context, "   ID     OWNER COUNT MISSED     "
+-       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          "     "
+-       #endif
+-          "CPU TIME     "
+-       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          "          "
+-       #endif
+-          "   WALL TIME\n"
+-  );
+-  (*print)( context, "                               "
+-       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          "     "
+-       #endif
+-          "MIN/MAX/AVG    "
+-       #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-          "          "
+-       #endif
+-          "  MIN/MAX/AVG\n"
+-  );
+-
+-  /*
+-   * Cycle through all possible ids and try to report on each one.  If it
+-   * is a period that is inactive, we just get an error back.  No big deal.
+-   */
+-  for ( id=_Rate_monotonic_Information.minimum_id ;
+-        id <= _Rate_monotonic_Information.maximum_id ;
+-        id++ ) {
+-    status = rtems_rate_monotonic_get_statistics( id, &the_stats );
+-    if ( status != RTEMS_SUCCESSFUL )
+-      continue;
+-
+-    /* If the above passed, so should this but check it anyway */
+-    status = rtems_rate_monotonic_get_status( id, &the_status );
+-    #if defined(RTEMS_DEBUG)
+-      if ( status != RTEMS_SUCCESSFUL )
+-        continue;
+-    #endif
+-
+-    rtems_object_get_name( the_status.owner, sizeof(name), name );
+-
+-    /*
+-     *  Print part of report line that is not dependent on granularity
+-     */
+-    (*print)( context,
+-      "0x%08" PRIx32 " %4s %5" PRId32 " %6" PRId32 " ",
+-      id, name,
+-      the_stats.count, the_stats.missed_count
+-    );
+-
+-    /*
+-     *  If the count is zero, don't print statistics
+-     */
+-    if (the_stats.count == 0) {
+-      (*print)( context, "\n" );
+-      continue;
+-    }
+-
+-    /*
+-     *  print CPU Usage part of statistics
+-     */
+-    {
+-    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-      struct timespec  cpu_average;
+-      struct timespec *min_cpu = &the_stats.min_cpu_time;
+-      struct timespec *max_cpu = &the_stats.max_cpu_time;
+-      struct timespec *total_cpu = &the_stats.total_cpu_time;
+-
+-      _Timespec_Divide_by_integer( total_cpu, the_stats.count, &cpu_average );
+-      (*print)( context,
+-        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* min cpu time */
+-        "%" PRId32 "."  NANOSECONDS_FMT "/"        /* max cpu time */
+-        "%" PRId32 "."  NANOSECONDS_FMT " ",       /* avg cpu time */
+-        _Timespec_Get_seconds( min_cpu ),
+-	  _Timespec_Get_nanoseconds( min_cpu ) / NANOSECONDS_DIVIDER,
+-        _Timespec_Get_seconds( max_cpu ),
+-	  _Timespec_Get_nanoseconds( max_cpu ) / NANOSECONDS_DIVIDER,
+-        _Timespec_Get_seconds( &cpu_average ),
+-	  _Timespec_Get_nanoseconds( &cpu_average ) / NANOSECONDS_DIVIDER
+-       );
+-    #else
+-      uint32_t ival_cpu, fval_cpu;
+-
+-      ival_cpu = the_stats.total_cpu_time * 100 / the_stats.count;
+-      fval_cpu = ival_cpu % 100;
+-      ival_cpu /= 100;
+-
+-      (*print)( context,
+-        "%3" PRId32 "/%4" PRId32 "/%3" PRId32 ".%02" PRId32 " ",
+-        the_stats.min_cpu_time, the_stats.max_cpu_time, ival_cpu, fval_cpu
+-      );
+-    #endif
+-    }
+-
+-    /*
+-     *  print wall time part of statistics
+-     */
+-    {
+-    #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+-      struct timespec  wall_average;
+-      struct timespec *min_wall = &the_stats.min_wall_time;
+-      struct timespec *max_wall = &the_stats.max_wall_time;
+-      struct timespec *total_wall = &the_stats.total_wall_time;
+-
+-      _Timespec_Divide_by_integer(total_wall, the_stats.count, &wall_average);
+-      (*print)( context,
+-        "%" PRId32 "." NANOSECONDS_FMT "/"        /* min wall time */
+-        "%" PRId32 "." NANOSECONDS_FMT "/"        /* max wall time */
+-        "%" PRId32 "." NANOSECONDS_FMT "\n",      /* avg wall time */
+-        _Timespec_Get_seconds( min_wall ),
+-          _Timespec_Get_nanoseconds( min_wall ) / NANOSECONDS_DIVIDER,
+-        _Timespec_Get_seconds( max_wall ),
+-          _Timespec_Get_nanoseconds( max_wall ) / NANOSECONDS_DIVIDER,
+-        _Timespec_Get_seconds( &wall_average ),
+-          _Timespec_Get_nanoseconds( &wall_average ) / NANOSECONDS_DIVIDER
+-      );
+-    #else
+-      uint32_t  ival_wall, fval_wall;
+-
+-      ival_wall = the_stats.total_wall_time * 100 / the_stats.count;
+-      fval_wall = ival_wall % 100;
+-      ival_wall /= 100;
+-      (*print)( context,
+-        "%3" PRId32 "/%4" PRId32 "/%3" PRId32 ".%02" PRId32 "\n",
+-        the_stats.min_wall_time, the_stats.max_wall_time, ival_wall, fval_wall
+-      );
+-    #endif
+-    }
+-  }
++  rtems_periodic_report_statistics_with_plugin( context, print );
+ }
+ 
+ void rtems_rate_monotonic_report_statistics( void )
+ {
+-  rtems_rate_monotonic_report_statistics_with_plugin( NULL, printk_plugin );
++  rtems_periodic_report_statistics_with_plugin( NULL, printk_plugin );
+ }
+Index: cpukit/rtems/src/ratemonresetall.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonresetall.c,v
+retrieving revision 1.2
+diff -u -p -r1.2 ratemonresetall.c
+--- cpukit/rtems/src/ratemonresetall.c	17 May 2007 22:46:45 -0000	1.2
++++ cpukit/rtems/src/ratemonresetall.c	13 Aug 2010 19:21:09 -0000
+@@ -19,6 +19,7 @@
+ #include <rtems/rtems/status.h>
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -27,30 +28,5 @@
+  */
+ void rtems_rate_monotonic_reset_all_statistics( void )
+ {
+-  Objects_Id        id;
+-  rtems_status_code status;
+-
+-   /*
+-    *  Prevent allocation or deallocation of any of the periods while
+-    *  we are cycling.  Also this is an optimization which ensures that
+-    *  we only disable/enable once.  The call to
+-    *  rtems_rate_monotonic_reset_statistics will be in a nested dispatch
+-    *  disabled critical section.
+-    */
+-  _Thread_Disable_dispatch();
+-
+-    /*
+-     * Cycle through all possible ids and try to reset each one.  If it
+-     * is a period that is inactive, we just get an error back.  No big deal.
+-     */
+-    for ( id=_Rate_monotonic_Information.minimum_id ;
+-          id <= _Rate_monotonic_Information.maximum_id ;
+-          id++ ) {
+-      status = rtems_rate_monotonic_reset_statistics( id );
+-    }
+-
+-  /*
+-   *  Done so exit thread dispatching disabled critical section.
+-   */
+-  _Thread_Enable_dispatch();
++  rtems_periodic_reset_all_statistics();
+ }
+Index: cpukit/rtems/src/ratemonresetstatistics.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonresetstatistics.c,v
+retrieving revision 1.4
+diff -u -p -r1.4 ratemonresetstatistics.c
+--- cpukit/rtems/src/ratemonresetstatistics.c	15 Dec 2009 18:26:41 -0000	1.4
++++ cpukit/rtems/src/ratemonresetstatistics.c	13 Aug 2010 19:21:09 -0000
+@@ -20,6 +20,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
+@@ -43,23 +44,5 @@ rtems_status_code rtems_rate_monotonic_r
+   rtems_id id
+ )
+ {
+-  Objects_Locations              location;
+-  Rate_monotonic_Control        *the_period;
+-
+-  the_period = _Rate_monotonic_Get( id, &location );
+-  switch ( location ) {
+-
+-    case OBJECTS_LOCAL:
+-      _Rate_monotonic_Reset_statistics( the_period );
+-      _Thread_Enable_dispatch();
+-      return RTEMS_SUCCESSFUL;
+-
+-#if defined(RTEMS_MULTIPROCESSING)
+-    case OBJECTS_REMOTE:            /* should never return this */
+-#endif
+-    case OBJECTS_ERROR:
+-      break;
+-  }
+-
+-  return RTEMS_INVALID_ID;
++  return (rtems_periodic_reset_statistics( id ));
+ }
+Index: cpukit/rtems/src/taskwakeafter.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/taskwakeafter.c,v
+retrieving revision 1.4
+diff -u -p -r1.4 taskwakeafter.c
+--- cpukit/rtems/src/taskwakeafter.c	18 Jan 2005 09:03:45 -0000	1.4
++++ cpukit/rtems/src/taskwakeafter.c	13 Aug 2010 19:21:09 -0000
+@@ -21,6 +21,7 @@
+ #include <rtems/rtems/support.h>
+ #include <rtems/rtems/modes.h>
+ #include <rtems/score/object.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/stack.h>
+ #include <rtems/score/states.h>
+ #include <rtems/rtems/tasks.h>
+@@ -52,7 +53,7 @@ rtems_status_code rtems_task_wake_after(
+ {
+   _Thread_Disable_dispatch();
+     if ( ticks == 0 ) {
+-      _Thread_Yield_processor();
++      _Scheduler_Yield();
+     } else {
+       _Thread_Set_state( _Thread_Executing, STATES_DELAYING );
+       _Watchdog_Initialize(
+Index: cpukit/sapi/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/Makefile.am,v
+retrieving revision 1.39
+diff -u -p -r1.39 Makefile.am
+--- cpukit/sapi/Makefile.am	18 Jun 2010 02:58:15 -0000	1.39
++++ cpukit/sapi/Makefile.am	13 Aug 2010 19:21:09 -0000
+@@ -10,12 +10,13 @@ include_rtemsdir = $(includedir)/rtems
+ include_rtems_HEADERS = include/confdefs.h
+ include_rtems_HEADERS += include/rtems/chain.h include/rtems/config.h \
+     include/rtems/extension.h include/rtems/fatal.h include/rtems/init.h \
+-    include/rtems/io.h include/rtems/mptables.h include/rtems/sptables.h
++    include/rtems/io.h include/rtems/mptables.h include/rtems/rbtree.h \
++		include/rtems/sptables.h
+ 
+ EXTRA_DIST = include/rtems/README
+ 
+ include_rtems_HEADERS += inline/rtems/chain.inl \
+-    inline/rtems/extension.inl
++    inline/rtems/extension.inl inline/rtems/rbtree.inl
+ 
+ ## src
+ AM_CPPFLAGS += -D__RTEMS_INSIDE__
+Index: cpukit/sapi/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/preinstall.am,v
+retrieving revision 1.11
+diff -u -p -r1.11 preinstall.am
+--- cpukit/sapi/preinstall.am	5 Aug 2009 21:18:29 -0000	1.11
++++ cpukit/sapi/preinstall.am	13 Aug 2010 19:21:09 -0000
+@@ -60,6 +60,10 @@ $(PROJECT_INCLUDE)/rtems/mptables.h: inc
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h
++
+ $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
+@@ -72,6 +76,10 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: 
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
++
+ $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
+ TMPINSTALL_FILES += $(PROJECT_LIB)/libsapi.a
+Index: cpukit/sapi/include/confdefs.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/include/confdefs.h,v
+retrieving revision 1.149
+diff -u -p -r1.149 confdefs.h
+--- cpukit/sapi/include/confdefs.h	11 Aug 2010 12:16:11 -0000	1.149
++++ cpukit/sapi/include/confdefs.h	13 Aug 2010 19:21:10 -0000
+@@ -535,6 +535,131 @@ rtems_fs_init_functions_t    rtems_fs_in
+ #endif
+ 
+ /*
++ * Scheduler configuration.
++ *
++ * The scheduler configuration allows an application to select the 
++ * scheduling policy to use.  The supported configurations are:
++ *  CONFIGURE_SCHEDULER_USER
++ *  CONFIGURE_SCHEDULER_PRIORITY
++ *  CONFIGURE_SCHEDULER_FIFO
++ *  CONFIGURE_SCHEDULER_EDF
++ * 
++ * If no configuration is specified by the application, then 
++ * CONFIGURE_SCHEDULER_PRIORITY is assumed to be the default.
++ * An application can define its own scheduling policy by defining
++ * CONFIGURE_SCHEDULER_USER and CONFIGURE_SCHEDULER_ENTRY_USER to point
++ * to an initialization routine.  
++ *
++ * To add a new scheduler:
++ */
++#include <rtems/score/scheduler.h>
++
++#if defined(CONFIGURE_SCHEDULER_USER) && \
++    !defined(CONFIGURE_SCHEDULER_ENTRY_USER)
++  #error "CONFIGURE_ERROR: CONFIGURE_SCHEDULER_USER without CONFIGURE_SCHEDULER_ENTRY_USER"
++#endif
++
++/* enable all RTEMS-provided schedulers */
++#if defined(CONFIGURE_SCHEDULER_ALL)
++  #define CONFIGURE_SCHEDULER_PRIORITY
++  #define CONFIGURE_SCHEDULER_FIFO
++  #define CONFIGURE_SCHEDULER_EDF
++#endif
++
++/* If no scheduler is specified, the priority scheduler is default. */
++#if !defined(CONFIGURE_SCHEDULER_USER) && \
++    !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
++    !defined(CONFIGURE_SCHEDULER_FIFO) && \
++    !defined(CONFIGURE_SCHEDULER_EDF)
++  #define CONFIGURE_SCHEDULER_PRIORITY
++  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
++#endif
++
++/*
++ * If a user scheduler is specified and no policy is set, 
++ * the user scheduler is the default policy.
++ */
++#if defined(CONFIGURE_SCHEDULER_USER) && \
++    !defined(CONFIGURE_SCHEDULER_POLICY)
++  #define CONFIGURE_SCHEDULER_POLICY _Scheduler_USER
++#endif
++
++/* 
++ * Check for priority scheduler next, as it is the default policy if there
++ * is no CONFIGURE_SCHEDULER_POLICY set and no USER scheduler provided.
++ */
++#if defined(CONFIGURE_SCHEDULER_PRIORITY)
++  #include <rtems/score/schedulerpriority.h>
++  #define CONFIGURE_SCHEDULER_ENTRY_PRIORITY { _Scheduler_priority_Initialize }
++  #if !defined(CONFIGURE_SCHEDULER_POLICY)
++    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
++  #endif
++#endif
++
++/* Check for FIFO scheduler */
++#if defined(CONFIGURE_SCHEDULER_FIFO)
++  #include <rtems/score/schedulerfifo.h>
++  #define CONFIGURE_SCHEDULER_ENTRY_FIFO { _Scheduler_fifo_Initialize }
++  #if !defined(CONFIGURE_SCHEDULER_POLICY)
++    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_FIFO
++  #endif
++#endif
++
++/* Check for EDF scheduler */
++#if defined(CONFIGURE_SCHEDULER_EDF)
++  #include <rtems/score/scheduleredf.h>
++  #define CONFIGURE_SCHEDULER_ENTRY_EDF { _Scheduler_edf_Initialize }
++  #if !defined(CONFIGURE_SCHEDULER_POLICY)
++    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_EDF
++  #endif
++#endif
++
++
++/* 
++ * Set up the scheduler table.  The scheduling code indexes this table to 
++ * invoke the correct scheduling implementation. The scheduler to use is 
++ * determined by the Configuration.scheduler_policy field, which is set
++ * by CONFIGURE_SCHEDULER_POLICY.  If a particular scheduler is not enabled,
++ * an empty entry is included in its entry in the scheduler table.
++ */
++
++  /**
++   * An empty scheduler entry
++   */
++  #define CONFIGURE_SCHEDULER_NULL { NULL }
++
++#ifdef CONFIGURE_INIT
++  /* the table of available schedulers. */
++  const Scheduler_Table_t _Scheduler_Table[] = {
++    #if defined(CONFIGURE_SCHEDULER_USER) && \
++        defined(CONFIGURE_SCHEDULER_ENTRY_USER)
++      CONFIGURE_SCHEDULER_ENTRY_USER,
++    #else
++      CONFIGURE_SCHEDULER_NULL,
++    #endif
++    #if defined(CONFIGURE_SCHEDULER_PRIORITY) && \
++        defined(CONFIGURE_SCHEDULER_ENTRY_PRIORITY)
++      CONFIGURE_SCHEDULER_ENTRY_PRIORITY,
++    #else
++      CONFIGURE_SCHEDULER_NULL,
++    #endif
++    #if defined(CONFIGURE_SCHEDULER_FIFO) && \
++        defined(CONFIGURE_SCHEDULER_ENTRY_FIFO)
++      CONFIGURE_SCHEDULER_ENTRY_FIFO,
++    #else
++      CONFIGURE_SCHEDULER_NULL,
++    #endif
++    #if defined(CONFIGURE_SCHEDULER_EDF) && \
++        defined(CONFIGURE_SCHEDULER_ENTRY_EDF)
++      CONFIGURE_SCHEDULER_ENTRY_EDF,
++    #else
++      CONFIGURE_SCHEDULER_NULL,
++    #endif   
++  };
++#endif
++
++
++/*
+  *  If you said the IDLE task was going to do application initialization
+  *  and didn't override the IDLE body, then something is amiss.
+  */
+@@ -2004,6 +2129,7 @@ rtems_fs_init_functions_t    rtems_fs_in
+     CONFIGURE_MAXIMUM_USER_EXTENSIONS,        /* maximum dynamic extensions */
+     CONFIGURE_MICROSECONDS_PER_TICK,          /* microseconds per clock tick */
+     CONFIGURE_TICKS_PER_TIMESLICE,            /* ticks per timeslice quantum */
++    CONFIGURE_SCHEDULER_POLICY,               /* scheduling policy */
+     CONFIGURE_IDLE_TASK_BODY,                 /* user's IDLE task */
+     CONFIGURE_IDLE_TASK_STACK_SIZE,           /* IDLE task stack size */
+     CONFIGURE_INTERRUPT_STACK_SIZE,           /* interrupt stack size */
+Index: cpukit/sapi/include/rtems/config.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/include/rtems/config.h,v
+retrieving revision 1.53
+diff -u -p -r1.53 config.h
+--- cpukit/sapi/include/rtems/config.h	18 Jun 2010 04:04:05 -0000	1.53
++++ cpukit/sapi/include/rtems/config.h	13 Aug 2010 19:21:10 -0000
+@@ -118,6 +118,10 @@ typedef struct {
+    */
+   uint32_t                       ticks_per_timeslice;
+ 
++  /** This field specifies the scheduling policy to use.
++   */
++  uint32_t                       scheduler_policy;
++
+   /** This element points to the BSP's optional idle task which may override
+    *  the default one provided with RTEMS.
+    */
+Index: cpukit/sapi/src/exinit.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/src/exinit.c,v
+retrieving revision 1.55
+diff -u -p -r1.55 exinit.c
+--- cpukit/sapi/src/exinit.c	29 Jul 2010 17:52:09 -0000	1.55
++++ cpukit/sapi/src/exinit.c	13 Aug 2010 19:21:10 -0000
+@@ -41,7 +41,9 @@
+ #if defined(RTEMS_MULTIPROCESSING)
+ #include <rtems/score/mpci.h>
+ #endif
++#include <rtems/score/periodic.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/prioritybitmap.h>
+ #include <rtems/score/thread.h>
+ #include <rtems/score/tod.h>
+@@ -130,6 +132,8 @@ void rtems_initialize_data_structures(vo
+   _TOD_Handler_initialization();
+ 
+   _Thread_Handler_initialization();
++  
++  _Scheduler_Handler_initialization();
+ 
+   #if defined(RTEMS_MULTIPROCESSING)
+     _Objects_MP_Handler_initialization();
+Index: cpukit/score/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/Makefile.am,v
+retrieving revision 1.87
+diff -u -p -r1.87 Makefile.am
+--- cpukit/score/Makefile.am	29 Jul 2010 17:52:09 -0000	1.87
++++ cpukit/score/Makefile.am	13 Aug 2010 19:21:10 -0000
+@@ -25,15 +25,22 @@ include_rtems_score_HEADERS = include/rt
+     include/rtems/score/heap.h include/rtems/score/protectedheap.h \
+     include/rtems/score/interr.h include/rtems/score/isr.h \
+     include/rtems/score/object.h include/rtems/score/percpu.h \
+-    include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
+-    include/rtems/score/stack.h include/rtems/score/states.h \
+-    include/rtems/score/sysstate.h include/rtems/score/thread.h \
+-    include/rtems/score/threadq.h include/rtems/score/threadsync.h \
+-    include/rtems/score/timespec.h include/rtems/score/timestamp.h \
+-    include/rtems/score/timestamp64.h include/rtems/score/tod.h \
+-    include/rtems/score/tqdata.h include/rtems/score/userext.h \
+-    include/rtems/score/watchdog.h include/rtems/score/wkspace.h \
+-    include/rtems/score/cpuopts.h include/rtems/score/basedefs.h
++    include/rtems/score/periodic.h include/rtems/score/priority.h \
++    include/rtems/score/prioritybitmap.h include/rtems/score/readyqedf.h \
++    include/rtems/score/rbtree.h include/rtems/score/readyq.h \
++    include/rtems/score/readyqfifo.h include/rtems/score/readyqpriority.h \
++    include/rtems/score/scheduler.h include/rtems/score/scheduleredf.h \
++    include/rtems/score/schedulerfifo.h \
++    include/rtems/score/schedulerpriority.h \
++    include/rtems/score/schedulerqueue.h include/rtems/score/stack.h \
++    include/rtems/score/states.h include/rtems/score/sysstate.h \
++    include/rtems/score/thread.h include/rtems/score/threadq.h \
++    include/rtems/score/threadsync.h include/rtems/score/timespec.h \
++    include/rtems/score/timestamp.h include/rtems/score/timestamp64.h \
++    include/rtems/score/tod.h include/rtems/score/tqdata.h \
++    include/rtems/score/userext.h include/rtems/score/watchdog.h \
++    include/rtems/score/wkspace.h include/rtems/score/cpuopts.h \
++    include/rtems/score/basedefs.h
+ 
+ if HAS_PTHREADS
+ include_rtems_score_HEADERS += include/rtems/score/corespinlock.h \
+@@ -53,12 +60,14 @@ include_rtems_score_HEADERS += inline/rt
+     inline/rtems/score/coremsg.inl inline/rtems/score/coremutex.inl \
+     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
+     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
+-    inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
+-    inline/rtems/score/stack.inl inline/rtems/score/states.inl \
+-    inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
+-    inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
+-    inline/rtems/score/tqdata.inl inline/rtems/score/watchdog.inl \
+-    inline/rtems/score/wkspace.inl
++    inline/rtems/score/periodic.inl inline/rtems/score/priority.inl \
++    inline/rtems/score/prioritybitmap.inl \
++    inline/rtems/score/stack.inl inline/rtems/score/rbtree.inl \
++    inline/rtems/score/readyq.inl  inline/rtems/score/scheduler.inl \
++    inline/rtems/score/states.inl inline/rtems/score/sysstate.inl \
++    inline/rtems/score/thread.inl inline/rtems/score/threadq.inl \
++    inline/rtems/score/tod.inl inline/rtems/score/tqdata.inl \
++    inline/rtems/score/watchdog.inl inline/rtems/score/wkspace.inl
+ 
+ if HAS_PTHREADS
+ include_rtems_score_HEADERS += inline/rtems/score/corespinlock.inl \
+@@ -71,7 +80,7 @@ include_rtems_score_HEADERS += inline/rt
+     inline/rtems/score/objectmp.inl inline/rtems/score/threadmp.inl
+ endif
+ 
+-## src
++## src/
+ 
+ AM_CPPFLAGS += -D__RTEMS_INSIDE__
+ 
+@@ -137,12 +146,60 @@ libscore_a_SOURCES += src/objectallocate
+     src/objectgetinfo.c src/objectgetinfoid.c src/objectapimaximumclass.c \
+     src/objectnamespaceremove.c
+ 
++## PERIODIC_C_FILES
++libscore_a_SOURCES += src/periodic.c \
++    src/periodicgetstatus.c src/periodicstatistics.c src/periodictimeout.c
++
+ ## PROTECTED_HEAP_C_FILES
+ libscore_a_SOURCES += src/pheapallocate.c \
+     src/pheapextend.c src/pheapfree.c src/pheapgetsize.c \
+     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
+     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
+ 
++## RBTREE_C FILES
++libscore_a_SOURCES += src/rbtree.c \
++    src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
++    src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
++
++## READYQEDF_C_FILES
++libscore_a_SOURCES += src/readyqedf.c \
++    src/readyqedfenqueue.c src/readyqedfenqueuefirst.c \
++    src/readyqedfextract.c src/readyqedffirst.c src/readyqedfrequeue.c
++
++## READYQFIFO_C_FILES
++libscore_a_SOURCES += src/readyqfifo.c \
++    src/readyqfifoenqueue.c src/readyqfifoenqueuefirst.c \
++    src/readyqfifoextract.c src/readyqfifofirst.c \
++    src/readyqfiforequeue.c
++
++## READYQPRIORITY_C_FILES
++libscore_a_SOURCES += src/readyqpriority.c \
++    src/readyqpriorityenqueue.c src/readyqpriorityenqueuefirst.c \
++    src/readyqpriorityextract.c src/readyqpriorityfirst.c \
++    src/readyqpriorityrequeue.c
++
++## SCHEDULER_C_FILES
++libscore_a_SOURCES += src/scheduler.c
++
++## SCHEDULERQUEUE_C_FILES
++libscore_a_SOURCES += src/schedulerqueueblock.c \
++                      src/schedulerqueueschedule.c \
++                      src/schedulerqueueunblock.c src/schedulerqueueyield.c
++
++## SCHEDULEREDF_C_FILES
++libscore_a_SOURCES += src/scheduleredf.c \
++      src/scheduleredfschedallocate.c src/scheduleredfschedfree.c \
++      src/scheduleredfschedupdate.c
++
++## SCHEDULERFIFO_C_FILES
++libscore_a_SOURCES += src/schedulerfifo.c
++
++## SCHEDULERPRIORITY_C_FILES
++libscore_a_SOURCES += src/schedulerpriority.c \
++                      src/schedulerpriorityschedallocate.c \
++                      src/schedulerpriorityschedfree.c \
++                      src/schedulerpriorityschedupdate.c
++
+ ## THREAD_C_FILES
+ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
+     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
+@@ -153,7 +210,7 @@ libscore_a_SOURCES += src/thread.c src/t
+     src/threadsetstate.c src/threadsettransient.c \
+     src/threadstackallocate.c src/threadstackfree.c src/threadstart.c \
+     src/threadstartmultitasking.c src/threadsuspend.c \
+-    src/threadtickletimeslice.c src/threadyieldprocessor.c \
++    src/threadtickletimeslice.c \
+     src/iterateoverthreads.c src/threadblockingoperationcancel.c
+ 
+ ## THREADQ_C_FILES
+Index: cpukit/score/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/preinstall.am,v
+retrieving revision 1.24
+diff -u -p -r1.24 preinstall.am
+--- cpukit/score/preinstall.am	29 Jul 2010 17:52:10 -0000	1.24
++++ cpukit/score/preinstall.am	13 Aug 2010 19:21:10 -0000
+@@ -103,6 +103,10 @@ $(PROJECT_INCLUDE)/rtems/score/percpu.h:
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/percpu.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/percpu.h
+ 
++$(PROJECT_INCLUDE)/rtems/score/periodic.h: include/rtems/score/periodic.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/periodic.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/periodic.h
++
+ $(PROJECT_INCLUDE)/rtems/score/priority.h: include/rtems/score/priority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.h
+@@ -111,6 +115,46 @@ $(PROJECT_INCLUDE)/rtems/score/priorityb
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
+ 
++$(PROJECT_INCLUDE)/rtems/score/readyqedf.h: include/rtems/score/readyqedf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqedf.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqedf.h
++
++$(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h
++
++$(PROJECT_INCLUDE)/rtems/score/readyq.h: include/rtems/score/readyq.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.h
++
++$(PROJECT_INCLUDE)/rtems/score/readyqfifo.h: include/rtems/score/readyqfifo.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqfifo.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqfifo.h
++
++$(PROJECT_INCLUDE)/rtems/score/readyqpriority.h: include/rtems/score/readyqpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyqpriority.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyqpriority.h
++
++$(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
++
++$(PROJECT_INCLUDE)/rtems/score/scheduleredf.h: include/rtems/score/scheduleredf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
++
++$(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h: include/rtems/score/schedulerfifo.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerfifo.h
++
++$(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
++
++$(PROJECT_INCLUDE)/rtems/score/schedulerqueue.h: include/rtems/score/schedulerqueue.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerqueue.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerqueue.h
++
+ $(PROJECT_INCLUDE)/rtems/score/stack.h: include/rtems/score/stack.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.h
+@@ -237,6 +281,10 @@ $(PROJECT_INCLUDE)/rtems/score/object.in
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/object.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/object.inl
+ 
++$(PROJECT_INCLUDE)/rtems/score/periodic.inl: inline/rtems/score/periodic.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/periodic.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/periodic.inl
++
+ $(PROJECT_INCLUDE)/rtems/score/priority.inl: inline/rtems/score/priority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/priority.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/priority.inl
+@@ -249,6 +297,18 @@ $(PROJECT_INCLUDE)/rtems/score/stack.inl
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/stack.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/stack.inl
+ 
++$(PROJECT_INCLUDE)/rtems/score/rbtree.inl: inline/rtems/score/rbtree.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
++
++$(PROJECT_INCLUDE)/rtems/score/readyq.inl: inline/rtems/score/readyq.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/readyq.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/readyq.inl
++
++$(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
++
+ $(PROJECT_INCLUDE)/rtems/score/states.inl: inline/rtems/score/states.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/states.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/states.inl
+Index: cpukit/score/include/rtems/score/percpu.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/include/rtems/score/percpu.h,v
+retrieving revision 1.4
+diff -u -p -r1.4 percpu.h
+--- cpukit/score/include/rtems/score/percpu.h	30 Jul 2010 18:53:06 -0000	1.4
++++ cpukit/score/include/rtems/score/percpu.h	13 Aug 2010 19:21:10 -0000
+@@ -154,13 +154,13 @@ extern Per_CPU_Control _Per_CPU_Informat
+  * But on a non-SMP system, these macros are simple references.
+  * Thus when built for non-SMP, there should be no performance penalty.
+  */
+-#define _Thread_Heir              _Per_CPU_Information.heir
+-#define _Thread_Executing         _Per_CPU_Information.executing
+-#define _Thread_Idle              _Per_CPU_Information.idle
+-#define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
+-#define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
+-#define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
+-#define _Thread_Dispatch_necessary _Per_CPU_Information.dispatch_necessary
++#define _Thread_Heir                _Per_CPU_Information.heir
++#define _Thread_Executing           _Per_CPU_Information.executing
++#define _Thread_Idle                _Per_CPU_Information.idle
++#define _ISR_Nest_level             _Per_CPU_Information.isr_nest_level
++#define _CPU_Interrupt_stack_low    _Per_CPU_Information.interrupt_stack_low
++#define _CPU_Interrupt_stack_high   _Per_CPU_Information.interrupt_stack_high
++#define _Thread_Dispatch_necessary  _Per_CPU_Information.dispatch_necessary
+ 
+ #endif  /* ASM */
+ 
+Index: cpukit/score/include/rtems/score/thread.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/include/rtems/score/thread.h,v
+retrieving revision 1.97
+diff -u -p -r1.97 thread.h
+--- cpukit/score/include/rtems/score/thread.h	29 Jul 2010 17:52:10 -0000	1.97
++++ cpukit/score/include/rtems/score/thread.h	13 Aug 2010 19:21:10 -0000
+@@ -70,6 +70,7 @@ extern "C" {
+ #endif
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/prioritybitmap.h>
+ #include <rtems/score/stack.h>
+ #include <rtems/score/states.h>
+@@ -390,10 +391,12 @@ struct Thread_Control_struct {
+    *  since it was created.
+    */
+   Thread_CPU_usage_t                    cpu_time_used;
+-  /** This field points to the Ready FIFO for this priority. */
+-  Chain_Control                        *ready;
+-  /** This field contains precalculated priority map indices. */
+-  Priority_bit_map_Information          Priority_map;
++  /** This union holds per-thread data for the scheduler and ready queue. */
++  union {
++    Scheduler_priority_Per_thread      *priority;
++    Scheduler_fifo_Per_thread          *fifo;
++    Scheduler_edf_Per_thread           *edf;
++  } sched;
+   /** This field contains information about the starting state of
+    *  this thread.
+    */
+@@ -456,12 +459,6 @@ SCORE_EXTERN uint32_t   _Thread_Maximum_
+ SCORE_EXTERN uint32_t   _Thread_Ticks_per_timeslice;
+ 
+ /**
+- *  The following points to the array of FIFOs used to manage the
+- *  set of ready threads.
+- */
+-SCORE_EXTERN Chain_Control *_Thread_Ready_chain;
+-
+-/**
+  *  The following points to the thread whose floating point
+  *  context is currently loaded.
+  */
+@@ -654,13 +651,6 @@ void _Thread_Set_transient(
+ void _Thread_Tickle_timeslice( void );
+ 
+ /**
+- *  This routine is invoked when a thread wishes to voluntarily
+- *  transfer control of the processor to another thread of equal
+- *  or greater priority.
+- */
+-void _Thread_Yield_processor( void );
+-
+-/**
+  *  This routine initializes the context of the_thread to its
+  *  appropriate starting state.
+  */
+Index: cpukit/score/inline/rtems/score/thread.inl
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/inline/rtems/score/thread.inl,v
+retrieving revision 1.43
+diff -u -p -r1.43 thread.inl
+--- cpukit/score/inline/rtems/score/thread.inl	30 Jul 2010 18:53:06 -0000	1.43
++++ cpukit/score/inline/rtems/score/thread.inl	13 Aug 2010 19:21:10 -0000
+@@ -120,17 +120,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Restar
+ }
+ 
+ /**
+- *  This function returns a pointer to the highest priority
+- *  ready thread.
+- */
+-
+-RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
+-{
+-  _Thread_Heir = (Thread_Control *)
+-    _Thread_Ready_chain[ _Priority_bit_map_Get_highest() ].first;
+-}
+-
+-/**
+  *  This function returns true if the floating point context of
+  *  the_thread is currently loaded in the floating point unit, and
+  *  false otherwise.
+Index: cpukit/score/src/thread.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/thread.c,v
+retrieving revision 1.64
+diff -u -p -r1.64 thread.c
+--- cpukit/score/src/thread.c	30 Jul 2010 18:53:06 -0000	1.64
++++ cpukit/score/src/thread.c	13 Aug 2010 19:21:10 -0000
+@@ -24,6 +24,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -45,7 +47,6 @@
+ 
+ void _Thread_Handler_initialization(void)
+ {
+-  uint32_t     index;
+   uint32_t     ticks_per_timeslice;
+   uint32_t     maximum_extensions;
+   #if defined(RTEMS_MULTIPROCESSING)
+@@ -80,13 +81,6 @@ void _Thread_Handler_initialization(void
+ 
+   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
+ 
+-  _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
+-    (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+-  );
+-
+-  for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
+-    _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
+-
+ #if defined(RTEMS_MULTIPROCESSING)
+   _Thread_MP_Handler_initialization( maximum_proxies );
+ #endif
+Index: cpukit/score/src/threadchangepriority.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadchangepriority.c,v
+retrieving revision 1.14
+diff -u -p -r1.14 threadchangepriority.c
+--- cpukit/score/src/threadchangepriority.c	30 Jul 2010 18:53:06 -0000	1.14
++++ cpukit/score/src/threadchangepriority.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -120,11 +122,10 @@ void _Thread_Change_priority(
+      */
+     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+ 
+-    _Priority_bit_map_Add( &the_thread->Priority_map );
+     if ( prepend_it )
+-      _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
++      _Ready_queue_Enqueue_first( &_Scheduler.ready_queue, the_thread );
+     else
+-      _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
++      _Ready_queue_Enqueue( &_Scheduler.ready_queue, the_thread );
+   }
+ 
+   _ISR_Flash( level );
+@@ -133,10 +134,7 @@ void _Thread_Change_priority(
+    *  We altered the set of thread priorities.  So let's figure out
+    *  who is the heir and if we need to switch to them.
+    */
+-  _Thread_Calculate_heir();
++  _Scheduler_Schedule(&_Scheduler);
+ 
+-  if ( !_Thread_Is_executing_also_the_heir() &&
+-       _Thread_Executing->is_preemptible )
+-    _Thread_Dispatch_necessary = true;
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadclearstate.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadclearstate.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadclearstate.c
+--- cpukit/score/src/threadclearstate.c	30 Jul 2010 18:53:06 -0000	1.12
++++ cpukit/score/src/threadclearstate.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -66,31 +68,7 @@ void _Thread_Clear_state(
+       the_thread->current_state = _States_Clear( state, current_state );
+ 
+       if ( _States_Is_ready( current_state ) ) {
+-
+-        _Priority_bit_map_Add( &the_thread->Priority_map );
+-
+-        _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
+-
+-        _ISR_Flash( level );
+-
+-        /*
+-         *  If the thread that was unblocked is more important than the heir,
+-         *  then we have a new heir.  This may or may not result in a
+-         *  context switch.
+-         *
+-         *  Normal case:
+-         *    If the current thread is preemptible, then we need to do
+-         *    a context switch.
+-         *  Pseudo-ISR case:
+-         *    Even if the thread isn't preemptible, if the new heir is
+-         *    a pseudo-ISR system task, we need to do a context switch.
+-         */
+-        if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+-          _Thread_Heir = the_thread;
+-          if ( _Thread_Executing->is_preemptible ||
+-               the_thread->current_priority == 0 )
+-            _Thread_Dispatch_necessary = true;
+-        }
++        _Scheduler_Unblock( &_Scheduler, the_thread);
+       }
+   }
+   _ISR_Enable( level );
+Index: cpukit/score/src/threadclose.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadclose.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadclose.c
+--- cpukit/score/src/threadclose.c	22 May 2008 20:38:03 -0000	1.12
++++ cpukit/score/src/threadclose.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,7 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -86,6 +87,11 @@ void _Thread_Close(
+   }
+ 
+   /*
++   * Free the per-thread scheduling information.
++   */
++  _Scheduler_Sched_free( &_Scheduler, the_thread );
++
++  /*
+    *  The thread might have been FP.  So deal with that.
+    */
+ #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+Index: cpukit/score/src/threadinitialize.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadinitialize.c,v
+retrieving revision 1.39
+diff -u -p -r1.39 threadinitialize.c
+--- cpukit/score/src/threadinitialize.c	18 Jun 2010 02:56:26 -0000	1.39
++++ cpukit/score/src/threadinitialize.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,7 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -60,6 +61,7 @@ bool _Thread_Initialize(
+   #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+     void              *fp_area;
+   #endif
++  void                *sched = NULL;
+   void                *extensions_area;
+   bool                 extension_status;
+   int                  i;
+@@ -192,6 +194,9 @@ bool _Thread_Initialize(
+   the_thread->resource_count          = 0;
+   the_thread->real_priority           = priority;
+   the_thread->Start.initial_priority  = priority;
++  sched =_Scheduler_Sched_allocate( &_Scheduler, the_thread );
++  if (!sched)
++    goto failed;
+   _Thread_Set_priority( the_thread, priority );
+ 
+   /*
+@@ -235,6 +240,9 @@ failed:
+       (void) _Workspace_Free( fp_area );
+   #endif
+ 
++  if ( sched )
++    (void) _Workspace_Free( sched );
++
+    _Thread_Stack_Free( the_thread );
+   return false;
+ 
+Index: cpukit/score/src/threadready.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadready.c,v
+retrieving revision 1.9
+diff -u -p -r1.9 threadready.c
+--- cpukit/score/src/threadready.c	30 Jul 2010 18:53:06 -0000	1.9
++++ cpukit/score/src/threadready.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -55,24 +57,12 @@ void _Thread_Ready(
+ )
+ {
+   ISR_Level              level;
+-  Thread_Control *heir;
+ 
+   _ISR_Disable( level );
+ 
+   the_thread->current_state = STATES_READY;
+ 
+-  _Priority_bit_map_Add( &the_thread->Priority_map );
+-
+-  _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  _Thread_Calculate_heir();
+-
+-  heir = _Thread_Heir;
+-
+-  if ( !_Thread_Is_executing( heir ) && _Thread_Executing->is_preemptible )
+-    _Thread_Dispatch_necessary = true;
++  _Scheduler_Unblock( &_Scheduler, the_thread );
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadresume.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadresume.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadresume.c
+--- cpukit/score/src/threadresume.c	30 Jul 2010 18:53:06 -0000	1.12
++++ cpukit/score/src/threadresume.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -68,19 +70,7 @@ void _Thread_Resume(
+     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
+ 
+     if ( _States_Is_ready( current_state ) ) {
+-
+-      _Priority_bit_map_Add( &the_thread->Priority_map );
+-
+-      _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
+-
+-      _ISR_Flash( level );
+-
+-      if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+-        _Thread_Heir = the_thread;
+-        if ( _Thread_Executing->is_preemptible ||
+-             the_thread->current_priority == 0 )
+-          _Thread_Dispatch_necessary = true;
+-      }
++      _Scheduler_Unblock( &_Scheduler, the_thread );
+     }
+   }
+ 
+Index: cpukit/score/src/threadsetpriority.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsetpriority.c,v
+retrieving revision 1.5
+diff -u -p -r1.5 threadsetpriority.c
+--- cpukit/score/src/threadsetpriority.c	29 Jul 2010 17:52:10 -0000	1.5
++++ cpukit/score/src/threadsetpriority.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -50,10 +52,6 @@ void _Thread_Set_priority(
+ )
+ {
+   the_thread->current_priority = new_priority;
+-  the_thread->ready            = &_Thread_Ready_chain[ new_priority ];
+ 
+-  _Priority_bit_map_Initialize_information( 
+-      &the_thread->Priority_map, 
+-      new_priority 
+-  );
++  _Scheduler_Sched_update(&_Scheduler, the_thread);
+ }
+Index: cpukit/score/src/threadsetstate.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsetstate.c,v
+retrieving revision 1.8
+diff -u -p -r1.8 threadsetstate.c
+--- cpukit/score/src/threadsetstate.c	30 Jul 2010 18:53:06 -0000	1.8
++++ cpukit/score/src/threadsetstate.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -54,9 +56,7 @@ void _Thread_Set_state(
+ )
+ {
+   ISR_Level      level;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+   if ( !_States_Is_ready( the_thread->current_state ) ) {
+     the_thread->current_state =
+@@ -67,21 +67,7 @@ void _Thread_Set_state(
+ 
+   the_thread->current_state = state;
+ 
+-  if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-    _Chain_Initialize_empty( ready );
+-    _Priority_bit_map_Remove( &the_thread->Priority_map );
+-
+-  } else
+-    _Chain_Extract_unprotected( &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  if ( _Thread_Is_heir( the_thread ) )
+-     _Thread_Calculate_heir();
+-
+-  if ( _Thread_Is_executing( the_thread ) )
+-    _Thread_Dispatch_necessary = true;
++  _Scheduler_Block( &_Scheduler, the_thread);
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadsettransient.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsettransient.c,v
+retrieving revision 1.6
+diff -u -p -r1.6 threadsettransient.c
+--- cpukit/score/src/threadsettransient.c	29 Jul 2010 17:52:10 -0000	1.6
++++ cpukit/score/src/threadsettransient.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -54,22 +56,14 @@ void _Thread_Set_transient(
+ {
+   ISR_Level             level;
+   uint32_t              old_state;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+ 
+   old_state = the_thread->current_state;
+   the_thread->current_state = _States_Set( STATES_TRANSIENT, old_state );
+ 
+   if ( _States_Is_ready( old_state ) ) {
+-    if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-      _Chain_Initialize_empty( ready );
+-      _Priority_bit_map_Remove( &the_thread->Priority_map );
+-
+-    } else
+-      _Chain_Extract_unprotected( &the_thread->Object.Node );
++    _Ready_queue_Extract(&_Scheduler.ready_queue, the_thread);
+   }
+ 
+   _ISR_Enable( level );
+Index: cpukit/score/src/threadsuspend.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsuspend.c,v
+retrieving revision 1.9
+diff -u -p -r1.9 threadsuspend.c
+--- cpukit/score/src/threadsuspend.c	30 Jul 2010 18:53:06 -0000	1.9
++++ cpukit/score/src/threadsuspend.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -52,9 +54,7 @@ void _Thread_Suspend(
+ )
+ {
+   ISR_Level      level;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+   if ( !_States_Is_ready( the_thread->current_state ) ) {
+     the_thread->current_state =
+@@ -65,21 +65,7 @@ void _Thread_Suspend(
+ 
+   the_thread->current_state = STATES_SUSPENDED;
+ 
+-  if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-    _Chain_Initialize_empty( ready );
+-    _Priority_bit_map_Remove( &the_thread->Priority_map );
+-
+-  } else
+-    _Chain_Extract_unprotected( &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  if ( _Thread_Is_heir( the_thread ) )
+-     _Thread_Calculate_heir();
+-
+-  if ( _Thread_Is_executing( the_thread ) )
+-    _Thread_Dispatch_necessary = true;
++  _Scheduler_Block(&_Scheduler, the_thread);
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadtickletimeslice.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadtickletimeslice.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadtickletimeslice.c
+--- cpukit/score/src/threadtickletimeslice.c	24 Jun 2010 21:27:30 -0000	1.12
++++ cpukit/score/src/threadtickletimeslice.c	13 Aug 2010 19:21:10 -0000
+@@ -23,6 +23,7 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -89,7 +90,7 @@ void _Thread_Tickle_timeslice( void )
+          *  currently executing thread is placed at the rear of the
+          *  FIFO for this priority and a new heir is selected.
+          */
+-        _Thread_Yield_processor();
++        _Scheduler_Yield( );
+         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
+       }
+       break;
+Index: doc/user/conf.t
+===================================================================
+RCS file: /usr1/CVS/rtems/doc/user/conf.t,v
+retrieving revision 1.65
+diff -u -p -r1.65 conf.t
+--- doc/user/conf.t	17 Jun 2010 18:45:36 -0000	1.65
++++ doc/user/conf.t	13 Aug 2010 19:21:11 -0000
+@@ -24,6 +24,7 @@ RTEMS must be configured for an applicat
+ information encompasses a variety of information including 
+ the length of each clock tick, the maximum number of each RTEMS
+ object that can be created, the application initialization tasks,
++the task scheduling algorithm to be used, 
+ and the device drivers in the application.  This information
+ is placed in data structures that are given to RTEMS at
+ system initialization time.  This chapter details the 
+@@ -392,6 +393,54 @@ and the user is assumed to provide one o
+ @c
+ @c
+ @c
++@subsection Scheduler Algorithm Configuration
++This section defines the configuration parameters related to selecting 
++a scheduling algorithm for an application.  Regardless of whether 
++@code{CONFIGURE_SCHEDULER_POLICY} is defined, if none of the other 
++configuration parameters are set, then @code{rtems/confdefs.h} will define 
++@code{CONFIGURE_SCHEDULER_PRIORITY} and will (re)define 
++@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_Priority}. That is, 
++@code{CONFIGURE_SCHEDULER_PRIORITY} is the default scheduling algorithm.
++
++@itemize @bullet
++@findex CONFIGURE_SCHEDULER_POLICY
++@item @code{CONFIGURE_SCHEDULER_POLICY} is defined to specify which 
++scheduling algorithm an application will use.  If it is undefined, 
++then @code{rtems/confdefs.h} will define it based on the definition 
++of the following configuration parameters.
++Valid values for this configuration parameter are: 
++@code{_Scheduler_USER},
++@code{_Scheduler_Priority}.
++
++@findex CONFIGURE_SCHEDULER_USER
++@item @code{CONFIGURE_SCHEDULER_USER} is defined if the application 
++provides its own scheduling algorithm. If @code{CONFIGURE_SCHEDULER_USER} is 
++defined then @code{CONFIGURE_SCHEDULER_ENTRY_USER} must be defined with the 
++name of the application's initialization function.  If both 
++configuration parameters are defined and @code{CONFIGURE_SCHEDULER_POLICY} 
++is undefined, then @code{CONFIGURE_SCHEDULER_POLICY} will be be defined as 
++@code{_Scheduler_USER}.
++
++@findex CONFIGURE_SCHEDULER_ALL
++@item @code{CONFIGURE_SCHEDULER_ALL} is defined if the application 
++chooses to include all of the RTEMS-provided schedulers.  
++@code{CONFIGURE_SCHEDULER_ALL} will define all of the following configuration 
++parameters and will use @code{CONFIGURE_SCHEDULER_POLICY} to select the 
++algorithm to use. If @code{CONFIGURE_SCHEDULER_POLICY} is not defined, then 
++@code{rtems/confdefs.h} will define it as @code{_Scheduler_Priority}.
++
++@findex CONFIGURE_SCHEDULER_PRIORITY
++@item @code{CONFIGURE_SCHEDULER_PRIORITY} is defined if the application 
++will use the Priority Scheduling algorithm.
++If none of the previous configuration parameters are defined by the 
++application, then @code{rtems/confdefs.h} will define 
++@code{CONFIGURE_SCHEDULER_POLICY} as @code{_Scheduler_PRIORITY}.
++
++@end itemize
++
++@c
++@c
++@c
+ @subsection Device Driver Table
+ 
+ This section defines the configuration parameters related
+@@ -816,6 +865,7 @@ typedef struct @{
+   uint32_t                        maximum_extensions;
+   uint32_t                        microseconds_per_tick;
+   uint32_t                        ticks_per_timeslice;
++  uint32_t                        scheduler_policy;
+   void                          (*idle_task)( void );
+   uint32_t                        idle_task_stack_size;
+   uint32_t                        interrupt_stack_size;
+@@ -875,6 +925,12 @@ When using the @code{rtems/confdefs.h} m
+ an RTEMS application, the value for this field corresponds
+ to the setting of the macro @code{CONFIGURE_TICKS_PER_TIMESLICE}.
+ 
++@item scheduler_policy
++is the algorithm to use for task scheduling.
++When using the @code{rtems/confdefs.h} mechanism for configuring
++an RTEMS application, the value for this field corresponds
++to the setting of the macro @code{CONFIGURE_SCHEDULER_POLICY}.
++
+ @item idle_task
+ is the address of the optional user
+ provided routine which is used as the system's IDLE task.  If
+Index: doc/user/schedule.t
+===================================================================
+RCS file: /usr1/CVS/rtems/doc/user/schedule.t,v
+retrieving revision 1.14
+diff -u -p -r1.14 schedule.t
+--- doc/user/schedule.t	9 Nov 2009 14:36:14 -0000	1.14
++++ doc/user/schedule.t	13 Aug 2010 19:21:11 -0000
+@@ -30,7 +30,30 @@ The component of RTEMS responsible for p
+ capability is appropriately called the scheduler.  The
+ scheduler's sole purpose is to allocate the all important
+ resource of processor time to the various tasks competing for
+-attention.  The RTEMS scheduler allocates the processor using a
++attention.  
++
++@section Scheduling Algorithms
++
++@cindex scheduling algorithms
++
++RTEMS provides multiple possible scheduling algorithms, each 
++of which are appropriate to different use case scenarios. 
++The classic RTEMS scheduling algorithm -- the only 
++algorithm available in RTEMS 4.10 and earlier -- is the priority
++scheduling algorithm.  When not specified, the priority scheduling
++algorithm can be assumed.
++
++RTEMS currently supports the following scheduling algorithms:
++
++@itemize @bullet
++@item Priority scheduling
++@end itemize
++
++@subsection Priority Scheduling
++
++@cindex priority scheduling
++
++The RTEMS scheduler allocates the processor using a
+ priority-based, preemptive algorithm augmented to provide
+ round-robin characteristics within individual priority groups.
+ The goal of this algorithm is to guarantee that the task which
+@@ -50,6 +73,11 @@ chain is allocated the processor.  RTEMS
+ the second method to guarantee faster response times to external
+ events.
+ 
++Priority scheduling is the most commonly used scheduling algorithm.
++It should be used by applications in which multiple tasks contend for 
++CPU time or other resources and there is a need to ensure certain tasks
++are given priority over other tasks.
++
+ @section Scheduling Mechanisms
+ 
+ @cindex scheduling mechanisms
+@@ -81,6 +109,11 @@ description.
+ 
+ @cindex task priority
+ 
++This mechanism affects the following scheduling algorithms:
++@itemize @bullet
++@item Priority scheduling
++@end itemize
++
+ The most significant of these mechanisms is the
+ ability for the user to assign a priority level to each
+ individual task when it is created and to alter a task's
+@@ -104,6 +137,11 @@ to a task.}
+ 
+ @cindex preemption
+ 
++This mechanism affects the following scheduling algorithms:
++@itemize @bullet
++@item Priority scheduling
++@end itemize
++
+ Another way the user can alter the basic scheduling
+ algorithm is by manipulating the preemption mode flag
+ (@code{@value{RPREFIX}PREEMPT_MASK}) of individual tasks.  If preemption is disabled
+@@ -120,6 +158,11 @@ control of the processor.
+ @cindex timeslicing
+ @cindex round robin scheduling
+ 
++This mechanism affects the following scheduling algorithms:
++@itemize @bullet
++@item Priority scheduling
++@end itemize
++
+ Timeslicing or round-robin scheduling is an
+ additional method which can be used to alter the basic
+ scheduling algorithm.  Like preemption, timeslicing is specified
+@@ -141,6 +184,11 @@ entire timeslice.
+ 
+ @cindex manual round robin
+ 
++This mechanism affects the following scheduling algorithms:
++@itemize @bullet
++@item Priority scheduling
++@end itemize
++
+ The final mechanism for altering the RTEMS scheduling
+ algorithm is called manual round-robin.  Manual round-robin is
+ invoked by using the @code{@value{DIRPREFIX}task_wake_after}
+@@ -151,7 +199,7 @@ end of its priority group.  If no other 
+ priority are ready to run, then the task does not lose control
+ of the processor.
+ 
+-@subsection Dispatching Tasks
++@section Dispatching Tasks
+ 
+ @cindex dispatching
+ 
+Index: testsuites/sptests/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/Makefile.am,v
+retrieving revision 1.104
+diff -u -p -r1.104 Makefile.am
+--- testsuites/sptests/Makefile.am	10 Aug 2010 22:57:59 -0000	1.104
++++ testsuites/sptests/Makefile.am	13 Aug 2010 19:21:11 -0000
+@@ -16,7 +16,8 @@ SUBDIRS = \
+     sp60      sp62 sp63 sp64 sp65 sp66 sp67 sp68 sp69 \
+     sp70 sp71 sp72 \
+     spassoc01 spchain spclockget spcoverage spobjgetnext \
+-    spnotepad01 spprintk spprivenv01 spsize spstkalloc spthreadq01 \
++    spnotepad01 spprintk sprbtree01 spsize spstkalloc spthreadq01 \
++		spsched01 spsched02 spsched03 spsched04 spsched05 \
+     spwatchdog spwkspace \
+     sperror01 sperror02 sperror03 \
+     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
+Index: testsuites/sptests/configure.ac
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/configure.ac,v
+retrieving revision 1.109
+diff -u -p -r1.109 configure.ac
+--- testsuites/sptests/configure.ac	10 Aug 2010 22:58:00 -0000	1.109
++++ testsuites/sptests/configure.ac	13 Aug 2010 19:21:11 -0000
+@@ -154,6 +154,12 @@ spmountmgr01/Makefile
+ spnotepad01/Makefile
+ spobjgetnext/Makefile
+ spprintk/Makefile
++sprbtree01/Makefile
++spsched01/Makefile
++spsched02/Makefile
++spsched03/Makefile
++spsched04/Makefile
++spsched05/Makefile
+ spprivenv01/Makefile
+ spsize/Makefile
+ spstkalloc/Makefile
+Index: testsuites/sptests/sp69/init.c
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/sp69/init.c,v
+retrieving revision 1.3
+diff -u -p -r1.3 init.c
+--- testsuites/sptests/sp69/init.c	15 Dec 2009 18:24:12 -0000	1.3
++++ testsuites/sptests/sp69/init.c	13 Aug 2010 19:21:11 -0000
+@@ -47,7 +47,7 @@ rtems_task Init(
+ 
+   /* Check status values. */
+   rtems_test_assert( period_status.owner == rtems_task_self() );
+-  rtems_test_assert( period_status.state == RATE_MONOTONIC_INACTIVE );
++  rtems_test_assert( period_status.state == PERIODIC_INACTIVE );
+   #ifndef __RTEMS_USE_TICKS_FOR_STATISTICS__
+     rtems_test_assert( period_status.since_last_period.tv_sec == 0 );
+     rtems_test_assert( period_status.since_last_period.tv_nsec == 0 );
+Index: testsuites/sptests/spintrcritical08/init.c
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/spintrcritical08/init.c,v
+retrieving revision 1.4
+diff -u -p -r1.4 init.c
+--- testsuites/sptests/spintrcritical08/init.c	30 Nov 2009 03:33:25 -0000	1.4
++++ testsuites/sptests/spintrcritical08/init.c	13 Aug 2010 19:21:11 -0000
+@@ -17,13 +17,13 @@ rtems_id Main_task;
+ rtems_id Period;
+ volatile bool case_hit;
+ 
+-rtems_rate_monotonic_period_states getState(void)
++rtems_periodic_period_states getState(void)
+ {
+   Objects_Locations       location;
+-  Rate_monotonic_Control *period;
++  Periodic_Control *period;
+ 
+-  period = (Rate_monotonic_Control *)_Objects_Get(
+-    &_Rate_monotonic_Information, Period, &location );
++  period = (Periodic_Control *)_Objects_Get(
++    &_Periodic_Information, Period, &location );
+   if ( location != OBJECTS_LOCAL ) {
+     puts( "Bad object lookup" );
+     rtems_test_exit(0);
+@@ -38,7 +38,7 @@ rtems_timer_service_routine test_release
+   void     *arg
+ )
+ {
+-  if ( getState() == RATE_MONOTONIC_EXPIRED_WHILE_BLOCKING )
++  if ( getState() == PERIODIC_EXPIRED_WHILE_BLOCKING )
+     case_hit = true;
+ }
+ 
+@@ -53,12 +53,12 @@ rtems_task Init(
+ 
+   puts( "Init - Trying to generate period ending while blocking" );
+ 
+-  puts( "Init - rtems_rate_monotonic_create - OK" );
+-  sc = rtems_rate_monotonic_create(
++  puts( "Init - rtems_periodic_create - OK" );
++  sc = rtems_periodic_create(
+     rtems_build_name( 'P', 'E', 'R', '1' ),
+     &Period
+   );
+-  directive_failed( sc, "rtems_rate_monotonic_create" );
++  directive_failed( sc, "rtems_periodic_create" );
+ 
+   Main_task = rtems_task_self();
+ 
+@@ -70,10 +70,10 @@ rtems_task Init(
+     if ( interrupt_critical_section_test_support_delay() )
+       resets++;
+ 
+-    sc = rtems_rate_monotonic_period( Period, 1 );
++    sc = rtems_periodic_period( Period, 1 );
+     if ( sc == RTEMS_TIMEOUT )
+       continue;
+-    directive_failed( sc, "rtems_monotonic_period");
++    directive_failed( sc, "rtems_periodic_period");
+   }
+ 
+   if ( case_hit ) {
+Index: testsuites/sptests/spsize/size.c
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/spsize/size.c,v
+retrieving revision 1.67
+diff -u -p -r1.67 size.c
+--- testsuites/sptests/spsize/size.c	8 Aug 2010 16:34:00 -0000	1.67
++++ testsuites/sptests/spsize/size.c	13 Aug 2010 19:21:11 -0000
+@@ -33,7 +33,8 @@
+ #endif
+ #include <rtems/rtems/part.h>
+ #include <rtems/score/priority.h>
+-#include <rtems/rtems/ratemon.h>
++#include <rtems/score/periodic.h>
++#include <rtems/rtems/periodic.h>
+ #include <rtems/rtems/region.h>
+ #include <rtems/rtems/sem.h>
+ #include <rtems/rtems/signal.h>
+@@ -81,7 +82,7 @@ void print_formula(void);
+ #define PER_PART      \
+      (long) (sizeof (Partition_Control) + NAME_PTR_SIZE)
+ #define PER_PERIOD      \
+-     (long) (sizeof (Rate_monotonic_Control) + NAME_PTR_SIZE)
++     (long) (sizeof (Periodic_Control) + NAME_PTR_SIZE)
+ #define PER_PORT      \
+      (long) (sizeof (Dual_ported_memory_Control) + NAME_PTR_SIZE)
+ #define PER_EXTENSION     \
+@@ -311,11 +312,11 @@ uninitialized =
+ 
+ /*percpu.h*/    (sizeof _Per_CPU_Information)             +
+ 
++/*periodic.h*/  (sizeof _Periodic_Information)            +
++
+ /*priority.h*/  (sizeof _Priority_Major_bit_map)          +
+                 (sizeof _Priority_Bit_map)                +
+ 
+-/*ratemon.h*/   (sizeof _Rate_monotonic_Information)      +
+-
+ /*region.h*/    (sizeof _Region_Information)              +
+ 
+ #if defined(RTEMS_MULTIPROCESSING)
+@@ -355,7 +356,6 @@ uninitialized =
+                 (sizeof _Thread_Dispatch_disable_level)   +
+                 (sizeof _Thread_Maximum_extensions)       +
+                 (sizeof _Thread_Ticks_per_timeslice)      +
+-                (sizeof _Thread_Ready_chain)              +
+                 (sizeof _Thread_Executing)                +
+                 (sizeof _Thread_Heir)                     +
+ #if (CPU_HARDWARE_FP == 1) || (CPU_SOFTWARE_FP == 1)

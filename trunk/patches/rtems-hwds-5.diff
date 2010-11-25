@@ -1,0 +1,290 @@
+diff -upr -X dontdiff rtems/cpukit/score/cpu/sparc64/rtems/score/sparc64.h rtems-hwds2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h
+--- rtems/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-09 17:38:15.000000000 -0400
++++ rtems-hwds2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-09 18:21:27.000000000 -0400
+@@ -145,6 +145,65 @@ extern "C" {
+ 
+ #define STACK_BIAS (2047)
+ 
++/* Additions to support MAGIC Simics commands */
++#ifdef ASM
++#define MAGIC(n) \
++  sethi n, %g0
++
++#endif /* ASM */
++
++#ifndef ASM
++
++#define __MAGIC_CASSERT(p) do {                                 \
++         typedef int __check_magic_argument[(p) ? 1 : -1];       \
++} while (0)
++
++#define MAGIC(n) do {                                   \
++    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
++         __asm__ __volatile__ ("sethi " #n ", %g0");     \
++} while (0)
++
++#define MAGIC_FLUSH(n) do { \
++    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
++        __asm__ __volatile__ ("flushw"); \
++         __asm__ __volatile__ ("sethi " #n ", %g0");     \
++} while (0)
++
++
++#endif /* !ASM */
++#define MAGIC_BREAKPOINT MAGIC(0x40000)
++
++#define MAGIC_HWSCHED_START     MAGIC(0x10)
++#define MAGIC_HWSCHED_UNPAUSE   MAGIC(0x20)
++
++#define MAGIC_HWSCHED_END       MAGIC(0x11)
++#define MAGIC_HWSCHED_PAUSE     MAGIC(0x21)
++
++
++#define MAGIC_HWDS1_START               MAGIC_FLUSH(0x100)
++#define MAGIC_HWDS1_FIRST               MAGIC_FLUSH(0x101)
++#define MAGIC_HWDS1_ENQUEUE             MAGIC_FLUSH(0x102)
++#define MAGIC_HWDS1_ENQUEUE_FIRST       MAGIC_FLUSH(0x103)
++#define MAGIC_HWDS1_EXTRACT             MAGIC_FLUSH(0x104)
++#define MAGIC_HWDS1_REQUEUE             MAGIC_FLUSH(0x105)
++
++#define MAGIC_HWDS1_END                 MAGIC(0x110)
++#define MAGIC_HWDS1_FIRST_END           MAGIC(0x111)
++#define MAGIC_HWDS1_ENQUEUE_END         MAGIC(0x112)
++#define MAGIC_HWDS1_ENQUEUE_FIRST_END   MAGIC(0x113)
++#define MAGIC_HWDS1_EXTRACT_END         MAGIC(0x114)
++#define MAGIC_HWDS1_REQUEUE_END         MAGIC(0x115)
++
++#define MAGIC_HWDS2_START               MAGIC_FLUSH(0x200)
++#define MAGIC_HWDS2_ENQUEUE             MAGIC_FLUSH(0x201)
++#define MAGIC_HWDS2_EXTRACT             MAGIC_FLUSH(0x202)
++#define MAGIC_HWDS2_UNPAUSE             MAGIC(0x400)
++
++#define MAGIC_HWDS2_END                 MAGIC(0x210)
++#define MAGIC_HWDS2_PAUSE               MAGIC(0x410)
++
++#ifdef ASM
++
+ /* 
+  * To enable the FPU we need to set both PSTATE.pef and FPRS.fef
+  */
+diff -upr -X dontdiff rtems/cpukit/score/inline/rtems/score/readyq.inl rtems-hwds2/cpukit/score/inline/rtems/score/readyq.inl
+--- rtems/cpukit/score/inline/rtems/score/readyq.inl	2010-07-28 17:10:58.000000000 -0400
++++ rtems-hwds2/cpukit/score/inline/rtems/score/readyq.inl	2010-10-09 14:46:52.000000000 -0400
+@@ -44,7 +44,9 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+   Thread_Control             *the_thread
+ )
+ {
++  MAGIC_HWDS1_ENQUEUE;
+   the_ready_queue->rq_ops.enqueue( the_ready_queue, the_thread );
++  MAGIC_HWDS1_ENQUEUE_END;
+ }
+ 
+ /*
+@@ -61,7 +63,9 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+   Thread_Control                   *the_thread
+ )
+ {
++  MAGIC_HWDS1_ENQUEUE_FIRST;
+   the_ready_queue->rq_ops.enqueue_first( the_ready_queue, the_thread );
++  MAGIC_HWDS1_ENQUEUE_FIRST_END;
+ }
+ 
+ /** @brief  Ready queue Extract
+@@ -73,7 +77,9 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+   Thread_Control       *the_thread
+ )
+ {
++  MAGIC_HWDS1_EXTRACT;
+   the_ready_queue->rq_ops.extract( the_ready_queue, the_thread );
++  MAGIC_HWDS1_EXTRACT_END;
+ }
+ 
+ 
+@@ -87,7 +93,11 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Re
+   Ready_queue_Control *the_ready_queue
+ )
+ {
+- return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
++  Thread_Control *t;
++ MAGIC_HWDS1_FIRST;
++ t= the_ready_queue->rq_ops.first( the_ready_queue );
++ MAGIC_HWDS1_FIRST_END;
++ return t;
+ }
+ 
+ /**
+diff -upr -X dontdiff rtems/cpukit/score/src/readyqedfenqueue.c rtems-hwds2/cpukit/score/src/readyqedfenqueue.c
+--- rtems/cpukit/score/src/readyqedfenqueue.c	2010-07-29 18:26:32.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqedfenqueue.c	2010-10-07 19:40:38.000000000 -0400
+@@ -76,6 +76,7 @@ void _Ready_queue_edf_Enqueue(
+       _Chain_Extract_unprotected( &_Thread_Idle->Object.Node );
+       _Chain_Append_unprotected( fifo, &_Thread_Idle->Object.Node );
+     }
++
+     return;
+   }
+ 
+@@ -110,6 +111,7 @@ void _Ready_queue_edf_Enqueue(
+         tmp_sched->last_duplicate,
+         &the_thread->Object.Node
+     );
++
+     return;
+   }
+ 
+@@ -125,6 +127,7 @@ void _Ready_queue_edf_Enqueue(
+         _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+         &the_thread->Object.Node
+     );
++
+     return;
+   } 
+ 
+@@ -136,6 +139,7 @@ void _Ready_queue_edf_Enqueue(
+         &the_ready_queue->Queues.EDF->deadline_queue, 
+         &the_thread->Object.Node
+     );
++
+     return;
+   }  
+ 
+@@ -151,6 +155,7 @@ void _Ready_queue_edf_Enqueue(
+         _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+         &the_thread->Object.Node
+     );
++
+     return;
+   } 
+   
+diff -upr -X dontdiff rtems/cpukit/score/src/readyqedfextract.c rtems-hwds2/cpukit/score/src/readyqedfextract.c
+--- rtems/cpukit/score/src/readyqedfextract.c	2010-10-09 17:37:54.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqedfextract.c	2010-10-07 19:53:56.000000000 -0400
+@@ -64,6 +64,7 @@ void _Ready_queue_edf_Extract(
+       _Chain_Initialize_empty(&the_ready_queue->Queues.EDF->fifo_queue);
+     else
+       _Chain_Extract_unprotected(&the_thread->Object.Node);
++
+     return;
+   }
+ 
+@@ -97,6 +98,7 @@ void _Ready_queue_edf_Extract(
+     if (!tmp_node) {
+       /* TODO: remove after debugging */
+       printk("invalid thread\n");
++      MAGIC_BREAKPOINT;
+       while(1);
+     }
+     tmp_sched = _RBTree_Container_of(
+@@ -116,5 +118,6 @@ void _Ready_queue_edf_Extract(
+     _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->deadline_queue );
+   else
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
++
+ }
+ 
+diff -upr -X dontdiff rtems/cpukit/score/src/readyqpriorityrequeue.c rtems-hwds2/cpukit/score/src/readyqpriorityrequeue.c
+--- rtems/cpukit/score/src/readyqpriorityrequeue.c	2010-07-28 12:51:01.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqpriorityrequeue.c	2010-10-07 19:43:42.000000000 -0400
+@@ -46,10 +46,14 @@ void _Ready_queue_priority_Requeue(
+ )
+ {
+   if ( !_Chain_Has_only_one_node( the_thread->sched.priority->ready_chain ) ) {
++  MAGIC_HWDS1_EXTRACT;
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
++  MAGIC_HWDS1_EXTRACT_END;
+ 
++  MAGIC_HWDS1_ENQUEUE;
+     _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
+       &the_thread->Object.Node );
++  MAGIC_HWDS1_ENQUEUE_END;
+   }
+ }
+ 
+diff -upr -X dontdiff rtems/cpukit/score/src/scheduleredf.c rtems-hwds2/cpukit/score/src/scheduleredf.c
+--- rtems/cpukit/score/src/scheduleredf.c	2010-07-29 17:56:42.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/scheduleredf.c	2010-10-07 19:44:09.000000000 -0400
+@@ -37,12 +37,16 @@ void _Scheduler_edf_Release_job(
+   ISR_Level       level;
+ 
+   _ISR_Disable( level );
+-  
++ 
++  //MAGIC_HWSCHED_START;
++
+   /* if the thread is already in a ready state, need to dequeue it from
+    * the ready queue and then re-enqueue it with the new deadline.
+    */
+   if ( _States_Is_ready( the_period->owner->current_state ) ) {
++    MAGIC_HWDS1_EXTRACT;
+     _Ready_queue_edf_Extract(&_Scheduler.ready_queue, the_period->owner);
++    MAGIC_HWDS1_EXTRACT_END;
+ 
+     /* stamp this job with its new deadline */
+     the_period->owner->sched.edf->deadline.value 
+@@ -51,7 +55,9 @@ void _Scheduler_edf_Release_job(
+     the_period->owner->sched.edf->last_duplicate = 
+       &the_period->owner->Object.Node;
+ 
++    MAGIC_HWDS1_ENQUEUE;
+     _Ready_queue_edf_Enqueue(&_Scheduler.ready_queue, the_period->owner);
++    MAGIC_HWDS1_ENQUEUE_END;
+     _Scheduler_Schedule(&_Scheduler);
+   } else {
+     the_period->owner->sched.edf->deadline.value 
+@@ -64,6 +70,8 @@ void _Scheduler_edf_Release_job(
+   if (the_period->owner != _Thread_Heir)
+     _Thread_Dispatch_necessary = true;
+ 
++  //MAGIC_HWSCHED_END;
++
+   _ISR_Enable( level );
+ }
+ 
+diff -upr -X dontdiff rtems/cpukit/score/src/watchdoginsert.c rtems-hwds2/cpukit/score/src/watchdoginsert.c
+--- rtems/cpukit/score/src/watchdoginsert.c	2010-09-28 19:57:08.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/watchdoginsert.c	2010-10-02 18:29:39.000000000 -0400
+@@ -53,6 +53,8 @@ void _Watchdog_Insert(
+     return;
+   }
+ 
++  MAGIC_HWDS2_ENQUEUE;
++
+   the_watchdog->state = WATCHDOG_BEING_INSERTED;
+   _Watchdog_Sync_count++;
+ 
+@@ -96,7 +98,9 @@ restart:
+       *  mechanism used here WAS redesigned to address this.
+       */
+ 
++    MAGIC_HWDS2_PAUSE;
+ //     _ISR_Flash( level );
++    MAGIC_HWDS2_UNPAUSE;
+ 
+      if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
+        goto exit_insert;
+@@ -119,5 +123,6 @@ restart:
+ exit_insert:
+   _Watchdog_Sync_level = insert_isr_nest_level;
+   _Watchdog_Sync_count--;
++  MAGIC_HWDS2_END;
+   _ISR_Enable( level );
+ }
+diff -upr -X dontdiff rtems/cpukit/score/src/watchdogremove.c rtems-hwds2/cpukit/score/src/watchdogremove.c
+--- rtems/cpukit/score/src/watchdogremove.c	2010-09-23 21:23:34.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/watchdogremove.c	2010-10-03 00:38:38.000000000 -0400
+@@ -37,6 +37,7 @@ Watchdog_States _Watchdog_Remove(
+   Watchdog_Control *next_watchdog;
+ 
+   _ISR_Disable( level );
++  MAGIC_HWDS2_EXTRACT;
+   previous_state = the_watchdog->state;
+   switch ( previous_state ) {
+     case WATCHDOG_INACTIVE:
+@@ -67,6 +68,7 @@ Watchdog_States _Watchdog_Remove(
+       break;
+   }
+   the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
++  MAGIC_HWDS2_END;
+   _ISR_Enable( level );
+   return( previous_state );
+ }

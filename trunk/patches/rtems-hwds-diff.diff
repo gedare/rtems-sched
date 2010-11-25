@@ -1,0 +1,970 @@
+diff -upr -X dontdiff rtems-hwds/c/src/lib/libbsp/sparc64/usiii/make/custom/usiii.cfg rtems-hwds2/c/src/lib/libbsp/sparc64/usiii/make/custom/usiii.cfg
+--- rtems-hwds/c/src/lib/libbsp/sparc64/usiii/make/custom/usiii.cfg	2010-09-28 22:39:23.000000000 -0400
++++ rtems-hwds2/c/src/lib/libbsp/sparc64/usiii/make/custom/usiii.cfg	2010-10-09 13:03:58.000000000 -0400
+@@ -24,4 +24,4 @@ CPU_CFLAGS = -mcpu=ultrasparc3 -DUS3 -DS
+ #CPU_CFLAGS = -mcpu=ultrasparc3 -DRTEMS_DEBUG -DHAVE___ASSERT_FUNC 
+ 
+ # optimize flag: typically -O2
+-CFLAGS_OPTIMIZE_V = -gstabs
++CFLAGS_OPTIMIZE_V = -gstabs -O2
+diff -upr -X dontdiff rtems-hwds/cpukit/score/cpu/sparc64/rtems/score/sparc64.h rtems-hwds2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h
+--- rtems-hwds/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-09 18:05:10.000000000 -0400
++++ rtems-hwds2/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-09 18:21:27.000000000 -0400
+@@ -163,29 +163,44 @@ extern "C" {
+          __asm__ __volatile__ ("sethi " #n ", %g0");     \
+ } while (0)
+ 
++#define MAGIC_FLUSH(n) do { \
++    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
++        __asm__ __volatile__ ("flushw"); \
++         __asm__ __volatile__ ("sethi " #n ", %g0");     \
++} while (0)
++
++
+ #endif /* !ASM */
+ #define MAGIC_BREAKPOINT MAGIC(0x40000)
+-#define MAGIC_HWDS1_START       MAGIC(0x100)
+-#define MAGIC_HWDS1_FIRST       MAGIC(0x101)
+-#define MAGIC_HWDS1_ENQUEUE     MAGIC(0x102)
+-#define MAGIC_HWDS1_ENQUEUE_FIRST    MAGIC(0x103)
+-#define MAGIC_HWDS1_EXTRACT    MAGIC(0x104)
+-#define MAGIC_HWDS1_REQUEUE    MAGIC(0x105)
+-#define MAGIC_HWDS2_START      MAGIC(0x200)
+-#define MAGIC_HWDS2_ENQUEUE      MAGIC(0x201)
+-#define MAGIC_HWDS2_EXTRACT      MAGIC(0x202)
+-#define MAGIC_HWDS2_UNPAUSE    MAGIC(0x300)
+-
+-#define MAGIC_HWDS1_END        MAGIC(0x800)
+-#define MAGIC_HWDS2_END        MAGIC(0x900)
+-#define MAGIC_HWDS2_PAUSE      MAGIC(0xA00)
+-
+-#define MAGIC_STOP_CACHING    MAGIC(0x1000)
+-#define MAGIC_RESUME_CACHING  MAGIC(0x2000)
+-#define MAGIC_STOP_POWER      MAGIC(0x4000)
+-#define MAGIC_RESUME_POWER    MAGIC(0x8000)
+-#define MAGIC_STOP_TIMING     MAGIC(0x10000)
+-#define MAGIC_RESUME_TIMING   MAGIC(0x20000)
++
++#define MAGIC_HWSCHED_START     MAGIC(0x10)
++#define MAGIC_HWSCHED_UNPAUSE   MAGIC(0x20)
++
++#define MAGIC_HWSCHED_END       MAGIC(0x11)
++#define MAGIC_HWSCHED_PAUSE     MAGIC(0x21)
++
++
++#define MAGIC_HWDS1_START               MAGIC_FLUSH(0x100)
++#define MAGIC_HWDS1_FIRST               MAGIC_FLUSH(0x101)
++#define MAGIC_HWDS1_ENQUEUE             MAGIC_FLUSH(0x102)
++#define MAGIC_HWDS1_ENQUEUE_FIRST       MAGIC_FLUSH(0x103)
++#define MAGIC_HWDS1_EXTRACT             MAGIC_FLUSH(0x104)
++#define MAGIC_HWDS1_REQUEUE             MAGIC_FLUSH(0x105)
++
++#define MAGIC_HWDS1_END                 MAGIC(0x110)
++#define MAGIC_HWDS1_FIRST_END           MAGIC(0x111)
++#define MAGIC_HWDS1_ENQUEUE_END         MAGIC(0x112)
++#define MAGIC_HWDS1_ENQUEUE_FIRST_END   MAGIC(0x113)
++#define MAGIC_HWDS1_EXTRACT_END         MAGIC(0x114)
++#define MAGIC_HWDS1_REQUEUE_END         MAGIC(0x115)
++
++#define MAGIC_HWDS2_START               MAGIC_FLUSH(0x200)
++#define MAGIC_HWDS2_ENQUEUE             MAGIC_FLUSH(0x201)
++#define MAGIC_HWDS2_EXTRACT             MAGIC_FLUSH(0x202)
++#define MAGIC_HWDS2_UNPAUSE             MAGIC(0x400)
++
++#define MAGIC_HWDS2_END                 MAGIC(0x210)
++#define MAGIC_HWDS2_PAUSE               MAGIC(0x410)
+ 
+ #ifdef ASM
+ 
+diff -upr -X dontdiff rtems-hwds/cpukit/score/include/rtems/score/rbtree.h rtems-hwds2/cpukit/score/include/rtems/score/rbtree.h
+--- rtems-hwds/cpukit/score/include/rtems/score/rbtree.h	2010-09-28 22:38:04.000000000 -0400
++++ rtems-hwds2/cpukit/score/include/rtems/score/rbtree.h	2010-10-09 13:11:41.000000000 -0400
+@@ -245,11 +245,11 @@ extern "C" {
+    *  @note It does NOT disable interrupts to ensure the atomicity
+    *        of the extract operation.
+    */
+-  RBTree_Node *_RBTree_Insert_unprotected(
++/*  RBTree_Node *_RBTree_Insert_unprotected(
+       RBTree_Control *the_rbtree,
+       RBTree_Node *the_node
+   );
+-
++*/
+   /**
+    *  @brief Insert a node on a rbtree
+    *
+@@ -272,11 +272,11 @@ extern "C" {
+    *        of the extract operation.
+    */
+ 
+-  void _RBTree_Extract_unprotected(
++/*  void _RBTree_Extract_unprotected(
+       RBTree_Control *the_rbtree,
+       RBTree_Node *the_node
+   );
+-
++*/
+ 
+   /**
+    *  @brief Delete a node from the rbtree
+diff -upr -X dontdiff rtems-hwds/cpukit/score/include/rtems/score/scheduler.h rtems-hwds2/cpukit/score/include/rtems/score/scheduler.h
+--- rtems-hwds/cpukit/score/include/rtems/score/scheduler.h	2010-09-28 22:38:04.000000000 -0400
++++ rtems-hwds2/cpukit/score/include/rtems/score/scheduler.h	2010-10-09 14:24:45.000000000 -0400
+@@ -98,8 +98,6 @@ typedef struct {
+   /** This field contains the thread's deadline information. */
+   RBTree_Node                       deadline;
+ 
+-  unsigned int                      absolute_deadline;
+-
+   /** 
+    * This field points to the last node in the ready queue that has 
+    * the same deadline (absolute) as this thread.
+diff -upr -X dontdiff rtems-hwds/cpukit/score/inline/rtems/score/rbtree.inl rtems-hwds2/cpukit/score/inline/rtems/score/rbtree.inl
+--- rtems-hwds/cpukit/score/inline/rtems/score/rbtree.inl	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/inline/rtems/score/rbtree.inl	2010-10-09 13:13:34.000000000 -0400
+@@ -367,28 +367,6 @@ RTEMS_INLINE_ROUTINE RBTree_Node *_RBTre
+   return iter_node;
+ }
+ 
+-/** @brief Get the First Node (unprotected)
+- *
+- *  This function removes the minimum or maximum node from the_rbtree and 
+- *  returns a pointer to that node.  It does NOT disable interrupts to ensure
+- *  the atomicity of the get operation.
+- *
+- *  @param[in] the_rbtree is the rbtree to attempt to get the min node from.
+- *  @param[in] dir specifies whether to get minimum (0) or maximum (1)
+- *
+- *  @return This method returns the min or max node on the rbtree, or NULL.
+- *
+- *  @note This routine may return NULL if the RBTree is empty.
+- */
+-RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
+-    RBTree_Control *the_rbtree,
+-    RBTree_Direction dir
+-    )
+-{
+-  RBTree_Node *the_node = the_rbtree->first[dir];
+-  _RBTree_Extract_unprotected(the_rbtree, the_node);
+-  return the_node;
+-}
+ 
+ /** @brief Peek at the First Node (unprotected)
+  *
+@@ -436,5 +414,328 @@ RTEMS_INLINE_ROUTINE void _RBTree_Rotate
+ }
+ /**@}*/
+ 
++/** @brief Validate and fix-up tree properties for a new insert/colored node
++ *
++ *  This routine checks and fixes the Red-Black Tree properties based on 
++ *  @a the_node being just added to the tree.
++ * 
++ *  @note It does NOT disable interrupts to ensure the atomicity of the
++ *        append operation.
++ */
++RTEMS_INLINE_ROUTINE void _RBTree_Validate_insert_unprotected(
++    RBTree_Node    *the_node
++    )
++{
++  RBTree_Node *u,*g;
++
++  /* note: the insert root case is handled already */
++  /* if the parent is black, nothing needs to be done
++   * otherwise may need to loop a few times */
++  while (_RBTree_Is_red(_RBTree_Parent(the_node))) {
++    u = _RBTree_Parent_sibling(the_node);
++    g = the_node->parent->parent;
++    
++    /* if uncle is red, repaint uncle/parent black and grandparent red */
++    if(_RBTree_Is_red(u)) {
++      the_node->parent->color = RBT_BLACK;
++      u->color = RBT_BLACK;
++      g->color = RBT_RED;
++      the_node = g;
++    } else { /* if uncle is black */
++      RBTree_Direction dir = the_node != the_node->parent->child[0];
++      RBTree_Direction pdir = the_node->parent != g->child[0];
++      
++      /* ensure node is on the same branch direction as parent */
++      if (dir != pdir) {
++        _RBTree_Rotate(the_node->parent, pdir);
++        the_node = the_node->child[pdir];
++      }
++      the_node->parent->color = RBT_BLACK;
++      g->color = RBT_RED;
++      
++      /* now rotate grandparent in the other branch direction (toward uncle) */
++      _RBTree_Rotate(g, (1-pdir));
++    }
++  }
++  if(!the_node->parent->parent) the_node->color = RBT_BLACK;
++}
++
++/** @brief Insert a Node (unprotected)
++ *
++ *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
++ *
++ *  @retval 0 Successfully inserted.
++ *  @retval -1 NULL @a the_node.
++ *  @retval RBTree_Node* if one with equal value to @a the_node->value exists 
++ *          in @a the_rbtree.
++ *
++ *  @note It does NOT disable interrupts to ensure the atomicity
++ *        of the extract operation.
++ */
++RTEMS_INLINE_ROUTINE  RBTree_Node *_RBTree_Insert_unprotected(
++    RBTree_Control *the_rbtree,
++    RBTree_Node *the_node
++    )
++{
++  if(!the_node) return (RBTree_Node*)-1;
++
++  RBTree_Node *iter_node = the_rbtree->root;
++
++  if (!iter_node) { /* special case: first node inserted */
++    the_node->color = RBT_BLACK;
++    the_rbtree->root = the_node;
++    the_rbtree->first[0] = the_rbtree->first[1] = the_node;
++    the_node->parent = (RBTree_Node *) the_rbtree;
++    the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
++  } else { 
++    /* typical binary search tree insert, descend tree to leaf and insert */
++    while (iter_node) {
++      if(the_node->value == iter_node->value) return(iter_node);
++      RBTree_Direction dir = the_node->value > iter_node->value;
++      if (!iter_node->child[dir]) {
++        the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
++        the_node->color = RBT_RED;
++        iter_node->child[dir] = the_node;
++        the_node->parent = iter_node;
++        /* update min/max */
++        if (_RBTree_Is_first(the_rbtree, iter_node, dir)) {
++          the_rbtree->first[dir] = the_node;
++        }
++        break;
++      } else {
++        iter_node = iter_node->child[dir];
++      }
++
++    } /* while(iter_node) */
++    
++    /* verify red-black properties */
++    _RBTree_Validate_insert_unprotected(the_node);
++  }
++  return (RBTree_Node*)0;
++}
++
++/** @brief  Validate and fix-up tree properties after deleting a node
++ *
++ *  This routine is called on a black node, @a the_node, after its deletion.
++ *  This function maintains the properties of the red-black tree.
++ *
++ *  @note It does NOT disable interrupts to ensure the atomicity
++ *        of the extract operation.
++ */
++RTEMS_INLINE_ROUTINE void _RBTree_Extract_validate_unprotected(
++    RBTree_Node *the_node
++    )
++{
++  RBTree_Node *parent, *sibling;
++  RBTree_Direction dir;
++
++  parent = the_node->parent; 
++  if(!parent->parent) return;
++
++  sibling = _RBTree_Sibling(the_node);
++
++  /* continue to correct tree as long as the_node is black and not the root */
++  while (!_RBTree_Is_red(the_node) && parent->parent) {
++
++    /* if sibling is red, switch parent (black) and sibling colors, 
++     * then rotate parent left, making the sibling be the_node's grandparent.
++     * Now the_node has a black sibling and red parent. After rotation, 
++     * update sibling pointer.
++     */
++    if (_RBTree_Is_red(sibling)) {
++      parent->color = RBT_RED;
++      sibling->color = RBT_BLACK;
++      dir = the_node != parent->child[0];
++      _RBTree_Rotate(parent, dir);
++      sibling = parent->child[!dir];
++    }
++
++    /* sibling is black, see if both of its children are also black. */
++    if (sibling && 
++        !_RBTree_Is_red(sibling->child[RBT_RIGHT]) && 
++        !_RBTree_Is_red(sibling->child[RBT_LEFT])) {
++        sibling->color = RBT_RED;
++        if (_RBTree_Is_red(parent)) {
++          parent->color = RBT_BLACK;
++          break;
++        }
++        the_node = parent; /* done if parent is red */
++        parent = the_node->parent;
++        sibling = _RBTree_Sibling(the_node);
++    } else if(sibling) {
++      /* at least one of sibling's children is red. we now proceed in two 
++       * cases, either the_node is to the left or the right of the parent. 
++       * In both cases, first check if one of sibling's children is black, 
++       * and if so rotate in the proper direction and update sibling pointer.
++       * Then switch the sibling and parent colors, and rotate through parent.
++       */
++      dir = the_node != parent->child[0];
++      if (!_RBTree_Is_red(sibling->child[!dir])) {
++        sibling->color = RBT_RED;
++        sibling->child[dir]->color = RBT_BLACK;
++        _RBTree_Rotate(sibling, !dir);
++        sibling = parent->child[!dir];
++      }
++      sibling->color = parent->color;
++      parent->color = RBT_BLACK;
++      sibling->child[!dir]->color = RBT_BLACK;
++      _RBTree_Rotate(parent, dir);
++      break; /* done */
++    }
++  } /* while */
++  if(!the_node->parent->parent) the_node->color = RBT_BLACK;
++}
++
++/** @brief Extract a Node (unprotected)
++ *
++ *  This routine extracts (removes) @a the_node from @a the_rbtree.
++ *
++ *  @note It does NOT disable interrupts to ensure the atomicity
++ *        of the extract operation.
++ */
++RTEMS_INLINE_ROUTINE void _RBTree_Extract_unprotected(
++    RBTree_Control *the_rbtree,
++    RBTree_Node *the_node
++    )
++{
++  RBTree_Node *leaf, *target;
++  RBTree_Color victim_color;
++  RBTree_Direction dir;
++
++  if(!the_node) return;
++
++  /* check if min needs to be updated */
++  if (the_node == the_rbtree->first[RBT_LEFT]) {
++    if (the_node->child[RBT_RIGHT])
++      the_rbtree->first[RBT_LEFT] = the_node->child[RBT_RIGHT];
++    else {
++      the_rbtree->first[RBT_LEFT] = the_node->parent;
++      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
++            the_rbtree->first[RBT_LEFT]))
++        the_rbtree->first[RBT_LEFT] = NULL;
++    }
++  }
++  /* check if max needs to be updated: note, min can equal max (1 element) */
++  if (the_node == the_rbtree->first[RBT_RIGHT]) {
++    if (the_node->child[RBT_LEFT])
++      the_rbtree->first[RBT_RIGHT] = the_node->child[RBT_LEFT];
++    else {
++      the_rbtree->first[RBT_RIGHT] = the_node->parent;
++      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
++            the_rbtree->first[RBT_RIGHT]))
++        the_rbtree->first[RBT_RIGHT] = NULL;
++    }
++  }
++
++  /* if the_node has at most one non-null child then it is safe to proceed
++   * check if both children are non-null, if so then we must find a target node
++   * either max in node->child[RBT_LEFT] or min in node->child[RBT_RIGHT], 
++   * and replace the_node with the target node. This maintains the binary 
++   * search tree property, but may violate the red-black properties.
++   */
++
++  if (the_node->child[RBT_LEFT] && the_node->child[RBT_RIGHT]) {
++    target = the_node->child[RBT_LEFT]; /* find max in node->child[RBT_LEFT] */
++    while (target->child[RBT_RIGHT]) target = target->child[RBT_RIGHT];
++
++    /* if the target node has a child, need to move it up the tree into 
++     * target's position (target is the right child of target->parent) 
++     * when target vacates it. if there is no child, then target->parent 
++     * should become NULL. This may cause the coloring to be violated.
++     * For now we store the color of the node being deleted in victim_color.
++     */
++     leaf = target->child[RBT_LEFT];
++    if(leaf) { 
++      leaf->parent = target->parent;
++    } else {
++      /* fix the tree here if the child is a null leaf. */
++      _RBTree_Extract_validate_unprotected(target);
++    }
++    victim_color = target->color;
++    dir = target != target->parent->child[0];
++    target->parent->child[dir] = leaf;
++
++    /* now replace the_node with target */
++    dir = the_node != the_node->parent->child[0];
++    the_node->parent->child[dir] = target;
++
++    /* set target's new children to the original node's children */
++    target->child[RBT_RIGHT] = the_node->child[RBT_RIGHT];
++    the_node->child[RBT_RIGHT]->parent = target;
++    target->child[RBT_LEFT] = the_node->child[RBT_LEFT];
++    the_node->child[RBT_LEFT]->parent = target;
++
++    /* finally, update the parent node and recolor. target has completely 
++     * replaced the_node, and target's child has moved up the tree if needed.
++     * the_node is no longer part of the tree, although it has valid pointers
++     * still.
++     */
++    target->parent = the_node->parent;
++    target->color = the_node->color;
++  } else { 
++    /* the_node has at most 1 non-null child. Move the child in to 
++     * the_node's location in the tree. This may cause the coloring to be 
++     * violated. We will fix it later.
++     * For now we store the color of the node being deleted in victim_color.
++     */
++    leaf = the_node->child[RBT_LEFT] ? 
++              the_node->child[RBT_LEFT] : the_node->child[RBT_RIGHT];
++    if( leaf ) {
++      leaf->parent = the_node->parent;
++    } else {
++      /* fix the tree here if the child is a null leaf. */
++      _RBTree_Extract_validate_unprotected(the_node);
++    }
++    victim_color = the_node->color;
++
++    /* remove the_node from the tree */
++    dir = the_node != the_node->parent->child[0];
++    the_node->parent->child[dir] = leaf;
++  }
++
++  /* fix coloring. leaf has moved up the tree. The color of the deleted 
++   * node is in victim_color. There are three cases:
++   *   1. Deleted a red node, its child must be black. Nothing must be done. 
++   *   2. Deleted a black node and the child is red. Paint child black.
++   *   3. Deleted a black node and its child is black. This requires some
++   *      care and rotations.
++   */
++  if (victim_color == RBT_BLACK) { /* eliminate case 1 */
++    if (_RBTree_Is_red(leaf))
++      leaf->color = RBT_BLACK; /* case 2 */
++    else if(leaf)
++      _RBTree_Extract_validate_unprotected(leaf); /* case 3 */
++  }
++
++  /* Wipe the_node */
++  _RBTree_Set_off_rbtree(the_node);
++
++  /* set root to black, if it exists */
++  if (the_rbtree->root) the_rbtree->root->color = RBT_BLACK;
++}
++
++/** @brief Get the First Node (unprotected)
++ *
++ *  This function removes the minimum or maximum node from the_rbtree and 
++ *  returns a pointer to that node.  It does NOT disable interrupts to ensure
++ *  the atomicity of the get operation.
++ *
++ *  @param[in] the_rbtree is the rbtree to attempt to get the min node from.
++ *  @param[in] dir specifies whether to get minimum (0) or maximum (1)
++ *
++ *  @return This method returns the min or max node on the rbtree, or NULL.
++ *
++ *  @note This routine may return NULL if the RBTree is empty.
++ */
++RTEMS_INLINE_ROUTINE RBTree_Node *_RBTree_Get_unprotected(
++    RBTree_Control *the_rbtree,
++    RBTree_Direction dir
++    )
++{
++  RBTree_Node *the_node = the_rbtree->first[dir];
++  _RBTree_Extract_unprotected(the_rbtree, the_node);
++  return the_node;
++}
++
+ #endif
+ /* end of include file */
+diff -upr -X dontdiff rtems-hwds/cpukit/score/inline/rtems/score/readyq.inl rtems-hwds2/cpukit/score/inline/rtems/score/readyq.inl
+--- rtems-hwds/cpukit/score/inline/rtems/score/readyq.inl	2010-10-03 21:46:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/inline/rtems/score/readyq.inl	2010-10-09 14:46:52.000000000 -0400
+@@ -46,7 +46,7 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+ {
+   MAGIC_HWDS1_ENQUEUE;
+   the_ready_queue->rq_ops.enqueue( the_ready_queue, the_thread );
+-  MAGIC_HWDS1_END;
++  MAGIC_HWDS1_ENQUEUE_END;
+ }
+ 
+ /*
+@@ -65,7 +65,7 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+ {
+   MAGIC_HWDS1_ENQUEUE_FIRST;
+   the_ready_queue->rq_ops.enqueue_first( the_ready_queue, the_thread );
+-  MAGIC_HWDS1_END;
++  MAGIC_HWDS1_ENQUEUE_FIRST_END;
+ }
+ 
+ /** @brief  Ready queue Extract
+@@ -79,7 +79,7 @@ RTEMS_INLINE_ROUTINE void _Ready_queue_E
+ {
+   MAGIC_HWDS1_EXTRACT;
+   the_ready_queue->rq_ops.extract( the_ready_queue, the_thread );
+-  MAGIC_HWDS1_END;
++  MAGIC_HWDS1_EXTRACT_END;
+ }
+ 
+ 
+@@ -96,7 +96,7 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Re
+   Thread_Control *t;
+  MAGIC_HWDS1_FIRST;
+  t= the_ready_queue->rq_ops.first( the_ready_queue );
+- MAGIC_HWDS1_END;
++ MAGIC_HWDS1_FIRST_END;
+  return t;
+ }
+ 
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/rbtreeextract.c rtems-hwds2/cpukit/score/src/rbtreeextract.c
+--- rtems-hwds/cpukit/score/src/rbtreeextract.c	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/rbtreeextract.c	2010-10-09 13:09:45.000000000 -0400
+@@ -17,207 +17,6 @@
+ #include <rtems/score/rbtree.h>
+ #include <rtems/score/isr.h>
+ 
+-/** @brief  Validate and fix-up tree properties after deleting a node
+- *
+- *  This routine is called on a black node, @a the_node, after its deletion.
+- *  This function maintains the properties of the red-black tree.
+- *
+- *  @note It does NOT disable interrupts to ensure the atomicity
+- *        of the extract operation.
+- */
+-void _RBTree_Extract_validate_unprotected(
+-    RBTree_Node *the_node
+-    )
+-{
+-  RBTree_Node *parent, *sibling;
+-  RBTree_Direction dir;
+-
+-  parent = the_node->parent; 
+-  if(!parent->parent) return;
+-
+-  sibling = _RBTree_Sibling(the_node);
+-
+-  /* continue to correct tree as long as the_node is black and not the root */
+-  while (!_RBTree_Is_red(the_node) && parent->parent) {
+-
+-    /* if sibling is red, switch parent (black) and sibling colors, 
+-     * then rotate parent left, making the sibling be the_node's grandparent.
+-     * Now the_node has a black sibling and red parent. After rotation, 
+-     * update sibling pointer.
+-     */
+-    if (_RBTree_Is_red(sibling)) {
+-      parent->color = RBT_RED;
+-      sibling->color = RBT_BLACK;
+-      dir = the_node != parent->child[0];
+-      _RBTree_Rotate(parent, dir);
+-      sibling = parent->child[!dir];
+-    }
+-
+-    /* sibling is black, see if both of its children are also black. */
+-    if (sibling && 
+-        !_RBTree_Is_red(sibling->child[RBT_RIGHT]) && 
+-        !_RBTree_Is_red(sibling->child[RBT_LEFT])) {
+-        sibling->color = RBT_RED;
+-        if (_RBTree_Is_red(parent)) {
+-          parent->color = RBT_BLACK;
+-          break;
+-        }
+-        the_node = parent; /* done if parent is red */
+-        parent = the_node->parent;
+-        sibling = _RBTree_Sibling(the_node);
+-    } else if(sibling) {
+-      /* at least one of sibling's children is red. we now proceed in two 
+-       * cases, either the_node is to the left or the right of the parent. 
+-       * In both cases, first check if one of sibling's children is black, 
+-       * and if so rotate in the proper direction and update sibling pointer.
+-       * Then switch the sibling and parent colors, and rotate through parent.
+-       */
+-      dir = the_node != parent->child[0];
+-      if (!_RBTree_Is_red(sibling->child[!dir])) {
+-        sibling->color = RBT_RED;
+-        sibling->child[dir]->color = RBT_BLACK;
+-        _RBTree_Rotate(sibling, !dir);
+-        sibling = parent->child[!dir];
+-      }
+-      sibling->color = parent->color;
+-      parent->color = RBT_BLACK;
+-      sibling->child[!dir]->color = RBT_BLACK;
+-      _RBTree_Rotate(parent, dir);
+-      break; /* done */
+-    }
+-  } /* while */
+-  if(!the_node->parent->parent) the_node->color = RBT_BLACK;
+-}
+-
+-/** @brief Extract a Node (unprotected)
+- *
+- *  This routine extracts (removes) @a the_node from @a the_rbtree.
+- *
+- *  @note It does NOT disable interrupts to ensure the atomicity
+- *        of the extract operation.
+- */
+-void _RBTree_Extract_unprotected(
+-    RBTree_Control *the_rbtree,
+-    RBTree_Node *the_node
+-    )
+-{
+-  RBTree_Node *leaf, *target;
+-  RBTree_Color victim_color;
+-  RBTree_Direction dir;
+-
+-  if(!the_node) return;
+-
+-  /* check if min needs to be updated */
+-  if (the_node == the_rbtree->first[RBT_LEFT]) {
+-    if (the_node->child[RBT_RIGHT])
+-      the_rbtree->first[RBT_LEFT] = the_node->child[RBT_RIGHT];
+-    else {
+-      the_rbtree->first[RBT_LEFT] = the_node->parent;
+-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
+-            the_rbtree->first[RBT_LEFT]))
+-        the_rbtree->first[RBT_LEFT] = NULL;
+-    }
+-  }
+-  /* check if max needs to be updated: note, min can equal max (1 element) */
+-  if (the_node == the_rbtree->first[RBT_RIGHT]) {
+-    if (the_node->child[RBT_LEFT])
+-      the_rbtree->first[RBT_RIGHT] = the_node->child[RBT_LEFT];
+-    else {
+-      the_rbtree->first[RBT_RIGHT] = the_node->parent;
+-      if(_RBTree_Are_nodes_equal((RBTree_Node *)the_rbtree, 
+-            the_rbtree->first[RBT_RIGHT]))
+-        the_rbtree->first[RBT_RIGHT] = NULL;
+-    }
+-  }
+-
+-  /* if the_node has at most one non-null child then it is safe to proceed
+-   * check if both children are non-null, if so then we must find a target node
+-   * either max in node->child[RBT_LEFT] or min in node->child[RBT_RIGHT], 
+-   * and replace the_node with the target node. This maintains the binary 
+-   * search tree property, but may violate the red-black properties.
+-   */
+-
+-  if (the_node->child[RBT_LEFT] && the_node->child[RBT_RIGHT]) {
+-    target = the_node->child[RBT_LEFT]; /* find max in node->child[RBT_LEFT] */
+-    while (target->child[RBT_RIGHT]) target = target->child[RBT_RIGHT];
+-
+-    /* if the target node has a child, need to move it up the tree into 
+-     * target's position (target is the right child of target->parent) 
+-     * when target vacates it. if there is no child, then target->parent 
+-     * should become NULL. This may cause the coloring to be violated.
+-     * For now we store the color of the node being deleted in victim_color.
+-     */
+-     leaf = target->child[RBT_LEFT];
+-    if(leaf) { 
+-      leaf->parent = target->parent;
+-    } else {
+-      /* fix the tree here if the child is a null leaf. */
+-      _RBTree_Extract_validate_unprotected(target);
+-    }
+-    victim_color = target->color;
+-    dir = target != target->parent->child[0];
+-    target->parent->child[dir] = leaf;
+-
+-    /* now replace the_node with target */
+-    dir = the_node != the_node->parent->child[0];
+-    the_node->parent->child[dir] = target;
+-
+-    /* set target's new children to the original node's children */
+-    target->child[RBT_RIGHT] = the_node->child[RBT_RIGHT];
+-    the_node->child[RBT_RIGHT]->parent = target;
+-    target->child[RBT_LEFT] = the_node->child[RBT_LEFT];
+-    the_node->child[RBT_LEFT]->parent = target;
+-
+-    /* finally, update the parent node and recolor. target has completely 
+-     * replaced the_node, and target's child has moved up the tree if needed.
+-     * the_node is no longer part of the tree, although it has valid pointers
+-     * still.
+-     */
+-    target->parent = the_node->parent;
+-    target->color = the_node->color;
+-  } else { 
+-    /* the_node has at most 1 non-null child. Move the child in to 
+-     * the_node's location in the tree. This may cause the coloring to be 
+-     * violated. We will fix it later.
+-     * For now we store the color of the node being deleted in victim_color.
+-     */
+-    leaf = the_node->child[RBT_LEFT] ? 
+-              the_node->child[RBT_LEFT] : the_node->child[RBT_RIGHT];
+-    if( leaf ) {
+-      leaf->parent = the_node->parent;
+-    } else {
+-      /* fix the tree here if the child is a null leaf. */
+-      _RBTree_Extract_validate_unprotected(the_node);
+-    }
+-    victim_color = the_node->color;
+-
+-    /* remove the_node from the tree */
+-    dir = the_node != the_node->parent->child[0];
+-    the_node->parent->child[dir] = leaf;
+-  }
+-
+-  /* fix coloring. leaf has moved up the tree. The color of the deleted 
+-   * node is in victim_color. There are three cases:
+-   *   1. Deleted a red node, its child must be black. Nothing must be done. 
+-   *   2. Deleted a black node and the child is red. Paint child black.
+-   *   3. Deleted a black node and its child is black. This requires some
+-   *      care and rotations.
+-   */
+-  if (victim_color == RBT_BLACK) { /* eliminate case 1 */
+-    if (_RBTree_Is_red(leaf))
+-      leaf->color = RBT_BLACK; /* case 2 */
+-    else if(leaf)
+-      _RBTree_Extract_validate_unprotected(leaf); /* case 3 */
+-  }
+-
+-  /* Wipe the_node */
+-  _RBTree_Set_off_rbtree(the_node);
+-
+-  /* set root to black, if it exists */
+-  if (the_rbtree->root) the_rbtree->root->color = RBT_BLACK;
+-}
+-
+-
+ /*
+  *  _RBTree_Extract
+  *
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/rbtreeinsert.c rtems-hwds2/cpukit/score/src/rbtreeinsert.c
+--- rtems-hwds/cpukit/score/src/rbtreeinsert.c	2010-09-28 22:38:02.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/rbtreeinsert.c	2010-10-09 13:08:56.000000000 -0400
+@@ -17,109 +17,6 @@
+ #include <rtems/score/rbtree.h>
+ #include <rtems/score/isr.h>
+ 
+-/** @brief Validate and fix-up tree properties for a new insert/colored node
+- *
+- *  This routine checks and fixes the Red-Black Tree properties based on 
+- *  @a the_node being just added to the tree.
+- * 
+- *  @note It does NOT disable interrupts to ensure the atomicity of the
+- *        append operation.
+- */
+-void _RBTree_Validate_insert_unprotected(
+-    RBTree_Node    *the_node
+-    )
+-{
+-  RBTree_Node *u,*g;
+-
+-  /* note: the insert root case is handled already */
+-  /* if the parent is black, nothing needs to be done
+-   * otherwise may need to loop a few times */
+-  while (_RBTree_Is_red(_RBTree_Parent(the_node))) {
+-    u = _RBTree_Parent_sibling(the_node);
+-    g = the_node->parent->parent;
+-    
+-    /* if uncle is red, repaint uncle/parent black and grandparent red */
+-    if(_RBTree_Is_red(u)) {
+-      the_node->parent->color = RBT_BLACK;
+-      u->color = RBT_BLACK;
+-      g->color = RBT_RED;
+-      the_node = g;
+-    } else { /* if uncle is black */
+-      RBTree_Direction dir = the_node != the_node->parent->child[0];
+-      RBTree_Direction pdir = the_node->parent != g->child[0];
+-      
+-      /* ensure node is on the same branch direction as parent */
+-      if (dir != pdir) {
+-        _RBTree_Rotate(the_node->parent, pdir);
+-        the_node = the_node->child[pdir];
+-      }
+-      the_node->parent->color = RBT_BLACK;
+-      g->color = RBT_RED;
+-      
+-      /* now rotate grandparent in the other branch direction (toward uncle) */
+-      _RBTree_Rotate(g, (1-pdir));
+-    }
+-  }
+-  if(!the_node->parent->parent) the_node->color = RBT_BLACK;
+-}
+-
+-
+-
+-/** @brief Insert a Node (unprotected)
+- *
+- *  This routine inserts @a the_node on the Red-Black Tree @a the_rbtree.
+- *
+- *  @retval 0 Successfully inserted.
+- *  @retval -1 NULL @a the_node.
+- *  @retval RBTree_Node* if one with equal value to @a the_node->value exists 
+- *          in @a the_rbtree.
+- *
+- *  @note It does NOT disable interrupts to ensure the atomicity
+- *        of the extract operation.
+- */
+-RBTree_Node *_RBTree_Insert_unprotected(
+-    RBTree_Control *the_rbtree,
+-    RBTree_Node *the_node
+-    )
+-{
+-  if(!the_node) return (RBTree_Node*)-1;
+-
+-  RBTree_Node *iter_node = the_rbtree->root;
+-
+-  if (!iter_node) { /* special case: first node inserted */
+-    the_node->color = RBT_BLACK;
+-    the_rbtree->root = the_node;
+-    the_rbtree->first[0] = the_rbtree->first[1] = the_node;
+-    the_node->parent = (RBTree_Node *) the_rbtree;
+-    the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
+-  } else { 
+-    /* typical binary search tree insert, descend tree to leaf and insert */
+-    while (iter_node) {
+-      if(the_node->value == iter_node->value) return(iter_node);
+-      RBTree_Direction dir = the_node->value > iter_node->value;
+-      if (!iter_node->child[dir]) {
+-        the_node->child[RBT_LEFT] = the_node->child[RBT_RIGHT] = NULL;
+-        the_node->color = RBT_RED;
+-        iter_node->child[dir] = the_node;
+-        the_node->parent = iter_node;
+-        /* update min/max */
+-        if (_RBTree_Is_first(the_rbtree, iter_node, dir)) {
+-          the_rbtree->first[dir] = the_node;
+-        }
+-        break;
+-      } else {
+-        iter_node = iter_node->child[dir];
+-      }
+-
+-    } /* while(iter_node) */
+-    
+-    /* verify red-black properties */
+-    _RBTree_Validate_insert_unprotected(the_node);
+-  }
+-  return (RBTree_Node*)0;
+-}
+-
+-
+ /*
+  *  _RBTree_Insert
+  *
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/readyqedfenqueue.c rtems-hwds2/cpukit/score/src/readyqedfenqueue.c
+--- rtems-hwds/cpukit/score/src/readyqedfenqueue.c	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqedfenqueue.c	2010-10-07 19:40:38.000000000 -0400
+@@ -76,6 +76,7 @@ void _Ready_queue_edf_Enqueue(
+       _Chain_Extract_unprotected( &_Thread_Idle->Object.Node );
+       _Chain_Append_unprotected( fifo, &_Thread_Idle->Object.Node );
+     }
++
+     return;
+   }
+ 
+@@ -110,6 +111,7 @@ void _Ready_queue_edf_Enqueue(
+         tmp_sched->last_duplicate,
+         &the_thread->Object.Node
+     );
++
+     return;
+   }
+ 
+@@ -125,6 +127,7 @@ void _Ready_queue_edf_Enqueue(
+         _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+         &the_thread->Object.Node
+     );
++
+     return;
+   } 
+ 
+@@ -136,6 +139,7 @@ void _Ready_queue_edf_Enqueue(
+         &the_ready_queue->Queues.EDF->deadline_queue, 
+         &the_thread->Object.Node
+     );
++
+     return;
+   }  
+ 
+@@ -151,6 +155,7 @@ void _Ready_queue_edf_Enqueue(
+         _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+         &the_thread->Object.Node
+     );
++
+     return;
+   } 
+   
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/readyqedfextract.c rtems-hwds2/cpukit/score/src/readyqedfextract.c
+--- rtems-hwds/cpukit/score/src/readyqedfextract.c	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqedfextract.c	2010-10-07 19:53:56.000000000 -0400
+@@ -64,6 +64,7 @@ void _Ready_queue_edf_Extract(
+       _Chain_Initialize_empty(&the_ready_queue->Queues.EDF->fifo_queue);
+     else
+       _Chain_Extract_unprotected(&the_thread->Object.Node);
++
+     return;
+   }
+ 
+@@ -117,5 +118,6 @@ void _Ready_queue_edf_Extract(
+     _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->deadline_queue );
+   else
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
++
+ }
+ 
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/readyqpriorityrequeue.c rtems-hwds2/cpukit/score/src/readyqpriorityrequeue.c
+--- rtems-hwds/cpukit/score/src/readyqpriorityrequeue.c	2010-10-03 21:45:58.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/readyqpriorityrequeue.c	2010-10-07 19:43:42.000000000 -0400
+@@ -45,16 +45,15 @@ void _Ready_queue_priority_Requeue(
+   Thread_Control       *the_thread
+ )
+ {
+-  
+   if ( !_Chain_Has_only_one_node( the_thread->sched.priority->ready_chain ) ) {
+   MAGIC_HWDS1_EXTRACT;
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
+-  MAGIC_HWDS1_END;
++  MAGIC_HWDS1_EXTRACT_END;
+ 
+   MAGIC_HWDS1_ENQUEUE;
+     _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
+       &the_thread->Object.Node );
+-  MAGIC_HWDS1_END;
++  MAGIC_HWDS1_ENQUEUE_END;
+   }
+ }
+ 
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/scheduleredf.c rtems-hwds2/cpukit/score/src/scheduleredf.c
+--- rtems-hwds/cpukit/score/src/scheduleredf.c	2010-10-02 01:33:43.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/scheduleredf.c	2010-10-07 19:44:09.000000000 -0400
+@@ -46,7 +46,7 @@ void _Scheduler_edf_Release_job(
+   if ( _States_Is_ready( the_period->owner->current_state ) ) {
+     MAGIC_HWDS1_EXTRACT;
+     _Ready_queue_edf_Extract(&_Scheduler.ready_queue, the_period->owner);
+-    MAGIC_HWDS1_END;
++    MAGIC_HWDS1_EXTRACT_END;
+ 
+     /* stamp this job with its new deadline */
+     the_period->owner->sched.edf->deadline.value 
+@@ -57,7 +57,7 @@ void _Scheduler_edf_Release_job(
+ 
+     MAGIC_HWDS1_ENQUEUE;
+     _Ready_queue_edf_Enqueue(&_Scheduler.ready_queue, the_period->owner);
+-    MAGIC_HWDS1_END;
++    MAGIC_HWDS1_ENQUEUE_END;
+     _Scheduler_Schedule(&_Scheduler);
+   } else {
+     the_period->owner->sched.edf->deadline.value 
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/scheduleredfschedallocate.c rtems-hwds2/cpukit/score/src/scheduleredfschedallocate.c
+--- rtems-hwds/cpukit/score/src/scheduleredfschedallocate.c	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/scheduleredfschedallocate.c	2010-10-09 14:25:10.000000000 -0400
+@@ -57,7 +57,6 @@ void* _Scheduler_edf_Sched_allocate (
+     the_thread->sched.edf->last_duplicate = &the_thread->Object.Node;
+     the_thread->sched.edf->this_thread = the_thread;
+     the_thread->sched.edf->deadline.value = 0;
+-    the_thread->sched.edf->absolute_deadline = 0;
+   }
+ 
+   return sched;
+diff -upr -X dontdiff rtems-hwds/cpukit/score/src/scheduleredfschedupdate.c rtems-hwds2/cpukit/score/src/scheduleredfschedupdate.c
+--- rtems-hwds/cpukit/score/src/scheduleredfschedupdate.c	2010-09-28 22:38:03.000000000 -0400
++++ rtems-hwds2/cpukit/score/src/scheduleredfschedupdate.c	2010-10-09 14:24:59.000000000 -0400
+@@ -50,5 +50,5 @@ void _Scheduler_edf_Sched_update (
+ {
+   Scheduler_edf_Per_thread *sched = the_thread->sched.edf;
+ 
+-  sched->absolute_deadline = the_thread->real_priority;
++  sched->deadline.value = the_thread->real_priority;
+ }
