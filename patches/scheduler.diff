@@ -1,0 +1,375 @@
+Index: cpukit/score/src/threadready.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadready.c,v
+retrieving revision 1.7
+diff -u -p -r1.7 threadready.c
+--- cpukit/score/src/threadready.c	22 Dec 2008 05:52:32 -0000	1.7
++++ cpukit/score/src/threadready.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -55,24 +57,12 @@ void _Thread_Ready(
+ )
+ {
+   ISR_Level              level;
+-  Thread_Control *heir;
+ 
+   _ISR_Disable( level );
+ 
+   the_thread->current_state = STATES_READY;
+ 
+-  _Priority_Add_to_bit_map( &the_thread->Priority_map );
+-
+-  _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  _Thread_Calculate_heir();
+-
+-  heir = _Thread_Heir;
+-
+-  if ( !_Thread_Is_executing( heir ) && _Thread_Executing->is_preemptible )
+-    _Context_Switch_necessary = true;
++  _Scheduler_Unblock( &_Scheduler, the_thread );
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadresume.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadresume.c,v
+retrieving revision 1.10
+diff -u -p -r1.10 threadresume.c
+--- cpukit/score/src/threadresume.c	18 Jun 2010 02:56:26 -0000	1.10
++++ cpukit/score/src/threadresume.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -68,19 +70,7 @@ void _Thread_Resume(
+     the_thread->current_state = _States_Clear(STATES_SUSPENDED, current_state);
+ 
+     if ( _States_Is_ready( current_state ) ) {
+-
+-      _Priority_Add_to_bit_map( &the_thread->Priority_map );
+-
+-      _Chain_Append_unprotected(the_thread->ready, &the_thread->Object.Node);
+-
+-      _ISR_Flash( level );
+-
+-      if ( the_thread->current_priority < _Thread_Heir->current_priority ) {
+-        _Thread_Heir = the_thread;
+-        if ( _Thread_Executing->is_preemptible ||
+-             the_thread->current_priority == 0 )
+-          _Context_Switch_necessary = true;
+-      }
++      _Scheduler_Unblock( &_Scheduler, the_thread );
+     }
+   }
+ 
+Index: cpukit/score/src/threadsetpriority.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsetpriority.c,v
+retrieving revision 1.4
+diff -u -p -r1.4 threadsetpriority.c
+--- cpukit/score/src/threadsetpriority.c	27 Jan 2005 05:57:05 -0000	1.4
++++ cpukit/score/src/threadsetpriority.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -50,7 +52,6 @@ void _Thread_Set_priority(
+ )
+ {
+   the_thread->current_priority = new_priority;
+-  the_thread->ready            = &_Thread_Ready_chain[ new_priority ];
+ 
+-  _Priority_Initialize_information( &the_thread->Priority_map, new_priority );
++  _Scheduler_Sched_update(&_Scheduler, the_thread);
+ }
+Index: cpukit/score/src/threadsetstate.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsetstate.c,v
+retrieving revision 1.6
+diff -u -p -r1.6 threadsetstate.c
+--- cpukit/score/src/threadsetstate.c	22 Dec 2008 05:52:32 -0000	1.6
++++ cpukit/score/src/threadsetstate.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -54,9 +56,7 @@ void _Thread_Set_state(
+ )
+ {
+   ISR_Level      level;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+   if ( !_States_Is_ready( the_thread->current_state ) ) {
+     the_thread->current_state =
+@@ -67,21 +67,7 @@ void _Thread_Set_state(
+ 
+   the_thread->current_state = state;
+ 
+-  if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-    _Chain_Initialize_empty( ready );
+-    _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+-
+-  } else
+-    _Chain_Extract_unprotected( &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  if ( _Thread_Is_heir( the_thread ) )
+-     _Thread_Calculate_heir();
+-
+-  if ( _Thread_Is_executing( the_thread ) )
+-    _Context_Switch_necessary = true;
++  _Scheduler_Block( &_Scheduler, the_thread);
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadsettransient.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsettransient.c,v
+retrieving revision 1.5
+diff -u -p -r1.5 threadsettransient.c
+--- cpukit/score/src/threadsettransient.c	27 Jan 2005 05:57:05 -0000	1.5
++++ cpukit/score/src/threadsettransient.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -54,22 +56,14 @@ void _Thread_Set_transient(
+ {
+   ISR_Level             level;
+   uint32_t              old_state;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+ 
+   old_state = the_thread->current_state;
+   the_thread->current_state = _States_Set( STATES_TRANSIENT, old_state );
+ 
+   if ( _States_Is_ready( old_state ) ) {
+-    if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-      _Chain_Initialize_empty( ready );
+-      _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+-
+-    } else
+-      _Chain_Extract_unprotected( &the_thread->Object.Node );
++    _Ready_queue_Extract(&_Scheduler.ready_queue, the_thread);
+   }
+ 
+   _ISR_Enable( level );
+Index: cpukit/score/src/threadsuspend.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadsuspend.c,v
+retrieving revision 1.7
+diff -u -p -r1.7 threadsuspend.c
+--- cpukit/score/src/threadsuspend.c	18 Jun 2010 02:56:26 -0000	1.7
++++ cpukit/score/src/threadsuspend.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -52,9 +54,7 @@ void _Thread_Suspend(
+ )
+ {
+   ISR_Level      level;
+-  Chain_Control *ready;
+-
+-  ready = the_thread->ready;
++  
+   _ISR_Disable( level );
+   if ( !_States_Is_ready( the_thread->current_state ) ) {
+     the_thread->current_state =
+@@ -65,21 +65,7 @@ void _Thread_Suspend(
+ 
+   the_thread->current_state = STATES_SUSPENDED;
+ 
+-  if ( _Chain_Has_only_one_node( ready ) ) {
+-
+-    _Chain_Initialize_empty( ready );
+-    _Priority_Remove_from_bit_map( &the_thread->Priority_map );
+-
+-  } else
+-    _Chain_Extract_unprotected( &the_thread->Object.Node );
+-
+-  _ISR_Flash( level );
+-
+-  if ( _Thread_Is_heir( the_thread ) )
+-     _Thread_Calculate_heir();
+-
+-  if ( _Thread_Is_executing( the_thread ) )
+-    _Context_Switch_necessary = true;
++  _Scheduler_Block(&_Scheduler, the_thread);
+ 
+   _ISR_Enable( level );
+ }
+Index: cpukit/score/src/threadtickletimeslice.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadtickletimeslice.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadtickletimeslice.c
+--- cpukit/score/src/threadtickletimeslice.c	24 Jun 2010 21:27:30 -0000	1.12
++++ cpukit/score/src/threadtickletimeslice.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,7 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -89,7 +90,7 @@ void _Thread_Tickle_timeslice( void )
+          *  currently executing thread is placed at the rear of the
+          *  FIFO for this priority and a new heir is selected.
+          */
+-        _Thread_Yield_processor();
++        _Scheduler_Yield( );
+         executing->cpu_time_budget = _Thread_Ticks_per_timeslice;
+       }
+       break;
+Index: cpukit/score/inline/rtems/score/thread.inl
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/inline/rtems/score/thread.inl,v
+retrieving revision 1.41
+diff -u -p -r1.41 thread.inl
+--- cpukit/score/inline/rtems/score/thread.inl	27 Jul 2010 01:48:46 -0000	1.41
++++ cpukit/score/inline/rtems/score/thread.inl	27 Jul 2010 16:13:58 -0000
+@@ -120,17 +120,6 @@ RTEMS_INLINE_ROUTINE void _Thread_Restar
+ }
+ 
+ /**
+- *  This function returns a pointer to the highest priority
+- *  ready thread.
+- */
+-
+-RTEMS_INLINE_ROUTINE void _Thread_Calculate_heir( void )
+-{
+-  _Thread_Heir = (Thread_Control *)
+-    _Thread_Ready_chain[ _Priority_Get_highest() ].first;
+-}
+-
+-/**
+  *  This function returns true if the floating point context of
+  *  the_thread is currently loaded in the floating point unit, and
+  *  false otherwise.
+Index: cpukit/score/src/thread.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/thread.c,v
+retrieving revision 1.63
+diff -u -p -r1.63 thread.c
+--- cpukit/score/src/thread.c	29 Jun 2010 00:34:12 -0000	1.63
++++ cpukit/score/src/thread.c	27 Jul 2010 16:13:58 -0000
+@@ -24,6 +24,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -45,7 +47,6 @@
+ 
+ void _Thread_Handler_initialization(void)
+ {
+-  uint32_t     index;
+   uint32_t     ticks_per_timeslice;
+   uint32_t     maximum_extensions;
+   #if defined(RTEMS_MULTIPROCESSING)
+@@ -80,12 +81,7 @@ void _Thread_Handler_initialization(void
+ 
+   _Thread_Ticks_per_timeslice  = ticks_per_timeslice;
+ 
+-  _Thread_Ready_chain = (Chain_Control *) _Workspace_Allocate_or_fatal_error(
+-    (PRIORITY_MAXIMUM + 1) * sizeof(Chain_Control)
+-  );
+-
+-  for ( index=0; index <= PRIORITY_MAXIMUM ; index++ )
+-    _Chain_Initialize_empty( &_Thread_Ready_chain[ index ] );
++  _Scheduler_Initialize( );
+ 
+ #if defined(RTEMS_MULTIPROCESSING)
+   _Thread_MP_Handler_initialization( maximum_proxies );
+Index: cpukit/score/src/threadchangepriority.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadchangepriority.c,v
+retrieving revision 1.12
+diff -u -p -r1.12 threadchangepriority.c
+--- cpukit/score/src/threadchangepriority.c	22 Dec 2008 05:52:32 -0000	1.12
++++ cpukit/score/src/threadchangepriority.c	27 Jul 2010 16:13:58 -0000
+@@ -23,6 +23,8 @@
+ #include <rtems/score/isr.h>
+ #include <rtems/score/object.h>
+ #include <rtems/score/priority.h>
++#include <rtems/score/readyq.h>
++#include <rtems/score/scheduler.h>
+ #include <rtems/score/states.h>
+ #include <rtems/score/sysstate.h>
+ #include <rtems/score/thread.h>
+@@ -120,11 +122,10 @@ void _Thread_Change_priority(
+      */
+     the_thread->current_state = _States_Clear( STATES_TRANSIENT, state );
+ 
+-    _Priority_Add_to_bit_map( &the_thread->Priority_map );
+     if ( prepend_it )
+-      _Chain_Prepend_unprotected( the_thread->ready, &the_thread->Object.Node );
++      _Ready_queue_Enqueue_first( &_Scheduler.ready_queue, the_thread );
+     else
+-      _Chain_Append_unprotected( the_thread->ready, &the_thread->Object.Node );
++      _Ready_queue_Enqueue( &_Scheduler.ready_queue, the_thread );
+   }
+ 
+   _ISR_Flash( level );
+@@ -133,10 +134,7 @@ void _Thread_Change_priority(
+    *  We altered the set of thread priorities.  So let's figure out
+    *  who is the heir and if we need to switch to them.
+    */
+-  _Thread_Calculate_heir();
++  _Scheduler_Schedule(&_Scheduler);
+ 
+-  if ( !_Thread_Is_executing_also_the_heir() &&
+-       _Thread_Executing->is_preemptible )
+-    _Context_Switch_necessary = true;
+   _ISR_Enable( level );
+ }
+

@@ -1,0 +1,501 @@
+Index: c/src/lib/libbsp/mips/shared/irq/exception.S
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libbsp/mips/shared/irq/exception.S,v
+retrieving revision 1.4
+diff -u -p -r1.4 exception.S
+--- c/src/lib/libbsp/mips/shared/irq/exception.S	6 Jul 2010 07:41:28 -0000	1.4
++++ c/src/lib/libbsp/mips/shared/irq/exception.S	27 Jul 2010 16:13:57 -0000
+@@ -322,7 +322,7 @@ _ISR_Handler_cleanup:
+    *    restore stack
+    *  #endif
+    *
+-   *  if ( !_Context_Switch_necessary )
++   *  if ( !_Thread_Dispatch_necessary )
+    *    goto the label "exit interrupt (simple case)"
+    */
+         lb	t0,DISPATCH_NEEDED
+Index: c/src/lib/libcpu/powerpc/new-exceptions/bspsupport/ppc_exc_hdl.c
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libcpu/powerpc/new-exceptions/bspsupport/ppc_exc_hdl.c,v
+retrieving revision 1.9
+diff -u -p -r1.9 ppc_exc_hdl.c
+--- c/src/lib/libcpu/powerpc/new-exceptions/bspsupport/ppc_exc_hdl.c	29 Jun 2010 00:39:39 -0000	1.9
++++ c/src/lib/libcpu/powerpc/new-exceptions/bspsupport/ppc_exc_hdl.c	27 Jul 2010 16:13:57 -0000
+@@ -81,7 +81,7 @@ rtems_status_code ppc_exc_set_handler(un
+ void ppc_exc_wrapup(BSP_Exception_frame *frame)
+ {
+   /* dispatch_disable level is decremented from assembly code.  */
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+     /* FIXME: I believe it should be OK to re-enable
+      *        interrupts around the execution of _Thread_Dispatch();
+      */
+Index: c/src/lib/libcpu/sh/sh7032/score/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libcpu/sh/sh7032/score/cpu_asm.c,v
+retrieving revision 1.16
+diff -u -p -r1.16 cpu_asm.c
+--- c/src/lib/libcpu/sh/sh7032/score/cpu_asm.c	29 Jun 2010 00:39:41 -0000	1.16
++++ c/src/lib/libcpu/sh/sh7032/score/cpu_asm.c	27 Jul 2010 16:13:57 -0000
+@@ -176,7 +176,7 @@ void __ISR_Handler( uint32_t   vector)
+     return;
+   }
+ 
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+     _Thread_Dispatch();
+   }
+ }
+Index: c/src/lib/libcpu/sh/sh7045/score/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libcpu/sh/sh7045/score/cpu_asm.c,v
+retrieving revision 1.18
+diff -u -p -r1.18 cpu_asm.c
+--- c/src/lib/libcpu/sh/sh7045/score/cpu_asm.c	29 Jun 2010 00:39:41 -0000	1.18
++++ c/src/lib/libcpu/sh/sh7045/score/cpu_asm.c	27 Jul 2010 16:13:57 -0000
+@@ -178,7 +178,7 @@ void __ISR_Handler( uint32_t   vector)
+     return;
+   }
+ 
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+     _Thread_Dispatch();
+   }
+ }
+Index: c/src/lib/libcpu/sh/sh7750/score/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libcpu/sh/sh7750/score/cpu_asm.c,v
+retrieving revision 1.14
+diff -u -p -r1.14 cpu_asm.c
+--- c/src/lib/libcpu/sh/sh7750/score/cpu_asm.c	29 Jun 2010 00:39:41 -0000	1.14
++++ c/src/lib/libcpu/sh/sh7750/score/cpu_asm.c	27 Jul 2010 16:13:57 -0000
+@@ -101,7 +101,7 @@ void __ISR_Handler( uint32_t   vector)
+     return;
+   }
+ 
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+     _Thread_Dispatch();
+   }
+ }
+Index: c/src/lib/libcpu/sh/shgdb/score/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/c/src/lib/libcpu/sh/shgdb/score/cpu_asm.c,v
+retrieving revision 1.3
+diff -u -p -r1.3 cpu_asm.c
+--- c/src/lib/libcpu/sh/shgdb/score/cpu_asm.c	29 Jun 2010 00:39:41 -0000	1.3
++++ c/src/lib/libcpu/sh/shgdb/score/cpu_asm.c	27 Jul 2010 16:13:57 -0000
+@@ -75,7 +75,7 @@ void __ISR_Handler( uint32_t   vector)
+     return;
+   }
+ 
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+     _Thread_Dispatch();
+   }
+ }
+Index: cpukit/posix/src/psignalunblockthread.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/posix/src/psignalunblockthread.c,v
+retrieving revision 1.11
+diff -u -p -r1.11 psignalunblockthread.c
+--- cpukit/posix/src/psignalunblockthread.c	29 Jun 2010 00:34:11 -0000	1.11
++++ cpukit/posix/src/psignalunblockthread.c	27 Jul 2010 16:13:57 -0000
+@@ -118,7 +118,7 @@ bool _POSIX_signals_Unblock_thread(
+ 	  }
+     } else if ( the_thread->current_state == STATES_READY ) {
+       if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
+-	_Context_Switch_necessary = true;
++	_Thread_Dispatch_necessary = true;
+     }
+   }
+   return false;
+Index: cpukit/posix/src/pthreadkill.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/posix/src/pthreadkill.c,v
+retrieving revision 1.16
+diff -u -p -r1.16 pthreadkill.c
+--- cpukit/posix/src/pthreadkill.c	29 Jun 2010 00:34:11 -0000	1.16
++++ cpukit/posix/src/pthreadkill.c	27 Jul 2010 16:13:57 -0000
+@@ -64,7 +64,7 @@ int pthread_kill(
+         (void) _POSIX_signals_Unblock_thread( the_thread, sig, NULL );
+ 
+         if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
+-	  _Context_Switch_necessary = true;
++	  _Thread_Dispatch_necessary = true;
+       }
+       _Thread_Enable_dispatch();
+       return 0;
+Index: cpukit/rtems/src/signalsend.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/signalsend.c,v
+retrieving revision 1.11
+diff -u -p -r1.11 signalsend.c
+--- cpukit/rtems/src/signalsend.c	29 Jun 2010 00:34:11 -0000	1.11
++++ cpukit/rtems/src/signalsend.c	27 Jul 2010 16:13:57 -0000
+@@ -65,7 +65,7 @@ rtems_status_code rtems_signal_send(
+           _ASR_Post_signals( signal_set, &asr->signals_posted );
+ 
+           if ( _ISR_Is_in_progress() && _Thread_Is_executing( the_thread ) )
+-            _Context_Switch_necessary = true;
++            _Thread_Dispatch_necessary = true;
+         } else {
+           _ASR_Post_signals( signal_set, &asr->signals_pending );
+         }
+Index: cpukit/score/cpu/avr/cpu_asm.S
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/avr/cpu_asm.S,v
+retrieving revision 1.10
+diff -u -p -r1.10 cpu_asm.S
+--- cpukit/score/cpu/avr/cpu_asm.S	29 Jun 2010 00:31:05 -0000	1.10
++++ cpukit/score/cpu/avr/cpu_asm.S	27 Jul 2010 16:13:58 -0000
+@@ -441,7 +441,7 @@ void _ISR_Handler(void)
+    *  if ( _Thread_Dispatch_disable_level )
+    *    goto the label "exit interrupt (simple case)"
+    *
+-   *  if ( _Context_Switch_necessary ) {
++   *  if ( _Thread_Dispatch_necessary ) {
+    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+    *    prepare to get out of interrupt
+    *    return from interrupt  (maybe to _ISR_Dispatch)
+Index: cpukit/score/cpu/lm32/irq.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/lm32/irq.c,v
+retrieving revision 1.5
+diff -u -p -r1.5 irq.c
+--- cpukit/score/cpu/lm32/irq.c	29 Jun 2010 00:31:12 -0000	1.5
++++ cpukit/score/cpu/lm32/irq.c	27 Jul 2010 16:13:58 -0000
+@@ -78,7 +78,7 @@ void __ISR_Handler(uint32_t vector, CPU_
+   if ( _ISR_Nest_level )
+     return;
+ 
+-  if ( _Context_Switch_necessary ) {
++  if ( _Thread_Dispatch_necessary ) {
+ 
+     /* save off our stack frame so the context switcher can get to it */
+     _exception_stack_frame = ifr;
+Index: cpukit/score/cpu/m32c/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/m32c/cpu_asm.c,v
+retrieving revision 1.6
+diff -u -p -r1.6 cpu_asm.c
+--- cpukit/score/cpu/m32c/cpu_asm.c	29 Jun 2010 00:31:14 -0000	1.6
++++ cpukit/score/cpu/m32c/cpu_asm.c	27 Jul 2010 16:13:58 -0000
+@@ -89,7 +89,7 @@ void _ISR_Handler(void)
+    *  if ( _Thread_Dispatch_disable_level )
+    *    goto the label "exit interrupt (simple case)"
+    *
+-   *  if ( _Context_Switch_necessary ) {
++   *  if ( _Thread_Dispatch_necessary ) {
+    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+    *    prepare to get out of interrupt
+    *    return from interrupt  (maybe to _ISR_Dispatch)
+Index: cpukit/score/cpu/m32r/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/m32r/cpu_asm.c,v
+retrieving revision 1.4
+diff -u -p -r1.4 cpu_asm.c
+--- cpukit/score/cpu/m32r/cpu_asm.c	29 Jun 2010 00:31:16 -0000	1.4
++++ cpukit/score/cpu/m32r/cpu_asm.c	27 Jul 2010 16:13:58 -0000
+@@ -79,7 +79,7 @@ void _ISR_Handler(void)
+    *  if ( _Thread_Dispatch_disable_level )
+    *    goto the label "exit interrupt (simple case)"
+    *
+-   *  if ( _Context_Switch_necessary ) {
++   *  if ( _Thread_Dispatch_necessary ) {
+    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+    *    prepare to get out of interrupt
+    *    return from interrupt  (maybe to _ISR_Dispatch)
+Index: cpukit/score/cpu/mips/cpu_asm.S
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/mips/cpu_asm.S,v
+retrieving revision 1.42
+diff -u -p -r1.42 cpu_asm.S
+--- cpukit/score/cpu/mips/cpu_asm.S	29 Jun 2010 00:31:44 -0000	1.42
++++ cpukit/score/cpu/mips/cpu_asm.S	27 Jul 2010 16:13:58 -0000
+@@ -949,7 +949,7 @@ _ISR_Handler_1:
+    *    restore stack
+    *  #endif
+    *
+-   *  if !_Context_Switch_necessary 
++   *  if !_Thread_Dispatch_necessary 
+    *    goto the label "exit interrupt (simple case)"
+    */
+         lbu	t0,DISPATCH_NEEDED
+Index: cpukit/score/cpu/nios2/irq.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/nios2/irq.c,v
+retrieving revision 1.6
+diff -u -p -r1.6 irq.c
+--- cpukit/score/cpu/nios2/irq.c	29 Jun 2010 00:31:47 -0000	1.6
++++ cpukit/score/cpu/nios2/irq.c	27 Jul 2010 16:13:58 -0000
+@@ -71,7 +71,7 @@ void __ISR_Handler(uint32_t vector, CPU_
+ 
+     if( _Thread_Dispatch_disable_level == 0 )
+     {
+-      if ( _Context_Switch_necessary ) {
++      if ( _Thread_Dispatch_necessary ) {
+         _CPU_ISR_Enable( level );
+         _Thread_Dispatch();
+         /* may have switched to another task and not return here immed. */
+Index: cpukit/score/cpu/no_cpu/cpu_asm.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/cpu/no_cpu/cpu_asm.c,v
+retrieving revision 1.19
+diff -u -p -r1.19 cpu_asm.c
+--- cpukit/score/cpu/no_cpu/cpu_asm.c	29 Jun 2010 00:33:12 -0000	1.19
++++ cpukit/score/cpu/no_cpu/cpu_asm.c	27 Jul 2010 16:13:58 -0000
+@@ -168,7 +168,7 @@ void _ISR_Handler(void)
+    *  if ( _Thread_Dispatch_disable_level )
+    *    goto the label "exit interrupt (simple case)"
+    *
+-   *  if ( _Context_Switch_necessary ) {
++   *  if ( _Thread_Dispatch_necessary ) {
+    *    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+    *    prepare to get out of interrupt
+    *    return from interrupt  (maybe to _ISR_Dispatch)
+Index: cpukit/score/include/rtems/score/percpu.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/include/rtems/score/percpu.h,v
+retrieving revision 1.3
+diff -u -p -r1.3 percpu.h
+--- cpukit/score/include/rtems/score/percpu.h	16 Jul 2010 08:31:33 -0000	1.3
++++ cpukit/score/include/rtems/score/percpu.h	27 Jul 2010 16:13:58 -0000
+@@ -85,7 +85,7 @@ typedef struct {
+   Thread_Control *idle;
+ 
+   /** This is set to true when this CPU needs to run the dispatcher. */
+-  volatile bool dispatch_needed;
++  volatile bool dispatch_necessary;
+ 
+ } Per_CPU_Control;
+ #endif
+@@ -154,13 +154,13 @@ extern Per_CPU_Control _Per_CPU_Informat
+  * But on a non-SMP system, these macros are simple references.
+  * Thus when built for non-SMP, there should be no performance penalty.
+  */
+-#define _Thread_Heir              _Per_CPU_Information.heir
+-#define _Thread_Executing         _Per_CPU_Information.executing
+-#define _Thread_Idle              _Per_CPU_Information.idle
+-#define _ISR_Nest_level           _Per_CPU_Information.isr_nest_level
+-#define _CPU_Interrupt_stack_low  _Per_CPU_Information.interrupt_stack_low
+-#define _CPU_Interrupt_stack_high _Per_CPU_Information.interrupt_stack_high
+-#define _Context_Switch_necessary _Per_CPU_Information.dispatch_needed
++#define _Thread_Heir                _Per_CPU_Information.heir
++#define _Thread_Executing           _Per_CPU_Information.executing
++#define _Thread_Idle                _Per_CPU_Information.idle
++#define _ISR_Nest_level             _Per_CPU_Information.isr_nest_level
++#define _CPU_Interrupt_stack_low    _Per_CPU_Information.interrupt_stack_low
++#define _CPU_Interrupt_stack_high   _Per_CPU_Information.interrupt_stack_high
++#define _Thread_Dispatch_necessary  _Per_CPU_Information.dispatch_necessary
+ 
+ #endif  /* ASM */
+
+Index: cpukit/score/src/threaddispatch.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threaddispatch.c,v
+retrieving revision 1.21
+diff -u -p -r1.21 threaddispatch.c
+--- cpukit/score/src/threaddispatch.c	29 Jun 2010 00:34:12 -0000	1.21
++++ cpukit/score/src/threaddispatch.c	27 Jul 2010 16:13:58 -0000
+@@ -89,10 +89,10 @@ void _Thread_Dispatch( void )
+ 
+   executing   = _Thread_Executing;
+   _ISR_Disable( level );
+-  while ( _Context_Switch_necessary == true ) {
++  while ( _Thread_Dispatch_necessary == true ) {
+     heir = _Thread_Heir;
+     _Thread_Dispatch_disable_level = 1;
+-    _Context_Switch_necessary = false;
++    _Thread_Dispatch_necessary = false;
+     _Thread_Executing = heir;
+ 
+     /*
+Index: cpukit/score/src/threadstartmultitasking.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadstartmultitasking.c,v
+retrieving revision 1.10
+diff -u -p -r1.10 threadstartmultitasking.c
+--- cpukit/score/src/threadstartmultitasking.c	28 Aug 2009 18:26:05 -0000	1.10
++++ cpukit/score/src/threadstartmultitasking.c	27 Jul 2010 16:13:58 -0000
+@@ -61,7 +61,7 @@ void _Thread_Start_multitasking( void )
+ 
+   _System_state_Set( SYSTEM_STATE_UP );
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Executing = _Thread_Heir;
+ 
+Index: cpukit/score/src/threadyieldprocessor.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/threadyieldprocessor.c,v
+retrieving revision 1.5
+diff -u -p -r1.5 threadyieldprocessor.c
+--- cpukit/score/src/threadyieldprocessor.c	22 Dec 2008 05:52:32 -0000	1.5
++++ cpukit/score/src/threadyieldprocessor.c	27 Jul 2010 16:13:58 -0000
+@@ -67,10 +67,10 @@ void _Thread_Yield_processor( void )
+ 
+       if ( _Thread_Is_heir( executing ) )
+         _Thread_Heir = (Thread_Control *) ready->first;
+-      _Context_Switch_necessary = true;
++      _Thread_Dispatch_necessary = true;
+     }
+     else if ( !_Thread_Is_heir( executing ) )
+-      _Context_Switch_necessary = true;
++      _Thread_Dispatch_necessary = true;
+ 
+   _ISR_Enable( level );
+ }
+Index: doc/porting/interrupts.t
+===================================================================
+RCS file: /usr1/CVS/rtems/doc/porting/interrupts.t,v
+retrieving revision 1.10
+diff -u -p -r1.10 interrupts.t
+--- doc/porting/interrupts.t	29 Jun 2010 00:39:27 -0000	1.10
++++ doc/porting/interrupts.t	27 Jul 2010 16:13:58 -0000
+@@ -368,7 +368,7 @@ if ( _ISR_Nest_level )
+ if ( _Thread_Dispatch_disable_level )
+     goto the label "exit interrupt (simple case)"
+   
+-if ( _Context_Switch_necessary )
++if ( _Thread_Dispatch_necessary )
+    call _Thread_Dispatch() or prepare to return to _ISR_Dispatch
+    prepare to get out of interrupt
+    return from interrupt  (maybe to _ISR_Dispatch)
+Index: testsuites/tmtests/tm26/task1.c
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/tmtests/tm26/task1.c,v
+retrieving revision 1.30
+diff -u -p -r1.30 task1.c
+--- testsuites/tmtests/tm26/task1.c	1 Nov 2009 04:10:20 -0000	1.30
++++ testsuites/tmtests/tm26/task1.c	27 Jul 2010 16:13:59 -0000
+@@ -225,7 +225,7 @@ rtems_task High_task(
+     _Thread_Set_state( _Thread_Executing, STATES_SUSPENDED );
+   thread_set_state_time = benchmark_timer_read();
+ 
+-  _Context_Switch_necessary = true;
++  _Thread_Dispatch_necessary = true;
+ 
+   benchmark_timer_initialize();
+     _Thread_Dispatch();           /* dispatches Middle_task */
+@@ -246,7 +246,7 @@ rtems_task Middle_task(
+ 
+   /* do not force context switch */
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Disable_dispatch();
+ 
+@@ -283,7 +283,7 @@ rtems_task Low_task(
+ 
+   /* do not force context switch */
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Disable_dispatch();
+ 
+@@ -310,7 +310,7 @@ rtems_task Floating_point_task_1(
+ 
+   /* do not force context switch */
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Disable_dispatch();
+ 
+@@ -333,7 +333,7 @@ rtems_task Floating_point_task_1(
+ 
+   /* do not force context switch */
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Disable_dispatch();
+ 
+@@ -364,7 +364,7 @@ rtems_task Floating_point_task_2(
+ 
+   /* do not force context switch */
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+ 
+   _Thread_Disable_dispatch();
+ 
+@@ -430,7 +430,7 @@ void complete_test( void )
+    */
+ 
+   _Thread_Heir = _Thread_Executing;
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+   _Thread_Dispatch_disable_level = 0;
+ 
+   /*
+Index: testsuites/tmtests/tm27/task1.c
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/tmtests/tm27/task1.c,v
+retrieving revision 1.27
+diff -u -p -r1.27 task1.c
+--- testsuites/tmtests/tm27/task1.c	9 May 2009 21:24:06 -0000	1.27
++++ testsuites/tmtests/tm27/task1.c	27 Jul 2010 16:13:59 -0000
+@@ -172,7 +172,7 @@ rtems_task Task_1(
+ 
+   _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[LOW_PRIORITY].last;
+ 
+-  _Context_Switch_necessary = 1;
++  _Thread_Dispatch_necessary = 1;
+ 
+   Interrupt_occurred = 0;
+   benchmark_timer_initialize();
+@@ -229,7 +229,7 @@ rtems_task Task_2(
+ 
+   _Thread_Heir = (rtems_tcb *) _Thread_Ready_chain[LOW_PRIORITY].first;
+ 
+-  _Context_Switch_necessary = 1;
++  _Thread_Dispatch_necessary = 1;
+ 
+   _Thread_Dispatch();
+Index: cpukit/score/inline/rtems/score/thread.inl
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/inline/rtems/score/thread.inl,v
+retrieving revision 1.41
+diff -u -p -r1.41 thread.inl
+--- cpukit/score/inline/rtems/score/thread.inl	27 Jul 2010 01:48:46 -0000	1.41
++++ cpukit/score/inline/rtems/score/thread.inl	27 Jul 2010 16:13:58 -0000
+@@ -258,7 +247,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Is_dis
+ 
+ RTEMS_INLINE_ROUTINE bool _Thread_Is_context_switch_necessary( void )
+ {
+-  return ( _Context_Switch_necessary );
++  return ( _Thread_Dispatch_necessary );
+ }
+ 
+ /**
+@@ -351,7 +340,7 @@ RTEMS_INLINE_ROUTINE bool _Thread_Evalua
+ 
+   if ( are_signals_pending ||
+        (!_Thread_Is_heir( executing ) && executing->is_preemptible) ) {
+-    _Context_Switch_necessary = true;
++    _Thread_Dispatch_necessary = true;
+     return true;
+   }
+ 
+Index: cpukit/score/src/thread.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/src/thread.c,v
+retrieving revision 1.63
+diff -u -p -r1.63 thread.c
+--- cpukit/score/src/thread.c	29 Jun 2010 00:34:12 -0000	1.63
++++ cpukit/score/src/thread.c	27 Jul 2010 16:13:58 -0000
+@@ -69,7 +70,7 @@ void _Thread_Handler_initialization(void
+       INTERNAL_ERROR_BAD_STACK_HOOK
+     );
+ 
+-  _Context_Switch_necessary = false;
++  _Thread_Dispatch_necessary = false;
+   _Thread_Executing         = NULL;
+   _Thread_Heir              = NULL;
+ #if ( CPU_HARDWARE_FP == TRUE ) || ( CPU_SOFTWARE_FP == TRUE )
+
