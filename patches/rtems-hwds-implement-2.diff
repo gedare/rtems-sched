@@ -1,0 +1,1037 @@
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/shared/include/traptable.h rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/include/traptable.h
+--- rtems/c/src/lib/libbsp/sparc64/shared/include/traptable.h	2010-09-22 16:57:49.000000000 -0400
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/include/traptable.h	2010-11-24 12:57:54.000000000 -0500
+@@ -14,9 +14,10 @@
+ 
+ #define ENTRY_SIZE (32)
+ 
+-#define TABLE_SIZE (1024*ENTRY_SIZE * 2 /* HACK */ )
++#define TABLE_SIZE (1024*ENTRY_SIZE)
+ 
+ #ifndef ASM
++extern void* real_trap_table;
+ extern void* trap_table[TABLE_SIZE];
+ #endif
+ 
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/shared/start/trap_table.S rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/start/trap_table.S
+--- rtems/c/src/lib/libbsp/sparc64/shared/start/trap_table.S	2010-07-08 13:32:48.000000000 -0400
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/start/trap_table.S	2010-11-24 12:57:54.000000000 -0500
+@@ -11,194 +11,147 @@
+  * 
+  *  This code defines the space for the trap table used by sun4u.
+  *
+- *  This file is currently unused.
+- *
+  * $Id: trap_table.S,v 1.1 2010/06/17 16:20:45 joel Exp $
+  */
+ 
+-
+ #include <rtems/asm.h>
+ #include <rtems/score/cpu.h>
+ #include <traptable.h>
+ 
+-#define BAD_TRAP \
+-    ta  0; \
+-  nop; \
+-  nop; \
+-  nop; \
+-  nop; \
+-  nop; \
+-  nop; \
++.register %g2, #scratch
++
++.macro JUMP_TO_TRAP offset
++  sethi %hi(real_trap_table), %g1;
++  sethi %hi(\offset), %g2;
++  or    %g1, %lo(real_trap_table), %g1;
++  or    %g2, %lo(\offset), %g2;          ! g2 = offset
++  ldx   [%g1], %g1;                      ! g1 = real_trap_table
++  add   %g1, %g2, %g1;                   ! g1 = real_trap_table[offset]
++  jmpl  %g1, %g0;
+   nop;
++.endm
+ 
+-.section .ttable
++! space to save a pointer to the real trap table
++.section  .data
++  .align 8
++  .global real_trap_table
++  SYM(real_trap_table):
++  .space 8
++
++.section .text
+   .align (TABLE_SIZE)
+ PUBLIC(trap_table)
+   SYM(trap_table):
+-  .space TABLE_SIZE
+-
+-/* These are just bogus traps that aren't used ever
+ 
+-.org trap_table + 8*32
+-    BAD_TRAP;                                     ! 8 IAE
+-.org trap_table + 9*32
+-    BAD_TRAP;                                     ! 9
+-.org trap_table + 10*32
+-    BAD_TRAP;                                     ! A
+-
+-.org trap_table + 11*32
+-    BAD_TRAP;                                     ! B
+-.org trap_table + 12*32
+-    BAD_TRAP;                                     ! C
+-
+-.org trap_table + 16*32
+-    BAD_TRAP;                                     ! 10 illegal instruction
+-.org trap_table + 17*32
+-    BAD_TRAP;                                     ! 11 privileged op_code
+-
+-.org trap_table + 18*32
+-    BAD_TRAP;                                     ! 12 unimplemented LDD
+-.org trap_table + 19*32
+-    BAD_TRAP;                                     ! 13 unimplemented std
+-.org trap_table + 20*32
+-    BAD_TRAP;                                     ! 14 dae invalid asi
+-.org trap_table + 21*32
+-    BAD_TRAP;                                     ! 15 dae priv violation
+-.org trap_table + 22*32
+-    BAD_TRAP;                                     ! 16 dae nc page
+-.org trap_table + 23*32
+-    BAD_TRAP;                                     ! 17 dae nfo page
+-
+-.org trap_table + 32*32
+-    BAD_TRAP;                                     ! 20 fp_disabled
+-.org trap_table + 33*32
+-    BAD_TRAP;                                     ! 21 fp_exception_ieee_754
+-.org trap_table + 34*32
+-    BAD_TRAP;                                     ! 22 fp_exception_other
+-
+-.org trap_table + 35*32
+-    BAD_TRAP;                                     ! 23 tag_overflow
+-
+-.org trap_table + 36*32
+-    BAD_TRAP;                         ! 24-27 clean_window
+-
+-
+-.org trap_table + 40*32
+-    BAD_TRAP;                                     ! 28 div by zero
+-    
+-.org trap_table + 48*32
+-    BAD_TRAP;                                     ! 30 data access exception
+-
+-.org trap_table + 49*32
+-    BAD_TRAP;                                     ! 31 data mmu miss
+-.org trap_table + 50*32
+-    BAD_TRAP;                                     ! 32 data access error
+-
+-.org trap_table + 52*32
+-    BAD_TRAP;                                     ! 34 mem address not aligned 
+-.org trap_table + 53*32
+-    BAD_TRAP;                                     ! 35 LDDF mem address not aligned 
+-.org trap_table + 54*32
+-    BAD_TRAP;                                     ! 36 STDF mem addr not aligned
+-.org trap_table + 55*32
+-    BAD_TRAP;                                     ! 37 privileged action
+-.org trap_table + 56*32
+-    BAD_TRAP;                                     ! 38 LDQF mem addr not aligned
+-.org trap_table + 57*32
+-    BAD_TRAP;                                     ! 39 STQF mem addr not aligned
+-
+-
+-.org trap_table + 65*32
+-    BAD_TRAP;                                     ! 41-4F
+-                                                  ! interrupt_level_n (1-15) 
+-.org trap_table + 66*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 67*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 68*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 69*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 70*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 71*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 72*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 73*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 74*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 75*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 76*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 77*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 78*32
+-    BAD_TRAP;                                     ! 
+-.org trap_table + 79*32
+-    BAD_TRAP;                                     ! 
+-
+-.org trap_table + 124*32
+-    BAD_TRAP;                                     ! 7C cpu mondo
+-
+-.org trap_table + 125*32
+-    BAD_TRAP;                                     ! 7D dev mondo
+-
+-.org trap_table + 128*32
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 80-83 spill_0_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 84-87 spill_1_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 88-8B spill_2_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 8C-8F spill_3_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 90-93 spill_4_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 94-97 spill_5_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 98-9B spill_6_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! 9C-9F spill_7_normal
+-
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! A0-A3 spill_0_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! A4-A7 spill_1_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! A8-AB spill_2_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! AC-AF spill_3_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! B0-B3 spill_4_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! B4-B7 spill_5_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! B8-BB spill_6_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! BC-BF spill_7_other
+-
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! C0-C3 fill_0_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! C4-C7 fill_1_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! C8-CB fill_2_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! CC-CF fill_3_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! D0-D3 fill_4_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! D4-D7 fill_5_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! D8-DB fill_6_normal
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! DC-DF fill_7_normal
+-
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! E0-E3 fill_0_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! E4-E7 fill_1_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! E8-EB fill_2_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! EC-EF fill_3_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! F0-F3 fill_4_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! F4-F7 fill_5_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! F8-FB fill_6_other
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;          ! FC-FF fill_7_other
+-
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;                   ! 100-17F trap instruction
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;                                    
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-    BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;BAD_TRAP;
+-*/
++  .irp idx, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, \
++    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, \
++    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
++    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, \
++    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, \
++    51, 52, 53, 54, 55, 56, 57, 58, 59, 60, \
++    61, 62, 63, 64, 65, 66, 67, 68, 69, 70, \
++    71, 72, 73, 74, 75, 76, 77, 78, 79, 80, \
++    81, 82, 83, 84, 85, 86, 87, 88, 89, 90, \
++    91, 92, 93, 94, 95, 96, 97, 98, 99, 100, \
++    101, 102, 103, 104, 105, 106, 107, 108, 109, 110, \
++    111, 112, 113, 114, 115, 116, 117, 118, 119, 120, \
++    121, 122, 123, 124, 125, 126, 127, 128, 129, 130, \
++    131, 132, 133, 134, 135, 136, 137, 138, 139, 140, \
++    141, 142, 143, 144, 145, 146, 147, 148, 149, 150, \
++    151, 152, 153, 154, 155, 156, 157, 158, 159, 160, \
++    161, 162, 163, 164, 165, 166, 167, 168, 169, 170, \
++    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, \
++    181, 182, 183, 184, 185, 186, 187, 188, 189, 190, \
++    191, 192, 193, 194, 195, 196, 197, 198, 199, 200, \
++    201, 202, 203, 204, 205, 206, 207, 208, 209, 210, \
++    211, 212, 213, 214, 215, 216, 217, 218, 219, 220, \
++    221, 222, 223, 224, 225, 226, 227, 228, 229, 230, \
++    231, 232, 233, 234, 235, 236, 237, 238, 239, 240, \
++    241, 242, 243, 244, 245, 246, 247, 248, 249, 250, \
++    251, 252, 253, 254, 255, 256, 257, 258, 259, 260, \
++    261, 262, 263, 264, 265, 266, 267, 268, 269, 270, \
++    271, 272, 273, 274, 275, 276, 277, 278, 279, 280, \
++    281, 282, 283, 284, 285, 286, 287, 288, 289, 290, \
++    291, 292, 293, 294, 295, 296, 297, 298, 299, 300, \
++    301, 302, 303, 304, 305, 306, 307, 308, 309, 310, \
++    311, 312, 313, 314, 315, 316, 317, 318, 319, 320, \
++    321, 322, 323, 324, 325, 326, 327, 328, 329, 330, \
++    331, 332, 333, 334, 335, 336, 337, 338, 339, 340, \
++    341, 342, 343, 344, 345, 346, 347, 348, 349, 350, \
++    351, 352, 353, 354, 355, 356, 357, 358, 359, 360, \
++    361, 362, 363, 364, 365, 366, 367, 368, 369, 370, \
++    371, 372, 373, 374, 375, 376, 377, 378, 379, 380, \
++    381, 382, 383, 384, 385, 386, 387, 388, 389, 390, \
++    391, 392, 393, 394, 395, 396, 397, 398, 399, 400, \
++    401, 402, 403, 404, 405, 406, 407, 408, 409, 410, \
++    411, 412, 413, 414, 415, 416, 417, 418, 419, 420, \
++    421, 422, 423, 424, 425, 426, 427, 428, 429, 430, \
++    431, 432, 433, 434, 435, 436, 437, 438, 439, 440, \
++    441, 442, 443, 444, 445, 446, 447, 448, 449, 450, \
++    451, 452, 453, 454, 455, 456, 457, 458, 459, 460, \
++    461, 462, 463, 464, 465, 466, 467, 468, 469, 470, \
++    471, 472, 473, 474, 475, 476, 477, 478, 479, 480, \
++    481, 482, 483, 484, 485, 486, 487, 488, 489, 490, \
++    491, 492, 493, 494, 495, 496, 497, 498, 499, 500, \
++    501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511
++
++    .org trap_table + ((\idx)*32)
++      JUMP_TO_TRAP( ((\idx)*32) );
++  .endr
++
++  .irp idx, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, \
++    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, \
++    21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
++    31, 32, 33, 34, 35, 36, 37, 38, 39, 40, \
++    41, 42, 43, 44, 45, 46, 47, 48, 49, 50, \
++    51, 52, 53, 54, 55, 56, 57, 58, 59, 60, \
++    61, 62, 63, 64, 65, 66, 67, 68, 69, 70, \
++    71, 72, 73, 74, 75, 76, 77, 78, 79, 80, \
++    81, 82, 83, 84, 85, 86, 87, 88, 89, 90, \
++    91, 92, 93, 94, 95, 96, 97, 98, 99, 100, \
++    101, 102, 103, 104, 105, 106, 107, 108, 109, 110, \
++    111, 112, 113, 114, 115, 116, 117, 118, 119, 120, \
++    121, 122, 123, 124, 125, 126, 127, 128, 129, 130, \
++    131, 132, 133, 134, 135, 136, 137, 138, 139, 140, \
++    141, 142, 143, 144, 145, 146, 147, 148, 149, 150, \
++    151, 152, 153, 154, 155, 156, 157, 158, 159, 160, \
++    161, 162, 163, 164, 165, 166, 167, 168, 169, 170, \
++    171, 172, 173, 174, 175, 176, 177, 178, 179, 180, \
++    181, 182, 183, 184, 185, 186, 187, 188, 189, 190, \
++    191, 192, 193, 194, 195, 196, 197, 198, 199, 200, \
++    201, 202, 203, 204, 205, 206, 207, 208, 209, 210, \
++    211, 212, 213, 214, 215, 216, 217, 218, 219, 220, \
++    221, 222, 223, 224, 225, 226, 227, 228, 229, 230, \
++    231, 232, 233, 234, 235, 236, 237, 238, 239, 240, \
++    241, 242, 243, 244, 245, 246, 247, 248, 249, 250, \
++    251, 252, 253, 254, 255, 256, 257, 258, 259, 260, \
++    261, 262, 263, 264, 265, 266, 267, 268, 269, 270, \
++    271, 272, 273, 274, 275, 276, 277, 278, 279, 280, \
++    281, 282, 283, 284, 285, 286, 287, 288, 289, 290, \
++    291, 292, 293, 294, 295, 296, 297, 298, 299, 300, \
++    301, 302, 303, 304, 305, 306, 307, 308, 309, 310, \
++    311, 312, 313, 314, 315, 316, 317, 318, 319, 320, \
++    321, 322, 323, 324, 325, 326, 327, 328, 329, 330, \
++    331, 332, 333, 334, 335, 336, 337, 338, 339, 340, \
++    341, 342, 343, 344, 345, 346, 347, 348, 349, 350, \
++    351, 352, 353, 354, 355, 356, 357, 358, 359, 360, \
++    361, 362, 363, 364, 365, 366, 367, 368, 369, 370, \
++    371, 372, 373, 374, 375, 376, 377, 378, 379, 380, \
++    381, 382, 383, 384, 385, 386, 387, 388, 389, 390, \
++    391, 392, 393, 394, 395, 396, 397, 398, 399, 400, \
++    401, 402, 403, 404, 405, 406, 407, 408, 409, 410, \
++    411, 412, 413, 414, 415, 416, 417, 418, 419, 420, \
++    421, 422, 423, 424, 425, 426, 427, 428, 429, 430, \
++    431, 432, 433, 434, 435, 436, 437, 438, 439, 440, \
++    441, 442, 443, 444, 445, 446, 447, 448, 449, 450, \
++    451, 452, 453, 454, 455, 456, 457, 458, 459, 460, \
++    461, 462, 463, 464, 465, 466, 467, 468, 469, 470, \
++    471, 472, 473, 474, 475, 476, 477, 478, 479, 480, \
++    481, 482, 483, 484, 485, 486, 487, 488, 489, 490, \
++    491, 492, 493, 494, 495, 496, 497, 498, 499, 500, \
++    501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511
++
++    .org trap_table + 512*32 + ((\idx)*32)
++      JUMP_TO_TRAP( 512*32 + ((\idx)*32) );
++  .endr
+ 
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/shared/startup/bspclean.c rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/startup/bspclean.c
+--- rtems/c/src/lib/libbsp/sparc64/shared/startup/bspclean.c	1969-12-31 19:00:00.000000000 -0500
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/startup/bspclean.c	2010-11-26 15:38:45.000000000 -0500
+@@ -0,0 +1,42 @@
++/*
++ *  This is a dummy bsp_cleanup routine.
++ *
++ *  COPYRIGHT (c) 1989-1999.
++ *  On-Line Applications Research Corporation (OAR).
++ *
++ *  The license and distribution terms for this file may be
++ *  found in the file LICENSE in this distribution or at
++ *  http://www.rtems.com/license/LICENSE.
++ *
++ *  $Id: bspclean.c,v 1.5 2009/11/30 04:56:10 ralf Exp $
++ */
++
++#include <rtems.h>
++#include <rtems/bspIo.h>
++#include <bsp.h>
++#include <bspopts.h>
++#include <bsp/bootcard.h>
++
++void bsp_cleanup( void )
++{
++  #if (BSP_PRESS_KEY_FOR_RESET)
++    printk( "\nEXECUTIVE SHUTDOWN! Any key to reboot..." );
++
++    /*
++     * Wait for a key to be pressed
++     */
++    while ( getchark() == -1 )
++      ;
++
++    printk("\n");
++  #endif
++
++  /*
++   *  Check both conditions -- if you want to ask for reboot, then
++   *  you must have meant to reset the board.
++   */
++  #if (BSP_PRESS_KEY_FOR_RESET) || (BSP_RESET_BOARD_AT_EXIT)
++    bsp_reset();
++  #endif
++  MAGIC_BREAKPOINT;
++}
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/shared/startup/linkcmds rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/startup/linkcmds
+--- rtems/c/src/lib/libbsp/sparc64/shared/startup/linkcmds	2010-09-22 16:57:49.000000000 -0400
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/shared/startup/linkcmds	2010-11-24 12:57:54.000000000 -0500
+@@ -202,11 +202,6 @@ SECTIONS
+      PROVIDE (__stack = .);
+      PROVIDE (StackStart = .);
+   } > ram
+-
+-  /* made-up section for the trap-table, which has a very high alignment */
+-  . = ALIGN(1024*32);
+-  .ttable   : { *(.ttable) } > ram
+-  
+ }
+ 
+ 
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/usiii/Makefile.am rtems-hwds-implement/c/src/lib/libbsp/sparc64/usiii/Makefile.am
+--- rtems/c/src/lib/libbsp/sparc64/usiii/Makefile.am	2010-06-17 12:20:39.000000000 -0400
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/usiii/Makefile.am	2010-11-26 15:39:26.000000000 -0500
+@@ -88,7 +88,7 @@ project_lib_DATA = start.$(OBJEXT)
+ 
+ dist_project_lib_DATA += ../shared/startup/linkcmds
+ 
+-startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
++startup_SOURCES = ../shared/bspclean.c ../../shared/bsplibc.c \
+     ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
+     ../../shared/bsppost.c \
+     ../../shared/bootcard.c ../../shared/sbrk.c \
+diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/usiii/start/bspinit.S rtems-hwds-implement/c/src/lib/libbsp/sparc64/usiii/start/bspinit.S
+--- rtems/c/src/lib/libbsp/sparc64/usiii/start/bspinit.S	2010-07-08 13:32:48.000000000 -0400
++++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/usiii/start/bspinit.S	2010-11-24 12:57:54.000000000 -0500
+@@ -35,12 +35,17 @@ PUBLIC(_BSP_init)
+   SYM(_BSP_init):
+   save %sp, -STACK_WINDOW_SAVE_AREA_SIZE, %sp
+ 
+-  /* copy firmware trap table so that RTEMS can install ISR handlers */
+-  setx  SYM(trap_table), %l0, %o0
+-  rdpr  %tba, %o1
+-  set TABLE_SIZE, %o2
+-  call memcpy
+-  nop
++  ! copy the tba
++  sethi %hi(real_trap_table), %o0
++  rdpr  %tba, %o2
++  stx   %o2, [%o0 + %lo(real_trap_table)]
++
++!  /* copy firmware trap table so that RTEMS can install ISR handlers */
++!  setx  SYM(trap_table), %l0, %o0
++!  rdpr  %tba, %o1
++!  set TABLE_SIZE, %o2
++!  call memcpy
++!  nop
+ 
+   mov %g0, %o0
+   call _take_mmu
+diff -X dontdiff -uprN rtems/cpukit/score/cpu/sparc64/rtems/score/sparc64.h rtems-hwds-implement/cpukit/score/cpu/sparc64/rtems/score/sparc64.h
+--- rtems/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-10-09 20:57:08.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/cpu/sparc64/rtems/score/sparc64.h	2010-11-24 16:41:39.000000000 -0500
+@@ -163,15 +163,71 @@ extern "C" {
+          __asm__ __volatile__ ("sethi " #n ", %g0");     \
+ } while (0)
+ 
++#define MAGIC_FLUSH(n) do { \
++    __MAGIC_CASSERT((n) > 0 && (n) < (1U << 22));   \
++        __asm__ __volatile__ ("flushw"); \
++         __asm__ __volatile__ ("sethi " #n ", %g0");     \
++} while (0)
++
++
+ #endif /* !ASM */
+ #define MAGIC_BREAKPOINT MAGIC(0x40000)
+ 
+-#define MAGIC_STOP_CACHING    MAGIC(0x1000)
+-#define MAGIC_RESUME_CACHING  MAGIC(0x2000)
+-#define MAGIC_STOP_POWER      MAGIC(0x4000)
+-#define MAGIC_RESUME_POWER    MAGIC(0x8000)
+-#define MAGIC_STOP_TIMING     MAGIC(0x10000)
+-#define MAGIC_RESUME_TIMING   MAGIC(0x20000)
++// probably could do some type checking.
++
++#define HWDS1_FIRST( _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %%g0, 0, %0\n\t" : "=r" (_ptr) : "0" (_ptr) \
++    ); \
++  } while (0)
++
++#define HWDS1_ENQUEUE( _pri, _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %0, 2, %%g0\n\t" \
++        "impdep2  %1, 3, %%g0\n\t" \
++        : "=r" (_pri), "=r" (_ptr) \
++        : "0" (_pri), "1" (_ptr) \
++    ); \
++  } while (0)
++
++// unsupported
++#define HWDS1_ENQUEUE_FIRST( _pri, _ptr ) HWDS1_ENQUEUE (_pri, _ptr)
++
++#define HWDS1_EXTRACT( _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %0, 1, %%g0\n\t" : "=r" (_ptr) : "0" (_ptr) \
++    ); \
++  } while (0) 
++
++#define HWDS2_FIRST( _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %%g0, (1<<11)|0, %0\n\t" : "=r" (_ptr) : "0" (_ptr) \
++    ); \
++  } while (0)
++
++#define HWDS2_ENQUEUE( _pri, _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %0, (1<<11)|2, %%g0\n\t" \
++        "impdep2  %1, (1<<11)|3, %%g0\n\t" \
++        : "=r" (_pri), "=r" (_ptr) \
++        : "0" (_pri), "1" (_ptr) \
++    ); \
++  } while (0)
++
++// unsupported
++#define HWDS2_ENQUEUE_FIRST( _pri, _ptr ) HWDS2_ENQUEUE (_pri, _ptr)
++
++#define HWDS2_EXTRACT( _ptr ) \
++  do { \
++    __asm__ __volatile__ ( \
++        "impdep2  %0, (1<<11)|1, %%g0\n\t" : "=r" (_ptr) : "0" (_ptr) \
++    ); \
++  } while (0) 
+ 
+ #ifdef ASM
+ 
+diff -X dontdiff -uprN rtems/cpukit/score/inline/rtems/score/readyq.inl rtems-hwds-implement/cpukit/score/inline/rtems/score/readyq.inl
+--- rtems/cpukit/score/inline/rtems/score/readyq.inl	2010-07-28 17:10:58.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/inline/rtems/score/readyq.inl	2010-11-24 13:18:05.000000000 -0500
+@@ -87,7 +87,9 @@ RTEMS_INLINE_ROUTINE Thread_Control *_Re
+   Ready_queue_Control *the_ready_queue
+ )
+ {
+- return ( the_ready_queue->rq_ops.first( the_ready_queue ) );
++  Thread_Control *t;
++ t= the_ready_queue->rq_ops.first( the_ready_queue );
++ return t;
+ }
+ 
+ /**
+diff -X dontdiff -uprN rtems/cpukit/score/inline/rtems/score/watchdog.inl rtems-hwds-implement/cpukit/score/inline/rtems/score/watchdog.inl
+--- rtems/cpukit/score/inline/rtems/score/watchdog.inl	2010-07-08 13:32:57.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/inline/rtems/score/watchdog.inl	2010-11-24 16:14:24.000000000 -0500
+@@ -237,9 +237,10 @@ RTEMS_INLINE_ROUTINE Watchdog_Control *_
+   Chain_Control *header
+ )
+ {
+-
+-  return ( (Watchdog_Control *) header->first );
+-
++  Watchdog_Control *w = NULL;
++  HWDS2_FIRST( w );
++  return w;
++//  return ( (Watchdog_Control *) header->first );
+ }
+ 
+ /**
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqedfenqueue.c rtems-hwds-implement/cpukit/score/src/readyqedfenqueue.c
+--- rtems/cpukit/score/src/readyqedfenqueue.c	2010-07-29 18:26:32.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqedfenqueue.c	2010-11-26 16:51:51.000000000 -0500
+@@ -76,88 +76,9 @@ void _Ready_queue_edf_Enqueue(
+       _Chain_Extract_unprotected( &_Thread_Idle->Object.Node );
+       _Chain_Append_unprotected( fifo, &_Thread_Idle->Object.Node );
+     }
+-    return;
+-  }
+ 
+-  /* first add the_thread to red-black tree */
+-  tmp_node = _RBTree_Insert_unprotected(
+-               &the_ready_queue->Queues.EDF->edf_rbtree, 
+-               &sched->deadline
+-             );
+-  if (tmp_node) { /* 1 */
+-    tmp_sched = _RBTree_Container_of(
+-        tmp_node, 
+-        Scheduler_edf_Per_thread, 
+-        deadline
+-    );
+-    _Chain_Insert_unprotected(
+-        tmp_sched->last_duplicate, 
+-        &the_thread->Object.Node
+-    );
+-    tmp_sched->last_duplicate = &the_thread->Object.Node;
+     return;
+   }
+ 
+-  tmp_node = _RBTree_Predecessor( &sched->deadline );
+-
+-  if (tmp_node) { /* 2 */
+-    tmp_sched = _RBTree_Container_of(
+-        tmp_node, 
+-        Scheduler_edf_Per_thread, 
+-        deadline
+-    );
+-    _Chain_Insert_unprotected(
+-        tmp_sched->last_duplicate,
+-        &the_thread->Object.Node
+-    );
+-    return;
+-  }
+-
+-  tmp_node = _RBTree_Successor( &sched->deadline );
+-
+-  if (tmp_node) { /* 3 */
+-    tmp_sched = _RBTree_Container_of(
+-        tmp_node, 
+-        Scheduler_edf_Per_thread, 
+-        deadline
+-    );
+-    _Chain_Insert_unprotected(
+-        _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+-        &the_thread->Object.Node
+-    );
+-    return;
+-  } 
+-
+-  if (_RBTree_Is_root(
+-        &the_ready_queue->Queues.EDF->edf_rbtree,
+-        &sched->deadline
+-    )) { /* 4 */
+-    _Chain_Append_unprotected( 
+-        &the_ready_queue->Queues.EDF->deadline_queue, 
+-        &the_thread->Object.Node
+-    );
+-    return;
+-  }  
+-
+-  tmp_node = _RBTree_Parent( &sched->deadline );
+-  tmp_sched = _RBTree_Container_of(tmp_node, 
+-      Scheduler_edf_Per_thread, 
+-      deadline
+-  );
+-
+-  if ( _RBTree_Are_nodes_equal(&sched->deadline, 
+-        _RBTree_Left(tmp_node))) { /* 5 */
+-    _Chain_Insert_unprotected(
+-        _Chain_Previous(&tmp_sched->this_thread->Object.Node), 
+-        &the_thread->Object.Node
+-    );
+-    return;
+-  } 
+-  
+-  /* 6 */
+-  _Chain_Insert_unprotected(
+-      tmp_sched->last_duplicate,
+-      &the_thread->Object.Node
+-  );
+-
++  HWDS1_ENQUEUE( sched->deadline.value, the_thread );
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqedfextract.c rtems-hwds-implement/cpukit/score/src/readyqedfextract.c
+--- rtems/cpukit/score/src/readyqedfextract.c	2010-10-09 17:37:54.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqedfextract.c	2010-11-26 16:52:43.000000000 -0500
+@@ -64,57 +64,10 @@ void _Ready_queue_edf_Extract(
+       _Chain_Initialize_empty(&the_ready_queue->Queues.EDF->fifo_queue);
+     else
+       _Chain_Extract_unprotected(&the_thread->Object.Node);
+-    return;
+-  }
+-
+-  if ( !(_RBTree_Is_node_off_rbtree( &sched->deadline )) ) {
+-    _RBTree_Extract_unprotected(
+-        &the_ready_queue->Queues.EDF->edf_rbtree,
+-        &sched->deadline
+-    );
+ 
+-    if (sched->last_duplicate != &the_thread->Object.Node) {
+-      tmp_thd = (Thread_Control *) _Chain_Next(&the_thread->Object.Node);
+-      tmp_sched = tmp_thd->sched.edf;
+-      /* TODO: remove after debugging */
+-      if (tmp_sched->deadline.value != sched->deadline.value)
+-        printk("invalid duplicate\n");
+-
+-      tmp_sched->last_duplicate = sched->last_duplicate;
+-      _RBTree_Insert_unprotected(
+-          &the_ready_queue->Queues.EDF->edf_rbtree,
+-          &tmp_sched->deadline
+-      );
+-      sched->last_duplicate = &the_thread->Object.Node;
+-    }
+-  } else {
+-    /* the_thread is not on the RBTree. Find its duplicate and update 
+-     * the last_duplicate field if necessary. */
+-    tmp_node = _RBTree_Find_unprotected(
+-        &the_ready_queue->Queues.EDF->edf_rbtree, 
+-        sched->deadline.value
+-    );
+-    if (!tmp_node) {
+-      /* TODO: remove after debugging */
+-      printk("invalid thread\n");
+-      while(1);
+-    }
+-    tmp_sched = _RBTree_Container_of(
+-        tmp_node, 
+-        Scheduler_edf_Per_thread, 
+-        deadline
+-    );
+-      /* TODO: remove after debugging */
+-    if (tmp_sched->deadline.value != sched->deadline.value)
+-      printk("Invalid duplicate\n");
+-
+-    if (tmp_sched->last_duplicate == &the_thread->Object.Node)
+-      tmp_sched->last_duplicate = _Chain_Previous(&the_thread->Object.Node);
++    return;
+   }
+ 
+-  if (_Chain_Has_only_one_node( &the_ready_queue->Queues.EDF->deadline_queue ))
+-    _Chain_Initialize_empty( &the_ready_queue->Queues.EDF->deadline_queue );
+-  else
+-    _Chain_Extract_unprotected( &the_thread->Object.Node );
++  HWDS1_EXTRACT(the_thread);
+ }
+ 
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqedffirst.c rtems-hwds-implement/cpukit/score/src/readyqedffirst.c
+--- rtems/cpukit/score/src/readyqedffirst.c	2010-07-29 15:44:17.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqedffirst.c	2010-11-26 16:53:38.000000000 -0500
+@@ -44,9 +44,11 @@ Thread_Control *_Ready_queue_edf_First(
+   Ready_queue_Control *the_ready_queue
+ )
+ {
++  Thread_Control *t = NULL;
+   /* when there are periodic jobs to run, schedule them first */
+-  if ( !_Chain_Is_empty(&the_ready_queue->Queues.EDF->deadline_queue ) )
+-    return (Thread_Control *) the_ready_queue->Queues.EDF->deadline_queue.first;
++  HWDS1_FIRST( t );
++  if (t) 
++    return t;
+ 
+   /* otherwise schedule aperiodic jobs as background tasks */
+ 
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqedfrequeue.c rtems-hwds-implement/cpukit/score/src/readyqedfrequeue.c
+--- rtems/cpukit/score/src/readyqedfrequeue.c	2010-07-28 16:46:04.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqedfrequeue.c	2010-11-26 16:54:32.000000000 -0500
+@@ -47,6 +47,7 @@ void _Ready_queue_edf_Requeue(
+   Thread_Control       *the_thread
+ )
+ {
+-  
++  HWDS1_EXTRACT(the_thread);  
++  HWDS1_ENQUEUE(the_thread->sched.edf->deadline.value, the_thread);
+ }
+ 
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqpriorityenqueue.c rtems-hwds-implement/cpukit/score/src/readyqpriorityenqueue.c
+--- rtems/cpukit/score/src/readyqpriorityenqueue.c	2010-07-28 12:50:07.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqpriorityenqueue.c	2010-11-24 14:55:25.000000000 -0500
+@@ -45,7 +45,10 @@ void _Ready_queue_priority_Enqueue(
+   Thread_Control                   *the_thread
+ )
+ {
++  HWDS1_ENQUEUE( the_thread->current_priority, the_thread );
++  /*
+   _Priority_bit_map_Add( &the_thread->sched.priority->Priority_map );
+   _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
+       &the_thread->Object.Node );
++   */
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqpriorityenqueuefirst.c rtems-hwds-implement/cpukit/score/src/readyqpriorityenqueuefirst.c
+--- rtems/cpukit/score/src/readyqpriorityenqueuefirst.c	2010-07-28 12:49:58.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqpriorityenqueuefirst.c	2010-11-24 14:55:51.000000000 -0500
+@@ -47,7 +47,10 @@ void _Ready_queue_priority_Enqueue_first
+   Thread_Control                   *the_thread
+ )
+ {
++  HWDS1_ENQUEUE_FIRST(the_thread->current_priority, the_thread );
++  /*
+   _Priority_bit_map_Add( &the_thread->sched.priority->Priority_map );
+   _Chain_Prepend_unprotected( the_thread->sched.priority->ready_chain, 
+       &the_thread->Object.Node );
++      */
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqpriorityextract.c rtems-hwds-implement/cpukit/score/src/readyqpriorityextract.c
+--- rtems/cpukit/score/src/readyqpriorityextract.c	2010-07-28 12:50:23.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqpriorityextract.c	2010-11-24 14:57:36.000000000 -0500
+@@ -47,6 +47,8 @@ void _Ready_queue_priority_Extract(
+   Thread_Control       *the_thread
+ )
+ {
++  HWDS1_EXTRACT(the_thread);
++  /*
+   Chain_Control *ready = the_thread->sched.priority->ready_chain;
+ 
+   if ( _Chain_Has_only_one_node( ready ) ) {
+@@ -56,4 +58,5 @@ void _Ready_queue_priority_Extract(
+ 
+   } else
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
++    */
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqpriorityfirst.c rtems-hwds-implement/cpukit/score/src/readyqpriorityfirst.c
+--- rtems/cpukit/score/src/readyqpriorityfirst.c	2010-07-28 12:50:40.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqpriorityfirst.c	2010-11-24 14:58:26.000000000 -0500
+@@ -43,10 +43,15 @@ Thread_Control *_Ready_queue_priority_Fi
+   Ready_queue_Control *the_ready_queue
+ )
+ {
++  Thread_Control *t = NULL;
++  HWDS1_FIRST( t );
++  return t;
++  /*
+   uint32_t   index = _Priority_bit_map_Get_highest();
+ 
+   if ( !_Chain_Is_empty( &the_ready_queue->Queues.Priority[ index ] ) )
+     return (Thread_Control *) the_ready_queue->Queues.Priority[ index ].first;
+ 
+   return NULL;
++  */
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/readyqpriorityrequeue.c rtems-hwds-implement/cpukit/score/src/readyqpriorityrequeue.c
+--- rtems/cpukit/score/src/readyqpriorityrequeue.c	2010-07-28 12:51:01.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/readyqpriorityrequeue.c	2010-11-24 14:58:58.000000000 -0500
+@@ -45,11 +45,17 @@ void _Ready_queue_priority_Requeue(
+   Thread_Control       *the_thread
+ )
+ {
++  HWDS1_EXTRACT( the_thread );
++  HWDS1_ENQUEUE( the_thread->current_priority, the_thread );
++  /*
+   if ( !_Chain_Has_only_one_node( the_thread->sched.priority->ready_chain ) ) {
++  //HWDS1_EXTRACT;
+     _Chain_Extract_unprotected( &the_thread->Object.Node );
+ 
++  //HWDS1_ENQUEUE;
+     _Chain_Append_unprotected( the_thread->sched.priority->ready_chain, 
+       &the_thread->Object.Node );
+   }
++  */
+ }
+ 
+diff -X dontdiff -uprN rtems/cpukit/score/src/scheduleredf.c rtems-hwds-implement/cpukit/score/src/scheduleredf.c
+--- rtems/cpukit/score/src/scheduleredf.c	2010-07-29 17:56:42.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/scheduleredf.c	2010-11-24 15:29:01.000000000 -0500
+@@ -37,7 +37,7 @@ void _Scheduler_edf_Release_job(
+   ISR_Level       level;
+ 
+   _ISR_Disable( level );
+-  
++
+   /* if the thread is already in a ready state, need to dequeue it from
+    * the ready queue and then re-enqueue it with the new deadline.
+    */
+diff -X dontdiff -uprN rtems/cpukit/score/src/watchdoginsert.c rtems-hwds-implement/cpukit/score/src/watchdoginsert.c
+--- rtems/cpukit/score/src/watchdoginsert.c	2010-09-28 19:57:08.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/watchdoginsert.c	2010-11-24 16:42:03.000000000 -0500
+@@ -34,9 +34,9 @@ void _Watchdog_Insert(
+ )
+ {
+   ISR_Level          level;
+-  Watchdog_Control  *after;
++//  Watchdog_Control  *after;
+   uint32_t           insert_isr_nest_level;
+-  Watchdog_Interval  delta_interval;
++//  Watchdog_Interval  delta_interval;
+ 
+ 
+   insert_isr_nest_level   = _ISR_Nest_level;
+@@ -53,71 +53,12 @@ void _Watchdog_Insert(
+     return;
+   }
+ 
+-  the_watchdog->state = WATCHDOG_BEING_INSERTED;
+-  _Watchdog_Sync_count++;
+-
+-restart:
+-  delta_interval = the_watchdog->initial;
+-
+-  /*
+-   * We CANT use _Watchdog_First() here, because a TICK interrupt
+-   * could modify the chain during the _ISR_Flash() below. Hence,
+-   * the header is pointing to volatile data. The _Watchdog_First()
+-   * INLINE routine (but not the macro - note the subtle difference)
+-   * casts away the 'volatile'...
+-   *
+-   * Also, this is only necessary because we call no other routine
+-   * from this piece of code, hence the compiler thinks it's safe to
+-   * cache *header!!
+-   *
+-   *  Till Straumann, 7/2003 (gcc-3.2.2 -O4 on powerpc)
+-   *
+-   */
+-  for ( after = (Watchdog_Control *) ((volatile Chain_Control *)header)->first ;
+-        ;
+-        after = _Watchdog_Next( after ) ) {
+-
+-     if ( delta_interval == 0 || !_Watchdog_Next( after ) )
+-       break;
+-
+-     if ( delta_interval < after->delta_interval ) {
+-       after->delta_interval -= delta_interval;
+-       break;
+-     }
+-
+-     delta_interval -= after->delta_interval;
+-
+-     /*
+-      *  If you experience problems comment out the _ISR_Flash line.
+-      *  3.2.0 was the first release with this critical section redesigned.
+-      *  Under certain circumstances, the PREVIOUS critical section algorithm
+-      *  used around this flash point allowed interrupts to execute
+-      *  which violated the design assumptions.  The critical section
+-      *  mechanism used here WAS redesigned to address this.
+-      */
+-
+-//     _ISR_Flash( level );
+-
+-     if ( the_watchdog->state != WATCHDOG_BEING_INSERTED ) {
+-       goto exit_insert;
+-     }
+-
+-     if ( _Watchdog_Sync_level > insert_isr_nest_level ) {
+-       _Watchdog_Sync_level = insert_isr_nest_level;
+-       goto restart;
+-     }
+-  }
++  the_watchdog->delta_interval = 
++    _Watchdog_Ticks_since_boot + the_watchdog->initial;
++  HWDS2_ENQUEUE ( the_watchdog->delta_interval, the_watchdog );
+ 
+   _Watchdog_Activate( the_watchdog );
+-
+-  the_watchdog->delta_interval = delta_interval;
+-
+-  _Chain_Insert_unprotected( after->Node.previous, &the_watchdog->Node );
+-
+   the_watchdog->start_time = _Watchdog_Ticks_since_boot;
+-
+-exit_insert:
+-  _Watchdog_Sync_level = insert_isr_nest_level;
+-  _Watchdog_Sync_count--;
++  _Watchdog_Sync_level = _ISR_Nest_level;
+   _ISR_Enable( level );
+ }
+diff -X dontdiff -uprN rtems/cpukit/score/src/watchdogremove.c rtems-hwds-implement/cpukit/score/src/watchdogremove.c
+--- rtems/cpukit/score/src/watchdogremove.c	2010-09-23 21:23:34.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/watchdogremove.c	2010-11-24 15:38:36.000000000 -0500
+@@ -54,16 +54,8 @@ Watchdog_States _Watchdog_Remove(
+     case WATCHDOG_ACTIVE:
+     case WATCHDOG_REMOVE_IT:
+ 
++      HWDS2_EXTRACT (the_watchdog );
+       the_watchdog->state = WATCHDOG_INACTIVE;
+-      next_watchdog = _Watchdog_Next( the_watchdog );
+-
+-      if ( _Watchdog_Next(next_watchdog) )
+-        next_watchdog->delta_interval += the_watchdog->delta_interval;
+-
+-      if ( _Watchdog_Sync_count )
+-        _Watchdog_Sync_level = _ISR_Nest_level;
+-
+-      _Chain_Extract_unprotected( &the_watchdog->Node );
+       break;
+   }
+   the_watchdog->stop_time = _Watchdog_Ticks_since_boot;
+diff -X dontdiff -uprN rtems/cpukit/score/src/watchdogtickle.c rtems-hwds-implement/cpukit/score/src/watchdogtickle.c
+--- rtems/cpukit/score/src/watchdogtickle.c	2010-07-08 13:33:02.000000000 -0400
++++ rtems-hwds-implement/cpukit/score/src/watchdogtickle.c	2010-11-24 16:40:14.000000000 -0500
+@@ -49,11 +49,13 @@ void _Watchdog_Tickle(
+ 
+   _ISR_Disable( level );
+ 
+-  if ( _Chain_Is_empty( header ) )
+-    goto leave;
++//  if ( _Chain_Is_empty( header ) )
++//    goto leave;
+ 
+   the_watchdog = _Watchdog_First( header );
+ 
++  if (!the_watchdog) goto leave;
++
+   /*
+    * For some reason, on rare occasions the_watchdog->delta_interval
+    * of the head of the watchdog chain is 0.  Before this test was
+@@ -79,11 +81,15 @@ void _Watchdog_Tickle(
+    *
+    * Steven Johnson - 12/2005 (gcc-3.2.3 -O3 on powerpc)
+    */
++  if (the_watchdog->delta_interval != _Watchdog_Ticks_since_boot) {
++    goto leave;
++  }
++  /*
+   if (the_watchdog->delta_interval != 0) {
+     the_watchdog->delta_interval--;
+     if ( the_watchdog->delta_interval != 0 )
+       goto leave;
+-  }
++  }*/
+ 
+   do {
+      watchdog_state = _Watchdog_Remove( the_watchdog );
+@@ -121,8 +127,8 @@ void _Watchdog_Tickle(
+      _ISR_Disable( level );
+ 
+      the_watchdog = _Watchdog_First( header );
+-   } while ( !_Chain_Is_empty( header ) &&
+-             (the_watchdog->delta_interval == 0) );
++   } while ( the_watchdog &&
++             (the_watchdog->delta_interval == _Watchdog_Ticks_since_boot) );
+ 
+ leave:
+    _ISR_Enable(level);
+diff -X dontdiff -uprN rtems/testsuites/gabtests/spinpause/init.c rtems-hwds-implement/testsuites/gabtests/spinpause/init.c
+--- rtems/testsuites/gabtests/spinpause/init.c	2010-10-09 21:10:25.000000000 -0400
++++ rtems-hwds-implement/testsuites/gabtests/spinpause/init.c	2010-11-24 16:06:57.000000000 -0500
+@@ -32,8 +32,8 @@ static unsigned int get_Frequency(void)
+ static void break_start_opal(void)
+ {
+ //  MAGIC_STOP_POWER;
+-  MAGIC_STOP_CACHING;
+-  MAGIC_STOP_TIMING;
++//  MAGIC_STOP_CACHING;
++//  MAGIC_STOP_TIMING;
+ }
+ 
+ uint32_t  Instructions_per_us;
+diff -X dontdiff -uprN rtems/testsuites/gabtests/spinpause/tasks_periodic.c rtems-hwds-implement/testsuites/gabtests/spinpause/tasks_periodic.c
+--- rtems/testsuites/gabtests/spinpause/tasks_periodic.c	2010-09-22 16:57:38.000000000 -0400
++++ rtems-hwds-implement/testsuites/gabtests/spinpause/tasks_periodic.c	2010-11-24 16:07:11.000000000 -0500
+@@ -75,8 +75,8 @@ rtems_task Tasks_Periodic(
+     /*
+     sparc64_read_tick( tick_start );
+     */
+-    MAGIC_RESUME_CACHING;
+-    MAGIC_RESUME_TIMING;
++//    MAGIC_RESUME_CACHING;
++//    MAGIC_RESUME_TIMING;
+ //    MAGIC_RESUME_POWER;
+      
+     /* active computing */
+@@ -87,9 +87,9 @@ rtems_task Tasks_Periodic(
+       printf("Time spun: %d us\n", 
+           (tick_stop - tick_start) / (Instructions_per_us) );
+     */
+-    MAGIC_STOP_TIMING;
++//    MAGIC_STOP_TIMING;
+ //    MAGIC_STOP_POWER;
+-    MAGIC_STOP_CACHING;
++//    MAGIC_STOP_CACHING;
+     periods_executed++;
+ 
+     /*
