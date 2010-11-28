@@ -407,10 +407,10 @@ diff -X dontdiff -uprN rtems/c/src/lib/libbsp/sparc64/usiii/Makefile.am rtems-hw
 +++ rtems-hwds-implement/c/src/lib/libbsp/sparc64/usiii/Makefile.am	2010-11-26 15:39:26.000000000 -0500
 @@ -88,7 +88,7 @@ project_lib_DATA = start.$(OBJEXT)
  
- dist_project_lib_DATA += ../shared/startup/linkcmds
+ dist_project_lib_DATA += ../sharedp/startup/linkcmds
  
 -startup_SOURCES = ../../shared/bspclean.c ../../shared/bsplibc.c \
-+startup_SOURCES = ../shared/bspclean.c ../../shared/bsplibc.c \
++startup_SOURCES = ../shared/startup/bspclean.c ../../shared/bsplibc.c \
      ../../shared/bsppredriverhook.c ../../shared/bsppretaskinghook.c \
      ../../shared/bsppost.c \
      ../../shared/bootcard.c ../../shared/sbrk.c \
