@@ -1,0 +1,506 @@
+? cpukit/sapi/include/rtems/rbtree.h
+? cpukit/sapi/inline/rtems/rbtree.inl
+? cpukit/score/include/rtems/score/rbtree.h
+? cpukit/score/include/rtems/score/scheduleredf.h
+? cpukit/score/inline/rtems/score/.scheduleredf.inl.swp
+? cpukit/score/inline/rtems/score/rbtree.inl
+? cpukit/score/inline/rtems/score/scheduleredf.inl
+? cpukit/score/src/rbtree.c
+? cpukit/score/src/rbtreeextract.c
+? cpukit/score/src/rbtreefind.c
+? cpukit/score/src/rbtreefindheader.c
+? cpukit/score/src/rbtreeget.c
+? cpukit/score/src/rbtreeinsert.c
+? cpukit/score/src/rbtreepeek.c
+? cpukit/score/src/scheduleredf.c
+? cpukit/score/src/scheduleredfblock.c
+? cpukit/score/src/scheduleredfschedule.c
+? cpukit/score/src/scheduleredfthreadschedulerallocate.c
+? cpukit/score/src/scheduleredfthreadschedulerfree.c
+? cpukit/score/src/scheduleredfthreadschedulerupdate.c
+? cpukit/score/src/scheduleredfunblock.c
+? cpukit/score/src/scheduleredfyield.c
+? testsuites/sptests/sprbtree01
+? testsuites/sptests/spsched01
+? testsuites/sptests/spsched02
+? testsuites/sptests/spsched03
+? testsuites/sptests/spsched04
+? testsuites/sptests/spsched05
+Index: cpukit/rtems/src/ratemonperiod.c
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/rtems/src/ratemonperiod.c,v
+retrieving revision 1.29
+diff -u -p -r1.29 ratemonperiod.c
+--- cpukit/rtems/src/ratemonperiod.c	26 Jul 2010 20:27:04 -0000	1.29
++++ cpukit/rtems/src/ratemonperiod.c	12 Dec 2010 23:42:57 -0000
+@@ -16,6 +16,7 @@
+ #endif
+ 
+ #include <rtems/system.h>
++#include <rtems/config.h> /* FIXME */
+ #include <rtems/rtems/status.h>
+ #include <rtems/rtems/support.h>
+ #include <rtems/score/isr.h>
+@@ -23,6 +24,47 @@
+ #include <rtems/rtems/ratemon.h>
+ #include <rtems/score/thread.h>
+ 
++#include <rtems/score/scheduler.h>
++#include <rtems/score/scheduleredf.h>
++/* TODO: put this somewhere more appropriate. */
++void _Scheduler_edf_Release_job(
++  Rate_monotonic_Control *the_period
++)
++{
++  ISR_Level       level;
++
++  _ISR_Disable( level );
++  
++  /* if the thread is already in a ready state, need to dequeue it from
++   * the ready queue and then re-enqueue it with the new deadline.
++   */
++  if ( _States_Is_ready( the_period->owner->current_state ) ) {
++    _Scheduler_edf_Ready_queue_extract(the_period->owner);
++
++    /* stamp this job with its new deadline */
++    the_period->owner->scheduler.edf->deadline.value 
++      = the_period->owner->real_priority + /* TODO: deadline field? */
++        _Watchdog_Ticks_since_boot;
++    the_period->owner->scheduler.edf->last_duplicate = 
++      &the_period->owner->Object.Node;
++
++    _Scheduler_edf_Ready_queue_enqueue(the_period->owner);
++  } else {
++    the_period->owner->scheduler.edf->deadline.value 
++      = the_period->owner->real_priority + /* TODO: deadline field? */
++        _Watchdog_Ticks_since_boot;
++    the_period->owner->scheduler.edf->last_duplicate = 
++      &the_period->owner->Object.Node;
++  }
++
++  _Scheduler_edf_Schedule_body(&_Scheduler);
++
++  if (the_period->owner != _Thread_Heir)
++    _Thread_Dispatch_necessary = true;
++
++  _ISR_Enable( level );
++}
++
+ bool _Rate_monotonic_Get_status(
+   Rate_monotonic_Control        *the_period,
+   Rate_monotonic_Period_time_t  *wall_since_last_period,
+@@ -143,6 +185,9 @@ void _Rate_monotonic_Initiate_statistics
+       _Timespec_Add_to( &the_period->cpu_usage_period_initiated, &ran );
+     }
+   #endif
++  /* FIXME: Scheduler-specific call-out? */
++  if (Configuration.scheduler_policy == _Scheduler_EDF) 
++    _Scheduler_edf_Release_job( the_period );
+ }
+ 
+ void _Rate_monotonic_Update_statistics(
+@@ -319,6 +364,10 @@ rtems_status_code rtems_rate_monotonic_p
+ 
+         _ISR_Enable( level );
+ 
++        /* TODO: scheduler-specific job release call-out */
++        if (Configuration.scheduler_policy == _Scheduler_EDF)
++          _Scheduler_edf_Release_job( the_period );
++
+         _Thread_Executing->Wait.id = the_period->Object.id;
+         _Thread_Set_state( _Thread_Executing, STATES_WAITING_FOR_PERIOD );
+ 
+@@ -350,7 +399,11 @@ rtems_status_code rtems_rate_monotonic_p
+ 
+         _ISR_Enable( level );
+ 
+-        the_period->state = RATE_MONOTONIC_ACTIVE;
++         /* TODO: scheduler-specific job release call-out */
++        if (Configuration.scheduler_policy == _Scheduler_EDF)
++          _Scheduler_edf_Release_job( the_period );
++
++       the_period->state = RATE_MONOTONIC_ACTIVE;
+         the_period->next_length = length;
+ 
+         _Watchdog_Insert_ticks( &the_period->Timer, length );
+Index: cpukit/sapi/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/Makefile.am,v
+retrieving revision 1.40
+diff -u -p -r1.40 Makefile.am
+--- cpukit/sapi/Makefile.am	24 Aug 2010 14:29:55 -0000	1.40
++++ cpukit/sapi/Makefile.am	12 Dec 2010 23:42:58 -0000
+@@ -10,12 +10,13 @@ include_rtemsdir = $(includedir)/rtems
+ include_rtems_HEADERS = include/confdefs.h
+ include_rtems_HEADERS += include/rtems/chain.h include/rtems/config.h \
+     include/rtems/extension.h include/rtems/fatal.h include/rtems/init.h \
+-    include/rtems/io.h include/rtems/mptables.h include/rtems/sptables.h
++    include/rtems/io.h include/rtems/mptables.h include/rtems/rbtree.h \
++		include/rtems/sptables.h
+ 
+ EXTRA_DIST = include/rtems/README
+ 
+ include_rtems_HEADERS += inline/rtems/chain.inl \
+-    inline/rtems/extension.inl
++    inline/rtems/extension.inl inline/rtems/rbtree.inl
+ 
+ ## src
+ AM_CPPFLAGS += -D__RTEMS_INSIDE__
+Index: cpukit/sapi/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/preinstall.am,v
+retrieving revision 1.11
+diff -u -p -r1.11 preinstall.am
+--- cpukit/sapi/preinstall.am	5 Aug 2009 21:18:29 -0000	1.11
++++ cpukit/sapi/preinstall.am	12 Dec 2010 23:42:58 -0000
+@@ -60,6 +60,10 @@ $(PROJECT_INCLUDE)/rtems/mptables.h: inc
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/mptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/mptables.h
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.h: include/rtems/rbtree.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.h
++
+ $(PROJECT_INCLUDE)/rtems/sptables.h: include/rtems/sptables.h $(PROJECT_INCLUDE)/rtems/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/sptables.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/sptables.h
+@@ -72,6 +76,10 @@ $(PROJECT_INCLUDE)/rtems/extension.inl: 
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/extension.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/extension.inl
+ 
++$(PROJECT_INCLUDE)/rtems/rbtree.inl: inline/rtems/rbtree.inl $(PROJECT_INCLUDE)/rtems/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/rbtree.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/rbtree.inl
++
+ $(PROJECT_LIB)/libsapi.a: libsapi.a $(PROJECT_LIB)/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_LIB)/libsapi.a
+ TMPINSTALL_FILES += $(PROJECT_LIB)/libsapi.a
+Index: cpukit/sapi/include/confdefs.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/sapi/include/confdefs.h,v
+retrieving revision 1.152
+diff -u -p -r1.152 confdefs.h
+--- cpukit/sapi/include/confdefs.h	25 Nov 2010 13:24:25 -0000	1.152
++++ cpukit/sapi/include/confdefs.h	12 Dec 2010 23:42:58 -0000
+@@ -562,11 +562,13 @@ rtems_fs_init_functions_t    rtems_fs_in
+ /* enable all RTEMS-provided schedulers */
+ #if defined(CONFIGURE_SCHEDULER_ALL)
+   #define CONFIGURE_SCHEDULER_PRIORITY
++  #define CONFIGURE_SCHEDULER_EDF
+ #endif
+ 
+ /* If no scheduler is specified, the priority scheduler is default. */
+ #if !defined(CONFIGURE_SCHEDULER_USER) && \
+-    !defined(CONFIGURE_SCHEDULER_PRIORITY)
++    !defined(CONFIGURE_SCHEDULER_PRIORITY) && \
++    !defined(CONFIGURE_SCHEDULER_EDF)
+   #define CONFIGURE_SCHEDULER_PRIORITY
+   #define CONFIGURE_SCHEDULER_POLICY _Scheduler_PRIORITY
+ #endif
+@@ -600,9 +602,41 @@ rtems_fs_init_functions_t    rtems_fs_in
+   )
+   #define CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY ( \
+     _Configure_From_workspace(sizeof(Scheduler_priority_Per_thread)) )
++#else
++  #define CONFIGURE_MEMORY_SCHEDULER_PRIORITY ( 0 )
++  #define CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY ( 0 )
+ #endif
+ 
+ /* 
++ * For additional schedulers, add a check for the configured scheduler 
++ * here. Copy the above block for the priority scheduler, and then replace
++ * the initialization and policy macros and update the memory usage.
++ */
++
++/* Check for EDF scheduler */
++#if defined(CONFIGURE_SCHEDULER_EDF)
++  #include <rtems/score/scheduleredf.h>
++  #define CONFIGURE_SCHEDULER_ENTRY_EDF { _Scheduler_edf_Initialize }
++  #if !defined(CONFIGURE_SCHEDULER_POLICY)
++    #define CONFIGURE_SCHEDULER_POLICY _Scheduler_EDF
++  #endif
++
++  /**
++   * define the memory used by the edf scheduler.
++   */
++  #define CONFIGURE_MEMORY_SCHEDULER_EDF ( \
++    _Configure_From_workspace( \
++      ((1) * sizeof(Scheduler_edf_Ready_queue_Control)) ) \
++  )
++  #define CONFIGURE_MEMORY_PER_TASK_SCHEDULER_EDF ( \
++    _Configure_From_workspace(sizeof(Scheduler_edf_Per_thread)) )
++#else
++  #define CONFIGURE_MEMORY_SCHEDULER_EDF ( 0 )
++  #define CONFIGURE_MEMORY_PER_TASK_SCHEDULER_EDF ( 0 )
++#endif
++
++
++/* 
+  * Set up the scheduler table.  The scheduling code indexes this table to 
+  * invoke the correct scheduling implementation. The scheduler to use is 
+  * determined by the Configuration.scheduler_policy field, which is set
+@@ -630,6 +664,12 @@ rtems_fs_init_functions_t    rtems_fs_in
+     #else
+       CONFIGURE_SCHEDULER_NULL,
+     #endif
++    #if defined(CONFIGURE_SCHEDULER_EDF) && \
++        defined(CONFIGURE_SCHEDULER_ENTRY_EDF)
++      CONFIGURE_SCHEDULER_ENTRY_EDF,
++    #else
++      CONFIGURE_SCHEDULER_NULL,
++    #endif   
+   };
+ #endif
+ 
+@@ -637,11 +677,13 @@ rtems_fs_init_functions_t    rtems_fs_in
+  * Define the memory overhead for the scheduler
+  */
+ #define CONFIGURE_MEMORY_FOR_SCHEDULER ( \
+-    CONFIGURE_MEMORY_SCHEDULER_PRIORITY \
++    CONFIGURE_MEMORY_SCHEDULER_PRIORITY + \
++    CONFIGURE_MEMORY_SCHEDULER_EDF \
+   )
+ 
+ #define CONFIGURE_MEMORY_PER_TASK_FOR_SCHEDULER ( \
+-    CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY \
++    CONFIGURE_MEMORY_PER_TASK_SCHEDULER_PRIORITY + \
++    CONFIGURE_MEMORY_PER_TASK_SCHEDULER_EDF \
+   )
+ 
+ /*
+Index: cpukit/score/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/Makefile.am,v
+retrieving revision 1.89
+diff -u -p -r1.89 Makefile.am
+--- cpukit/score/Makefile.am	24 Nov 2010 15:51:27 -0000	1.89
++++ cpukit/score/Makefile.am	12 Dec 2010 23:42:59 -0000
+@@ -26,7 +26,9 @@ include_rtems_score_HEADERS = include/rt
+     include/rtems/score/interr.h include/rtems/score/isr.h \
+     include/rtems/score/object.h include/rtems/score/percpu.h \
+     include/rtems/score/priority.h include/rtems/score/prioritybitmap.h \
+-    include/rtems/score/scheduler.h include/rtems/score/schedulerpriority.h \
++    include/rtems/score/rbtree.h include/rtems/score/scheduler.h \
++    include/rtems/score/scheduleredf.h \
++    include/rtems/score/schedulerpriority.h \
+     include/rtems/score/stack.h include/rtems/score/states.h \
+     include/rtems/score/sysstate.h include/rtems/score/thread.h \
+     include/rtems/score/threadq.h include/rtems/score/threadsync.h \
+@@ -55,7 +57,9 @@ include_rtems_score_HEADERS += inline/rt
+     inline/rtems/score/coresem.inl inline/rtems/score/heap.inl \
+     inline/rtems/score/isr.inl inline/rtems/score/object.inl \
+     inline/rtems/score/priority.inl inline/rtems/score/prioritybitmap.inl \
+-    inline/rtems/score/scheduler.inl inline/rtems/score/schedulerpriority.inl \
++    inline/rtems/score/rbtree.inl \
++    inline/rtems/score/scheduler.inl inline/rtems/score/scheduleredf.inl \
++    inline/rtems/score/schedulerpriority.inl \
+     inline/rtems/score/stack.inl inline/rtems/score/states.inl \
+     inline/rtems/score/sysstate.inl inline/rtems/score/thread.inl \
+     inline/rtems/score/threadq.inl inline/rtems/score/tod.inl \
+@@ -142,15 +146,25 @@ libscore_a_SOURCES += src/objectallocate
+ ## SCHEDULER_C_FILES
+ libscore_a_SOURCES += src/scheduler.c
+ 
++## SCHEDULEREDF_C_FILES
++libscore_a_SOURCES += src/scheduleredf.c \
++    src/scheduleredfblock.c \
++    src/scheduleredfthreadschedulerallocate.c \
++    src/scheduleredfthreadschedulerfree.c \
++    src/scheduleredfthreadschedulerupdate.c \
++    src/scheduleredfschedule.c \
++    src/scheduleredfunblock.c \
++    src/scheduleredfyield.c
++
+ ## SCHEDULERPRIORITY_C_FILES
+ libscore_a_SOURCES += src/schedulerpriority.c \
+-											src/schedulerpriorityblock.c \
+-                      src/schedulerprioritythreadschedulerallocate.c \
+-                      src/schedulerprioritythreadschedulerfree.c \
+-                      src/schedulerprioritythreadschedulerupdate.c \
+-											src/schedulerpriorityschedule.c \
+-											src/schedulerpriorityunblock.c \
+-											src/schedulerpriorityyield.c
++    src/schedulerpriorityblock.c \
++    src/schedulerprioritythreadschedulerallocate.c \
++    src/schedulerprioritythreadschedulerfree.c \
++    src/schedulerprioritythreadschedulerupdate.c \
++    src/schedulerpriorityschedule.c \
++    src/schedulerpriorityunblock.c \
++    src/schedulerpriorityyield.c
+ 
+ ## PROTECTED_HEAP_C_FILES
+ libscore_a_SOURCES += src/pheapallocate.c \
+@@ -158,6 +172,11 @@ libscore_a_SOURCES += src/pheapallocate.
+     src/pheapgetblocksize.c src/pheapgetfreeinfo.c src/pheapgetinfo.c \
+     src/pheapinit.c src/pheapresizeblock.c src/pheapwalk.c
+ 
++## RBTREE_C_FILES
++libscore_a_SOURCES += src/rbtree.c \
++    src/rbtreeextract.c src/rbtreefind.c src/rbtreefindheader.c \
++    src/rbtreeget.c src/rbtreeinsert.c src/rbtreepeek.c
++
+ ## THREAD_C_FILES
+ libscore_a_SOURCES += src/thread.c src/threadchangepriority.c \
+     src/threadclearstate.c src/threadclose.c src/threadcreateidle.c \
+Index: cpukit/score/preinstall.am
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/preinstall.am,v
+retrieving revision 1.25
+diff -u -p -r1.25 preinstall.am
+--- cpukit/score/preinstall.am	24 Nov 2010 15:51:27 -0000	1.25
++++ cpukit/score/preinstall.am	12 Dec 2010 23:42:59 -0000
+@@ -111,10 +111,18 @@ $(PROJECT_INCLUDE)/rtems/score/priorityb
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.h
+ 
++$(PROJECT_INCLUDE)/rtems/score/rbtree.h: include/rtems/score/rbtree.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.h
++
+ $(PROJECT_INCLUDE)/rtems/score/scheduler.h: include/rtems/score/scheduler.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.h
+ 
++$(PROJECT_INCLUDE)/rtems/score/scheduleredf.h: include/rtems/score/scheduleredf.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredf.h
++
+ $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h: include/rtems/score/schedulerpriority.h $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.h
+@@ -253,10 +261,18 @@ $(PROJECT_INCLUDE)/rtems/score/priorityb
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/prioritybitmap.inl
+ 
++$(PROJECT_INCLUDE)/rtems/score/rbtree.inl: inline/rtems/score/rbtree.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/rbtree.inl
++
+ $(PROJECT_INCLUDE)/rtems/score/scheduler.inl: inline/rtems/score/scheduler.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduler.inl
+ 
++$(PROJECT_INCLUDE)/rtems/score/scheduleredf.inl: inline/rtems/score/scheduleredf.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
++	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/scheduleredf.inl
++PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/scheduleredf.inl
++
+ $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl: inline/rtems/score/schedulerpriority.inl $(PROJECT_INCLUDE)/rtems/score/$(dirstamp)
+ 	$(INSTALL_DATA) $< $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
+ PREINSTALL_FILES += $(PROJECT_INCLUDE)/rtems/score/schedulerpriority.inl
+Index: cpukit/score/include/rtems/score/scheduler.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/include/rtems/score/scheduler.h,v
+retrieving revision 1.3
+diff -u -p -r1.3 scheduler.h
+--- cpukit/score/include/rtems/score/scheduler.h	25 Nov 2010 13:24:25 -0000	1.3
++++ cpukit/score/include/rtems/score/scheduler.h	12 Dec 2010 23:43:29 -0000
+@@ -22,6 +22,7 @@
+ #include <rtems/score/chain.h>
+ #include <rtems/score/priority.h>
+ #include <rtems/score/prioritybitmap.h>
++#include <rtems/score/rbtree.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+@@ -43,6 +44,7 @@ extern "C" {
+  */
+ #define _Scheduler_USER     (0)
+ #define _Scheduler_PRIORITY (1)
++#define _Scheduler_EDF      (2)
+ 
+ typedef struct Scheduler_Control_struct Scheduler_Control;
+ 
+@@ -77,6 +79,23 @@ typedef struct {
+ } Scheduler_priority_Per_thread;
+ 
+ /**
++ * Per-thread data related to the _Scheduler_EDF scheduling policy.
++ */
++typedef struct {
++  /** Point back to this thread. */
++  Thread_Control                   *this_thread;
++
++  /** This field contains the thread's deadline information. */
++  RBTree_Node                       deadline;
++
++  /** 
++   * This field points to the last node in the ready queue that has 
++   * the same deadline (absolute) as this thread.
++   */
++  Chain_Node                       *last_duplicate;
++} Scheduler_edf_Per_thread;
++
++/**
+  * function jump table that holds pointers to the functions that
+  * implement specific schedulers.
+  */
+@@ -118,7 +137,13 @@ struct Scheduler_Control_struct {
+      * This is the set of lists (an array of Chain_Control) for
+      * priority scheduling.
+      */
+-    Chain_Control            *priority;
++    Chain_Control                      *priority;
++
++   /**
++    * Structure containing the red-black tree, deadline-ordered, and 
++    * fifo-ordered queues for EDF scheduling
++    */
++    struct Scheduler_edf_Ready_queue_Control  *edf;
+ 
+   } Ready_queues;
+ 
+Index: cpukit/score/include/rtems/score/thread.h
+===================================================================
+RCS file: /usr1/CVS/rtems/cpukit/score/include/rtems/score/thread.h,v
+retrieving revision 1.98
+diff -u -p -r1.98 thread.h
+--- cpukit/score/include/rtems/score/thread.h	24 Nov 2010 15:51:27 -0000	1.98
++++ cpukit/score/include/rtems/score/thread.h	12 Dec 2010 23:43:29 -0000
+@@ -393,6 +393,7 @@ struct Thread_Control_struct {
+   /** This union holds per-thread data for the scheduler and ready queue. */
+   union {
+     Scheduler_priority_Per_thread      *priority;
++    Scheduler_edf_Per_thread           *edf;
+   } scheduler;
+   /** This field contains information about the starting state of
+    *  this thread.
+Index: testsuites/sptests/Makefile.am
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/Makefile.am,v
+retrieving revision 1.106
+diff -u -p -r1.106 Makefile.am
+--- testsuites/sptests/Makefile.am	25 Aug 2010 13:05:47 -0000	1.106
++++ testsuites/sptests/Makefile.am	12 Dec 2010 23:44:45 -0000
+@@ -16,8 +16,10 @@ SUBDIRS = \
+     sp60      sp62 sp63 sp64 sp65 sp66 sp67 sp68 sp69 \
+     sp70 sp71 sp72 \
+     spassoc01 spchain spclockget spcoverage spobjgetnext \
+-    spnotepad01 spprintk spprivenv01 spsize spstkalloc spthreadq01 \
+-    spwatchdog spwkspace \
++    spnotepad01 spprintk spprivenv01 \
++		sprbtree01 spsched01 spsched02 spsched03 spsched04 spsched05 \
++		spsize spstkalloc \
++		spthreadq01 spwatchdog spwkspace \
+     sperror01 sperror02 sperror03 \
+     spfatal01 spfatal02 spfatal03 spfatal04 spfatal05 spfatal06 spfatal07 \
+     spfatal08 spfatal09 spfatal10 spfatal11 spfatal12 spfatal13 spfatal14 \
+Index: testsuites/sptests/configure.ac
+===================================================================
+RCS file: /usr1/CVS/rtems/testsuites/sptests/configure.ac,v
+retrieving revision 1.111
+diff -u -p -r1.111 configure.ac
+--- testsuites/sptests/configure.ac	25 Aug 2010 13:05:47 -0000	1.111
++++ testsuites/sptests/configure.ac	12 Dec 2010 23:44:45 -0000
+@@ -158,6 +158,12 @@ spnotepad01/Makefile
+ spobjgetnext/Makefile
+ spprintk/Makefile
+ spprivenv01/Makefile
++sprbtree01/Makefile
++spsched01/Makefile
++spsched02/Makefile
++spsched03/Makefile
++spsched04/Makefile
++spsched05/Makefile
+ spsize/Makefile
+ spstkalloc/Makefile
+ spthreadq01/Makefile
