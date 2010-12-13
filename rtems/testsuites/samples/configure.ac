@@ -73,5 +73,6 @@ iostream/Makefile
 cdtest/Makefile
 pppd/Makefile
 capture/Makefile
+8puzzle/Makefile
 ])
 AC_OUTPUT
