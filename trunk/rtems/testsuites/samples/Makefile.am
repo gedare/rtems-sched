@@ -4,7 +4,7 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = hello capture ticker base_sp unlimited minimum fileio
+SUBDIRS = hello capture ticker base_sp unlimited minimum fileio 
 
 if MPTESTS
 ## base_mp is a sample multiprocessing test
@@ -16,7 +16,7 @@ SUBDIRS += paranoia
 SUBDIRS += nsecs
 
 if CXXTESTS
-SUBDIRS += iostream cdtest
+SUBDIRS += iostream cdtest 8puzzle
 endif
 
 if NETTESTS
