@@ -1,0 +1,140 @@
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/linkcmds.lpc32xx_mzx, startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2,
+	startup/linkcmds.lpc32xx_phycore: Update due to linker command file
+	changes.
+
+2010-12-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc32xx.h: Added I2S module.
+	* Makefile.am, bsp_specs, preinstall.am, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx, startup/linkcmds.lpc32xx_mzx,
+	startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2,
+	startup/linkcmds.lpc32xx_phycore: Update due to linker command file
+	changes.
+
+2010-11-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* rtc/rtc-config.c: Fixed type.
+
+2010-10-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/tm27.h: New file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* include/bsp.h: Fixed lpc32xx_micro_seconds_delay().
+	* misc/timer.c: Support for timer tests.
+
+2010-10-14	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/emc.h, include/i2c.h, include/lpc32xx.h, include/nand-mlc.h:
+	Update for <bsp/utility.h> changes.
+
+2010-09-28	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* misc/mmu.c: New file.
+	* Makefile.am: Reflect change above.
+	* configure.ac, include/bspopts.h.in, include/irq.h,
+	include/lpc32xx.h, include/mmu.h, misc/emc.c, misc/restart.c,
+	startup/bspstarthooks.c: Changes throughout.
+
+2010-08-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/hsu.c: Fixed warnings.
+
+2010-06-23	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx_mzx_boot_int.cfg,
+	startup/linkcmds.lpc32xx_mzx_boot_int: Removed files.
+	* include/boot.h, include/emc.h, include/i2c.h, include/nand-mlc.h,
+	make/custom/lpc32xx_mzx.cfg, make/custom/lpc32xx_mzx_stage_1.cfg,
+	make/custom/lpc32xx_mzx_stage_2.cfg, misc/boot.c, misc/emc.c,
+	misc/i2c.c, misc/nand-mlc.c, misc/nand-mlc-read-blocks.c,
+	misc/nand-mlc-write-blocks.c, misc/restart.c,
+	startup/linkcmds.lpc32xx, startup/linkcmds.lpc32xx_mzx,
+	startup/linkcmds.lpc32xx_mzx_stage_1,
+	startup/linkcmds.lpc32xx_mzx_stage_2: New files.
+	* configure.ac, Makefile.am, preinstall.am: Reflect changes above.
+	* include/bsp.h, include/lpc32xx.h, irq/irq.c, rtc/rtc-config.c,
+	startup/bspstart.c, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx_phycore: Changes throughout.
+
+2010-05-25	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac, include/bspopts.h.in: Added BSP_SMALL_MEMORY option.
+
+2010-05-21	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc32xx.h: Update for utility macro changes.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* configure.ac: Fixed BSP option.
+	* include/lpc32xx.h, startup/bspstarthooks.c: Added PLL setup.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* startup/bspstarthooks.c: Removed start section attribute defines.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx.inc, make/custom/lpc32xx_mzx_boot_int.cfg,
+	startup/linkcmds.lpc32xx_mzx_boot_int: New files.
+	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
+	include/bspopts.h.in, include/lpc32xx.h, irq/irq.c,
+	make/custom/lpc32xx_phycore.cfg, startup/bspstart.c,
+	startup/bspstarthooks.c: Changes throughout.
+
+2010-05-20	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx_phycore.cfg: Workaround for GCC bug 38644.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/irq-config.h: Removed file.
+	* Makefile.am, preinstall.am: Reflect change above.
+	* irq/irq.c: Removed superfluous parameter checks.
+
+2010-04-30	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* make/custom/lpc32xx_phycore.cfg: Use VFP floating point model.
+
+2010-04-09	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* console/hsu.c: New file.
+	* Makefile.am, configure.ac, preinstall.am, console/console-config.c,
+	include/bsp.h, include/bspopts.h.in, include/lpc-clock-config.h,
+	include/lpc-ethernet-config.h, include/lpc32xx.h, include/mmu.h,
+	startup/bspstart.c, startup/bspstarthooks.c: Changes throughout.
+
+2010-03-03	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* README, include/lpc32xx.h, irq/irq.c, startup/bspstarthooks.c:
+	Changes throughout.
+
+2010-02-02	Ralf Corsépius <ralf.corsepius@rtems.org>
+
+	* make/custom/lpc32xx_phycore.cfg: Remove -W* flags.
+
+2010-01-12	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* include/lpc-ethernet-config.h, include/mmu.h: New files.
+	* Makefile.am, configure.ac, preinstall.am, include/bsp.h,
+	include/bspopts.h.in, include/irq.h, include/lpc32xx.h, irq/irq.c,
+	rtc/rtc-config.c, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx_phycore: Changes throughout.
+
+2009-12-17	Joel Sherrill <joel.sherrill@oarcorp.com>
+
+	* include/bspopts.h.in: Regenerated.
+
+2009-12-15	Sebastian Huber <sebastian.huber@embedded-brains.de>
+
+	* bsp_specs, configure.ac, console/console-config.c, include/bsp.h,
+	include/irq-config.h, include/irq.h, include/lpc32xx.h,
+	include/lpc-clock-config.h, irq/irq.c,
+	make/custom/lpc32xx_phycore.cfg, Makefile.am, misc/timer.c,
+	preinstall.am, README, rtc/rtc-config.c, startup/bspreset.c,
+	startup/bspstart.c, startup/bspstarthooks.c,
+	startup/linkcmds.lpc32xx_phycore: New files.
