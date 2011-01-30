@@ -13,8 +13,8 @@
  * Declare some sizes.
  */
 RamBase = DEFINED(RamBase) ? RamBase : 0x0;
-RamSize = DEFINED(RamSize) ? RamSize : 4M;
-HeapSize = DEFINED(HeapSize) ? HeapSize : 2M;
+RamSize = DEFINED(RamSize) ? RamSize : 3M; /* 3.5M */
+/*HeapSize = DEFINED(HeapSize) ? HeapSize : 1M;*/
 StackSize = DEFINED(StackSize) ? StackSize : 256K;
 
 RAM_END = RamBase + RamSize;
@@ -25,7 +25,7 @@ ENTRY(start)
 
 MEMORY
         {
-	        ram : ORIGIN = 0x0, LENGTH = 256M
+	        ram : ORIGIN = 0x0, LENGTH = 4M
 	}
 
 
@@ -194,7 +194,9 @@ SECTIONS
     __end = .;
 
     . = RAM_END;
-    . = ALIGN (16);
+    . += StackSize;
+
+/*    . = ALIGN (16);*/
      PROVIDE (StackStart = .);
 
   } > ram
