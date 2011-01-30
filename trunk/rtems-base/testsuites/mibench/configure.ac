@@ -63,6 +63,8 @@ AC_CONFIG_FILES([Makefile
 sha_small/Makefile
 sha_large/Makefile
 susan_smoothing/Makefile
+susan_corners/Makefile
+susan_edges/Makefile
 crc/Makefile
 dijkstra/Makefile
 dijkstra_small_sort/Makefile
