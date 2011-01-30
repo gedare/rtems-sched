@@ -18,10 +18,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* fs includes */
-#include "FileSystemImage.h"
-#include <rtems/untar.h>
-
 /* functions */
 rtems_task Init(
   rtems_task_argument argument
@@ -33,11 +29,6 @@ rtems_task Init(
 /* drivers */
 #define CONFIGURE_APPLICATION_NEEDS_CLOCK_DRIVER
 #define CONFIGURE_APPLICATION_NEEDS_CONSOLE_DRIVER
-
-/* filesystem */
-#define CONFIGURE_USE_IMFS_AS_BASE_FILESYSTEM
-#define CONFIGURE_LIBIO_MAXIMUM_FILE_DESCRIPTORS 40
-#define CONFIGURE_IMFS_MEMFILE_BYTES_PER_BLOCK 512
 
 /* tasks */
 #define CONFIGURE_MAXIMUM_TASKS             4

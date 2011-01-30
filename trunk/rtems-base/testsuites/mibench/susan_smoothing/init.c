@@ -1972,6 +1972,7 @@ corner_list[n].info=7;
 
 /* }}} */
 /* {{{ main(argc, argv) */
+CORNER_LIST corner_list;
 
 main(argc, argv)
   int   argc;
@@ -1996,7 +1997,6 @@ int    *r,
        max_no_edges=2650,
        mode = 0, i,
        x_size, y_size;
-CORNER_LIST corner_list;
 
 /* }}} */
 
