@@ -60,6 +60,8 @@ AM_CONDITIONAL(LIBCHIP,[test "$RTEMS_BSP_FAMILY" != "posix"])
 
 # Explicitly list all Makefiles here
 AC_CONFIG_FILES([Makefile
+basicmath_large/Makefile
+basicmath_small/Makefile
 bitcount_large/Makefile
 bitcount_small/Makefile
 crc/Makefile
