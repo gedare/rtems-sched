@@ -68,7 +68,11 @@ fft_large/Makefile
 fft_small/Makefile
 fftinv_large/Makefile
 fftinv_small/Makefile
+patricia_small/Makefile
+qsort_small/Makefile
 sha_small/Makefile
+stringsearch_large/Makefile
+stringsearch_small/Makefile
 susan_smoothing/Makefile
 susan_corners/Makefile
 susan_edges/Makefile
