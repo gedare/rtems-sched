@@ -4,7 +4,9 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = bitcount_large bitcount_small crc dijkstra sha_small \
+SUBDIRS = bitcount_large bitcount_small crc dijkstra \
+					fft_small fft_large fftinv_small fftinv_large \
+					sha_small \
 					susan_corners susan_edges susan_smoothing
 #	dijkstra_small_sort dijkstra_large_sort \
 #	dijkstra_small_sort_HWPQ dijkstra_large_sort_HWPQ
