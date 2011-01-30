@@ -4,7 +4,8 @@
 
 ACLOCAL_AMFLAGS = -I ../aclocal
 
-SUBDIRS = bitcount_large bitcount_small crc dijkstra \
+SUBDIRS = basicmath_large basicmath_small bitcount_large bitcount_small \
+					crc dijkstra \
 					fft_small fft_large fftinv_small fftinv_large \
 					qsort_small sha_small \
 					stringsearch_large stringsearch_small \
