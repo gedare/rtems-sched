@@ -72,6 +72,7 @@ fftinv_large/Makefile
 fftinv_small/Makefile
 patricia_small/Makefile
 qsort_small/Makefile
+rijndael_small/Makefile
 sha_small/Makefile
 stringsearch_large/Makefile
 stringsearch_small/Makefile
