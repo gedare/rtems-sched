@@ -123,16 +123,16 @@ setstack:
 	set SYM(StackStart), %sp
 	add %sp, -STACK_BIAS, %sp
 
+  /* BSP-specific pre-bootcard initializations */
+  call SYM(_BSP_init)
+  nop
+
 	setx ofw_cif, %l0, %l1
  
 	call ofw_init		! initialize OpenFirmware
 	stx %o4, [%l1]
 
   call bootstrap
-  nop
-
-  /* BSP-specific pre-bootcard initializations */
-  call SYM(_BSP_init)
   nop
 
   /* Set up ISR handler for interrupt enable/disable */
