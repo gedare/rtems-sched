@@ -20,8 +20,8 @@ then
 #  --enable-rtemsbsp=${BSP} --enable-rtems-debug --enable-tests 
 
 ## Build for QEMU
-  ../rtems/configure --target=${TARGET} --disable-networking \
-    --enable-rtemsbsp=${BSP} --enable-tests \
+  ../rtems-base/configure --target=${TARGET} --disable-networking \
+    --enable-rtemsbsp=${BSP} \
     USE_COM1_AS_CONSOLE=1 BSP_PRESS_KEY_FOR_RESET=0
 
 fi
