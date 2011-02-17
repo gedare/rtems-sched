@@ -351,7 +351,7 @@ int getint(fd)
   {
     if (c=='#')    /* if we're at a comment, read to end of line */
       //fgets(dummy,9000,fd);
-      while(c != "\n" && i<56)
+      while(c != '\n' && i<100)
       	{
 			c = getc(fd);
 			//printf("%d",i);
@@ -438,7 +438,7 @@ FILE  *fd;
   if ((fd=fopen(filename,"w")) == NULL)
 #endif
     exit_error("Can't output image%s.\n",filename);
-
+  
   fprintf(fd,"P5\n");
   fprintf(fd,"%d %d\n",x_size,y_size);
   fprintf(fd,"255\n");

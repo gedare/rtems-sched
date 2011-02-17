@@ -35,7 +35,7 @@ rtems_task Init(
 {
   
 
-  char in_file[20] = "/image.img";
+  char in_file[20] = "/small.pcm";
 
   printf("Unpacking tar filesystem\nThis may take awhile...\n");
   if(Untar_FromMemory(FileSystemImage, FileSystemImage_size) != 0) {

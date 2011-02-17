@@ -13,3 +13,7 @@ depcomp
 missing
 *.svn
 *.html
+FileSystemImage*
+disbench
+heapbench
+files
